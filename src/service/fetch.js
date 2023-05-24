@@ -1,7 +1,6 @@
 import axios from 'axios';
 import intercept from '../assets/js/intercept';
-
-const store = {};
+import { useCounterStore } from '../store/counter'
 
 let instance = axios.create({
     baseURL: '',
@@ -11,6 +10,8 @@ let instance = axios.create({
       'Pragma': 'no-cache'
     }
 });
+
+const store = useCounterStore();
 
 let fingerPoint = store.state.canvasFingerPoint || sessionStorage.getItem('canvasFingerPoint');
 let csrfToken = store.state.csrfToken || sessionStorage.getItem('csrfToken');

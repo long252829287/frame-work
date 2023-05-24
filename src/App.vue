@@ -1,6 +1,9 @@
 <script setup>
 import { onMounted } from "vue";
 import { commonService } from './service'
+import { useCounterStore } from '@/store/counter'
+
+const store = useCounterStore();
 
 function initPlatform() {
   let params = {
@@ -9,6 +12,8 @@ function initPlatform() {
   };
   commonService.toLogin(params).then(res => {
     console.log('res', res);
+    store.useCounterStore({ csrfToken: newCsrfToken })
+    counter.setState({ csrfToken: counter.count + 1 })
   });
   let params2 = {
     username: 'admin'
