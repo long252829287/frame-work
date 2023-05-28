@@ -1,6 +1,7 @@
 import axios from 'axios';
 import intercept from '../assets/js/intercept';
-import { useCounterStore } from '../store/counter'
+
+let csrfToken = sessionStorage.getItem('csrfToken');
 
 let instance = axios.create({
     baseURL: '',
@@ -11,17 +12,8 @@ let instance = axios.create({
     }
 });
 
-const store = useCounterStore();
-
-let fingerPoint = store.state.canvasFingerPoint || sessionStorage.getItem('canvasFingerPoint');
-let csrfToken = store.state.csrfToken || sessionStorage.getItem('csrfToken');
-
 instance.interceptors.request.use(request => {
-    fingerPoint = fingerPoint || store.state.canvasFingerPoint || sessionStorage.getItem('canvasFingerPoint');
-    if (fingerPoint) { // 浏览器指纹，标识唯一用户
-      request.headers['FingerPoint'] = fingerPoint;
-    }
-    csrfToken = csrfToken || store.state.csrfToken || sessionStorage.getItem('csrfToken');
+    csrfToken = csrfToken || sessionStorage.getItem('csrfToken');
     if (csrfToken) { // csrftoken请求头，用于放置csrf攻击
       request.headers['X-CSRFtoken'] = csrfToken;
     }
