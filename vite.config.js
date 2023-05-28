@@ -33,7 +33,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api/': {
-        target: 'http://localhost:3000',
+        target: 'http://www.osheeep.com',
         changeOrigin: true,
         configure: (proxy, options) => {
           // proxy 是 'http-proxy' 的实例

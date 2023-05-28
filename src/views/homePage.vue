@@ -9,5 +9,6 @@ onMounted(()=> {
 </script>
 
 <template>
+  <div></div>
   <p>{{user.name}}</p>
 </template>
