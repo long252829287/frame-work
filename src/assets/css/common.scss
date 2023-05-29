@@ -1,0 +1,33 @@
+/* 单行文本溢出打点隐藏 */
+@mixin ellipsis {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+/* 两行文本溢出打点隐藏 */
+@mixin twoline-ellipsis {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+}
+
+/* 点击按钮变色*/
+.active-style {
+	&:active {
+		background-color: rgba(100,100,100,0.1);
+		border-radius: 6px;
+	}
+}
+
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin flex-row-center {
+    display: flex;
+    justify-content: center;
+}
+$normal-size: 28px;

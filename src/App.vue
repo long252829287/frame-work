@@ -22,7 +22,7 @@ function initPlatform() {
 }
 
 onMounted(()=> {
-  initPlatform();
+  // initPlatform();
 });
 </script>
 
@@ -31,5 +31,5 @@ onMounted(()=> {
 </template>
 
 <style scoped lang="scss">
-
+@import "../src/assets/css/main.css";
 </style>

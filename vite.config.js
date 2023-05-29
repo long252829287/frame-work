@@ -24,7 +24,9 @@ export default defineConfig({
       },
     },
   },
-  plugins: [vue()],
+  plugins: [
+    vue()
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
@@ -40,8 +42,15 @@ export default defineConfig({
         }
       },
     },
-    port: 2222,
+    port: 611,
     open: true,
     cors: true,
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `@import "./src/assets/css/theme.scss";`
+      }
+    }
   }
 })

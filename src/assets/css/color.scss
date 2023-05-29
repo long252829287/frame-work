@@ -1,0 +1,98 @@
+/**
+ * 基础变量 --- 所有主题共用
+ * 变量颜色少，可以选择使用透明度控制
+ */
+
+/* ---颜色--- */
+$black: #000;
+
+$gray_1: #323232;
+$gray_2: #606266;
+$gray_3: #999999;
+$gray_4: #c0c4cc;
+
+
+$white: #fff;
+$white_1: #dfe4e7;
+$white_2: #c0c4cc;
+
+$border_1: #DCDFE6;
+$border_2: #E4E7ED;
+$border_3: #EBEEF5;
+$border_4: #F2F6FC;
+
+$success: #67C23A;
+$successHover: #e1f3d8;
+$warning: #E6A23C;
+$warningHover: #faecd8;
+$danger: #F56C6C;
+$dangerHover: #fde2e2;
+
+/* ---字体大小--- */
+$font_12: 1.2rem;
+$font_14: 1.4rem;
+$font_16: 1.6rem;
+$font_18: 1.8rem;
+$font_20: 2rem;
+$font_30: 3rem;
+
+
+/** 
+ * 主题一： 蓝色调 **********************************************************************************************
+ */
+/* 主色调 */
+$main_main: #409eff;
+$main_main_1: #66b1ff;
+$main_main_2: #a0cfff;
+$main_main_3: #d9ecff;
+/* 框架布局颜色 */
+$main_frame_1: #091729;
+$main_frame_2: #1a2e46;
+$main_frame_3: #15436d;
+$main_frame_4: #245d91;
+$main_frame_5: #1a2e46;
+/* 标题字体颜色 */
+$main_frame_color: #ffffff;
+$main_frame_color_1: #c0c4cc;
+$main_frame_color_2: #97bed9;
+
+
+/** 
+* 主题二： 白-红色调 *****************************************************************************************
+*/
+/* 主色调 */
+$light_main: #fc333f;
+$light_main_1: #fc5531;
+$light_main_2: #ff7700;
+$light_main_3: #fcecea;
+/* 框架布局颜色 */
+$light_frame_1: #ffffff;
+$light_frame_2: #ffffff;
+$light_frame_3: #ffffff;
+$light_frame_4: #f5f6f7;
+$light_frame_5: #fcecea;
+/* 标题字体颜色 */
+$light_frame_color: #222226;
+$light_frame_color_1: #999aaa;
+$light_frame_color_2: #1c1d30;
+
+
+/** 
+* 主题三： 绿色调 *****************************************************************************************
+*/
+
+/* 主色调 */
+$green_main: #ffffff;
+$green_main_1: #ffffff;
+$green_main_2: #ffffff;
+$green_main_3: #ffffff;
+/* 框架布局颜色 */
+$green_frame_1: #3eaf7c;
+$green_frame_2: #077752;
+$green_frame_3: #329267;
+$green_frame_4: #a8e2ca;
+$green_frame_5: #077752;
+/* 标题字体颜色 */
+$green_frame_color: #ffffff;
+$green_frame_color_1: #c2c4c2;
+$green_frame_color_2: #aeccbe;
