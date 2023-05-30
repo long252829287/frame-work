@@ -139,7 +139,7 @@ main {
   }
   &:not(:hover) {
     .module-enter-text {
-      transition: width 0.4s ease 0s;
+      transition: width 0.3s ease 0s;
       width: 0;
     }
   }
