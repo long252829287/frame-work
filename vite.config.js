@@ -1,5 +1,4 @@
-import { fileURLToPath, URL } from 'node:url'
-
+import { resolve } from 'path';
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
@@ -7,20 +6,16 @@ import vue from '@vitejs/plugin-vue'
 // https://vitejs.dev/config/
 export default defineConfig({
   // 指定运行环境为开发环境
-  mode: 'development',
+  // mode: 'development',
+  base: './',
   // 入口文件
   build: {
-    outDir: 'dist',
-    assetsDir: 'assets',
-    target: 'es2015',
-    rollupOptions: {
-      // 更改js文件扩展名
-      input: 'src/main.js',
-      output: {
-        entryFileNames: 'index.js',
-        chunkFileNames: 'index.js',
-        assetFileNames: 'index.[ext]',
-        format: 'es',
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        //生产环境时移除console
+        drop_console: true,
+        drop_debugger: true,
       },
     },
   },
@@ -29,12 +24,14 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': resolve(__dirname, 'src'),
+      'comp': resolve(__dirname, 'src/components'),
+      'img': './src/static'
     },
   },
   server: {
     proxy: {
-      '/api/': {
+      '/platform/': {
         target: 'http://www.osheeep.com',
         changeOrigin: true,
         configure: (proxy, options) => {
@@ -49,7 +46,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: `@import "./src/assets/css/theme.scss";`
+        additionalData: `@import "@/assets/css/variables.scss";`
       }
     }
   }

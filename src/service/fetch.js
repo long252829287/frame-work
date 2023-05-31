@@ -27,7 +27,7 @@ instance.interceptors.response.use(response => {
 export default {
     get(url, params) {
         return new Promise((resolve, reject) => {
-            instance.get('/api/'+ url, {params}).then(res => {
+            instance.get('/platform/'+ url, {params}).then(res => {
                 resolve(res);
             }).catch(err => {
                 reject(err);
@@ -36,7 +36,7 @@ export default {
     },
     post(url, params) {
         return new Promise((resolve, reject) => {
-            instance.post('/api/'+ url, params).then(res => {
+            instance.post('/platform/'+ url, params).then(res => {
                 resolve(res);
             }).catch(err => {
                 reject(err);

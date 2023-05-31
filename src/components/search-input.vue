@@ -61,7 +61,7 @@ export default {
     display: block;
     .search-area {
         height: 36px;
-        width: 360px !important;
+        width: 280px !important;
         background: #f3f5f6;
         border-radius: 8px;
         box-sizing: border-box;

@@ -64,9 +64,18 @@ npm run dev
 npm run build
 ```
 
-### 
+### 前端仓库路径
+
+/usr/local/webserver/nginx/html
+
+### 后端仓库路径
+
+/usr/local/server
+
+
 
 ---
+
 ## Nginx 安装
 
 系统平台：CentOS release 6.6 (Final) 64位。
@@ -246,3 +255,362 @@ Nginx 启动命令如下：
 /usr/local/webserver/nginx/sbin/nginx -s reload            # 重新载入配置文件
 /usr/local/webserver/nginx/sbin/nginx -s reopen            # 重启 Nginx
 /usr/local/webserver/nginx/sbin/nginx -s stop              # 停止 Nginx
+
+### 平台nginx配置
+
+```js
+user    root;
+worker_processes  24;
+error_log  /var/log/nginx/error.log;
+
+events {
+        worker_connections  1024;
+}
+
+http { 
+        include       mime.types;
+        default_type  application/octet-stream;
+        sendfile        on;
+        keepalive_timeout  65;
+        keepalive_requests 1000;
+        server_names_hash_bucket_size  128;
+        client_header_buffer_size    320k;
+        client_max_body_size    6g; 
+        large_client_header_buffers  4 64k;
+        access_log off;
+        postpone_output  1460;
+        client_header_timeout  3m;
+        client_body_timeout    3m;
+        send_timeout           3m;
+        tcp_nopush             on;
+        tcp_nodelay            on;
+        limit_conn_zone $binary_remote_addr zone=addr:10m;
+        gzip on;
+        gzip_comp_level 9;
+        gzip_min_length 1024;
+        gzip_types text/plain application/x-javascript text/css application/xml text/javascript application/x-httpd-php image/jpeg image/gif image/png;
+        gzip_vary on;
+        server_tokens off;
+
+        #跨域请求配置
+        add_header 'Access-Control-Allow-Origin' $http_origin;
+        add_header 'Access-Control-Allow-Methods' 'GET,OPTIONS,PUT,DELETE,POST' always;
+        add_header 'Access-Control-Allow-Credentials' 'true' always;
+        add_header 'Access-Control-Allow-Headers' 'cache-control,pragma,X-CSRFtoken,Authorization,DNT,User-Agent,Keep-Alive,Content-Type,accept,origin,X-Requested-With,content-range,accesstoken,userId,code,FingerPoint,no-cors' always;
+
+        upstream zkcloud {
+                                server  127.0.0.1:28000 max_fails=3 fail_timeout=10;
+                server  127.0.0.1:26000 backup;
+        }
+
+        upstream zk_cmsm {
+                server  127.0.0.1:8080;
+        }
+
+        upstream zkdevice {
+                server  127.0.0.1:8088 max_fails=3 fail_timeout=5;
+                server  127.0.0.1:8089 backup;
+        }
+
+        upstream zkai {
+                server  127.0.0.1:8188;
+        }
+
+        upstream zk_interaction {
+                server  127.0.0.1:23000;
+        }
+
+        upstream zk_manager {
+                server  127.0.0.1:8180;
+        }
+
+        upstream zk_zhibo {
+                server 127.0.0.1:8200;
+        }
+
+        upstream zk_wljy {
+                server 127.0.0.1:8250;
+        }
+
+        server {
+                listen       80;
+                server_name  localhost;
+                default_type 'text/html';
+                charset utf-8;
+                access_log  /var/log/nginx/zonekey_cloud_platform.log;
+                root /home/mfsdate;
+                ssi on;
+
+                #静态资源访问
+                location ^~ /static-server/pic/ {
+                        alias /home/mfsdate/;
+                }
+                location ^~ /static-server/doc/ {
+                        alias /home/mfsdate/;
+                }
+                location ^~ /static-server/video/ {
+                        alias /home/mfsdate/;
+                }
+
+                #请求类型如果为OPTIONS，返回状态200
+                if ($request_method = 'OPTIONS' ) {
+                        return 200;
+                }
+
+                # 限制请求方法
+                if ($request_method !~ ^(GET|HEAD|POST|OPTIONS)$ ) {
+                        return 444;
+                }
+
+                # 过滤非法的UA
+                if ($http_user_agent ~* "perl|ruby|bash|echo|uname|base64|decode|md5sum|select|concat|httprequest|nmap|scan" ) {
+                        return 403;
+                }
+
+                # 过滤不支持的URL
+                location ~* \.(bak|save|sh|sql|mdb|svn|git|old)$ {
+                        rewrite ^/(.*)$  $host  permanent;
+                }
+
+                # 限制php执行
+                location ~ /(attachments|upload)/.*.(php|php5)?$ {
+                        deny all;
+                }
+
+                location ~ .*\.(?:jpg|jpeg|gif|png|ico|cur|gz|svg|svgz|mp4|ogg|ogv|webm)$ {
+                        expires      1d;
+                }
+
+                location ~ .*\.(?:js|css)$ {
+                        expires      1d;
+                }
+
+                location ~ .*\.(?:htm|html)$ {
+                         add_header Cache-Control "private, no-store, no-cache, must-revalidate, proxy-revalidate";
+                }
+
+                #微信H5页面访问
+                location ^~ /h5 {
+                    if (-d $request_filename) {
+                        rewrite [^/]$ $scheme://$http_host$uri/ permanent;
+                    }
+                        alias /home/runprograms/configs-server/front;
+                        index h5index.html;
+                        break;
+                }
+
+                #移动教研页面访问
+                location ^~ /ydjy {
+                        alias /home/runprograms/configs-server/front/ydh5;
+                        index index.html;
+                        break;
+                }
+
+                location ^~ /static {
+                        set $server_out_ip 36.112.70.172;
+                        set $server_out_port 90;
+                        if ($host = $server_out_ip){
+                                rewrite ^(.*)$ http://$host:$server_out_port/ydjy/$uri;
+                        }
+                        rewrite ^(.*)$ http://$host:$server_port/ydjy/$uri;
+                }
+
+                #智课手机app访问
+                location ^~ /WiClass/mobileapp {
+                        alias /home/runprograms/configs-server/front/mobileapp;
+                        index index.html;
+                        break;
+                }
+
+                # 智播APP反向代理
+                location ^~ /platform-app/ {
+                        proxy_http_version 1.1;
+                        proxy_set_header Connection "";
+                        proxy_intercept_errors on;
+                        proxy_pass http://zk_zhibo;
+                        proxy_set_header  X-Real-IP  $remote_addr;
+                        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+                        proxy_set_header Host $http_host;
+                        break;
+                }
+
+                # 网络教研APP反向代理
+                location ^~ /platform-zkt-app/ {
+                        proxy_http_version 1.1;
+                        proxy_set_header Connection "";
+                        proxy_intercept_errors on;
+                        proxy_pass http://zk_wljy;
+                        proxy_set_header  X-Real-IP  $remote_addr;
+                        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+                        proxy_set_header Host $http_host;
+                        break;
+                }
+
+                #云平台websocket长连接设置
+                location /platform/api/websocket {
+                        proxy_pass http://zkcloud;
+                        proxy_http_version 1.1;
+                        proxy_read_timeout 1d;
+                        proxy_set_header Upgrade $http_upgrade;
+                        proxy_set_header Connection "Upgrade";
+                }
+
+                #对部分请求进行https跳转
+                location ^~ /mook/interaction {
+                        rewrite ^(.*)$ https://$host/platform/index.html#$1 permanent;
+                }
+
+                #云平台web访问rewrite配置
+                location ~ ^/$ {
+                        set $server_out_ip 1.1.1.1;
+                        set $server_out_port 28080;
+                        if ($host = $server_out_ip){
+                                rewrite ^/$ http://$host:$server_out_port/platform/index.html;
+                        }
+                        rewrite ^/$ http://$host:$server_port/platform/index.html;
+                }
+
+                #web模块反向代理配置
+                location ^~ /platform {
+                        proxy_http_version 1.1;
+                        proxy_set_header Connection "";
+                        add_header    Cache-Control  max-age=28800;
+                        proxy_intercept_errors on;
+                        proxy_pass http://zkcloud;
+                        proxy_set_header  X-Real-IP  $remote_addr;
+                        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+                        proxy_set_header Host $http_host;
+                        break;
+                }
+
+                #互动相关配置
+                location ^~ /interactionPlatform/ {
+                        proxy_http_version 1.1;
+                        proxy_set_header Connection "";
+                        proxy_intercept_errors on;
+                        proxy_pass http://zk_interaction;
+                        proxy_set_header  X-Real-IP  $remote_addr;
+                        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+                        proxy_set_header Host $http_host;
+                        proxy_read_timeout 1d;
+                        proxy_set_header Upgrade $http_upgrade;
+                        proxy_set_header Connection "Upgrade";
+                        break;
+                }
+
+                #老中控反向代理配置
+                location ^~ /ManagerService {
+                        proxy_http_version 1.1;
+                        proxy_set_header Connection "";
+                        proxy_intercept_errors on;
+                        proxy_pass http://zk_manager;
+                        proxy_set_header  X-Real-IP  $remote_addr;
+                        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+                        proxy_set_header Host $http_host;
+                        break;
+                }
+
+                #####以下为站点#####
+                #站点websocket长连接设置,ws://ip:81/device-service/ws/loginName
+                location ^~ /device-service/ws/ {
+                        proxy_pass http://zkdevice;
+                        proxy_http_version 1.1;
+                        proxy_read_timeout 1d;
+                        proxy_set_header Upgrade $http_upgrade;
+                        proxy_set_header Connection "Upgrade";
+                }
+
+                #站点websocket长链接设置
+                location ^~ /ai-service/ws/ {
+                        proxy_pass http://zkai;
+                        proxy_http_version 1.1;
+                        proxy_read_timeout 1d;
+                        proxy_set_header Upgrade $http_upgrade;
+                        proxy_set_header Connection "Upgrade";
+                }
+
+                #ai数据相关
+                location ^~ /ai-service/ {
+                        proxy_http_version 1.1;
+                        proxy_set_header Connection "";
+                        proxy_intercept_errors on;
+                        proxy_pass http://zkai;
+                        proxy_set_header  X-Real-IP  $remote_addr;
+                        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+                        proxy_set_header Host $http_host;
+                        break;
+                }
+
+                #指定常态化转码服务主目录
+                location ^~ /home/mfsdate/filetransdate/ {
+                        root /;
+                }
+
+                location ^~ /cmsm/ {
+                        proxy_http_version 1.1;
+                        proxy_set_header Connection "";
+                        proxy_intercept_errors on;
+                        proxy_pass http://zk_cmsm;
+                        proxy_set_header  X-Real-IP  $remote_addr;
+                        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+                        proxy_set_header Host $http_host;
+                        break;
+                }
+
+                location ^~ /device-service/ {
+                        proxy_http_version 1.1;
+                        proxy_set_header Connection "";
+                        proxy_intercept_errors on;
+                        proxy_pass http://zkdevice/$request_uri;
+                        proxy_set_header  X-Real-IP  $remote_addr;
+                        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+                        proxy_set_header Host $http_host;
+                        proxy_max_temp_file_size 5120m;
+                        break;
+                }
+
+                #设备资产注册
+                location /api/zdg/datagateway/syncstate {
+                        proxy_http_version 1.1;
+                        proxy_set_header Connection "";
+                        proxy_intercept_errors on;
+                        proxy_pass http://zkdevice/device-service/control/onoff/syncstate;
+                        proxy_set_header  X-Real-IP  $remote_addr;
+                        proxy_set_header  X-Forwarded-For $proxy_add_x_forwarded_for;
+                        proxy_set_header Host $http_host;
+                        break;
+                }
+
+                #资产设备报修管理
+                location ^~ /cmsmh5 {
+                    alias /home/tomcat/tomcat8080/webapps/cmsm/h5zcgl;
+                    index index.html;
+                    break;
+                }
+
+                #指定hls流观看地址
+                location /hls {
+                        types {
+                                application/vnd.apple.mpegusr m3u8;
+                                video/mp2t ts;
+                        }
+                        alias /home/mfsdate/hls/;
+                        expires -1;
+                }
+
+                #支持flv流
+                location /flv/ {
+                        proxy_http_version 1.1;
+                        proxy_set_header Connection "";
+                        proxy_pass http://127.0.0.1:18080/;
+                        add_header Cache-Control no-cache;
+                        #add_header Access-Control-Allow-Origin *;
+                        #add_header Access-Control-Allow-Credentials true;
+                        #add_header Access-Control-Allow-Methods GET;
+                }
+
+                #zk_site
+        }
+        include /etc/nginx/conf.d/*.conf;
+}
+```

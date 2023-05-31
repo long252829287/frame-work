@@ -52,7 +52,8 @@ onMounted(()=> {
 }
 .homePage {
   background: #fff;
-  height: 100%;
+  min-height: 100vh;
+  min-width: 100vw;
   display: flex;
   flex-direction: column;
 }
@@ -65,18 +66,26 @@ header {
 }
 main {
   flex: 1;
-  position: relative;
+  padding: 20px;
+  @include flex-center;
 }
 .modules {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(0%, 0%);
   display: grid;
   justify-content: center;
   grid-template-columns: 320px 320px 320px 320px;
   grid-gap: 20px;
   justify-items: center;
+}
+@media screen and (max-width: 1400px) {
+  .modules {
+    grid-template-columns: 320px 320px;
+  }
+}
+@media screen and (max-width: 760px) {
+  .modules {
+    grid-template-columns: 320px;
+  }
 }
 .module {
   width: 100%;
@@ -147,7 +156,7 @@ main {
     display: flex;
     width: 100%;
     color: $light_frame_1;
-    font-size: $normal-size;
+    font-size: 28px;
   }
 }
 .module:nth-of-type(n):hover {
@@ -158,6 +167,18 @@ main {
 }
 .module:nth-of-type(2n):hover {
   background: linear-gradient(90deg, #fa7199, #f5ce62, #e43603, #fa7199);
+  background-size: 400%;
+  z-index: 1;
+  animation: glow 8s linear infinite;
+}
+.module:nth-of-type(3n):hover {
+  background: linear-gradient(90deg, #66b1ff, #fc5531, #fa7199, #409eff);
+  background-size: 400%;
+  z-index: 1;
+  animation: glow 8s linear infinite;
+}
+.module:nth-of-type(4n):hover {
+  background: linear-gradient(90deg, #67C23A, #1a2e46, #c0c4cc, #077752);
   background-size: 400%;
   z-index: 1;
   animation: glow 8s linear infinite;

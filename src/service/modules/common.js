@@ -11,10 +11,10 @@ export default {
     },
     // 登录
     toLogin(params) {
-        return fetch.post('login', params)
+        return fetch.post('api/login', params)
     },
     // 用户信息
     getUserInfo(params) {
-        return fetch.get('userinfo', params)
+        return fetch.get('api/userinfo', params)
     }
 }
