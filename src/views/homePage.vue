@@ -51,11 +51,12 @@ onMounted(()=> {
   padding: 0 20px;
 }
 .homePage {
-  background: #fff;
+  background: #F5F6F8;
   min-height: 100vh;
   min-width: 100vw;
   display: flex;
   flex-direction: column;
+  box-sizing: border-box;
 }
 header {
   width: 100%;
@@ -63,11 +64,16 @@ header {
   justify-content: space-between;
   align-items: center;
   @include default-padding;
+  position: fixed;
+  background: #fff;
+  box-shadow: 0px 2px 10px rgba(32,39,54,0.03);
+  z-index: 999;
 }
 main {
   flex: 1;
   padding: 20px;
   @include flex-center;
+  margin-top: 60px;
 }
 .modules {
   transform: translate(0%, 0%);
@@ -172,13 +178,37 @@ main {
   animation: glow 8s linear infinite;
 }
 .module:nth-of-type(3n):hover {
-  background: linear-gradient(90deg, #66b1ff, #fc5531, #fa7199, #409eff);
+  background: linear-gradient(90deg, #983498, #d890d8, #f8dcf8, #602060);
   background-size: 400%;
   z-index: 1;
   animation: glow 8s linear infinite;
 }
 .module:nth-of-type(4n):hover {
-  background: linear-gradient(90deg, #67C23A, #1a2e46, #c0c4cc, #077752);
+  background: linear-gradient(90deg, #db3700,  #ff8c6a, #ffd2c4,  #8a1f00);
+  background-size: 400%;
+  z-index: 1;
+  animation: glow 8s linear infinite;
+}
+.module:nth-of-type(5n):hover {
+  background: linear-gradient(90deg, #507010, #003300, #a0dc40, #077752);
+  background-size: 400%;
+  z-index: 1;
+  animation: glow 8s linear infinite;
+}
+.module:nth-of-type(6n):hover {
+  background: linear-gradient(90deg, #007ca6, #15b9ff, #cef3ff, #00637b);
+  background-size: 400%;
+  z-index: 1;
+  animation: glow 8s linear infinite;
+}
+.module:nth-of-type(7n):hover {
+  background: linear-gradient(90deg, #002cae, #7d9aff, #d0dcff, #001c7b);
+  background-size: 400%;
+  z-index: 1;
+  animation: glow 8s linear infinite;
+}
+.module:nth-of-type(8n):hover {
+  background: linear-gradient(90deg, #ff51b0, #ff8cc6, #ffe1f0,  #bf0069);
   background-size: 400%;
   z-index: 1;
   animation: glow 8s linear infinite;
@@ -209,6 +239,7 @@ footer {
   @include default-padding;
 }
 .footer {
+  line-height: 60px;
   float: right;
 }
 </style>
