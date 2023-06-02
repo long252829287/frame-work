@@ -1,16 +1,11 @@
 <template>
 <div class="search-warp">
-    <div>
-        <div class="search-area" :class="{'active-search': this.inActive}">
-            <input class="search-input" placeholder="搜索感兴趣的内容" v-model="searchValue" @focus="inputActive(true)" @blur="inputActive(false)" @keyup.enter="toSearch(searchValue)"/>
-        </div>
-        <div class="show-hide-search" :class="{'active-search-icon': this.inActive}" @click.stop="toSearch(searchValue)">
-            <el-icon><Search /></el-icon>
-        </div>
+    <div class="search-area" :class="{'active-search': this.inActive}">
+        <input class="search-input" placeholder="搜索感兴趣的内容" v-model="searchValue" @focus="inputActive(true)" @blur="inputActive(false)" @keyup.enter="toSearch(searchValue)"/>
     </div>
-    <!-- <div class="show-hide-search" v-else >
-        <i class="el-icon-search"></i>
-    </div> -->
+    <div class="show-hide-search" :class="{'active-search-icon': this.inActive}" @click.stop="toSearch(searchValue)">
+        <i class="iconfont icon-search"></i>
+    </div>
 </div>
 </template>
 <script>

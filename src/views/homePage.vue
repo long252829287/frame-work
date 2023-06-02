@@ -1,11 +1,14 @@
 <script setup>
 import { ref, onMounted, reactive } from "vue";
+import { useRouter, useRoute } from 'vue-router'
 import SearchInput from '@/components/search-input.vue'
 import softDrag from '@/components/soft-drag.vue'
 import enter from '../static/homePage/enter_toPage.png'
 
+const router = useRouter()
+const route = useRoute()
 const moduleList = ref([
-  {name: '第一模块', summary: '紫色', color:'#9773FF'},
+  {name: '第一模块', summary: '点击观看小猴跳舞', color:'#9773FF',src: '/play'},
   {name: '第二模块', summary: '绿色', color:'#3EC053'},
   {name: '第三模块', summary: '蓝色', color:'#1DB2FF'},
   {name: '第四模块', summary: '橙色', color:'#F7A554'},
@@ -17,6 +20,10 @@ const moduleList = ref([
 const data = reactive({
   
 })
+
+function toDetail(module) {
+  router.push({path: module.src})
+}
 
 onMounted(()=> {
 });
@@ -30,7 +37,7 @@ onMounted(()=> {
     </header>
     <main>
       <div class="modules">
-        <div class="module" v-for="(module, index)  in moduleList" :key="index">
+        <div class="module" v-for="(module, index)  in moduleList" :key="index" @click="toDetail(module)">
           <p class="module-name">{{module.name}}</p>
           <p class="module-summary">{{module.summary}}</p>
           <div class="module-enter">
@@ -52,6 +59,7 @@ onMounted(()=> {
 }
 .homePage {
   background: #F5F6F8;
+  // background: rgba(255,255,255,.4);
   min-height: 100vh;
   min-width: 100vw;
   display: flex;
