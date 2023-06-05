@@ -65,6 +65,7 @@ export default {
       volumeBeforMuted: 0, // 静音前音量，关闭静音后恢复音量
       volume: 60, // 音量，默认音量为60%
       controlBar: '',
+      observer: {}
     };
   },
   computed: {
@@ -115,41 +116,44 @@ export default {
     fullScreenOperation() {
       this.$emit('fullScreen', this.isFullScreen);
     },
+    createObserver() {
+      this.observer = new MutationObserver((mutationsList, observer) => {
+        // 遍历每个发生变化的 MutationRecord
+        for (const mutation of mutationsList) {
+          // 遍历每个被添加到 DOM 中的节点
+          for (const node of mutation.addedNodes) {
+            // 如果节点是元素节点，并且包含类名为 player-pause-button
+            if (
+              node.nodeType === Node.ELEMENT_NODE &&
+              node.classList.contains('player-pause-button')
+            ) {
+              // 将 isPlaying 置为 false
+              this.isPlaying = false;
+              return;
+            }
+          }
+          // 遍历每个从 DOM 中移除的节点
+          for (const node of mutation.removedNodes) {
+            // 如果节点是元素节点，并且包含类名为 player-pause-button
+            if (
+              node.nodeType === Node.ELEMENT_NODE &&
+              node.classList.contains('player-pause-button')
+            ) {
+              // 将 isPlaying 置为 true
+              this.isPlaying = true;
+              return;
+            }
+          }
+        }
+      });
+      this.observer.observe(document, { childList: true, subtree: true });
+    }
   },
   mounted() {
-    const observer = new MutationObserver((mutationsList, observer) => {
-      // 遍历每个发生变化的 MutationRecord
-      for (const mutation of mutationsList) {
-        // 遍历每个被添加到 DOM 中的节点
-        for (const node of mutation.addedNodes) {
-          // 如果节点是元素节点，并且包含类名为 player-pause-button
-          if (
-            node.nodeType === Node.ELEMENT_NODE &&
-            node.classList.contains('player-pause-button')
-          ) {
-            // 将 isPlaying 置为 false
-            this.isPlaying = false;
-            return;
-          }
-        }
-        // 遍历每个从 DOM 中移除的节点
-        for (const node of mutation.removedNodes) {
-          // 如果节点是元素节点，并且包含类名为 player-pause-button
-          if (
-            node.nodeType === Node.ELEMENT_NODE &&
-            node.classList.contains('player-pause-button')
-          ) {
-            // 将 isPlaying 置为 true
-            this.isPlaying = true;
-            return;
-          }
-        }
-      }
-    });
-    observer.observe(document, { childList: true, subtree: true });
+    this.createObserver();
   },
   beforeDestroy() {
-    observer.disconnect();
+    this.observer.disconnect();
   },
 };
 </script>

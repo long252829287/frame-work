@@ -4,6 +4,7 @@ import { useRouter, useRoute } from 'vue-router'
 import SearchInput from '@/components/search-input.vue'
 import softDrag from '@/components/soft-drag.vue'
 import enter from '../static/homePage/enter_toPage.png'
+import mainImg from '../static/avatar/main.jpg'
 
 const router = useRouter()
 const route = useRoute()
@@ -32,8 +33,10 @@ onMounted(()=> {
 <template>
   <div class="homePage">
     <header>
-      <el-avatar class="avatar" icon="UserFilled" />
-      <SearchInput/>
+      <div class="header-container">
+        <el-avatar class="avatar" icon="UserFilled" :src="mainImg"/>
+        <SearchInput/>
+      </div>
     </header>
     <main>
       <div class="modules">
@@ -67,15 +70,27 @@ onMounted(()=> {
   box-sizing: border-box;
 }
 header {
-  width: 100%;
+  width: 100vw;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  @include default-padding;
+  justify-content: center;
   position: fixed;
+  border-bottom: #e5e5e5;
   background: #fff;
   box-shadow: 0px 2px 10px rgba(32,39,54,0.03);
   z-index: 999;
+  .header-container {
+    display: flex;
+    align-items: center;
+    max-width: 1560px;
+    justify-content: space-between;
+    padding: 0 12px;
+    width: 100%;
+    // background: #232222;
+  }
+  @media screen and (max-width: 720px) {
+    background: #fff;
+  }
 }
 main {
   flex: 1;
@@ -96,7 +111,7 @@ main {
     grid-template-columns: 320px 320px;
   }
 }
-@media screen and (max-width: 760px) {
+@media screen and (max-width: 740px) {
   .modules {
     grid-template-columns: 320px;
   }
