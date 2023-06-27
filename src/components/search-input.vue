@@ -30,7 +30,8 @@ export default {
             if (!val) {
                 return false;
             } else {
-                this.$message.success('e点点w点点q点点');
+                this.$emit('search', {searchVal: val})
+                // this.$message.success('e点点w点点q点点');
             }
         },
         hideSearchActive() {

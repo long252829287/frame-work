@@ -5,12 +5,13 @@ import SearchInput from '@/components/search-input.vue'
 import softDrag from '@/components/soft-drag.vue'
 import enter from '../static/homePage/enter_toPage.png'
 import mainImg from '../static/avatar/main.jpg'
+import { commonService } from '../service'
 
 const router = useRouter()
 const route = useRoute()
 const moduleList = ref([
   {name: '第一模块', summary: '点击观看小猴跳舞', color:'#9773FF',src: '/play'},
-  {name: '第二模块', summary: '绿色', color:'#3EC053'},
+  {name: '第二模块', summary: '点击搜索斗鱼直播', color:'#3EC053',src: '/room'},
   {name: '第三模块', summary: '蓝色', color:'#1DB2FF'},
   {name: '第四模块', summary: '橙色', color:'#F7A554'},
   {name: '第五模块', summary: '青色', color:'#00AFD1'},
@@ -26,7 +27,17 @@ function toDetail(module) {
   router.push({path: module.src})
 }
 
+function getLiveStream() {
+  let params = {
+    rid: '5110403'
+  }
+  commonService.postLiveStream(params).then(res => {
+    console.log('res', res);
+  })
+}
+
 onMounted(()=> {
+  // getLiveStream();
 });
 </script>
 
@@ -207,7 +218,7 @@ main {
   animation: glow 8s linear infinite;
 }
 .module:nth-of-type(4n):hover {
-  background: linear-gradient(90deg, #db3700,  #ff8c6a, #ffd2c4,  #8a1f00);
+  background: linear-gradient(90deg, #db3700, #ff8c6a, #ffd2c4, #8a1f00);
   background-size: 400%;
   z-index: 1;
   animation: glow 8s linear infinite;
@@ -231,7 +242,7 @@ main {
   animation: glow 8s linear infinite;
 }
 .module:nth-of-type(8n):hover {
-  background: linear-gradient(90deg, #ff51b0, #ff8cc6, #ffe1f0,  #bf0069);
+  background: linear-gradient(90deg, #ff51b0, #ff8cc6, #ffe1f0, #bf0069);
   background-size: 400%;
   z-index: 1;
   animation: glow 8s linear infinite;

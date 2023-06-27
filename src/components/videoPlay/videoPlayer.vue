@@ -1,7 +1,7 @@
 <template>
   <div
     id="commonVideoPlayer"
-    v-show="data.videoList.length"
+    v-show="props.playVideoList.length"
     class="video-player-container"
   >
     <!-- 播放器 -->
@@ -9,7 +9,7 @@
       <div class="center-player" id="centerPlayer">
         <div class="player-con">
           <div id="video0" class="each-player full-player">
-            <template v-if="data.playVideoList[0]"> </template>
+            <template v-if="props.playVideoList[0]"> </template>
           </div>
         </div>
       </div>
@@ -36,6 +36,7 @@
 import playerjs from './js/player';
 import ControlBar from './components/control-bar.vue';
 import { utilsTime } from '../../utils/utilsTime';
+import posterImg from '../../static/homePage/cs1.jpg'
 import {
   ref,
   onMounted,
@@ -44,14 +45,35 @@ import {
   nextTick,
   defineEmits,
 } from 'vue';
+import { defineProps } from 'vue'
+
+const props = defineProps({
+  playVideoList:{
+    type: Array,
+    default: () => [{
+      source: '',
+      size: 0,
+      rate: '0', // 倍速
+      fileUrl:
+        'http://zonekeyvideo.oss-cn-hangzhou.aliyuncs.com/9532072548461-%E8%B8%A2%E8%B8%8F.mp4',
+      camera: '小猴跳舞.mp4',
+      showFlag: true,
+    }]
+  },
+  isLive: {
+    type: Boolean,
+    default: false,
+  },
+})
 
 const emit = defineEmits(['totalTime', 'currentTime']);
 
 const screenWidth = ref(0);
 
 const data = reactive({
-  isLive: false, // 是否直播
+  isLive: true, // 是否直播
   errorFlag: false,
+  posterImg: posterImg,
   refreshFlag: true, // 是否显示暂停图标
   playerConfig: {
     // 播放器基础配置信息
@@ -66,148 +88,9 @@ const data = reactive({
     doubleScreenMode: false, // 是否存在双屏模式
     startTime: 0, // 直播开始时间
   },
-  videoList: [
-    {
-      downloadFlag: '1',
-      publishState: '1',
-      objectpos: null,
-      endDate: null,
-      subject: null,
-      publishDate: null,
-      source: '',
-      resourceServerIp: null,
-      type: '0',
-      resourceStoragePath: null,
-      deleteFlag: null,
-      modifyUser: null,
-      downloadNum: 0,
-      timeLength: null,
-      uploadPic:
-        '//192.168.12.126:80/static-server/pic/14ab31300bcf490b95962f554cd509e3/plateFormResource/7642b182c10d4c4d9fdf9173d0bc913b.jpg","areaName":null,"storeUser":null,"id":"221116f741b04feaa9140769bcb44505","transFlag":"1","downLoadUrl":"http://192.168.12.126/device-service/curriculum/downs?path=TlRjNE5ESTROREkxWWpFMk1XUmxNemszWWpNNE5UTmk9UURjdDVDYnNWblp0SVhab05XWWxSbk8wQVhidXdHYjFaV0x5VkdhakZXWjA5eU41RWpMekFETXpFRE94VVRNekFqTXlBanZNVVRNekFqTXlBak12SWpNd0l6THZWR1pwWjNMelVXT3dVRFpqUlROMVltTTJrVE41SUdNNVFqWmpKR013TVRNeklXWTBFekxZVGRtWVdZek16UmpOV1F3TUdRNVpUVTJNekl6WkdWag==',
-      modifyDate: null,
-      author: null,
-      resourceName: null,
-      curriculumId: null,
-      projectPrefixUrl: null,
-      isFolder: null,
-      sorted: null,
-      size: 0,
-      grade: null,
-      name: 'teacher-full.mp4',
-      floder: '202203151813003.197',
-      startDate: null,
-      status: null,
-      desc: null,
-      uploadState: null,
-      watchWatchNum: null,
-      code: '14ab31300bcf490b95962f554cd509e3',
-      flag: null,
-      resourcePath: null,
-      isPassBack: null,
-      nameType: null,
-      selfType2: null,
-      selfType3: null,
-      rate: '0',
-      imageUrl: null,
-      selfType1: null,
-      transPath: null,
-      fileUrl:
-        'http://zonekeyvideo.oss-cn-hangzhou.aliyuncs.com/9532072548461-%E8%B8%A2%E8%B8%8F.mp4',
-      attribute: null,
-      changeFlag: null,
-      camera: 'card1',
-      uploadIsManual: null,
-      uploadIsDelete: null,
-      createDate: null,
-      storeType: null,
-      rates: null,
-      label: null,
-      userName: null,
-      storeId: null,
-      userId: null,
-      areaId: null,
-      uploaddeletestatus: null,
-      createUser: null,
-      resourceUuid: '2158356e-4ed9-4cf5-bbea-37ee5fa9a64a',
-      resourceType: null,
-    },
-  ],
-  playVideoList: [
-    {
-      downloadFlag: '1',
-      publishState: '1',
-      objectpos: null,
-      endDate: null,
-      subject: null,
-      publishDate: null,
-      source: '',
-      resourceServerIp: null,
-      type: '0',
-      resourceStoragePath: null,
-      deleteFlag: null,
-      modifyUser: null,
-      downloadNum: 0,
-      timeLength: null,
-      uploadPic:
-        '//192.168.12.126:80/static-server/pic/14ab31300bcf490b95962f554cd509e3/plateFormResource/7642b182c10d4c4d9fdf9173d0bc913b.jpg',
-      areaName: null,
-      storeUser: null,
-      id: 'b69e55821f9d46acb520f2862fe8eb5a',
-      transFlag: '1',
-      downLoadUrl:
-        'http://192.168.12.126/device-service/curriculum/downs?path=WldNeVpEaGhaak5oTm1RMk9USTFNak00WVdZd01UWmk9PUFOdzFtTHR4V2FtcEROdzFtTHR4V2FtOXlONUVqTHpBRE0yRUROeFVUTXpBak15QWpNdlVUTXpBak15akFNdklqTXdJekx2VkdacFozTHpVV093VURaalJUTjFZbU0ya1RONUlHTTVRalpqSkdNd01UTXpJV1kwRXpMTUdFME56ZzROamRqTXpNeU1HSm1ZMk5sT0RjNU1HTm0=',
-      modifyDate: null,
-      author: null,
-      resourceName: null,
-      curriculumId: null,
-      projectPrefixUrl: null,
-      isFolder: null,
-      sorted: null,
-      size: 0,
-      grade: null,
-      name: 'film.mp4',
-      floder: '202203151416003.197',
-      startDate: null,
-      status: null,
-      desc: null,
-      uploadState: null,
-      watchWatchNum: null,
-      code: '14ab31300bcf490b95962f554cd509e3',
-      flag: null,
-      resourcePath: null,
-      isPassBack: null,
-      nameType: null,
-      selfType2: null,
-      selfType3: null,
-      rate: '0',
-      imageUrl: null,
-      selfType1: null,
-      transPath: null,
-      fileUrl:
-        'http://zonekeyvideo.oss-cn-hangzhou.aliyuncs.com/9532072548461-%E8%B8%A2%E8%B8%8F.mp4',
-      attribute: null,
-      changeFlag: null,
-      camera: 'Hello-副本.mp4',
-      uploadIsManual: null,
-      uploadIsDelete: null,
-      createDate: null,
-      storeType: null,
-      rates: null,
-      label: null,
-      userName: null,
-      storeId: null,
-      userId: null,
-      areaId: null,
-      uploaddeletestatus: null,
-      createUser: null,
-      resourceUuid: 'a4bdd16f-991a-4379-be79-f5cdc9cb98ac',
-      resourceType: null,
-      showFlag: true,
-    },
-  ],
 });
 function playInit() {
-  if (data.videoList.length === 0) return false;
+  if (props.playVideoList.length === 0) return false;
   nextTick(() => {
     createPlayer();
   });
@@ -216,7 +99,7 @@ function playInit() {
 function createPlayer(obj = {}, type) {
   data.playerList = [];
   // 遍历创建播放器对象
-  data.playVideoList.forEach((video, index) => {
+  props.playVideoList.forEach((video, index) => {
     if (video.showFlag) {
       const mediaData = Object.assign(
         {
@@ -255,8 +138,8 @@ function bindPlayerEvent(player) {
     setDuration();
     // player.listen('ended', haddlePlayEnd);
   } else {
-    player.listen('media_info', checkAudioStatus);
-    player.listen('error', haddlePlayerError);
+    // player.listen('media_info', checkAudioStatus);
+    // player.listen('error', haddlePlayerError);
     player.listen('canplay', () => {
       refreshPlayer(); // 刷新当前页面时，加个样式。
     });

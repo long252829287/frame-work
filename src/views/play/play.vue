@@ -4,13 +4,32 @@ import { useRouter, useRoute } from 'vue-router'
 import VideoPlayer from '../../components/videoPlay/videoPlayer.vue';
 
 const router = useRouter();
+const route = useRoute();
 const isCollect = false;
-
+const data = reactive({
+  playVideoList: [{
+    source: '',
+    size: 0,
+    rate: '0', // 倍速
+    fileUrl:
+      // 'http://openhls-tct.douyucdn2.cn/dyliveflv3a/3573342rl07ghZJ6.m3u8?txSecret=78d47c77d6deda5dca4bc66c254825c6&txTime=649ac437&token=h5-douyu-0-3573342-7d3ca23be85d52e407edcc3d1dea706a&did=10000000000000000000000000001501&origin=tct&vhost=play4&sid=353433713',
+      // 'http://openhls-tct.douyucdn2.cn/dyliveflv1/5110403rMxtI8adm.m3u8?txSecret=0f734ee3d278a0a7f309fc7979323ee4&txTime=649a8d03&token=h5-douyu-0-5110403-eafadf348ab024032a41d812d87065b0&did=9f1063149f7ae763a1ac4ace00081631&origin=tct&vhost=play1&sid=354110680',
+      'http://zonekeyvideo.oss-cn-hangzhou.aliyuncs.com/9532072548461-%E8%B8%A2%E8%B8%8F.mp4',
+    camera: '小猴跳舞.mp4',
+    showFlag: true,
+  }],
+  isLive: false
+})
 
 function toBack() {
   router.go(-1)
 }
-onMounted(() => {});
+onMounted(() => {
+  if (route.query.url) {
+    data.playVideoList[0].fileUrl = route.query.url;
+    data.isLive = true;
+  }
+});
 </script>
 
 <template>
@@ -45,7 +64,7 @@ onMounted(() => {});
         </ul>
       </div>
       <div class="content-center">
-        <Video-player></Video-player>
+        <Video-player :playVideoList="data.playVideoList" :isLive="data.isLive"></Video-player>
       </div>
       <div class="content-right display-center" @click="toExpand()">back</div>
     </div>

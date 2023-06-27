@@ -31,8 +31,9 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      '/platform/': {
-        target: 'http://www.osheeep.com',
+      '/lyl/': {
+        // target: 'http://www.osheeep.com',
+        target: 'http://localhost:3000/',
         changeOrigin: true,
         configure: (proxy, options) => {
           // proxy 是 'http-proxy' 的实例

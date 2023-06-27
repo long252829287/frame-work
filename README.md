@@ -72,8 +72,6 @@ npm run build
 
 /usr/local/server
 
-
-
 ---
 
 ## Nginx 安装
@@ -613,4 +611,10 @@ http {
         }
         include /etc/nginx/conf.d/*.conf;
 }
+```
+
+#### 微前端Nginx配置
+
+```js
+
 ```
