@@ -3,82 +3,49 @@ import { ref, onMounted, reactive, inject } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import SearchInput from '@/components/search-input.vue';
 import { commonService } from '../../service';
-import RoomMain from './components/room-main.vue';
-import { ElMessage  } from 'element-plus';
 
 const loading = inject('loading');
-const router = useRouter();
 const route = useRoute();
-const data = reactive({});
-
-function toDetail(module) {
-  router.push({ path: module.src });
-}
-
-function getLiveStream(roomNumber) {
-  let param = {
-    rid: roomNumber,
-  };
-  loading.showLoading();
-  commonService
-    .postLiveStream(param)
-    .then((res) => {
-      if (res.data.fileUrl != null) {
-        loading.hideLoading();
-        router.push({
-          name: 'play',
-          query: { url: res.data.fileUrl, isLive: true },
-        });
-      } else {
-        loading.hideLoading();
-        ElMessage({
-          type: 'warning',
-          message: '房间号错误或未开播',
-          center: true,
-        });
-      }
-    })
-    .catch((err) => {
-      loading.hideLoading();
-    });
-}
+const router = useRouter();
 
 function search(val) {
-  getLiveStream(val.value);
+  let params = {
+    rid: val.value
+  }
+  commonService.postHuyaLiveStream(params).then(res => {
+    if (res.data.fileUrl != null) {
+      loading.hideLoading();
+      router.push({
+        name: 'play',
+        query: { url: res.data.fileUrl, isLive: true },
+      });
+    } else {
+      loading.hideLoading();
+    }
+  })
 }
 
 function toBack() {
   router.go(-1);
 }
-
-onMounted(() => {
-});
 </script>
 
 <template>
-  <div class="room">
+  <div class="chat">
     <header>
       <div class="header-container">
         <div class="go-back">
           <i class="iconfont icon-arrow-left" @click="toBack"></i>
         </div>
-        <SearchInput :placeholder="'请输入斗鱼房间号'" @search="search" />
+        <SearchInput :placeholder="'请输入'" @search="search" />
       </div>
     </header>
-    <RoomMain></RoomMain>
-    <footer>
-      <p class="footer"></p>
-    </footer>
   </div>
 </template>
 
-<style scoped lang="scss">
-@mixin default-padding {
-  padding: 0 20px;
-}
+<style lang="scss" scoped>
 .room {
   background: #f5f6f8;
-  // background: rgba(255,255,255,.4);
   min-height: 100vh;
   min-width: 100vw;
   display: flex;
@@ -121,13 +88,5 @@ header {
   @media screen and (max-width: 720px) {
     background: #fff;
   }
-}
-
-footer {
-  @include default-padding;
-}
-.footer {
-  line-height: 60px;
-  float: right;
 }
 </style>

@@ -36,35 +36,37 @@
 import playerjs from './js/player';
 import ControlBar from './components/control-bar.vue';
 import { utilsTime } from '../../utils/utilsTime';
-import posterImg from '../../static/homePage/cs1.jpg'
+import posterImg from '../../static/homePage/cs1.jpg';
 import {
   ref,
   onMounted,
   reactive,
-  onDeactivated,
   nextTick,
   defineEmits,
+  onBeforeUnmount,
 } from 'vue';
-import { defineProps } from 'vue'
+import { defineProps } from 'vue';
 
 const props = defineProps({
-  playVideoList:{
+  playVideoList: {
     type: Array,
-    default: () => [{
-      source: '',
-      size: 0,
-      rate: '0', // 倍速
-      fileUrl:
-        'http://zonekeyvideo.oss-cn-hangzhou.aliyuncs.com/9532072548461-%E8%B8%A2%E8%B8%8F.mp4',
-      camera: '小猴跳舞.mp4',
-      showFlag: true,
-    }]
+    default: () => [
+      {
+        source: '',
+        size: 0,
+        rate: '0', // 倍速
+        fileUrl:
+          'http://zonekeyvideo.oss-cn-hangzhou.aliyuncs.com/9532072548461-%E8%B8%A2%E8%B8%8F.mp4',
+        camera: '小猴跳舞.mp4',
+        showFlag: true,
+      },
+    ],
   },
   isLive: {
     type: Boolean,
     default: false,
   },
-})
+});
 
 const emit = defineEmits(['totalTime', 'currentTime']);
 
@@ -111,6 +113,7 @@ function createPlayer(obj = {}, type) {
         },
         obj
       ); // obj放到后面防止事件循环机制导致每次的fileUrl获取是最后面的一个
+      console.log('mediaData', mediaData);
       data.playerList[index] = playerjs.createPlayer(mediaData);
     } else {
       data.playerList[index] = null;
@@ -255,7 +258,7 @@ function filterPlayerTitle(player) {
 onMounted(() => {
   playInit();
 });
-onDeactivated(() => {
+onBeforeUnmount(() => {
   // 注销播放器
   data.playerList.forEach((player) => {
     if (player) {

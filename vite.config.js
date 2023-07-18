@@ -33,7 +33,7 @@ export default defineConfig({
     proxy: {
       '/lyl/': {
         // target: 'http://www.osheeep.com',
-        target: 'http://localhost:3000/',
+        target: 'http://localhost:3000',
         changeOrigin: true,
         configure: (proxy, options) => {
           // proxy 是 'http-proxy' 的实例

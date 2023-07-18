@@ -63,7 +63,6 @@ class LnFlvPlayer extends flvjs.FlvPlayer {
         let _vDom = this._videoDom;
         // 双击视频，切换全屏
         let v = this;
-        console.log('_vDom', this._videoDom);
         _vDom.addEventListener('dblclick', function () {v._toggleFullScreen()});
         super.attachMediaElement(_vDom);
     }

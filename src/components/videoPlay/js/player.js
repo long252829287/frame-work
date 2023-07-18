@@ -14,6 +14,7 @@ function createLNPlayer(mediaDataSource, optionalConfig) {
   const _id = mediaDataSource.wrapperId;
   const vDom = document.getElementById(_id);
   if (!vDom) throw String('From lnPlayer: can\'t find the div item from document base on your [wrapperId]!');
+  console.log('mediaDataSource', mediaDataSource);
 
   if (!mediaDataSource.videoType) mediaDataSource.videoType = _getVideoType(mediaDataSource.url);
 
@@ -43,7 +44,6 @@ function createLNPlayer(mediaDataSource, optionalConfig) {
       mediaDataSource.type = type;
     }
   }
-  console.log('mediaDataSource', mediaDataSource);
 
   // 创建video标签，放在document中
   vDom.style.position = 'relative';
@@ -51,7 +51,7 @@ function createLNPlayer(mediaDataSource, optionalConfig) {
   const videoDom = document.createElement('video');
   videoDom.setAttribute('id', _id + '_player');
   videoDom.addEventListener('loadedmetadata', () => {
-    const ratioFlag = videoDom.videoWidth / videoDom.videoHeight > 1.78;
+    const ratioFlag = videoDom.videoWidth / videoDom.videoHeight > 1.77;
     const style = mediaDataSource.videoStyle ? mediaDataSource.videoStyle : ratioFlag ? 'width: 100%; object-fit: fill' : 'height: 100%; object-fit: fill';
     videoDom.setAttribute('style', style);
   }, { once: true });
@@ -144,7 +144,7 @@ function _getVideoType(url) {
   if (url.indexOf('.m3u8') > -1) {
     return 'hls';
   }
-  if (url.indexOf('flv/') > -1) {
+  if (url.indexOf('flv') > -1) {
     return 'live';
   } else {
     return 'video';

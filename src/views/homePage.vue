@@ -10,9 +10,9 @@ import { commonService } from '../service'
 const router = useRouter()
 const route = useRoute()
 const moduleList = ref([
-  {name: '第一模块', summary: '点击观看小猴跳舞', color:'#9773FF',src: '/play'},
-  {name: '第二模块', summary: '点击搜索斗鱼直播', color:'#3EC053',src: '/room'},
-  {name: '第三模块', summary: '蓝色', color:'#1DB2FF'},
+  {name: '默认播放器', summary: '点击观看小猴跳舞', color:'#9773FF',src: '/play'},
+  {name: '斗鱼', summary: '搜索房间号观看斗鱼直播', color:'#3EC053',src: '/room'},
+  {name: '虎牙', summary: '搜索房间号观看虎牙直播', color:'#1DB2FF', src: '/chat'},
   {name: '第四模块', summary: '橙色', color:'#F7A554'},
   {name: '第五模块', summary: '青色', color:'#00AFD1'},
   {name: '第六模块', summary: '粉色', color:'#FF6F8E'},
