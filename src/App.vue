@@ -18,6 +18,7 @@ function initPlatform() {
     username: 'admin'
   }
   commonService.getUserInfo(params2).then(res => {
+    
   })
 }
 
