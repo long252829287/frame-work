@@ -1,20 +1,18 @@
 <script setup>
 import { ref, onMounted, reactive } from "vue";
 import { useRouter, useRoute } from 'vue-router'
-import SearchInput from '@/components/search-input.vue'
-import softDrag from '@/components/soft-drag.vue'
 import enter from '../static/homePage/enter_toPage.png'
-import mainImg from '../static/avatar/main.jpg'
 import { commonService } from '../service'
+import Header from '@/components/header/header.vue'
 
 const router = useRouter()
 const route = useRoute()
 const moduleList = ref([
   {name: '默认播放器', summary: '点击观看小猴跳舞', color:'#9773FF',src: '/play'},
   {name: '斗鱼', summary: '搜索房间号观看斗鱼直播', color:'#3EC053',src: '/room'},
-  {name: '虎牙', summary: '搜索房间号观看虎牙直播', color:'#1DB2FF', src: '/chat'},
-  {name: '第四模块', summary: '橙色', color:'#F7A554'},
-  {name: '第五模块', summary: '青色', color:'#00AFD1'},
+  {name: '虎牙', summary: '搜索房间号观看虎牙直播', color:'#1DB2FF', src: '/room'},
+  {name: 'chatgpt', summary: '使用chatgpt，密匙lyl_wdxl', color:'#F7A554', open: true, src: 'https://chat-gpt-next-web-main-taupe.vercel.app/#/chat'},
+  {name: '照片墙', summary: '实验室', color:'#00AFD1', src: '/pictureWall'},
   {name: '第六模块', summary: '粉色', color:'#FF6F8E'},
   {name: '第七模块', summary: '黄色', color:'#D1C425'},
   {name: '第八模块', summary: '湛清', color:'#05739D'},
@@ -22,33 +20,21 @@ const moduleList = ref([
 const data = reactive({
   
 })
-
 function toDetail(module) {
-  router.push({path: module.src})
-}
-
-function getLiveStream() {
-  let params = {
-    rid: '5110403'
+  if (module.open) {
+    window.open(module.src, '_blank');
+  } else {
+    router.push({path: module.src})
   }
-  commonService.postLiveStream(params).then(res => {
-    console.log('res', res);
-  })
 }
 
 onMounted(()=> {
-  // getLiveStream();
 });
 </script>
 
 <template>
   <div class="homePage">
-    <header>
-      <div class="header-container">
-        <el-avatar class="avatar" icon="UserFilled" :src="mainImg"/>
-        <SearchInput/>
-      </div>
-    </header>
+    <Header type="1"></Header>
     <main>
       <div class="modules">
         <div class="module" v-for="(module, index)  in moduleList" :key="index" @click="toDetail(module)">
@@ -74,34 +60,12 @@ onMounted(()=> {
 .homePage {
   background: #F5F6F8;
   // background: rgba(255,255,255,.4);
+  height: 100%;
   min-height: 100vh;
-  min-width: 100vw;
+  // min-width: 100vw;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-}
-header {
-  width: 100vw;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: fixed;
-  border-bottom: #e5e5e5;
-  background: #fff;
-  box-shadow: 0px 2px 10px rgba(32,39,54,0.03);
-  z-index: 999;
-  .header-container {
-    display: flex;
-    align-items: center;
-    max-width: 1560px;
-    justify-content: space-between;
-    padding: 0 12px;
-    width: 100%;
-    // background: #232222;
-  }
-  @media screen and (max-width: 720px) {
-    background: #fff;
-  }
 }
 main {
   flex: 1;

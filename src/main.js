@@ -13,7 +13,6 @@ import {
 import './assets/iconfont/iconfont.css'
 import 'element-plus/dist/index.css'
 import lylLoading from './assets/js/lyl-loading'
-import './assets/ts/test.ts'
 // import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 const app = createApp(App)
 const loading = new lylLoading()

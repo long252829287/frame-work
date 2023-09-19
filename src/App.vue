@@ -18,7 +18,6 @@ function initPlatform() {
     username: 'admin'
   }
   commonService.getUserInfo(params2).then(res => {
-    
   })
 }
 
@@ -32,5 +31,5 @@ onMounted(()=> {
 </template>
 
 <style scoped lang="scss">
-@import "../src/assets/css/main.css";
+@import "../src/assets/css/main.scss";
 </style>

@@ -2,6 +2,7 @@
 import { ref, onMounted, reactive, inject } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import SearchInput from '@/components/search-input.vue';
+import Header from '@/components/header/header.vue'
 import { commonService } from '../../service';
 
 const loading = inject('loading');
@@ -32,14 +33,7 @@ function toBack() {
 
 <template>
   <div class="chat">
-    <header>
-      <div class="header-container">
-        <div class="go-back">
-          <i class="iconfont icon-arrow-left" @click="toBack"></i>
-        </div>
-        <SearchInput :placeholder="'请输入'" @search="search" />
-      </div>
-    </header>
+    <Header></Header>
   </div>
 </template>
 

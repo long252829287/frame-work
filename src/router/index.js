@@ -24,6 +24,11 @@ const router = createRouter({
       name: 'chat',
       component: () => import('../views/chatGPT/chat.vue')
     },
+    {
+      path: '/pictureWall',
+      name: 'pictureWall',
+      component: () => import('../views/pictureWall/pictureWall.vue')
+    },
   ]
 })
 

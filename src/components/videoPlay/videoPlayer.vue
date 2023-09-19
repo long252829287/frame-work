@@ -38,11 +38,9 @@ import ControlBar from './components/control-bar.vue';
 import { utilsTime } from '../../utils/utilsTime';
 import posterImg from '../../static/homePage/cs1.jpg';
 import {
-  ref,
   onMounted,
   reactive,
   nextTick,
-  defineEmits,
   onBeforeUnmount,
 } from 'vue';
 import { defineProps } from 'vue';
@@ -69,9 +67,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['totalTime', 'currentTime']);
-
-const screenWidth = ref(0);
-
 const data = reactive({
   isLive: true, // 是否直播
   errorFlag: false,
