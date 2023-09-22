@@ -17,7 +17,6 @@ function getLiveStream(roomNumber) {
   let param = {
     rid: roomNumber,
   };
-  loading.showLoading();
   commonService
     .postLiveStream(param)
     .then((res) => {
@@ -42,6 +41,7 @@ function getLiveStream(roomNumber) {
 }
 
 function search(val) {
+  loading.showLoading();
   getLiveStream(val);
 }
 

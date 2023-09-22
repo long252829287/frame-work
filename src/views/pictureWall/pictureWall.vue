@@ -11,7 +11,7 @@ useInView(imgRef);
 <template>
   <Header title="照片墙"></Header>
   <div class="picture-wall">
-    <div v-for="(_, idx) in new Array(200).fill(11)" :key="idx">
+    <div v-for="(_, idx) in new Array(200).fill(1)" :key="idx">
       <img
         ref="imgRef"
         src="https://via.placeholder.com/300"

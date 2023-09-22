@@ -1,18 +1,15 @@
 import { onMounted, Ref } from "vue";
 const options = {
-  // root: document.querySelector(".container"), // 根元素，默认为视口
+  // root: document.querySelector(".picture-wall"), // 根元素，默认为视口
   rootMargin: "0px", // 根元素的边距
   threshold: 0.5, // 可见性比例阈值
   once: true,
 };
 
-function callback(
-  entries: IntersectionObserverEntry[],
-  observer: IntersectionObserver
-) {
+function callback(entries, observer) {
   entries.forEach((entry) => {
     if (entry.intersectionRatio <= 0) return;
-    const img = entry.target as HTMLImageElement;
+    const img = entry.target;
     const src = img.getAttribute("data-src");
 
     img.setAttribute("src", src ?? ""); // 将真实的图片地址赋给 src 属性

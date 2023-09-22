@@ -31,10 +31,10 @@ function search(val) {
 <template>
   <header>
     <div class="header-container">
-      <el-avatar v-if="type == 1" icon="UserFilled" :src="mainImg"/>
+      <el-avatar v-if="type == 1" class="avatar" icon="UserFilled" :src="mainImg"/>
       <div v-else class="go-back" @click="toBack">
         <i class="iconfont icon-arrow-left"></i>
-      </div>
+      </div>      
       <h3>{{title}}</h3>
       <SearchInput :placeholder="placeholder" @search="search"/>
     </div>
@@ -59,7 +59,6 @@ header {
     display: flex;
     align-items: center;
     max-width: 1630px;
-    justify-content: space-between;
     padding: 0 12px;
     width: 100%;
     .go-back {
@@ -76,6 +75,14 @@ header {
         background-color: #ebeff3;
         color: rgb(34, 33, 33);
         cursor: pointer;
+      }
+    }
+    > h3 {
+      margin: 0 auto 0 10px;
+    }
+    @media (max-width: 720px) {
+      > h3 {
+        display: none;
       }
     }
   }

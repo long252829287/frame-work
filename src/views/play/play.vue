@@ -36,8 +36,8 @@ onMounted(() => {
   <div class="Play">
     <div class="course-detail-header">
       <div class="l">
-        <div class="go-back">
-          <i class="iconfont icon-arrow-left" @click="toBack"></i>
+        <div class="go-back"  @click="toBack">
+          <i class="iconfont icon-arrow-left"></i>
         </div>
         <div class="collect" @click="isCollect = !isCollect">
           <i class="iconfont icon-star-o">

@@ -33,7 +33,7 @@ export default {
     placeholder: {
       type: String,
       default: '请搜索感兴趣的内容',
-    },
+    }
   },
   methods: {
     inputActive(boolean) {
@@ -43,12 +43,8 @@ export default {
       this.inActive = true;
       setTimeout(() => {
         document.addEventListener('click', this.hideSearchActive);
-      }, 50);
-      if (!val) {
-        return false;
-      } else {
-        this.$emit('search', { value: val });
-      } 
+      }, 500);
+      this.$emit('search', { value: val });
     },
     hideSearchActive() {
       document.removeEventListener('click', this.hideSearchActive);
