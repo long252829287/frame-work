@@ -1,5 +1,9 @@
 <script setup>
-import { ref } from 'vue';
+import {
+  onMounted,
+  onBeforeUnmount,
+  ref
+} from 'vue';
 import SearchInput from '@/components/search-input.vue';
 import { useRouter } from 'vue-router';
 import mainImg from '@/static/avatar/main.jpg'
@@ -14,10 +18,9 @@ defineProps({
   }
 })
 let progress = ref(0);
-// 监听滚动事件
-window.addEventListener('scroll', () => {
+const scrollHandler = function() {
   progress.value = ((document.documentElement.scrollTop / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100).toFixed(2);
-});
+};
 
 function toBack() {
   router.go(-1);
@@ -26,6 +29,12 @@ function toBack() {
 function search(val) {
   emit('search', val.value);
 }
+onMounted(() => {
+  window.addEventListener('scroll', scrollHandler);
+});
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', scrollHandler)
+})
 </script>
 
 <template>

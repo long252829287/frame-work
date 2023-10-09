@@ -123,6 +123,7 @@ class HlsPlayer extends Hls {
 
   attachMediaData() {
     let _v = this;
+    _v._videoDom.addEventListener('click', function () { _v._togglePlayStatus() });
     _v._videoDom.addEventListener('dblclick', function () { _v._toggleFullScreen() });
     super.attachMedia(_v._videoDom);
   }
@@ -142,6 +143,9 @@ class HlsPlayer extends Hls {
   // 进度跳转
   _toggleFullScreen() {
     _isFullscreenEnabled() ? this.exitFullScreen() : this.goFullScreen();
+  }
+  _togglePlayStatus() {
+    this._videoDom.paused ? this.play() : this.pause();
   }
   // 播放
   play() {

@@ -3,9 +3,14 @@
     id="commonVideoPlayer"
     v-show="props.playVideoList.length"
     class="video-player-container"
+    @mouseout.capture="showControlBar"
   >
     <!-- 播放器 -->
-    <div class="players-container">
+    <div
+      class="players-container"
+      :style="{ height: windowHeight - 163 + 'px !important' }"
+      @mousemove.prevent="showControlBar"
+    >
       <div class="center-player" id="centerPlayer">
         <div class="player-con">
           <div id="video0" class="each-player full-player">
@@ -16,16 +21,22 @@
     </div>
     <!-- 播放器控制条 -->
     <transition name="el-zoom-in-bottom">
-      <div class="controls-container" id="controlBar">
+      <div
+        class="controls-container"
+        id="controlBar"
+        v-show="data.isShowControlBar"
+        @mouseover.capture="stillShowControlBar"
+      >
         <ControlBar
           ref="controlBar"
           :config="data.playerConfig"
-          :isLive="data.isLive"
+          :isLive="props.isLive"
           @play="play"
           @pause="pause"
           @setVolume="setVolume"
           @playRate="playRate"
           @fullScreen="toggleFullScreen"
+          @changeTime="changeTime"
         ></ControlBar>
       </div>
     </transition>
@@ -42,8 +53,10 @@ import {
   reactive,
   nextTick,
   onBeforeUnmount,
+  defineProps,
+  computed,
+  ref,
 } from 'vue';
-import { defineProps } from 'vue';
 
 const props = defineProps({
   playVideoList: {
@@ -68,10 +81,11 @@ const props = defineProps({
 
 const emit = defineEmits(['totalTime', 'currentTime']);
 const data = reactive({
-  isLive: true, // 是否直播
   errorFlag: false,
   posterImg: posterImg,
   refreshFlag: true, // 是否显示暂停图标
+  isShowControlBar: true,
+  controlBarTimer: null,
   playerConfig: {
     // 播放器基础配置信息
     duration: 0, // 视频总时长
@@ -86,6 +100,10 @@ const data = reactive({
     startTime: 0, // 直播开始时间
   },
 });
+let windowHeight = ref(0);
+function resizeHandle() {
+  windowHeight.value = window.innerHeight;
+}
 function playInit() {
   if (props.playVideoList.length === 0) return false;
   nextTick(() => {
@@ -108,13 +126,12 @@ function createPlayer(obj = {}, type) {
         },
         obj
       ); // obj放到后面防止事件循环机制导致每次的fileUrl获取是最后面的一个
-      console.log('mediaData', mediaData);
       data.playerList[index] = playerjs.createPlayer(mediaData);
     } else {
       data.playerList[index] = null;
     }
   });
-  if (data.isLive) {
+  if (props.isLive) {
     nextTick(() => {
       if (data.playerList[0]) bindPlayerEvent(data.playerList[0]);
     });
@@ -124,9 +141,12 @@ function createPlayer(obj = {}, type) {
 }
 function bindPlayerEvent(player) {
   player.listen('fullScreen', setFullScreen);
+  player.listen('timeupdate', setCurrentTime);
+  player.listen('play', play);
+  player.listen('pause', pause);
   player.muted = false;
   player.volume = data.playerConfig.volume;
-  if (!data.isLive) {
+  if (props.isLive) {
     player.listen('canplay', () => {
       setDuration();
       player.muted = false;
@@ -134,9 +154,9 @@ function bindPlayerEvent(player) {
       refreshPlayer(); // 刷新当前页面时，加个样式。
     });
     setDuration();
-    // player.listen('ended', haddlePlayEnd);
   } else {
-    // player.listen('media_info', checkAudioStatus);
+    player.listen('ended', handlePlayEnd);
+    player.listen('media_info', checkAudioStatus);
     // player.listen('error', haddlePlayerError);
     player.listen('canplay', () => {
       refreshPlayer(); // 刷新当前页面时，加个样式。
@@ -224,8 +244,7 @@ function setCurrentTime() {
     var time = utilsTime.formatTime(data.playerConfig.currentTime);
     emit('currentTime', time);
   }
-
-  if (!data.isLive && data.playerList[0]) {
+  if (!props.isLive && data.playerList[0]) {
     // 获取总时间
     const duration = data.playerList[0].getDuration();
     duration && setDuration();
@@ -249,21 +268,62 @@ function filterPlayerTitle(player) {
     return '暂无名称';
   }
 }
+// 视频播放结束
+function handlePlayEnd() {
+  data.playerConfig.pauseFlag = true;
+  data.isShowControlBar = true;
+  data.playerList.forEach((player) => {
+    // 全部暂停
+    if (player) player.pause();
+    pause();
+  });
+}
+// 展示进度条
+function showControlBar() {
+  if (data.playerList.length) {
+    // if (!data.playerList[0].fileUrl) return false; // 没有资源，不展示进度条
+    if (data.playerConfig.pauseFlag) return false;
+    if (data.controlBarTimer) clearTimeout(data.controlBarTimer);
+    data.isShowControlBar = true;
+    data.controlBarTimer = setTimeout(() => {
+      data.isShowControlBar = data.playerConfig.pauseFlag;
+    }, 3000);
+  }
+}
+// 鼠标焦点在进度条上或者视频暂停或者结束播放时，始终展示进度条
+function stillShowControlBar() {
+  if (data.playerConfig.pauseFlag) return false;
+  if (data.controlBarTimer) clearTimeout(data.controlBarTimer);
+  data.isShowControlBar = true;
+}
+// 改变当前播放进度
+function changeTime(time) {
+  data.playerConfig.pauseFlag = false;
+  data.playerList.forEach((player) => {
+    if (player) player.setCurrentTime(time);
+    if (data.playerList[0].paused) {
+      data.playerList[0].play();
+    }
+  });
+}
 
 onMounted(() => {
+  resizeHandle();
+  window.addEventListener('resize', resizeHandle);
   playInit();
 });
 onBeforeUnmount(() => {
   // 注销播放器
   data.playerList.forEach((player) => {
     if (player) {
-      if (data.isLive) {
+      if (props.isLive) {
         player.dispose();
       } else {
         player.destroy();
       }
     }
   });
+  window.removeEventListener('resize', resizeHandle);
 });
 </script>
 

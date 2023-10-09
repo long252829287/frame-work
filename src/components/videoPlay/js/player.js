@@ -51,8 +51,8 @@ function createLNPlayer(mediaDataSource, optionalConfig) {
   const videoDom = document.createElement('video');
   videoDom.setAttribute('id', _id + '_player');
   videoDom.addEventListener('loadedmetadata', () => {
-    const ratioFlag = videoDom.videoWidth / videoDom.videoHeight > 1.77;
-    const style = mediaDataSource.videoStyle ? mediaDataSource.videoStyle : ratioFlag ? 'width: 100%; object-fit: fill' : 'height: 100%; object-fit: fill';
+    const ratioFlag = videoDom.videoWidth / videoDom.videoHeight > 1.78;
+    const style = mediaDataSource.videoStyle ? mediaDataSource.videoStyle : ratioFlag ? 'width: 100%; height: 100%' : 'height: 100%; width: 100%;';
     videoDom.setAttribute('style', style);
   }, { once: true });
   vDom.appendChild(videoDom);

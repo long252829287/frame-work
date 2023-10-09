@@ -40,10 +40,6 @@
             @extend .wd_hd_100;
             transition: all 0.2s linear;
             padding-top: 56.25%;
-            position: relative;
-            text-align: center;
-            @extend .flex;
-            box-sizing: border-box;
         }
     }
     .each-player {

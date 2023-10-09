@@ -147,6 +147,9 @@ onMounted(() => {
           cursor: pointer;
         }
       }
+      @media screen and (max-width: 720px) {
+        display: none;
+      }
     }
     .content-center {
       flex: 1;
@@ -157,6 +160,9 @@ onMounted(() => {
       > i {
         color: rgba(255, 255, 255, 0.4);
         font-size: 22px;
+      }
+      @media screen and (max-width: 720px) {
+        display: none;
       }
     }
   }
