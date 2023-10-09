@@ -156,7 +156,7 @@ function bindPlayerEvent(player) {
     setDuration();
   } else {
     player.listen('ended', handlePlayEnd);
-    player.listen('media_info', checkAudioStatus);
+    // player.listen('media_info', checkAudioStatus);
     // player.listen('error', haddlePlayerError);
     player.listen('canplay', () => {
       refreshPlayer(); // 刷新当前页面时，加个样式。
