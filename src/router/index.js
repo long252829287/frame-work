@@ -29,6 +29,11 @@ const router = createRouter({
       name: 'pictureWall',
       component: () => import('../views/pictureWall/pictureWall.vue')
     },
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/login/login.vue')
+    }
   ]
 })
 

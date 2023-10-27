@@ -29,6 +29,12 @@ function toBack() {
 function search(val) {
   emit('search', val.value);
 }
+
+function toLogin() {
+  router.push({
+    name: 'login',
+  })
+}
 onMounted(() => {
   window.addEventListener('scroll', scrollHandler);
 });
@@ -40,10 +46,10 @@ onBeforeUnmount(() => {
 <template>
   <header>
     <div class="header-container">
-      <el-avatar v-if="type == 1" class="avatar" icon="UserFilled" :src="mainImg"/>
+      <el-avatar v-if="type == 1" class="avatar" icon="UserFilled" :src="mainImg" @click="toLogin"/>
       <div v-else class="go-back" @click="toBack">
         <i class="iconfont icon-arrow-left"></i>
-      </div>      
+      </div>
       <h3>{{title}}</h3>
       <SearchInput :placeholder="placeholder" @search="search"/>
     </div>
@@ -70,6 +76,9 @@ header {
     max-width: 1630px;
     padding: 0 12px;
     width: 100%;
+    .avatar {
+      cursor: pointer;
+    }
     .go-back {
       width: 70px;
       text-align: center;
