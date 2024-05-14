@@ -1,11 +1,5 @@
 <script setup>
-import {
-  onMounted,
-  onBeforeUnmount,
-  ref
-} from 'vue';
 import SearchInput from '@/components/search-input.vue';
-import { useRouter } from 'vue-router';
 import mainImg from '@/static/avatar/main.jpg'
 const emit = defineEmits(['search']);
 const router = useRouter(); 

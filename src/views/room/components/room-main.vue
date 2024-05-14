@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { ref } from 'vue'
-
 const tableData = [
   {
     date: '2016-05-03',

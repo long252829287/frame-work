@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue';
 import { useInView } from '@/hooks/useInView';
 import Header from '@/components/header/header.vue'
 

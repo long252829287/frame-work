@@ -5,6 +5,7 @@ import viteCompression from 'vite-plugin-compression'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import ViteAutoImport from 'unplugin-auto-import/vite'
 
 /** @type {import('vite').UserConfig} */
 // https://vitejs.dev/config/
@@ -32,6 +33,10 @@ export default defineConfig({
       threshold: 5120, //压缩前最小文件大小
       algorithm: 'gzip', //压缩算法
       ext: '.gz', //文件类型
+    }),
+    ViteAutoImport({
+      imports: ['vue', 'vue-router'], // 自动导入 Vue 相关函数，如:ref, reactive, toRef 等
+      dts: './auto-import.d.ts',
     }),
     AutoImport({
       resolvers: [ElementPlusResolver()],

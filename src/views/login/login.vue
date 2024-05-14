@@ -1,7 +1,5 @@
 <script setup>
-import { reactive, ref } from 'vue'
 import { commonService } from '../../service';
-import { useRouter, useRoute } from 'vue-router'
 const router = useRouter()
 const loginForm = reactive({
   username: '',

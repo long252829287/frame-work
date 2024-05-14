@@ -1,6 +1,4 @@
 <script setup>
-import { ref, onMounted, reactive } from "vue";
-import { useRouter, useRoute } from 'vue-router'
 import enter from '../static/homePage/enter_toPage.png'
 import { commonService } from '../service'
 import Header from '@/components/header/header.vue'

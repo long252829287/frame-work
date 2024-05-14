@@ -1,6 +1,4 @@
 <script setup>
-import { ref, onMounted, reactive } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
 import VideoPlayer from '../../components/videoPlay/videoPlayer.vue';
 
 const router = useRouter();

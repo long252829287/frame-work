@@ -1,10 +1,8 @@
 <script setup>
-import { ref, onMounted, inject } from 'vue';
 import { commonService } from '../../service';
 import RoomMain from './components/room-main.vue';
 import Header from '@/components/header/header.vue';
 import { ElMessage  } from 'element-plus';
-import { useRouter } from 'vue-router';
 const loading = inject('loading');
 const router = new useRouter()
 const headerProps = ref({

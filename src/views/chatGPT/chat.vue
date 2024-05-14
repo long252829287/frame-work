@@ -1,6 +1,4 @@
 <script setup>
-import { ref, onMounted, reactive, inject } from 'vue';
-import { useRouter, useRoute } from 'vue-router';
 import SearchInput from '@/components/search-input.vue';
 import Header from '@/components/header/header.vue'
 import { commonService } from '../../service';
