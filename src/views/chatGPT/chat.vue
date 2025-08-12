@@ -1,10 +1,8 @@
 <script setup>
-import SearchInput from '@/components/search-input.vue';
 import Header from '@/components/header/header.vue'
 import { commonService } from '../../service';
 
 const loading = inject('loading');
-const route = useRoute();
 const router = useRouter();
 
 function search(val) {

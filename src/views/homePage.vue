@@ -68,7 +68,9 @@ onMounted(()=> {
 main {
   flex: 1;
   padding: 20px;
-  @include flex-center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin-top: 60px;
 }
 .modules {
@@ -157,7 +159,7 @@ main {
   .module-name {
     display: flex;
     width: 100%;
-    color: $light_frame_1;
+    color: #ffffff;
     font-size: 28px;
   }
 }

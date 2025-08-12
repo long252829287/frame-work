@@ -328,5 +328,5 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-@import './videoPlayer.scss';
+@use './videoPlayer.scss';
 </style>

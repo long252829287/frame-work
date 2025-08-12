@@ -14,13 +14,24 @@ let instance = axios.create({
 
 instance.interceptors.request.use(request => {
     csrfToken = csrfToken || sessionStorage.getItem('csrfToken');
-    if (csrfToken) { // csrftoken请求头，用于放置csrf攻击
+    if (csrfToken) {
       request.headers['X-CSRFtoken'] = csrfToken;
+    }
+    // 注入防注入处理（仅在有 body/params 时生效）
+    if (request.data) {
+      request.data = intercept.formatSql(request.data);
+    }
+    if (request.params) {
+      request.params = intercept.formatSql(request.params);
     }
     return request;
 });
 
 instance.interceptors.response.use(response => {
+    // 移除请求过程中的标记
+    if (response && response.data) {
+      response.data = intercept.formatRes(response.data);
+    }
     return response;
 });
 
