@@ -1,15 +1,33 @@
-# frame-work
+# osheeep-frontend
 
-## author
+This template should help get you started developing with Vue 3 in Vite.
 
-###### liuyl
+## Recommended IDE Setup
 
-目前项目还未完善，目前已有的模块与功能有：
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
 
-1. 自定义样式的播放器，包括倍速播放、进度跳转、全屏等功能。该播放器可以播放mp4等常见格式的视频，也可以播放hls、flv、rtmp流。
-2. 可以通过斗鱼房间号、虎牙房间号来爬直播流进行播放，自动爬取最高清晰度，针对第一次进入的性能问题，会通过低码率的流到高码率的流的过渡来优化。
-3. 可以通过梯子访问子网页，chatgpt-nextWeb使用chatgpt功能
-4. 照片墙功能是进行api试验时的使用
-5. 剩下的模块待开发
+## Type Support for `.vue` Imports in TS
 
-后端项目存储指向 node-server
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vite.dev/config/).
+
+## Project Setup
+
+```sh
+pnpm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
+pnpm dev
+```
+
+### Type-Check, Compile and Minify for Production
+
+```sh
+pnpm build
+```
