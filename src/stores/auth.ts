@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import { commonService } from '@/service'
 import type { ApiLoginData } from '@/types'
 
@@ -11,9 +10,10 @@ export interface UserInfo {
 }
 
 export const useAuthStore = defineStore('auth', () => {
-  const router = useRouter()
+  // 从 localStorage 初始化状态
   const token = ref<string | null>(localStorage.getItem('token'))
-  const user = ref<UserInfo | null>(null)
+  const savedUserRaw = localStorage.getItem('user')
+  const user = ref<UserInfo | null>(savedUserRaw ? JSON.parse(savedUserRaw) : null)
 
   const isAuthenticated = computed(() => Boolean(token.value))
 
@@ -26,11 +26,28 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
+  function setUser(newUser: UserInfo | null) {
+    user.value = newUser
+    if (newUser) {
+      localStorage.setItem('user', JSON.stringify(newUser))
+    } else {
+      localStorage.removeItem('user')
+    }
+  }
+
   async function login(payload: { username: string; password: string }) {
     const res = await commonService.apiLogin(payload)
-    const data = res.data as ApiLoginData
-    setToken(data?.token)
-    user.value = data?.user ?? null
+    const raw = res?.data as any
+    const data: any = raw?.token ? raw : (raw?.data ?? raw?.result ?? raw?.payload)
+    const newToken: string | undefined = data?.token
+    const newUser: UserInfo | null | undefined = data?.user
+
+    if (!newToken) {
+      throw new Error('登录失败：未返回有效 token')
+    }
+
+    setToken(newToken)
+    setUser(newUser ?? null)
   }
 
   async function register(payload: { username: string; password: string; nickname?: string }) {
@@ -44,8 +61,26 @@ export const useAuthStore = defineStore('auth', () => {
       // ignore network errors for logout
     }
     setToken(null)
-    user.value = null
-    router.replace({ name: 'login' })
+    setUser(null)
+  }
+
+  // 检查登录状态
+  function checkAuth() {
+    const savedToken = localStorage.getItem('token')
+    const savedUser = localStorage.getItem('user')
+
+    if (savedToken) {
+      token.value = savedToken
+      if (savedUser) {
+        try {
+          user.value = JSON.parse(savedUser)
+        } catch {
+          user.value = null
+        }
+      }
+      return true
+    }
+    return false
   }
 
   return {
@@ -53,8 +88,10 @@ export const useAuthStore = defineStore('auth', () => {
     user,
     isAuthenticated,
     setToken,
+    setUser,
     login,
     register,
     logout,
+    checkAuth,
   }
 })

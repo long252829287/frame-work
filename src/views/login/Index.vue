@@ -20,9 +20,11 @@ async function onSubmit() {
     loading.value = true
     await auth.login(form)
     const redirect = (route.query.redirect as string) || '/notes'
-    router.replace(redirect)
+    await router.replace(redirect)
   } catch (e: any) {
-    window.alert(e?.response?.data?.message || '登录失败')
+    console.error('登录错误:', e)
+    const errorMessage = e?.response?.data?.message || e?.message || '登录失败'
+    window.alert(errorMessage)
   } finally {
     loading.value = false
   }

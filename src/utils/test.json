@@ -1,0 +1,4474 @@
+[
+  {
+    "nodes": [
+      {
+        "nodes": [
+          {
+            "innerid": "20110139",
+            "deviceIp": "10.31.2.89",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.89",
+                "name": "A101中控",
+                "typeid": "2",
+                "id": "e883d40edc674a5ab85cc5c99e4da008",
+                "camera": "card5",
+                "deviceid": "2eea5c6bcef843d2b01c7b8baebe0261",
+                "cameraName": "VGA",
+                "MAC": "00096F565101"
+              }
+            ],
+            "deviceMac": "00096F565101",
+            "id": "83943a4c2672455d8630a95ab80da4e1",
+            "attribute": "Y",
+            "sort": "111",
+            "title": "A101"
+          },
+          {
+            "innerid": "2011021",
+            "deviceIp": "10.31.2.90",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.90",
+                "name": "A102中控",
+                "typeid": "2",
+                "id": "c2eb1ad6c78543df9960cf42adf620c9",
+                "camera": "card5",
+                "deviceid": "2ac8dedeafb54e84ac860d74edafaba8",
+                "cameraName": "VGA",
+                "MAC": "00096F565102"
+              }
+            ],
+            "deviceMac": "00096F565102",
+            "id": "521760de2255459ea8083e30a38a2dd3",
+            "attribute": "Y",
+            "sort": "112",
+            "title": "A102"
+          },
+          {
+            "innerid": "2011031",
+            "deviceIp": "10.31.2.91",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.91",
+                "name": "A104中控",
+                "typeid": "2",
+                "id": "4c4a0eccf98d4668b8335204c28b973a",
+                "camera": "card5",
+                "deviceid": "603be01902ce4333b81444c0b0b6daa2",
+                "cameraName": "VGA",
+                "MAC": "00096F565103"
+              }
+            ],
+            "deviceMac": "00096F565103",
+            "id": "ab17e28341cd448bbdad40d02225df85",
+            "attribute": "Y",
+            "sort": "113",
+            "title": "A104"
+          },
+          {
+            "innerid": "2011041",
+            "deviceIp": "10.31.2.92",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.92",
+                "name": "A105中控",
+                "typeid": "2",
+                "id": "9be3567f75b2405cb45e266a2d8c04a4",
+                "camera": "card5",
+                "deviceid": "47f66b01c1a1492bb2a463074772de1e",
+                "cameraName": "VGA",
+                "MAC": "00096F565104"
+              }
+            ],
+            "deviceMac": "00096F565104",
+            "id": "4ddb72c332cc45e3b3ac972f1d3e284b",
+            "attribute": "Y",
+            "sort": "114",
+            "title": "A105"
+          },
+          {
+            "innerid": "2011051",
+            "deviceIp": "10.31.2.93",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.93",
+                "name": "A106中控",
+                "typeid": "2",
+                "id": "5eb474fbfd3041fbb3d424ebf284f7f5",
+                "camera": "card5",
+                "deviceid": "34a43bda0bea4c64a87e1408dc80b17c",
+                "cameraName": "VGA",
+                "MAC": "00096F565105"
+              }
+            ],
+            "deviceMac": "00096F565105",
+            "id": "845cf80880694c6894293ae73050c8c8",
+            "attribute": "Y",
+            "sort": "115",
+            "title": "A106"
+          },
+          {
+            "innerid": "2011061",
+            "deviceIp": "10.31.2.94",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.94",
+                "name": "A107中控",
+                "typeid": "2",
+                "id": "566bdefc50f740c8a5aaa941df332417",
+                "camera": "card5",
+                "deviceid": "5d43b8150d514546bdfc9699d6b0bade",
+                "cameraName": "VGA",
+                "MAC": "00096F565106"
+              }
+            ],
+            "deviceMac": "00096F565106",
+            "id": "64992ed3105b44c7b36e24de5cea8965",
+            "attribute": "Y",
+            "sort": "116",
+            "title": "A107"
+          },
+          {
+            "innerid": "2011071",
+            "deviceIp": "10.31.2.95",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.95",
+                "name": "A108中控",
+                "typeid": "2",
+                "id": "d307d46b7e9a45f58539f31c647739dd",
+                "camera": "card5",
+                "deviceid": "a00c72cf376b41f4b85d91114f9c02a5",
+                "cameraName": "VGA",
+                "MAC": "00096F565107"
+              }
+            ],
+            "deviceMac": "00096F565107",
+            "id": "8e9e714d9ef041edbb91ac8592ae0cd8",
+            "attribute": "Y",
+            "sort": "117",
+            "title": "A108"
+          },
+          {
+            "innerid": "2011081",
+            "deviceIp": "10.31.2.96",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.96",
+                "name": "A109中控",
+                "typeid": "2",
+                "id": "46dd702071fb4802b614cc92b57d8334",
+                "camera": "card5",
+                "deviceid": "4f0fd06c9f7d48eb800b32805f944484",
+                "cameraName": "VGA",
+                "MAC": "00096F565108"
+              }
+            ],
+            "deviceMac": "00096F565108",
+            "id": "44569bbdf3614eb7b02e013c358a3b7b",
+            "attribute": "Y",
+            "sort": "118",
+            "title": "A109"
+          },
+          {
+            "innerid": "2011091",
+            "deviceIp": "10.31.2.97",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.97",
+                "name": "A110中控",
+                "typeid": "2",
+                "id": "80aad319919e41b6a49035b5a2d763e9",
+                "camera": "card5",
+                "deviceid": "db7e4d5a5a5b4dbcac77aad7baae9f78",
+                "cameraName": "VGA",
+                "MAC": "00096F565109"
+              }
+            ],
+            "deviceMac": "00096F565109",
+            "id": "ee1c986af1f14cf7a1bf5fb27b5e8711",
+            "attribute": "Y",
+            "sort": "119",
+            "title": "A110"
+          },
+          {
+            "innerid": "2011101",
+            "deviceIp": "10.31.2.98",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.98",
+                "name": "A111中控",
+                "typeid": "2",
+                "id": "34d363628bcd4240a72c9f39f8082187",
+                "camera": "card5",
+                "deviceid": "4878ea9d46bf4308aff520b5ccfa2003",
+                "cameraName": "VGA",
+                "MAC": "00096F565110"
+              }
+            ],
+            "deviceMac": "00096F565110",
+            "id": "917f70ba04214c5ea3b83b156845c51e",
+            "attribute": "Y",
+            "sort": "120",
+            "title": "A111"
+          },
+          {
+            "innerid": "20120139",
+            "deviceIp": "10.31.2.99",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.99",
+                "name": "A201中控",
+                "typeid": "2",
+                "id": "8c742f1b37a147ba94c1e1dace558a42",
+                "camera": "card5",
+                "deviceid": "492fa719b4e144f794f2695934af5c7c",
+                "cameraName": "VGA",
+                "MAC": "00096F565111"
+              }
+            ],
+            "deviceMac": "00096F565111",
+            "id": "c9088c5bfd1c4ccfbfac32b15da2ebd9",
+            "attribute": "Y",
+            "sort": "121",
+            "title": "A201"
+          },
+          {
+            "innerid": "2012021",
+            "deviceIp": "10.31.2.100",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.100",
+                "name": "A202中控",
+                "typeid": "2",
+                "id": "ca146abfff864d0ebf00b71c25ffa903",
+                "camera": "card5",
+                "deviceid": "9422641b998943af9fb26768843fb526",
+                "cameraName": "VGA",
+                "MAC": "00096F565112"
+              }
+            ],
+            "deviceMac": "00096F565112",
+            "id": "a43d600ffd104203b51b11b3b9918fc4",
+            "attribute": "Y",
+            "sort": "122",
+            "title": "A202"
+          },
+          {
+            "innerid": "2012031",
+            "deviceIp": "10.31.2.101",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.101",
+                "name": "A204中控",
+                "typeid": "2",
+                "id": "502d819c0d894adbbf2c5a995f9eec94",
+                "camera": "card5",
+                "deviceid": "fabffef93afe45b9920ecd49632d661f",
+                "cameraName": "VGA",
+                "MAC": "00096F565113"
+              }
+            ],
+            "deviceMac": "00096F565113",
+            "id": "58361cac1b7747668f90740d8b210814",
+            "attribute": "Y",
+            "sort": "123",
+            "title": "A204"
+          },
+          {
+            "innerid": "2012041",
+            "deviceIp": "10.31.2.102",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.102",
+                "name": "A205中控",
+                "typeid": "2",
+                "id": "6fd949ff3b6e46e3a09c4cb6f4c3cd44",
+                "camera": "card5",
+                "deviceid": "20333671c2174c37bca9efd87449ad66",
+                "cameraName": "VGA",
+                "MAC": "00096F565114"
+              }
+            ],
+            "deviceMac": "00096F565114",
+            "id": "c808c750b2e44d448b918254e5b1ee4b",
+            "attribute": "Y",
+            "sort": "124",
+            "title": "A205"
+          },
+          {
+            "innerid": "2012051",
+            "deviceIp": "10.31.2.103",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.103",
+                "name": "A206中控",
+                "typeid": "2",
+                "id": "c730108a240142e9934a17b19660c338",
+                "camera": "card5",
+                "deviceid": "486d88d4acfa40328109e975e547839a",
+                "cameraName": "VGA",
+                "MAC": "00096F565115"
+              }
+            ],
+            "deviceMac": "00096F565115",
+            "id": "12cd30891abc46a7a8de9a7546a69067",
+            "attribute": "Y",
+            "sort": "125",
+            "title": "A206"
+          },
+          {
+            "innerid": "2012061",
+            "deviceIp": "10.31.2.104",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.104",
+                "name": "A207中控",
+                "typeid": "2",
+                "id": "4c163b6560e0478f8154830ec646e727",
+                "camera": "card5",
+                "deviceid": "a1b8d53ea8114889b4546695b1a38535",
+                "cameraName": "VGA",
+                "MAC": "00096F565116"
+              }
+            ],
+            "deviceMac": "00096F565116",
+            "id": "656f2908717b448f891a08614cb17f1d",
+            "attribute": "Y",
+            "sort": "126",
+            "title": "A207"
+          },
+          {
+            "innerid": "2012071",
+            "deviceIp": "10.31.2.105",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.105",
+                "name": "A208中控",
+                "typeid": "2",
+                "id": "1dbba6a0edeb404aad00acc94e9359d9",
+                "camera": "card5",
+                "deviceid": "0a56c7a7473c4d8e834fd825f98937c7",
+                "cameraName": "VGA",
+                "MAC": "00096F565117"
+              }
+            ],
+            "deviceMac": "00096F565117",
+            "id": "955404c21eee4036905bdb9beda5a105",
+            "attribute": "Y",
+            "sort": "127",
+            "title": "A208"
+          },
+          {
+            "innerid": "2012081",
+            "deviceIp": "10.31.2.106",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.106",
+                "name": "A209中控",
+                "typeid": "2",
+                "id": "2804642c629e44209a79000fadccc6fc",
+                "camera": "card5",
+                "deviceid": "5d0cbe2f33384671997ccce81f78b60f",
+                "cameraName": "VGA",
+                "MAC": "00096F565118"
+              }
+            ],
+            "deviceMac": "00096F565118",
+            "id": "4c3cac460e9144b79f7f1dd6080d6e9d",
+            "attribute": "Y",
+            "sort": "128",
+            "title": "A209"
+          },
+          {
+            "innerid": "2012091",
+            "deviceIp": "10.31.2.107",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.107",
+                "name": "A210中控",
+                "typeid": "2",
+                "id": "eae44530e6fb472da99873f810a76f05",
+                "camera": "card5",
+                "deviceid": "682c1b0b35174676aa6b47225135e7c8",
+                "cameraName": "VGA",
+                "MAC": "00096F565119"
+              }
+            ],
+            "deviceMac": "00096F565119",
+            "id": "5c897ebecf914b5b911d34d2835ced8d",
+            "attribute": "Y",
+            "sort": "129",
+            "title": "A210"
+          },
+          {
+            "innerid": "2012101",
+            "deviceIp": "10.31.2.108",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.108",
+                "name": "A211中控",
+                "typeid": "2",
+                "id": "7f79138c310340c881cd02b0d052564f",
+                "camera": "card5",
+                "deviceid": "27498f1fddad41178f36b2c39a51d3ca",
+                "cameraName": "VGA",
+                "MAC": "00096F565120"
+              }
+            ],
+            "deviceMac": "00096F565120",
+            "id": "b13b36015f1645cd892ab4ec42ad8fcc",
+            "attribute": "Y",
+            "sort": "130",
+            "title": "A211"
+          },
+          {
+            "innerid": "20130139",
+            "deviceIp": "10.31.2.138",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.2.138",
+                "name": "D301中控",
+                "typeid": "2",
+                "id": "66f8c723c9944e4ab4f13323a8571b33",
+                "camera": "card5",
+                "deviceid": "255050778df847878cbd7a557496df27",
+                "cameraName": "VGA",
+                "MAC": "00096F00CCAA"
+              }
+            ],
+            "deviceMac": "00096F00CCAA",
+            "id": "6c2a098c971d418c9ad15283135e3f4e",
+            "attribute": "Y",
+            "sort": "131",
+            "title": "A301"
+          },
+          {
+            "innerid": "2013021",
+            "deviceIp": "10.31.2.110",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.110",
+                "name": "A302中控",
+                "typeid": "2",
+                "id": "3f38a6dfd5b24809a580aa24fa2e68b1",
+                "camera": "card5",
+                "deviceid": "023ae35226a142c0bcc19507e5e812af",
+                "cameraName": "VGA",
+                "MAC": "00096F565122"
+              }
+            ],
+            "deviceMac": "00096F565122",
+            "id": "485bb8acf8de421fb06125ad3bcca6d3",
+            "attribute": "Y",
+            "sort": "209",
+            "title": "A302"
+          },
+          {
+            "innerid": "2013031",
+            "deviceIp": "10.31.2.111",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.111",
+                "name": "A304中控",
+                "typeid": "2",
+                "id": "e15728ec062740a3b6ce3740b35e9e19",
+                "camera": "card5",
+                "deviceid": "a7f7b224913f409b9548ee58d1423023",
+                "cameraName": "VGA",
+                "MAC": "00096F565123"
+              }
+            ],
+            "deviceMac": "00096F565123",
+            "id": "ca8bd8d0c2164c5b9b7e238ec09af3ec",
+            "attribute": "Y",
+            "sort": "210",
+            "title": "A304"
+          },
+          {
+            "innerid": "2013041",
+            "deviceIp": "10.31.2.112",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.112",
+                "name": "A305中控",
+                "typeid": "2",
+                "id": "0001f0f5c1624dc4ace21e5b93224976",
+                "camera": "card5",
+                "deviceid": "ff1958efa58646fd8c08e532f274ce11",
+                "cameraName": "VGA",
+                "MAC": "00096F565124"
+              }
+            ],
+            "deviceMac": "00096F565124",
+            "id": "7e3a5fdf9a2a454b98a53430875a7661",
+            "attribute": "Y",
+            "sort": "211",
+            "title": "A305"
+          },
+          {
+            "innerid": "2013051",
+            "deviceIp": "10.31.2.113",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.113",
+                "name": "A306中控",
+                "typeid": "2",
+                "id": "d70b2e5052d047aba0ab65ef5bede8a6",
+                "camera": "card5",
+                "deviceid": "1daa2f8bb77445f7a2072cacd4f28615",
+                "cameraName": "VGA",
+                "MAC": "00096F565125"
+              }
+            ],
+            "deviceMac": "00096F565125",
+            "id": "0f36725367ba465ba6d138ceeea06f63",
+            "attribute": "Y",
+            "sort": "212",
+            "title": "A306"
+          },
+          {
+            "innerid": "2013061",
+            "deviceIp": "10.31.2.114",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.114",
+                "name": "A307中控",
+                "typeid": "2",
+                "id": "2f0e6795592942cd80339325278d5e3d",
+                "camera": "card5",
+                "deviceid": "299c31e11fa2411dbaa623fd940cfad1",
+                "cameraName": "VGA",
+                "MAC": "00096F565126"
+              }
+            ],
+            "deviceMac": "00096F565126",
+            "id": "7c20fdb90963402b80f46e95621ec6ff",
+            "attribute": "Y",
+            "sort": "213",
+            "title": "A307"
+          },
+          {
+            "innerid": "2013071",
+            "deviceIp": "10.31.2.115",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.115",
+                "name": "A308中控",
+                "typeid": "2",
+                "id": "306839c6cf3b42fda18407f3f84c8410",
+                "camera": "card5",
+                "deviceid": "7387090225c74b43be6796af70fc0a6b",
+                "cameraName": "VGA",
+                "MAC": "00096F565127"
+              }
+            ],
+            "deviceMac": "00096F565127",
+            "id": "f44a53bd8a194d8d9893020548f5a004",
+            "attribute": "Y",
+            "sort": "214",
+            "title": "A308"
+          },
+          {
+            "innerid": "2013081",
+            "deviceIp": "10.31.2.116",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.116",
+                "name": "A309中控",
+                "typeid": "2",
+                "id": "4f9103854bb644869ff68be4579b0cfc",
+                "camera": "card5",
+                "deviceid": "25af799a875c4607860bd239e1168afd",
+                "cameraName": "VGA",
+                "MAC": "00096F565128"
+              }
+            ],
+            "deviceMac": "00096F565128",
+            "id": "1c724e7e64644865adfa6aef815e08fd",
+            "attribute": "Y",
+            "sort": "215",
+            "title": "A309"
+          },
+          {
+            "innerid": "2013091",
+            "deviceIp": "10.31.2.117",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.117",
+                "name": "A310中控",
+                "typeid": "2",
+                "id": "b049591fc3dc4d47b3b2ec8518d8d504",
+                "camera": "card5",
+                "deviceid": "7db1abd23a1e4c0bb436bb36c2c22df1",
+                "cameraName": "VGA",
+                "MAC": "00096F565129"
+              }
+            ],
+            "deviceMac": "00096F565129",
+            "id": "f88f7b055c5841088f33981d2c70a3bc",
+            "attribute": "Y",
+            "sort": "216",
+            "title": "A310"
+          },
+          {
+            "innerid": "2013101",
+            "deviceIp": "10.31.2.118",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.118",
+                "name": "A311中控",
+                "typeid": "2",
+                "id": "5800909f2aa74710b847c7d213a08727",
+                "camera": "card5",
+                "deviceid": "fd3c0534754941eeb902a8d4831f565a",
+                "cameraName": "VGA",
+                "MAC": "00096F565130"
+              }
+            ],
+            "deviceMac": "00096F565130",
+            "id": "a10b227decdf43d694bc66bbe89bc513",
+            "attribute": "Y",
+            "sort": "217",
+            "title": "A311"
+          },
+          {
+            "innerid": "20140139",
+            "deviceIp": "10.31.2.119",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.119",
+                "name": "A401中控",
+                "typeid": "2",
+                "id": "42e6d6fe3ee44f1cbd54851b72c42f9a",
+                "camera": "card5",
+                "deviceid": "18d24b41775744a2b871d9e4312977ae",
+                "cameraName": "VGA",
+                "MAC": "00096F565131"
+              }
+            ],
+            "deviceMac": "00096F565131",
+            "id": "c1bd1434516b4483bb3a688acde75d73",
+            "attribute": "Y",
+            "sort": "218",
+            "title": "A401"
+          },
+          {
+            "innerid": "2014021",
+            "deviceIp": "10.31.2.120",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.120",
+                "name": "A402中控",
+                "typeid": "2",
+                "id": "9530da83460e41ee863561e0c4cd90fd",
+                "camera": "card5",
+                "deviceid": "19d134947ae84490b0369ba95336118a",
+                "cameraName": "VGA",
+                "MAC": "00096F565132"
+              }
+            ],
+            "deviceMac": "00096F565132",
+            "id": "4c8f3c36c3e842cdac55c769c4509a06",
+            "attribute": "Y",
+            "sort": "219",
+            "title": "A402"
+          },
+          {
+            "innerid": "2014031",
+            "deviceIp": "10.31.2.121",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.121",
+                "name": "A404中控",
+                "typeid": "2",
+                "id": "09392a02cbd8415f874217c171632424",
+                "camera": "card5",
+                "deviceid": "ccf7ce4ea2a043abba883ea232315edc",
+                "cameraName": "VGA",
+                "MAC": "00096F565133"
+              }
+            ],
+            "deviceMac": "00096F565133",
+            "id": "f40d5e34973444fcae4de2d2e91b9f54",
+            "attribute": "Y",
+            "sort": "220",
+            "title": "A404"
+          },
+          {
+            "innerid": "2014041",
+            "deviceIp": "10.31.2.122",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.122",
+                "name": "A405中控",
+                "typeid": "2",
+                "id": "7602b23086344d4086b21b2f1d2d1201",
+                "camera": "card5",
+                "deviceid": "3f99257bbbf14f32a741d31aacad8f93",
+                "cameraName": "VGA",
+                "MAC": "00096F565134"
+              }
+            ],
+            "deviceMac": "00096F565134",
+            "id": "691d22f367924852a3d09ea289e9fb42",
+            "attribute": "Y",
+            "sort": "221",
+            "title": "A405"
+          },
+          {
+            "innerid": "2014051",
+            "deviceIp": "10.31.2.123",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.123",
+                "name": "A406中控",
+                "typeid": "2",
+                "id": "20ecd50f77b94e73a113c716d24f2fec",
+                "camera": "card5",
+                "deviceid": "47e5e67d62e744a1891af8086d76fa08",
+                "cameraName": "VGA",
+                "MAC": "00096F565135"
+              }
+            ],
+            "deviceMac": "00096F565135",
+            "id": "ad99329132f24cd7805e09841a6525e0",
+            "attribute": "Y",
+            "sort": "222",
+            "title": "A406"
+          },
+          {
+            "innerid": "2014061",
+            "deviceIp": "10.31.2.124",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.124",
+                "name": "A407中控",
+                "typeid": "2",
+                "id": "5cc6c9aa3e1f45548ffdc36920d516c9",
+                "camera": "card5",
+                "deviceid": "9a7ddb679e3f4074a5427518b4c249e2",
+                "cameraName": "VGA",
+                "MAC": "00096F565136"
+              }
+            ],
+            "deviceMac": "00096F565136",
+            "id": "64d65eaaf3a943698788e47994b7a820",
+            "attribute": "Y",
+            "sort": "223",
+            "title": "A407"
+          },
+          {
+            "innerid": "2014071",
+            "deviceIp": "10.31.2.125",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.125",
+                "name": "A408中控",
+                "typeid": "2",
+                "id": "70bd483bb7a341d5b43dd5b092569c40",
+                "camera": "card5",
+                "deviceid": "fe08430db1bc4072b4919af797a8d8dd",
+                "cameraName": "VGA",
+                "MAC": "00096F565137"
+              }
+            ],
+            "deviceMac": "00096F565137",
+            "id": "11a52de4713b41aa964da7e0e00cc93d",
+            "attribute": "Y",
+            "sort": "224",
+            "title": "A408"
+          },
+          {
+            "innerid": "2014081",
+            "deviceIp": "10.31.2.126",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.126",
+                "name": "A409中控",
+                "typeid": "2",
+                "id": "42865118a8784b0bbc86302523360710",
+                "camera": "card5",
+                "deviceid": "aa7a13c366384eb6904870546dcb6abd",
+                "cameraName": "VGA",
+                "MAC": "00096F565138"
+              }
+            ],
+            "deviceMac": "00096F565138",
+            "id": "1b1979547aa34e15bde8e4d1e351110d",
+            "attribute": "Y",
+            "sort": "225",
+            "title": "A409"
+          },
+          {
+            "innerid": "2014091",
+            "deviceIp": "10.31.2.127",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.127",
+                "name": "A410中控",
+                "typeid": "2",
+                "id": "1045cb09487f42a1a065378e6eb8a8bb",
+                "camera": "card5",
+                "deviceid": "776fc71957364b3598c86731f016ea78",
+                "cameraName": "VGA",
+                "MAC": "00096F565139"
+              }
+            ],
+            "deviceMac": "00096F565139",
+            "id": "e3afcadb8324444a9921b2abdd8b614f",
+            "attribute": "Y",
+            "sort": "226",
+            "title": "A410"
+          },
+          {
+            "innerid": "2014101",
+            "deviceIp": "10.31.2.128",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.128",
+                "name": "A411中控",
+                "typeid": "2",
+                "id": "aed9e1bf4a044c9598e5090d2ef20660",
+                "camera": "card5",
+                "deviceid": "eb76f7cf4e9f484d8031c721434d0226",
+                "cameraName": "VGA",
+                "MAC": "00096F565140"
+              }
+            ],
+            "deviceMac": "00096F565140",
+            "id": "ece6278460364d72b9545f8f2d55ddc0",
+            "attribute": "Y",
+            "sort": "227",
+            "title": "A411"
+          },
+          {
+            "innerid": "20150139",
+            "deviceIp": "10.31.2.129",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.129",
+                "name": "A501中控",
+                "typeid": "2",
+                "id": "201c7a72f2374eb1a59587ce1ba6e4a7",
+                "camera": "card5",
+                "deviceid": "f39544823e784755845bac53cc420cc6",
+                "cameraName": "VGA",
+                "MAC": "00096F565141"
+              }
+            ],
+            "deviceMac": "00096F565141",
+            "id": "545dbbca35ee4034af988d5def7d378c",
+            "attribute": "Y",
+            "sort": "228",
+            "title": "A501"
+          },
+          {
+            "innerid": "2015021",
+            "deviceIp": "10.31.2.130",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.130",
+                "name": "A502中控",
+                "typeid": "2",
+                "id": "97efb499ad9e459fa115505b5bf54f83",
+                "camera": "card5",
+                "deviceid": "ace3190d50d94250aa8c43e9670bc6af",
+                "cameraName": "VGA",
+                "MAC": "00096F565142"
+              }
+            ],
+            "deviceMac": "00096F565142",
+            "id": "8c37775dc6394ea380f13cd47ea93897",
+            "attribute": "Y",
+            "sort": "229",
+            "title": "A502"
+          },
+          {
+            "innerid": "2015031",
+            "deviceIp": "10.31.2.132",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.132",
+                "name": "A504中控",
+                "typeid": "2",
+                "id": "d59256317e114117b0619de66f44af27",
+                "camera": "card5",
+                "deviceid": "5810a2ec780b46abbd4f721f9d26e0f9",
+                "cameraName": "VGA",
+                "MAC": "00096F565144"
+              }
+            ],
+            "deviceMac": "00096F565144",
+            "id": "80f2f424302b4c31be69c585076e9591",
+            "attribute": "Y",
+            "sort": "231",
+            "title": "A504"
+          },
+          {
+            "innerid": "2015041",
+            "deviceIp": "10.31.2.133",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.133",
+                "name": "A505中控",
+                "typeid": "2",
+                "id": "573fbe5e805741aaa8a4eafc54e80a3f",
+                "camera": "card5",
+                "deviceid": "dfaf26d2f5aa4f8f9a28a09b894757b1",
+                "cameraName": "VGA",
+                "MAC": "00096F565145"
+              }
+            ],
+            "deviceMac": "00096F565145",
+            "id": "8eb549a26e15495184930374e4b1a34d",
+            "attribute": "Y",
+            "sort": "232",
+            "title": "A505"
+          },
+          {
+            "innerid": "2015051",
+            "deviceIp": "10.31.2.134",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.134",
+                "name": "A506中控",
+                "typeid": "2",
+                "id": "39c3cabad54f422a99a0f1948b567015",
+                "camera": "card5",
+                "deviceid": "7bb5c03f76be49eeb12e1d92b78a2a79",
+                "cameraName": "VGA",
+                "MAC": "00096F565146"
+              }
+            ],
+            "deviceMac": "00096F565146",
+            "id": "8b918a9784c1404a830445b98405222d",
+            "attribute": "Y",
+            "sort": "233",
+            "title": "A506"
+          },
+          {
+            "innerid": "2015061",
+            "deviceIp": "10.31.2.135",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.135",
+                "name": "A507中控",
+                "typeid": "2",
+                "id": "d7aaa93a425d44d7b9762f1adf337f34",
+                "camera": "card5",
+                "deviceid": "edd8d83f10f14ad886899667ffd455b9",
+                "cameraName": "VGA",
+                "MAC": "00096F565147"
+              }
+            ],
+            "deviceMac": "00096F565147",
+            "id": "1f3eacf9453d4cab99a3571fbdb13166",
+            "attribute": "Y",
+            "sort": "234",
+            "title": "A507"
+          },
+          {
+            "innerid": "2015071",
+            "deviceIp": "10.31.2.136",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.136",
+                "name": "A508中控",
+                "typeid": "2",
+                "id": "9123ed16a2aa42ee9b2ef8a8d5c403af",
+                "camera": "card5",
+                "deviceid": "abfbd4a3efec4bf29bb394a8aaaac226",
+                "cameraName": "VGA",
+                "MAC": "00096F565148"
+              }
+            ],
+            "deviceMac": "00096F565148",
+            "id": "dacc976058bf4a1d8af7d26ccc0dd3fd",
+            "attribute": "Y",
+            "sort": "235",
+            "title": "A508"
+          },
+          {
+            "innerid": "2015081",
+            "deviceIp": "10.31.2.137",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.137",
+                "name": "A509中控",
+                "typeid": "2",
+                "id": "5cf2d97ef87f4beba06746a22a20a3a4",
+                "camera": "card5",
+                "deviceid": "e69a4736320d4d1396c16a774fe59042",
+                "cameraName": "VGA",
+                "MAC": "00096F565149"
+              }
+            ],
+            "deviceMac": "00096F565149",
+            "id": "e096a592625e4672bafd3e39a9871fd8",
+            "attribute": "Y",
+            "sort": "236",
+            "title": "A509"
+          },
+          {
+            "innerid": "2015091",
+            "deviceIp": "10.31.2.109",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.109",
+                "name": "A510中控",
+                "typeid": "2",
+                "id": "82d4801957a6451fa9a34c19ed426370",
+                "camera": "card5",
+                "deviceid": "6b40d6c65cd84caf91f2196223153689",
+                "cameraName": "VGA",
+                "MAC": "00096F565150"
+              }
+            ],
+            "deviceMac": "00096F565150",
+            "id": "0f11aba4a98f4cba98d2bf8a1b015e13",
+            "attribute": "Y",
+            "sort": "237",
+            "title": "A510"
+          },
+          {
+            "innerid": "2015101",
+            "deviceIp": "10.31.2.131",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.131",
+                "name": "A511中控",
+                "typeid": "2",
+                "id": "3eecd0679d1d4f17bb2160cc267d9d1d",
+                "camera": "card5",
+                "deviceid": "504521ab91704a65b3e09d30bc4db0c8",
+                "cameraName": "VGA",
+                "MAC": "00096F565151"
+              }
+            ],
+            "deviceMac": "00096F565151",
+            "id": "03374bcd206349789670f6d986c3e818",
+            "attribute": "Y",
+            "sort": "238",
+            "title": "A511"
+          }
+        ],
+        "code": "a29e1915480d48779b9e75b8cd69a72a",
+        "id": "32cde7fcf8674a51a6f898dc0ed726fc",
+        "attribute": "N",
+        "sort": "11",
+        "title": "A区"
+      },
+      {
+        "nodes": [
+          {
+            "innerid": "20111139",
+            "deviceIp": "10.31.2.86",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.86",
+                "name": "B112中控",
+                "typeid": "2",
+                "id": "60b6c0cfa0ec43a1939630360252f78c",
+                "camera": "card5",
+                "deviceid": "54fbfb9bd5a147e486c6f2a3b144416a",
+                "cameraName": "VGA",
+                "MAC": "00096F565D01"
+              }
+            ],
+            "deviceMac": "00096F565D01",
+            "id": "10113899f2574b079a9735a2e5295e30",
+            "attribute": "Y",
+            "sort": "201",
+            "title": "B112"
+          },
+          {
+            "innerid": "20111239",
+            "deviceIp": "10.31.2.87",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.87",
+                "name": "B113中控",
+                "typeid": "2",
+                "id": "809096407b974907be5d58241db016ac",
+                "camera": "card5",
+                "deviceid": "c5fc3bc98f6b456885faf22a63c7ce8b",
+                "cameraName": "VGA",
+                "MAC": "00096F565D02"
+              }
+            ],
+            "deviceMac": "00096F565D02",
+            "id": "a586081d39024169bfee976d4bcf4249",
+            "attribute": "Y",
+            "sort": "202",
+            "title": "B113"
+          },
+          {
+            "innerid": "20111339",
+            "deviceIp": "10.31.2.88",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.88",
+                "name": "B114中控",
+                "typeid": "2",
+                "id": "837fce2a855148b1b44b1621a792c2ac",
+                "camera": "card5",
+                "deviceid": "3edeb04428fa45d8bf320e0d6657f176",
+                "cameraName": "VGA",
+                "MAC": "00096F565D03"
+              }
+            ],
+            "deviceMac": "00096F565D03",
+            "id": "cddd96bad7524998889492aabc1f1ecc",
+            "attribute": "Y",
+            "sort": "203",
+            "title": "B114"
+          }
+        ],
+        "code": "a29e1915480d48779b9e75b8cd69a72a",
+        "id": "31bd3ea8e3b04abd87bf1aeec8c8eba9",
+        "attribute": "N",
+        "sort": "12",
+        "title": "B区"
+      },
+      {
+        "nodes": [
+          {
+            "innerid": "2011142",
+            "deviceIp": "10.31.2.57",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.57",
+                "name": "C116中控",
+                "typeid": "2",
+                "id": "052560aafc3f43df988556c513e4ed3b",
+                "camera": "card5",
+                "deviceid": "82419a342cf2437098b3f47c5195fc5d",
+                "cameraName": "VGA",
+                "MAC": "00096F565D10"
+              }
+            ],
+            "deviceMac": "00096F565D10",
+            "id": "08a0579a6e3249fcbe16206514c51194",
+            "attribute": "Y",
+            "sort": "316",
+            "title": "C116"
+          },
+          {
+            "innerid": "2011152",
+            "deviceIp": "10.31.2.56",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.56",
+                "name": "C117中控",
+                "typeid": "2",
+                "id": "c34d26c030014065ba8ee8b7994338e4",
+                "camera": "card5",
+                "deviceid": "84ad7f025c0841ecb1fefc9dc7d00a52",
+                "cameraName": "VGA",
+                "MAC": "00096F565D09"
+              }
+            ],
+            "deviceMac": "00096F565D09",
+            "id": "2011078e55e9444baf06058e1924578c",
+            "attribute": "Y",
+            "sort": "317",
+            "title": "C117"
+          },
+          {
+            "innerid": "2011162",
+            "deviceIp": "10.31.2.55",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.55",
+                "name": "C118中控",
+                "typeid": "2",
+                "id": "cb9370a27a424424aa267c99b0012471",
+                "camera": "card5",
+                "deviceid": "6e4f046a633243998aabe01943bf7ab8",
+                "cameraName": "VGA",
+                "MAC": "00096F565D08"
+              }
+            ],
+            "deviceMac": "00096F565D08",
+            "id": "555ea77dfb88457e86c8dd876d707352",
+            "attribute": "Y",
+            "sort": "318",
+            "title": "C118"
+          },
+          {
+            "innerid": "2011172",
+            "deviceIp": "10.31.2.54",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.54",
+                "name": "C119中控",
+                "typeid": "2",
+                "id": "9aebffe18da541c099129f087ee07f22",
+                "camera": "card5",
+                "deviceid": "8b278b268fa04810ba7edc9cf2bfe387",
+                "cameraName": "VGA",
+                "MAC": "00096F565D07"
+              }
+            ],
+            "deviceMac": "00096F565D07",
+            "id": "bdd42c7eaf404a3181b4ed6f5f9e5a61",
+            "attribute": "Y",
+            "sort": "319",
+            "title": "C119"
+          },
+          {
+            "innerid": "2011182",
+            "deviceIp": "10.31.2.53",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.53",
+                "name": "C120中控",
+                "typeid": "2",
+                "id": "9c2cb943fdc9483a98925955952b3784",
+                "camera": "card5",
+                "deviceid": "3c90360dbd384a3ea9d35cafe55c333b",
+                "cameraName": "VGA",
+                "MAC": "00096F565D06"
+              }
+            ],
+            "deviceMac": "00096F565D06",
+            "id": "ec2de84f6ff047388ee92f3ba2a1abc2",
+            "attribute": "Y",
+            "sort": "320",
+            "title": "C120"
+          },
+          {
+            "innerid": "2011192",
+            "deviceIp": "10.31.2.52",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.52",
+                "name": "C121中控",
+                "typeid": "2",
+                "id": "dc100687eb6f41758b9a4ed290452142",
+                "camera": "card5",
+                "deviceid": "55c0a8be937c4c28b64015a84fbb03c6",
+                "cameraName": "VGA",
+                "MAC": "00096F565D05"
+              }
+            ],
+            "deviceMac": "00096F565D05",
+            "id": "9f58d5fdcaf04255879e3e3c7fe5b66e",
+            "attribute": "Y",
+            "sort": "321",
+            "title": "C121"
+          },
+          {
+            "innerid": "2011202",
+            "deviceIp": "10.31.2.51",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.51",
+                "name": "C122中控",
+                "typeid": "2",
+                "id": "b7382477c5d74873b472822201f1e236",
+                "camera": "card5",
+                "deviceid": "594f5b544b00404e8f56151c745edb42",
+                "cameraName": "VGA",
+                "MAC": "00096F565D04"
+              }
+            ],
+            "deviceMac": "00096F565D04",
+            "id": "c6522de067be4287ad4fbc0bead0b49c",
+            "attribute": "Y",
+            "sort": "322",
+            "title": "C122"
+          },
+          {
+            "innerid": "2012142",
+            "deviceIp": "10.31.2.64",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.64",
+                "name": "C216中控",
+                "typeid": "2",
+                "id": "935d17d0496241609ea12fd4ccd1d9cc",
+                "camera": "card5",
+                "deviceid": "3438d0bd9e43495f88c19586519034df",
+                "cameraName": "VGA",
+                "MAC": "00096F565D17"
+              }
+            ],
+            "deviceMac": "00096F565D17",
+            "id": "ae9259a39a174ddb94aed0c5467710f5",
+            "attribute": "Y",
+            "sort": "323",
+            "title": "C216"
+          },
+          {
+            "innerid": "2012152",
+            "deviceIp": "10.31.2.63",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.63",
+                "name": "C217中控",
+                "typeid": "2",
+                "id": "b2e15bb508744a468f240237344822da",
+                "camera": "card5",
+                "deviceid": "45dcf3efa3e3478785b303144b54e2ea",
+                "cameraName": "VGA",
+                "MAC": "00096F565D16"
+              }
+            ],
+            "deviceMac": "00096F565D16",
+            "id": "8a23d5c4c5a34ad5b9317992e0372c31",
+            "attribute": "Y",
+            "sort": "324",
+            "title": "C217"
+          },
+          {
+            "innerid": "2012162",
+            "deviceIp": "10.31.2.62",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.62",
+                "name": "C218中控",
+                "typeid": "2",
+                "id": "d14553a02068405ab43c83833a00c791",
+                "camera": "card5",
+                "deviceid": "226e12c16ccb4d10a61f2e0ec46217e8",
+                "cameraName": "VGA",
+                "MAC": "00096F565D15"
+              }
+            ],
+            "deviceMac": "00096F565D15",
+            "id": "f00217d1450e40d49830ce42d3980b39",
+            "attribute": "Y",
+            "sort": "325",
+            "title": "C218"
+          },
+          {
+            "innerid": "2012172",
+            "deviceIp": "10.31.2.61",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.61",
+                "name": "C219中控",
+                "typeid": "2",
+                "id": "0c72e8b11f1242fabbfb810934ddb60c",
+                "camera": "card5",
+                "deviceid": "55762daa62c143cba7a58c24813b6a49",
+                "cameraName": "VGA",
+                "MAC": "00096F565D14"
+              }
+            ],
+            "deviceMac": "00096F565D14",
+            "id": "5ab40bbc4c5643f2967a3189cc44705e",
+            "attribute": "Y",
+            "sort": "326",
+            "title": "C219"
+          },
+          {
+            "innerid": "2012182",
+            "deviceIp": "10.31.2.60",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.60",
+                "name": "C220中控",
+                "typeid": "2",
+                "id": "ddacc15d8ec944a2a5dd54f6878cdc50",
+                "camera": "card5",
+                "deviceid": "39512b06450a4cbdb4d250506221a255",
+                "cameraName": "VGA",
+                "MAC": "00096F565D13"
+              }
+            ],
+            "deviceMac": "00096F565D13",
+            "id": "41ea6d68958f4e7ab20be356c80d6c34",
+            "attribute": "Y",
+            "sort": "327",
+            "title": "C220"
+          },
+          {
+            "innerid": "2012192",
+            "deviceIp": "10.31.2.59",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.59",
+                "name": "C221中控",
+                "typeid": "2",
+                "id": "3ed82ee791014be8a27757546ba12735",
+                "camera": "card5",
+                "deviceid": "c92ed29af52840a3b1a0200a1ac94b10",
+                "cameraName": "VGA",
+                "MAC": "00096F565D12"
+              }
+            ],
+            "deviceMac": "00096F565D12",
+            "id": "7b88cc3b387d4f70823605dcacd323a6",
+            "attribute": "Y",
+            "sort": "328",
+            "title": "C221"
+          },
+          {
+            "innerid": "2012202",
+            "deviceIp": "10.31.2.58",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.58",
+                "name": "C222中控",
+                "typeid": "2",
+                "id": "3540dd3aa04045d79e4867e7ec470e55",
+                "camera": "card5",
+                "deviceid": "a1e6de3d6eb74fe1b3660d396365074e",
+                "cameraName": "VGA",
+                "MAC": "00096F565D11"
+              }
+            ],
+            "deviceMac": "00096F565D11",
+            "id": "2d56144f46f14169a6b68a4145a86d1a",
+            "attribute": "Y",
+            "sort": "329",
+            "title": "C222"
+          },
+          {
+            "innerid": "2013112",
+            "deviceIp": "10.31.2.71",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.71",
+                "name": "C312中控",
+                "typeid": "2",
+                "id": "b5a5a76eae5c43ad8af2fb8ae61d2b5a",
+                "camera": "card5",
+                "deviceid": "90eeded05a92419b8513a42c250bacc5",
+                "cameraName": "VGA",
+                "MAC": "00096F565D24"
+              }
+            ],
+            "deviceMac": "00096F565D24",
+            "id": "888d9993dadd41b18bb7658be3d329ff",
+            "attribute": "Y",
+            "sort": "340",
+            "title": "C312"
+          },
+          {
+            "innerid": "2013122",
+            "deviceIp": "10.31.2.70",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.70",
+                "name": "C314中控",
+                "typeid": "2",
+                "id": "6c6660dbd2214bdabff60d2f8b16f98a",
+                "camera": "card5",
+                "deviceid": "8be51f3274b947a281c0eed0569c2f84",
+                "cameraName": "VGA",
+                "MAC": "00096F565D23"
+              }
+            ],
+            "deviceMac": "00096F565D23",
+            "id": "d537ee7191f74d01b3b5f638c34c3506",
+            "attribute": "Y",
+            "sort": "341",
+            "title": "C314"
+          },
+          {
+            "innerid": "2013132",
+            "deviceIp": "10.31.2.69",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.69",
+                "name": "C315中控",
+                "typeid": "2",
+                "id": "4a2f10c2ad2046c3bdadb862e439ab03",
+                "camera": "card5",
+                "deviceid": "f1096a2424604cfb8c8f62a4ad225f59",
+                "cameraName": "VGA",
+                "MAC": "00096F565D22"
+              }
+            ],
+            "deviceMac": "00096F565D22",
+            "id": "a307d05cc69e403290b119be9a440dd1",
+            "attribute": "Y",
+            "sort": "342",
+            "title": "C315"
+          },
+          {
+            "innerid": "2013142",
+            "deviceIp": "10.31.2.68",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.68",
+                "name": "C316中控",
+                "typeid": "2",
+                "id": "ba4384b3a2f9456bac714d444f55bc18",
+                "camera": "card5",
+                "deviceid": "e1e2e46412304e7dbec35a9d59bf20fb",
+                "cameraName": "VGA",
+                "MAC": "00096F565D21"
+              }
+            ],
+            "deviceMac": "00096F565D21",
+            "id": "54565e30b0c742d68b248fc093a22b2e",
+            "attribute": "Y",
+            "sort": "343",
+            "title": "C316"
+          },
+          {
+            "innerid": "2013152",
+            "deviceIp": "10.31.2.67",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.67",
+                "name": "C317中控",
+                "typeid": "2",
+                "id": "a676c0b4ebf141628b66cb48d78cf360",
+                "camera": "card5",
+                "deviceid": "39250807a642476a889f78220ed68b0a",
+                "cameraName": "VGA",
+                "MAC": "00096F565D20"
+              }
+            ],
+            "deviceMac": "00096F565D20",
+            "id": "87e7be8a240543bfae2b0d0694cc955c",
+            "attribute": "Y",
+            "sort": "344",
+            "title": "C317"
+          },
+          {
+            "innerid": "2013162",
+            "deviceIp": "10.31.2.66",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.66",
+                "name": "C318中控",
+                "typeid": "2",
+                "id": "41ce77e967d448ef8887d7000abb0b28",
+                "camera": "card5",
+                "deviceid": "62ca9950ae714afe8380e73b4433c605",
+                "cameraName": "VGA",
+                "MAC": "00096F565D19"
+              }
+            ],
+            "deviceMac": "00096F565D19",
+            "id": "d2eeddbabc684982a608c4257cb81ea9",
+            "attribute": "Y",
+            "sort": "345",
+            "title": "C318"
+          },
+          {
+            "innerid": "2013172",
+            "deviceIp": "10.31.2.65",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.65",
+                "name": "C319中控",
+                "typeid": "2",
+                "id": "eba1ad4053ad4703a1f5168802eb7836",
+                "camera": "card5",
+                "deviceid": "9a69f0ba786c4aebaf9e65bbc9c3dd1d",
+                "cameraName": "VGA",
+                "MAC": "00096F565D18"
+              }
+            ],
+            "deviceMac": "00096F565D18",
+            "id": "24404f5d6ad142a193e9949bf955129e",
+            "attribute": "Y",
+            "sort": "346",
+            "title": "C319"
+          },
+          {
+            "innerid": "2014112",
+            "deviceIp": "10.31.2.78",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.78",
+                "name": "C412中控",
+                "typeid": "2",
+                "id": "87c4c3fdcd8b46b9b0c33d954eeef7f8",
+                "camera": "card5",
+                "deviceid": "f744e7ab57084c8ab59685e8137423f0",
+                "cameraName": "VGA",
+                "MAC": "00096F565D31"
+              }
+            ],
+            "deviceMac": "00096F565D31",
+            "id": "704b246f8a7a4ec781732dfbb687dcef",
+            "attribute": "Y",
+            "sort": "347",
+            "title": "C412"
+          },
+          {
+            "innerid": "2014122",
+            "deviceIp": "10.31.2.77",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.77",
+                "name": "C414中控",
+                "typeid": "2",
+                "id": "fedf57b4823045febf628f9cc2857140",
+                "camera": "card5",
+                "deviceid": "edf383029e274aa0823d608daa330565",
+                "cameraName": "VGA",
+                "MAC": "00096F565D30"
+              }
+            ],
+            "deviceMac": "00096F565D30",
+            "id": "49d736a74e1a4685a19ab54925435b02",
+            "attribute": "Y",
+            "sort": "348",
+            "title": "C414"
+          },
+          {
+            "innerid": "2014132",
+            "deviceIp": "10.31.2.76",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.76",
+                "name": "C415中控",
+                "typeid": "2",
+                "id": "9e811a094f5e4e64a073e51d21a0ce1b",
+                "camera": "card5",
+                "deviceid": "b6e91a1dec4047efb18cf42dc4a9d445",
+                "cameraName": "VGA",
+                "MAC": "00096F565D29"
+              }
+            ],
+            "deviceMac": "00096F565D29",
+            "id": "af7365dc51b146158eb4b9a5326e9b07",
+            "attribute": "Y",
+            "sort": "349",
+            "title": "C415"
+          },
+          {
+            "innerid": "2014142",
+            "deviceIp": "10.31.2.75",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.75",
+                "name": "C416中控",
+                "typeid": "2",
+                "id": "20468a83002e4c829efe97fd8bc2b2bb",
+                "camera": "card5",
+                "deviceid": "f319d16c2ba84fd9bb306f27642b34b8",
+                "cameraName": "VGA",
+                "MAC": "00096F565D28"
+              }
+            ],
+            "deviceMac": "00096F565D28",
+            "id": "ddc9ee0d6f4e4a198b72dc4b0f9ff9ef",
+            "attribute": "Y",
+            "sort": "350",
+            "title": "C416"
+          },
+          {
+            "innerid": "2014152",
+            "deviceIp": "10.31.2.74",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.74",
+                "name": "C417中控",
+                "typeid": "2",
+                "id": "ed1b7191c68448b3b2286ecf386b88d9",
+                "camera": "card5",
+                "deviceid": "fabc8729c66a4d6a9ad08724ecd042c6",
+                "cameraName": "VGA",
+                "MAC": "00096F565D27"
+              }
+            ],
+            "deviceMac": "00096F565D27",
+            "id": "66d012bd682a4d72a9e08daa04ab3bcd",
+            "attribute": "Y",
+            "sort": "351",
+            "title": "C417"
+          },
+          {
+            "innerid": "2014162",
+            "deviceIp": "10.31.2.73",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.73",
+                "name": "C418中控",
+                "typeid": "2",
+                "id": "4cad9ede356b424c9766904fabb3c835",
+                "camera": "card5",
+                "deviceid": "4e9944a7a39540de97c56a073ffade22",
+                "cameraName": "VGA",
+                "MAC": "00096F565D26"
+              }
+            ],
+            "deviceMac": "00096F565D26",
+            "id": "ee58a825c00a4c21ada5d1be75897ca6",
+            "attribute": "Y",
+            "sort": "352",
+            "title": "C418"
+          },
+          {
+            "innerid": "2014172",
+            "deviceIp": "10.31.2.72",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.72",
+                "name": "C419中控",
+                "typeid": "2",
+                "id": "14adfecb86854df8ba6be27b31974a7c",
+                "camera": "card5",
+                "deviceid": "ed261c9dc9ed4995b7e35e1ca82ff0a6",
+                "cameraName": "VGA",
+                "MAC": "00096F565D25"
+              }
+            ],
+            "deviceMac": "00096F565D25",
+            "id": "6920289f65b64f83b31415aabfa39aca",
+            "attribute": "Y",
+            "sort": "353",
+            "title": "C419"
+          },
+          {
+            "innerid": "2015112",
+            "deviceIp": "10.31.2.85",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.85",
+                "name": "C512中控",
+                "typeid": "2",
+                "id": "327d435d1c414097b43d6a009adc3512",
+                "camera": "card5",
+                "deviceid": "b5138470533345e48beaf921f3e46e5f",
+                "cameraName": "VGA",
+                "MAC": "00096F565D38"
+              }
+            ],
+            "deviceMac": "00096F565D38",
+            "id": "47fd6710023c479ab1afd5f429332181",
+            "attribute": "Y",
+            "sort": "354",
+            "title": "C512"
+          },
+          {
+            "innerid": "2015122",
+            "deviceIp": "10.31.2.84",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.84",
+                "name": "C514中控",
+                "typeid": "2",
+                "id": "bf3797e05c4742b7b94c20cd0a6b6ba7",
+                "camera": "card5",
+                "deviceid": "16813f9c58144078af0ef9f119d0b3ea",
+                "cameraName": "VGA",
+                "MAC": "00096F565D37"
+              }
+            ],
+            "deviceMac": "00096F565D37",
+            "id": "70f91ec9c81a4919b40572559c0ecb00",
+            "attribute": "Y",
+            "sort": "355",
+            "title": "C514"
+          },
+          {
+            "innerid": "2015132",
+            "deviceIp": "10.31.2.83",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.83",
+                "name": "C515中控",
+                "typeid": "2",
+                "id": "5abc58efed9d4c0eb43ff84c3169cb6f",
+                "camera": "card5",
+                "deviceid": "6e56d12f691c47eaae87bcb7b29f5eb6",
+                "cameraName": "VGA",
+                "MAC": "00096F565D36"
+              }
+            ],
+            "deviceMac": "00096F565D36",
+            "id": "c8541c5f98c540ffac8aed3a1b5d6785",
+            "attribute": "Y",
+            "sort": "356",
+            "title": "C515"
+          },
+          {
+            "innerid": "2015142",
+            "deviceIp": "10.31.2.82",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.82",
+                "name": "C516中控",
+                "typeid": "2",
+                "id": "941a9bed773846389727bcc302d77614",
+                "camera": "card5",
+                "deviceid": "4b426e58bb0b4317817d08c5d31ec732",
+                "cameraName": "VGA",
+                "MAC": "00096F565D35"
+              }
+            ],
+            "deviceMac": "00096F565D35",
+            "id": "0472daa335014487a8cf20521517e3bf",
+            "attribute": "Y",
+            "sort": "357",
+            "title": "C516"
+          },
+          {
+            "innerid": "2015152",
+            "deviceIp": "10.31.2.81",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.81",
+                "name": "C517中控",
+                "typeid": "2",
+                "id": "4cdd09f23e1c460480bce6987e10386f",
+                "camera": "card5",
+                "deviceid": "4561b2d3090d40e7ac231ab2943da3ca",
+                "cameraName": "VGA",
+                "MAC": "00096F565D34"
+              }
+            ],
+            "deviceMac": "00096F565D34",
+            "id": "c3ed0d2f17d643388feb006e8f359266",
+            "attribute": "Y",
+            "sort": "358",
+            "title": "C517"
+          },
+          {
+            "innerid": "2015162",
+            "deviceIp": "10.31.2.80",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.80",
+                "name": "C518中控",
+                "typeid": "2",
+                "id": "0ac16f3164b34e64bdca6ca08d310864",
+                "camera": "card5",
+                "deviceid": "6c1b54157a1c4b9fbb86c080101fc756",
+                "cameraName": "VGA",
+                "MAC": "00096F565D33"
+              }
+            ],
+            "deviceMac": "00096F565D33",
+            "id": "2252bda9625941029d29d27ca017d1aa",
+            "attribute": "Y",
+            "sort": "359",
+            "title": "C518"
+          },
+          {
+            "innerid": "2015172",
+            "deviceIp": "10.31.2.79",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.79",
+                "name": "C519中控",
+                "typeid": "2",
+                "id": "8feb857fdadf4287802ed06fab0597dc",
+                "camera": "card5",
+                "deviceid": "9798b5cc875f4c1aa565c2d4ff48423a",
+                "cameraName": "VGA",
+                "MAC": "00096F565D32"
+              }
+            ],
+            "deviceMac": "00096F565D32",
+            "id": "13f515803af8416d9ce00e7a2534904b",
+            "attribute": "Y",
+            "sort": "360",
+            "title": "C519"
+          }
+        ],
+        "code": "a29e1915480d48779b9e75b8cd69a72a",
+        "id": "5f84260b4937446aa944181c5c97c955",
+        "attribute": "N",
+        "sort": "13",
+        "title": "C区"
+      },
+      {
+        "nodes": [
+          {
+            "innerid": "2011211",
+            "deviceIp": "10.31.2.11",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.34",
+                "name": "D123录播",
+                "typeid": "1",
+                "id": "eccd315d720349e0a944511d116df792",
+                "camera": "card10",
+                "deviceid": "3c17c7723a4f4401a3d6f18f90e3fc5a",
+                "cameraName": "电影",
+                "MAC": "00096F007D96"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.34",
+                "name": "D123录播",
+                "typeid": "1",
+                "id": "fcdc9cd7c0ea411882fadad77bdbe9ce",
+                "camera": "card1",
+                "deviceid": "3c17c7723a4f4401a3d6f18f90e3fc5a",
+                "cameraName": "教师全景",
+                "MAC": "00096F007D96"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.34",
+                "name": "D123录播",
+                "typeid": "1",
+                "id": "a6815997fe4d44968ea6687595d56677",
+                "camera": "card3",
+                "deviceid": "3c17c7723a4f4401a3d6f18f90e3fc5a",
+                "cameraName": "学生全景",
+                "MAC": "00096F007D96"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.34",
+                "name": "D123录播",
+                "typeid": "1",
+                "id": "e88087f22c784d8abfda7e102d860a95",
+                "camera": "card5",
+                "deviceid": "3c17c7723a4f4401a3d6f18f90e3fc5a",
+                "cameraName": "VGA",
+                "MAC": "00096F007D96"
+              }
+            ],
+            "deviceMac": "00096F565D48",
+            "id": "690da16a0a284916b3405291b51083a9",
+            "attribute": "Y",
+            "sort": "401",
+            "title": "D123"
+          },
+          {
+            "innerid": "2011221",
+            "deviceIp": "10.31.2.10",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.30",
+                "name": "D125录播",
+                "typeid": "1",
+                "id": "3559ea3a3b3b4edab5a3512a59c9010d",
+                "camera": "card10",
+                "deviceid": "417b8b09a9d442e0a075ba1b061c6104",
+                "cameraName": "电影",
+                "MAC": "00096F007CD2"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.30",
+                "name": "D125录播",
+                "typeid": "1",
+                "id": "a16dacb4a8534c0a9148bf1b4018bae9",
+                "camera": "card1",
+                "deviceid": "417b8b09a9d442e0a075ba1b061c6104",
+                "cameraName": "教师全景",
+                "MAC": "00096F007CD2"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.30",
+                "name": "D125录播",
+                "typeid": "1",
+                "id": "416cb57ac0264e5c994ee873836b5eb4",
+                "camera": "card3",
+                "deviceid": "417b8b09a9d442e0a075ba1b061c6104",
+                "cameraName": "学生全景",
+                "MAC": "00096F007CD2"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.30",
+                "name": "D125录播",
+                "typeid": "1",
+                "id": "d6ebfb33ce8e4f2090d635376dfc27e3",
+                "camera": "card5",
+                "deviceid": "417b8b09a9d442e0a075ba1b061c6104",
+                "cameraName": "VGA",
+                "MAC": "00096F007CD2"
+              }
+            ],
+            "deviceMac": "00096F565D47",
+            "id": "0faf44ae86824d649bdf35734cd14ac0",
+            "attribute": "Y",
+            "sort": "402",
+            "title": "D125"
+          },
+          {
+            "innerid": "2011231",
+            "deviceIp": "10.31.2.9",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.26",
+                "name": "D126录播",
+                "typeid": "1",
+                "id": "da0b9757792a415e89f99354984dd6b6",
+                "camera": "card10",
+                "deviceid": "3fb6f0bd7ccd4d2da1aeee150c4273a1",
+                "cameraName": "电影",
+                "MAC": "00096F007ECD"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.26",
+                "name": "D126录播",
+                "typeid": "1",
+                "id": "5c610a3b97944210b6f6648707ac3871",
+                "camera": "card1",
+                "deviceid": "3fb6f0bd7ccd4d2da1aeee150c4273a1",
+                "cameraName": "教师全景",
+                "MAC": "00096F007ECD"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.26",
+                "name": "D126录播",
+                "typeid": "1",
+                "id": "6f6465afdfca4737a567e4e3935d2d53",
+                "camera": "card3",
+                "deviceid": "3fb6f0bd7ccd4d2da1aeee150c4273a1",
+                "cameraName": "学生全景",
+                "MAC": "00096F007ECD"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.26",
+                "name": "D126录播",
+                "typeid": "1",
+                "id": "e84d23219aa1496196b0b8d6ddaaf48c",
+                "camera": "card5",
+                "deviceid": "3fb6f0bd7ccd4d2da1aeee150c4273a1",
+                "cameraName": "VGA",
+                "MAC": "00096F007ECD"
+              }
+            ],
+            "deviceMac": "00096F565D46",
+            "id": "d0416b0d731149ada3c7ab0b343ef98d",
+            "attribute": "Y",
+            "sort": "403",
+            "title": "D126"
+          },
+          {
+            "innerid": "2011241",
+            "deviceIp": "10.31.2.8",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.22",
+                "name": "D127录播",
+                "typeid": "1",
+                "id": "eaf995521542468ba792e802615c1566",
+                "camera": "card10",
+                "deviceid": "c2a1712230d6499a8b7d48233cf4706a",
+                "cameraName": "电影",
+                "MAC": "00096F007EB5"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.22",
+                "name": "D127录播",
+                "typeid": "1",
+                "id": "e3b7b2966a6042898e586743c59762e8",
+                "camera": "card1",
+                "deviceid": "c2a1712230d6499a8b7d48233cf4706a",
+                "cameraName": "教师全景",
+                "MAC": "00096F007EB5"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.22",
+                "name": "D127录播",
+                "typeid": "1",
+                "id": "1af76530a07c415f9c7ac1c882d73bf5",
+                "camera": "card3",
+                "deviceid": "c2a1712230d6499a8b7d48233cf4706a",
+                "cameraName": "学生全景",
+                "MAC": "00096F007EB5"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.22",
+                "name": "D127录播",
+                "typeid": "1",
+                "id": "2821ff4448544a9ba9bf977f70786a87",
+                "camera": "card5",
+                "deviceid": "c2a1712230d6499a8b7d48233cf4706a",
+                "cameraName": "VGA",
+                "MAC": "00096F007EB5"
+              }
+            ],
+            "deviceMac": "00096F565D45",
+            "id": "333c1c97f8074b5a831412592a7ae82d",
+            "attribute": "Y",
+            "sort": "404",
+            "title": "D127"
+          },
+          {
+            "innerid": "2011251",
+            "deviceIp": "10.31.2.7",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.18",
+                "name": "D128录播",
+                "typeid": "1",
+                "id": "11e5aba5aa824e15881d48aea6e6b4ae",
+                "camera": "card10",
+                "deviceid": "35f2d526efd046c8bba2dfc1493259a6",
+                "cameraName": "电影",
+                "MAC": "00096F007EA1"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.18",
+                "name": "D128录播",
+                "typeid": "1",
+                "id": "74c713b8b24740e78ce5b2b8c1a14fab",
+                "camera": "card1",
+                "deviceid": "35f2d526efd046c8bba2dfc1493259a6",
+                "cameraName": "教师全景",
+                "MAC": "00096F007EA1"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.18",
+                "name": "D128录播",
+                "typeid": "1",
+                "id": "4948d5de1f314a0982b9b3e73e36a627",
+                "camera": "card3",
+                "deviceid": "35f2d526efd046c8bba2dfc1493259a6",
+                "cameraName": "学生全景",
+                "MAC": "00096F007EA1"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.18",
+                "name": "D128录播",
+                "typeid": "1",
+                "id": "0bc3d0fa2c3543f0bc54515ae3dddcad",
+                "camera": "card5",
+                "deviceid": "35f2d526efd046c8bba2dfc1493259a6",
+                "cameraName": "VGA",
+                "MAC": "00096F007EA1"
+              }
+            ],
+            "deviceMac": "00096F565D44",
+            "id": "54436f1a9b35407d9eaa9841182ec27c",
+            "attribute": "Y",
+            "sort": "405",
+            "title": "D128"
+          },
+          {
+            "innerid": "2011261",
+            "deviceIp": "10.31.2.6",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.14",
+                "name": "D129录播",
+                "typeid": "1",
+                "id": "a5a7929008ba43f0bae6beeb34219709",
+                "camera": "card10",
+                "deviceid": "371491ae0f854800a9385fb123f5701d",
+                "cameraName": "电影",
+                "MAC": "00096F007CDA"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.14",
+                "name": "D129录播",
+                "typeid": "1",
+                "id": "7cf41ebe9a81473eadf76fb1bc92865b",
+                "camera": "card1",
+                "deviceid": "371491ae0f854800a9385fb123f5701d",
+                "cameraName": "教师全景",
+                "MAC": "00096F007CDA"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.14",
+                "name": "D129录播",
+                "typeid": "1",
+                "id": "bf9e69fa95f04fa5ade1f6165c84d4aa",
+                "camera": "card3",
+                "deviceid": "371491ae0f854800a9385fb123f5701d",
+                "cameraName": "学生全景",
+                "MAC": "00096F007CDA"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.14",
+                "name": "D129录播",
+                "typeid": "1",
+                "id": "a1f1ea2f864c4a29a0b0e21ef6fe63c6",
+                "camera": "card5",
+                "deviceid": "371491ae0f854800a9385fb123f5701d",
+                "cameraName": "VGA",
+                "MAC": "00096F007CDA"
+              }
+            ],
+            "deviceMac": "00096F565D43",
+            "id": "c2063121a0fb4680aea3db52675dc82d",
+            "attribute": "Y",
+            "sort": "406",
+            "title": "D129"
+          },
+          {
+            "innerid": "2011271",
+            "deviceIp": "10.31.2.5",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.10",
+                "name": "D130录播",
+                "typeid": "1",
+                "id": "920f6efd6da6474886691c1e14c46dce",
+                "camera": "card10",
+                "deviceid": "574a2dff528745dc84d64ce3a884dd96",
+                "cameraName": "电影",
+                "MAC": "00096F007D68"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.10",
+                "name": "D130录播",
+                "typeid": "1",
+                "id": "c60cee0287e54931bd5ff890238581ae",
+                "camera": "card1",
+                "deviceid": "574a2dff528745dc84d64ce3a884dd96",
+                "cameraName": "教师全景",
+                "MAC": "00096F007D68"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.10",
+                "name": "D130录播",
+                "typeid": "1",
+                "id": "3e23b3ecd7b34f3788548edc002fcb07",
+                "camera": "card3",
+                "deviceid": "574a2dff528745dc84d64ce3a884dd96",
+                "cameraName": "学生全景",
+                "MAC": "00096F007D68"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.10",
+                "name": "D130录播",
+                "typeid": "1",
+                "id": "167ec1af808a4d8ab7c42a18a13fb3bd",
+                "camera": "card5",
+                "deviceid": "574a2dff528745dc84d64ce3a884dd96",
+                "cameraName": "VGA",
+                "MAC": "00096F007D68"
+              }
+            ],
+            "deviceMac": "00096F565D42",
+            "id": "de0817b8906e468481635e16feebbabe",
+            "attribute": "Y",
+            "sort": "407",
+            "title": "D130"
+          },
+          {
+            "innerid": "2011281",
+            "deviceIp": "10.31.2.4",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.6",
+                "name": "D131录播",
+                "typeid": "1",
+                "id": "59f695d0428b42b4ba85a824090186a9",
+                "camera": "card10",
+                "deviceid": "0e3efb7fef714373b00f1329b92b5c50",
+                "cameraName": "电影",
+                "MAC": "00096F007D79"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.6",
+                "name": "D131录播",
+                "typeid": "1",
+                "id": "7d0f197b060f4b7ea02044ef46f20a83",
+                "camera": "card1",
+                "deviceid": "0e3efb7fef714373b00f1329b92b5c50",
+                "cameraName": "教师全景",
+                "MAC": "00096F007D79"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.6",
+                "name": "D131录播",
+                "typeid": "1",
+                "id": "4007f92e75f54bfe9a09b5c34d518e9c",
+                "camera": "card3",
+                "deviceid": "0e3efb7fef714373b00f1329b92b5c50",
+                "cameraName": "学生全景",
+                "MAC": "00096F007D79"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.6",
+                "name": "D131录播",
+                "typeid": "1",
+                "id": "507af32ba327487abb276d56c8c12616",
+                "camera": "card5",
+                "deviceid": "0e3efb7fef714373b00f1329b92b5c50",
+                "cameraName": "VGA",
+                "MAC": "00096F007D79"
+              }
+            ],
+            "deviceMac": "00096F565D41",
+            "id": "c1d115aeaaf84542ba5861a8f274db0d",
+            "attribute": "Y",
+            "sort": "408",
+            "title": "D131"
+          },
+          {
+            "innerid": "2011291",
+            "deviceIp": "10.31.2.3",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.2",
+                "name": "D132录播",
+                "typeid": "1",
+                "id": "b77ccfe495f14ceba75b7a82d0d14720",
+                "camera": "card10",
+                "deviceid": "cd623045d2ea4196a15339ed3076d2c9",
+                "cameraName": "电影",
+                "MAC": "00096F007EE3"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.2",
+                "name": "D132录播",
+                "typeid": "1",
+                "id": "a43003e19c324fa383642d38475afae0",
+                "camera": "card1",
+                "deviceid": "cd623045d2ea4196a15339ed3076d2c9",
+                "cameraName": "教师全景",
+                "MAC": "00096F007EE3"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.2",
+                "name": "D132录播",
+                "typeid": "1",
+                "id": "14ff078cb3054ad9a2c55b3fb6a9ea50",
+                "camera": "card3",
+                "deviceid": "cd623045d2ea4196a15339ed3076d2c9",
+                "cameraName": "学生全景",
+                "MAC": "00096F007EE3"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.2",
+                "name": "D132录播",
+                "typeid": "1",
+                "id": "696632fdaab04ec28a8e5aab38a3f348",
+                "camera": "card5",
+                "deviceid": "cd623045d2ea4196a15339ed3076d2c9",
+                "cameraName": "VGA",
+                "MAC": "00096F007EE3"
+              }
+            ],
+            "deviceMac": "00096F565D40",
+            "id": "d6c2131c40ab4c6db41194a5cd44d930",
+            "attribute": "Y",
+            "sort": "409",
+            "title": "D132"
+          },
+          {
+            "innerid": "20113039",
+            "deviceIp": "10.31.2.2",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.2",
+                "name": "D134中控",
+                "typeid": "2",
+                "id": "51e5a96dc4b4410ab86687af5ec4bcd8",
+                "camera": "card5",
+                "deviceid": "38224fcc72224da1802d9e2676062b44",
+                "cameraName": "VGA",
+                "MAC": "00096F565D39"
+              }
+            ],
+            "deviceMac": "00096F565D39",
+            "id": "cdf4cc36e38e490b966a730bf532fa22",
+            "attribute": "Y",
+            "sort": "410",
+            "title": "D134"
+          },
+          {
+            "innerid": "2012211",
+            "deviceIp": "10.31.2.21",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.62",
+                "name": "D223录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096F015A17"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.62",
+                "name": "D223录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096F015A17"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.62",
+                "name": "D223录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096F015A17"
+              }
+            ],
+            "deviceMac": "00096F565D58",
+            "id": "77572214bc8142279981f0fbf2f1625a",
+            "attribute": "Y",
+            "sort": "411",
+            "title": "D223"
+          },
+          {
+            "innerid": "2012221",
+            "deviceIp": "10.31.2.20",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.59",
+                "name": "D225录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a27"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.59",
+                "name": "D225录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a27"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.59",
+                "name": "D225录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a27"
+              }
+            ],
+            "deviceMac": "00096F565D57",
+            "id": "b71259891b044669917d5eeceb9ea9db",
+            "attribute": "Y",
+            "sort": "412",
+            "title": "D225"
+          },
+          {
+            "innerid": "2012231",
+            "deviceIp": "10.31.2.19",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.56",
+                "name": "D226录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f0159da"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.56",
+                "name": "D226录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f0159da"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.56",
+                "name": "D226录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f0159da"
+              }
+            ],
+            "deviceMac": "00096F565D56",
+            "id": "8086a98df156481685ba50fec0f8dfba",
+            "attribute": "Y",
+            "sort": "413",
+            "title": "D226"
+          },
+          {
+            "innerid": "2012241",
+            "deviceIp": "10.31.2.18",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.53",
+                "name": "D227录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a18"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.53",
+                "name": "D227录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a18"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.53",
+                "name": "D227录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a18"
+              }
+            ],
+            "deviceMac": "00096F565D55",
+            "id": "11afcda336334e6b9d9c24ebde66164c",
+            "attribute": "Y",
+            "sort": "414",
+            "title": "D227"
+          },
+          {
+            "innerid": "2012251",
+            "deviceIp": "10.31.2.17",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.50",
+                "name": "D228录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a37"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.50",
+                "name": "D228录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a37"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.50",
+                "name": "D228录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a37"
+              }
+            ],
+            "deviceMac": "00096F565D54",
+            "id": "0ba706362bda42c584a50c0278c86d97",
+            "attribute": "Y",
+            "sort": "415",
+            "title": "D228"
+          },
+          {
+            "innerid": "2012261",
+            "deviceIp": "10.31.2.16",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.47",
+                "name": "D229录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a12"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.47",
+                "name": "D229录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a12"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.47",
+                "name": "D229录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a12"
+              }
+            ],
+            "deviceMac": "00096F565D53",
+            "id": "c66a8f7160ae418da6cbc02a6eb3ed48",
+            "attribute": "Y",
+            "sort": "416",
+            "title": "D229"
+          },
+          {
+            "innerid": "2012271",
+            "deviceIp": "10.31.2.15",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.44",
+                "name": "D230录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a45"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.44",
+                "name": "D230录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a45"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.44",
+                "name": "D230录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a45"
+              }
+            ],
+            "deviceMac": "00096F565D52",
+            "id": "5508a0a577b64768b012d4d61214c77f",
+            "attribute": "Y",
+            "sort": "417",
+            "title": "D230"
+          },
+          {
+            "innerid": "2012281",
+            "deviceIp": "10.31.2.14",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.41",
+                "name": "D231录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a2b"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.41",
+                "name": "D231录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a2b"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.41",
+                "name": "D231录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a2b"
+              }
+            ],
+            "deviceMac": "00096F565D51",
+            "id": "c417bd2a6b8e45aca5bdca9d75084eba",
+            "attribute": "Y",
+            "sort": "418",
+            "title": "D231"
+          },
+          {
+            "innerid": "2012291",
+            "deviceIp": "10.31.2.13",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.38",
+                "name": "D232录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f0159d9"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.38",
+                "name": "D232录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f0159d9"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.38",
+                "name": "D232录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f0159d9"
+              }
+            ],
+            "deviceMac": "00096F565D50",
+            "id": "b3ff201c01ec4dd199a26c90ede407ef",
+            "attribute": "Y",
+            "sort": "419",
+            "title": "D232"
+          },
+          {
+            "innerid": "20123039",
+            "deviceIp": "10.31.2.12",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.12",
+                "name": "D234中控",
+                "typeid": "2",
+                "id": "3c4835adf9554f4880b543ef3e57d357",
+                "camera": "card5",
+                "deviceid": "62ec88032e574556971480114a7698a5",
+                "cameraName": "VGA",
+                "MAC": "00096F565D49"
+              }
+            ],
+            "deviceMac": "00096F565D49",
+            "id": "9eb08680789c44018509af2424762cd0",
+            "attribute": "Y",
+            "sort": "420",
+            "title": "D234"
+          },
+          {
+            "innerid": "2013181",
+            "deviceIp": "10.31.2.30",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.89",
+                "name": "D321录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f0159dc"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.89",
+                "name": "D321录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f0159dc"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.89",
+                "name": "D321录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f0159dc"
+              }
+            ],
+            "deviceMac": "00096F565D67",
+            "id": "467095fda3b54c86a3bd1d9b2129e21f",
+            "attribute": "Y",
+            "sort": "422",
+            "title": "D321"
+          },
+          {
+            "innerid": "2013191",
+            "deviceIp": "10.31.2.29",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.86",
+                "name": "D322录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a1f"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.86",
+                "name": "D322录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a1f"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.86",
+                "name": "D322录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a1f"
+              }
+            ],
+            "deviceMac": "00096F565D66",
+            "id": "d0608f16bc6c49599fbe02fa736108e0",
+            "attribute": "Y",
+            "sort": "423",
+            "title": "D322"
+          },
+          {
+            "innerid": "2013201",
+            "deviceIp": "10.31.2.28",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.83",
+                "name": "D323录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a28"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.83",
+                "name": "D323录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a28"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.83",
+                "name": "D323录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a28"
+              }
+            ],
+            "deviceMac": "00096F565D65",
+            "id": "313830a304a542cfaf1451dd24c2a056",
+            "attribute": "Y",
+            "sort": "424",
+            "title": "D323"
+          },
+          {
+            "innerid": "2013211",
+            "deviceIp": "10.31.2.27",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.80",
+                "name": "D324录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a1b"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.80",
+                "name": "D324录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a1b"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.80",
+                "name": "D324录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a1b"
+              }
+            ],
+            "deviceMac": "00096F565D64",
+            "id": "87549de309794fada87e4b276a657e32",
+            "attribute": "Y",
+            "sort": "425",
+            "title": "D324"
+          },
+          {
+            "innerid": "2013221",
+            "deviceIp": "10.31.2.26",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.77",
+                "name": "D325录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a05"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.77",
+                "name": "D325录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a05"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.77",
+                "name": "D325录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a05"
+              }
+            ],
+            "deviceMac": "00096F565D63",
+            "id": "d796544a99d7485eb3ad619c873822b8",
+            "attribute": "Y",
+            "sort": "426",
+            "title": "D325"
+          },
+          {
+            "innerid": "2013231",
+            "deviceIp": "10.31.2.25",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.74",
+                "name": "D326录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a1a"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.74",
+                "name": "D326录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a1a"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.74",
+                "name": "D326录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a1a"
+              }
+            ],
+            "deviceMac": "00096F565D62",
+            "id": "752c879051114d1f8cdaccbdab66fb9d",
+            "attribute": "Y",
+            "sort": "427",
+            "title": "D326"
+          },
+          {
+            "innerid": "2013241",
+            "deviceIp": "10.31.2.24",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.71",
+                "name": "D327录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a03"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.71",
+                "name": "D327录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a03"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.71",
+                "name": "D327录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a03"
+              }
+            ],
+            "deviceMac": "00096F565D61",
+            "id": "77dbc15b091b4b8c9415344c515157e1",
+            "attribute": "Y",
+            "sort": "428",
+            "title": "D327"
+          },
+          {
+            "innerid": "2013251",
+            "deviceIp": "10.31.2.23",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.68",
+                "name": "D328录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f0159ef"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.68",
+                "name": "D328录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f0159ef"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.68",
+                "name": "D328录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f0159ef"
+              }
+            ],
+            "deviceMac": "00096F565D60",
+            "id": "22f2cb63ff5b45a093d2632caddbf74b",
+            "attribute": "Y",
+            "sort": "429",
+            "title": "D328"
+          },
+          {
+            "innerid": "2014181",
+            "deviceIp": "10.31.2.40",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.116",
+                "name": "D421录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a2a"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.116",
+                "name": "D421录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a2a"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.116",
+                "name": "D421录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a2a"
+              }
+            ],
+            "deviceMac": "00096F565D77",
+            "id": "282d178198f94b97942f2fd21cd2d7b8",
+            "attribute": "Y",
+            "sort": "431",
+            "title": "D421"
+          },
+          {
+            "innerid": "2014191",
+            "deviceIp": "10.31.2.39",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.113",
+                "name": "D422录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a16"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.113",
+                "name": "D422录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a16"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.113",
+                "name": "D422录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a16"
+              }
+            ],
+            "deviceMac": "00096F565D76",
+            "id": "c72c0acec01247ff904236149ffa8ab3",
+            "attribute": "Y",
+            "sort": "432",
+            "title": "D422"
+          },
+          {
+            "innerid": "2014201",
+            "deviceIp": "10.31.2.38",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.110",
+                "name": "D423录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a21"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.110",
+                "name": "D423录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a21"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.110",
+                "name": "D423录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a21"
+              }
+            ],
+            "deviceMac": "00096F565D75",
+            "id": "aaa0d9aa07f54bfd85028843fdad4ad6",
+            "attribute": "Y",
+            "sort": "433",
+            "title": "D423"
+          },
+          {
+            "innerid": "2014211",
+            "deviceIp": "10.31.2.37",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.107",
+                "name": "D424录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f0159d7"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.107",
+                "name": "D424录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f0159d7"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.107",
+                "name": "D424录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f0159d7"
+              }
+            ],
+            "deviceMac": "00096F565D74",
+            "id": "9a137185519143edb6b946f3794e4fa5",
+            "attribute": "Y",
+            "sort": "434",
+            "title": "D424"
+          },
+          {
+            "innerid": "2014221",
+            "deviceIp": "10.31.2.36",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.104",
+                "name": "D425录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f0159fd"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.104",
+                "name": "D425录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f0159fd"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.104",
+                "name": "D425录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f0159fd"
+              }
+            ],
+            "deviceMac": "00096F565D73",
+            "id": "43920c196e0f4df3b0419ee85aa9f386",
+            "attribute": "Y",
+            "sort": "435",
+            "title": "D425"
+          },
+          {
+            "innerid": "2014231",
+            "deviceIp": "10.31.2.35",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.101",
+                "name": "D426录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a15"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.101",
+                "name": "D426录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a15"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.101",
+                "name": "D426录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a15"
+              }
+            ],
+            "deviceMac": "00096F565D72",
+            "id": "e5411d3efa4e490a8a8db825a377bf1f",
+            "attribute": "Y",
+            "sort": "436",
+            "title": "D426"
+          },
+          {
+            "innerid": "2014241",
+            "deviceIp": "10.31.2.34",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.98",
+                "name": "D427录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f0159f2"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.98",
+                "name": "D427录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f0159f2"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.98",
+                "name": "D427录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f0159f2"
+              }
+            ],
+            "deviceMac": "00096F565D71",
+            "id": "5dddd279bff642e7a8804a61c485bad5",
+            "attribute": "Y",
+            "sort": "437",
+            "title": "D427"
+          },
+          {
+            "innerid": "2014251",
+            "deviceIp": "10.31.2.33",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.95",
+                "name": "D428录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a49"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.95",
+                "name": "D428录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a49"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.95",
+                "name": "D428录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a49"
+              }
+            ],
+            "deviceMac": "00096F565D70",
+            "id": "e7569fcf974c4660b2fdd7bdc36d6b92",
+            "attribute": "Y",
+            "sort": "438",
+            "title": "D428"
+          },
+          {
+            "innerid": "2014261",
+            "deviceIp": "10.31.2.32",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.92",
+                "name": "D429录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f0158d9"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.92",
+                "name": "D429录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f0158d9"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.92",
+                "name": "D429录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f0158d9"
+              }
+            ],
+            "deviceMac": "00096F565D69",
+            "id": "043cad38a5254c6594dd87c79fbdade3",
+            "attribute": "Y",
+            "sort": "439",
+            "title": "D429"
+          },
+          {
+            "innerid": "20142739",
+            "deviceIp": "10.31.2.31",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.31",
+                "name": "D431中控",
+                "typeid": "2",
+                "id": "d54dcb41dfcd499b9cb3ad163ebfe56c",
+                "camera": "card5",
+                "deviceid": "e4f1fa77edd545b9ae196105bba189b7",
+                "cameraName": "VGA",
+                "MAC": "00096F565D68"
+              }
+            ],
+            "deviceMac": "00096F565D68",
+            "id": "0dc721379c6a4bc19aa77acd04380e23",
+            "attribute": "Y",
+            "sort": "440",
+            "title": "D431"
+          },
+          {
+            "innerid": "2015181",
+            "deviceIp": "10.31.2.50",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.143",
+                "name": "D521录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f0159db"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.143",
+                "name": "D521录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f0159db"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.143",
+                "name": "D521录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f0159db"
+              }
+            ],
+            "deviceMac": "00096F565D87",
+            "id": "f4690a2f4e2e4ef38184ee270afe8eda",
+            "attribute": "Y",
+            "sort": "441",
+            "title": "D521"
+          },
+          {
+            "innerid": "2015191",
+            "deviceIp": "10.31.2.49",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.140",
+                "name": "D522录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f0159fb"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.140",
+                "name": "D522录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f0159fb"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.140",
+                "name": "D522录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f0159fb"
+              }
+            ],
+            "deviceMac": "00096F565D86",
+            "id": "450a2562fa694c3797fd5846533743d2",
+            "attribute": "Y",
+            "sort": "442",
+            "title": "D522"
+          },
+          {
+            "innerid": "2015201",
+            "deviceIp": "10.31.2.48",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.137",
+                "name": "D523录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a29"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.137",
+                "name": "D523录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a29"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.137",
+                "name": "D523录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a29"
+              }
+            ],
+            "deviceMac": "00096F565D85",
+            "id": "e4987be1a260426599c56df75325b47f",
+            "attribute": "Y",
+            "sort": "443",
+            "title": "D523"
+          },
+          {
+            "innerid": "2015211",
+            "deviceIp": "10.31.2.47",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.134",
+                "name": "D524录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a13"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.134",
+                "name": "D524录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a13"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.134",
+                "name": "D524录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a13"
+              }
+            ],
+            "deviceMac": "00096F565D84",
+            "id": "fcc7725a3ee742f58ca917be4464bc4c",
+            "attribute": "Y",
+            "sort": "444",
+            "title": "D524"
+          },
+          {
+            "innerid": "2015221",
+            "deviceIp": "10.31.2.46",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.131",
+                "name": "D525录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f0159f3"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.131",
+                "name": "D525录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f0159f3"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.131",
+                "name": "D525录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f0159f3"
+              }
+            ],
+            "deviceMac": "00096F565D83",
+            "id": "ba5af92285ba4037a1353c2d86703c2c",
+            "attribute": "Y",
+            "sort": "445",
+            "title": "D525"
+          },
+          {
+            "innerid": "2015231",
+            "deviceIp": "10.31.2.45",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.128",
+                "name": "D526录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a01"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.128",
+                "name": "D526录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a01"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.128",
+                "name": "D526录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a01"
+              }
+            ],
+            "deviceMac": "00096F565D82",
+            "id": "814d71993ebc476e97faa89429cfbbc7",
+            "attribute": "Y",
+            "sort": "446",
+            "title": "D526"
+          },
+          {
+            "innerid": "2015241",
+            "deviceIp": "10.31.2.44",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.125",
+                "name": "D527录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a06"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.125",
+                "name": "D527录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a06"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.125",
+                "name": "D527录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a06"
+              }
+            ],
+            "deviceMac": "00096F565D81",
+            "id": "c2e4ff17a6d04d8e891771952061113f",
+            "attribute": "Y",
+            "sort": "447",
+            "title": "D527"
+          },
+          {
+            "innerid": "2015251",
+            "deviceIp": "10.31.2.43",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.122",
+                "name": "D528录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f0159de"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.122",
+                "name": "D528录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f0159de"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.122",
+                "name": "D528录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f0159de"
+              }
+            ],
+            "deviceMac": "00096F565D80",
+            "id": "eed732c49b1f478cb3eb18a9ec0d2c4f",
+            "attribute": "Y",
+            "sort": "448",
+            "title": "D528"
+          },
+          {
+            "innerid": "2015261",
+            "deviceIp": "10.31.2.42",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.119",
+                "name": "D529录播主机",
+                "typeid": "8",
+                "id": "a0618365-95bf-11ef-9555-000c2993f116",
+                "camera": "card0",
+                "deviceid": "",
+                "cameraName": "教师全景",
+                "MAC": "00096f015a19"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.119",
+                "name": "D529录播主机",
+                "typeid": "8",
+                "id": "a07309b4-95bf-11ef-9555-000c2993f116",
+                "camera": "card2",
+                "deviceid": "",
+                "cameraName": "学生全景",
+                "MAC": "00096f015a19"
+              },
+              {
+                "address": "",
+                "flag": "false",
+                "IP": "10.31.1.119",
+                "name": "D529录播主机",
+                "typeid": "8",
+                "id": "a0790b84-95bf-11ef-9555-000c2993f116",
+                "camera": "card5",
+                "deviceid": "",
+                "cameraName": "VGA",
+                "MAC": "00096f015a19"
+              }
+            ],
+            "deviceMac": "00096F565D79",
+            "id": "93629785d1454bcda3c4266b18941681",
+            "attribute": "Y",
+            "sort": "449",
+            "title": "D529"
+          },
+          {
+            "innerid": "20152739",
+            "deviceIp": "10.31.2.41",
+            "code": "a29e1915480d48779b9e75b8cd69a72a",
+            "videoStreams": [
+              {
+                "address": null,
+                "flag": null,
+                "IP": "10.31.2.41",
+                "name": "D531中控",
+                "typeid": "2",
+                "id": "e391211dbd3f427c8a3452d11417a7c1",
+                "camera": "card5",
+                "deviceid": "43c14867255c416cbf87633057ac35ab",
+                "cameraName": "VGA",
+                "MAC": "00096F565D78"
+              }
+            ],
+            "deviceMac": "00096F565D78",
+            "id": "75114c2b04144fe7b8dc525fc2f44bf7",
+            "attribute": "Y",
+            "sort": "450",
+            "title": "D531"
+          }
+        ],
+        "code": "a29e1915480d48779b9e75b8cd69a72a",
+        "id": "d63c0522378c4b99a52e3b9f3f3477a5",
+        "attribute": "N",
+        "sort": "14",
+        "title": "D区"
+      }
+    ],
+    "code": "a29e1915480d48779b9e75b8cd69a72a",
+    "id": "1",
+    "attribute": "N",
+    "title": "郑州师范学院"
+  }
+]

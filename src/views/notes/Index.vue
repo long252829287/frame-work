@@ -72,16 +72,33 @@ async function removeNote(row: NoteItem) {
   await fetchNotes()
 }
 
+async function handleLogout() {
+  try {
+    await auth.logout()
+    // 退出登录后跳转到登录页
+    window.location.href = '/login'
+  } catch (error) {
+    console.error('退出登录失败:', error)
+    // 即使退出失败，也清除本地状态并跳转
+    window.location.href = '/login'
+  }
+}
+
 onMounted(fetchNotes)
 </script>
 
 <template>
   <div style="max-width: 960px; margin: 20px auto;">
     <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 12px;">
-      <h2 style="margin:0;">我的笔记 ({{ total }})</h2>
+      <div>
+        <h2 style="margin:0;">我的笔记 ({{ total }})</h2>
+        <div style="color: #666; font-size: 14px; margin-top: 4px;">
+          欢迎回来，{{ auth.user?.nickname || auth.user?.username || '用户' }}
+        </div>
+      </div>
       <div>
         <el-button type="primary" @click="openCreate">新建笔记</el-button>
-        <el-button @click="auth.logout">退出登录</el-button>
+        <el-button @click="handleLogout">退出登录</el-button>
       </div>
     </div>
 
