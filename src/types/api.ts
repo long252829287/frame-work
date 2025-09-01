@@ -20,3 +20,31 @@ export interface NoteItem {
   createdAt?: string
   updatedAt?: string
 }
+
+// Credentials
+export interface CredentialItem {
+  id: string
+  account: string
+  website: string
+  notes?: string
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface RevealPasswordResult {
+  password: string
+}
+
+export interface StudySubject {
+  id: string
+  name: string
+  description?: string
+  files: string[] // Array of markdown file names
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface MarkdownFile {
+  name: string
+  content: string
+}

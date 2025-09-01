@@ -1,413 +1,230 @@
 <template>
-  <div class="landing">
-    <div class="bg-grid"></div>
-    <div class="bg-blobs">
-      <div class="blob b1"></div>
-      <div class="blob b2"></div>
-      <div class="blob b3"></div>
+  <div class="desktop">
+    <div class="start-grid" role="grid" aria-label="start modules">
+      <button v-for="t in tiles" :key="t.key" class="tile" :class="['tile--' + t.size, 'tile--' + t.color]"
+        type="button" role="button" tabindex="0" @click="handleTile(t)">
+        <div class="tile__icon" aria-hidden="true">{{ t.icon }}</div>
+        <div class="tile__text">
+          <div class="tile__title">{{ t.title }}</div>
+          <div v-if="t.subtitle" class="tile__sub">{{ t.subtitle }}</div>
+        </div>
+      </button>
     </div>
-
-    <header class="nav">
-      <div class="brand">
-        <div class="logo">✦</div>
-        <div class="name">Osheeep Notes</div>
-      </div>
-      <div class="nav-actions">
-        <el-button v-if="!isAuthed" type="primary" round @click="goLogin">登录</el-button>
-        <el-button v-if="!isAuthed" round @click="goRegister">注册</el-button>
-        <el-button v-else round @click="goNotes">进入笔记</el-button>
-        <el-button round @click="goTool">工具</el-button>
-      </div>
-    </header>
-
-    <main class="hero">
-      <div class="glass">
-        <h1 class="title">
-          记录灵感，整理思绪
-          <span class="gradient">更优雅</span>
-        </h1>
-        <p class="subtitle">
-          轻盈的富文本笔记应用，支持多端同步、智能标签与快捷操作。让创作与管理，都变得简单而愉悦。
-        </p>
-        <div class="cta">
-          <el-button type="primary" size="large" class="cta-btn" @click="goNotes">立即开始</el-button>
-          <el-button size="large" class="ghost-btn" @click="scrollFeatures">了解功能</el-button>
-        </div>
-        <div class="stats">
-          <template v-for="(s, i) in stats" :key="s.label">
-            <div><span class="num">{{ s.value }}</span> {{ s.label }}</div>
-            <div v-if="i < stats.length - 1" class="dot"></div>
-          </template>
-        </div>
-      </div>
-    </main>
-
-    <section ref="featuresRef" aria-label="features">
-      <div class="features">
-        <div v-for="f in features" :key="f.title" class="feature-card">
-          <div class="f-icon">{{ f.icon }}</div>
-          <div class="f-title">{{ f.title }}</div>
-          <div class="f-desc">{{ f.desc }}</div>
-        </div>
-      </div>
-    </section>
-
-    <section aria-label="cta-strip">
-      <div class="cta-strip">
-        <div class="cta-strip__inner">
-          <div>
-            <div class="cta-strip__title">准备好开始了吗？</div>
-            <div class="cta-strip__sub">用更优雅的方式记录每一刻灵感。</div>
-          </div>
-          <div class="cta-strip__actions">
-            <el-button type="primary" size="large" @click="goNotes">立即使用</el-button>
-            <el-button size="large" class="ghost-btn" @click="goRegister">创建账号</el-button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <footer class="footer">© 2025 Osheeep Notes · Crafted with ♥</footer>
   </div>
-
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
-import { FEATURES, type FeatureItem, STATS } from './home.data'
 
 const router = useRouter()
 const auth = useAuthStore()
 const isAuthed = computed(() => auth.checkAuth())
-const featuresRef = ref<HTMLElement | null>(null)
-const features = ref<FeatureItem[]>(FEATURES)
-const stats = ref(STATS)
-function goLogin() {
-  router.push({ name: 'login' })
+
+type TileSize = 's' | 'm' | 'w' | 't' | 'l'
+type TileColor = 'blue' | 'purple' | 'teal' | 'orange' | 'pink' | 'slate'
+interface TileItem {
+  key: string
+  title: string
+  subtitle?: string
+  icon: string
+  size: TileSize
+  color: TileColor
+  route?: string
+  requiresAuth?: boolean
 }
-function goRegister() {
-  router.push({ name: 'register' })
-}
-function goNotes() {
-  if (isAuthed.value) {
-    router.push({ name: 'notes' })
-  } else {
-    router.push({ name: 'login', query: { redirect: '/notes' } })
+
+const tiles: TileItem[] = [
+  { key: 'notes', title: '笔记', subtitle: 'Notes', icon: '📝', size: 'w', color: 'purple', route: '/notes', requiresAuth: true },
+  { key: 'cred', title: '凭据', subtitle: 'Credentials', icon: '🔐', size: 'm', color: 'teal', route: '/credentials', requiresAuth: true },
+  { key: 'study', title: '学习记录', subtitle: 'Study Records', icon: '📚', size: 'm', color: 'blue', route: '/study', requiresAuth: true },
+  { key: 'login', title: '登录', subtitle: 'Sign in', icon: '🔑', size: 's', color: 'blue', route: '/login' },
+  { key: 'register', title: '注册', subtitle: 'Create', icon: '🆕', size: 's', color: 'orange', route: '/register' },
+  { key: 'tasks', title: '任务', subtitle: 'Coming soon', icon: '✅', size: 'm', color: 'slate' },
+  { key: 'media', title: '媒体', subtitle: 'Coming soon', icon: '🎬', size: 'm', color: 'pink' },
+  { key: 'gallery', title: '相册', subtitle: 'Coming soon', icon: '🖼️', size: 't', color: 'orange' },
+  { key: 'analytics', title: '分析', subtitle: 'Coming soon', icon: '📊', size: 'm', color: 'blue' },
+  { key: 'tools', title: '工具', subtitle: 'Coming soon', icon: '🧰', size: 's', color: 'teal' },
+  { key: 'settings', title: '设置', subtitle: 'Preferences', icon: '⚙️', size: 'l', color: 'slate' },
+]
+
+function handleTile(t: TileItem) {
+  if (t.route) {
+    if (t.requiresAuth && !isAuthed.value) {
+      router.push({ name: 'login', query: { redirect: t.route } })
+      return
+    }
+    router.push(t.route)
+    return
   }
-}
-function goTool() {
-  router.push({ name: 'tool' })
-}
-function scrollFeatures() {
-  featuresRef.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  window.alert('功能即将上线：' + t.title)
 }
 </script>
 
 <style scoped lang="scss">
-.landing {
-  position: relative;
+.desktop {
   min-height: 100vh;
-  color: #fff;
-  overflow: hidden;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-  background: radial-gradient(1200px 800px at 10% 10%, #1f275a 0%, transparent 60%),
-    radial-gradient(1000px 700px at 90% 20%, #5a1f4b 0%, transparent 60%),
-    radial-gradient(1400px 900px at 50% 100%, #083344 0%, #0a0d1a 80%);
+  padding: 28px;
+  background:
+    radial-gradient(1200px 800px at 10% 10%, rgba(99, 102, 241, 0.14) 0%, transparent 60%),
+    radial-gradient(1000px 700px at 90% 20%, rgba(56, 189, 248, 0.12) 0%, transparent 60%),
+    radial-gradient(1400px 900px at 50% 100%, rgba(244, 114, 182, 0.12) 0%, transparent 70%),
+    linear-gradient(180deg, #fbfdff 0%, #f9fbff 40%, #f8f8ff 100%);
 }
 
-.bg-grid::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(transparent 95%, rgba(255, 255, 255, 0.06) 95%),
-    linear-gradient(90deg, transparent 95%, rgba(255, 255, 255, 0.06) 95%);
-  background-size: 32px 32px, 32px 32px;
-  opacity: 0.25;
-  mask-image: radial-gradient(1000px 600px at 50% -10%, black 0%, transparent 70%);
-}
-
-.bg-blobs .blob {
-  position: absolute;
-  filter: blur(40px);
-  opacity: 0.7;
-  mix-blend-mode: screen;
-  animation: float 12s ease-in-out infinite;
-}
-
-.bg-blobs .b1 {
-  width: 420px;
-  height: 420px;
-  background: #7c3aed;
-  top: -60px;
-  left: -60px;
-}
-
-.bg-blobs .b2 {
-  width: 380px;
-  height: 380px;
-  background: #06b6d4;
-  top: 40%;
-  right: -100px;
-  animation-duration: 15s;
-}
-
-.bg-blobs .b3 {
-  width: 300px;
-  height: 300px;
-  background: #ef4444;
-  bottom: -80px;
-  left: 20%;
-  animation-duration: 18s;
-}
-
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0) translateX(0);
-  }
-
-  50% {
-    transform: translateY(-20px) translateX(10px);
-  }
-}
-
-.nav {
-  position: relative;
-  z-index: 2;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 20px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logo {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.2);
+.start-grid {
   display: grid;
-  place-items: center;
-  backdrop-filter: blur(6px);
+  grid-auto-flow: dense;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.name {
+.tile {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 14px;
+  padding: 14px;
+  color: #0f172a;
+  border: 1px solid rgba(148, 163, 184, 0.28);
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px) saturate(120%);
+  transform: translateZ(0);
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+}
+
+.tile:focus-visible {
+  outline: 2px solid rgba(59, 130, 246, 0.6);
+  outline-offset: 2px;
+}
+
+.tile:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.03);
+}
+
+.tile:active {
+  transform: translateY(0);
+  filter: brightness(0.98);
+}
+
+.tile__icon {
+  font-size: 28px;
+  position: absolute;
+  top: 12px;
+  left: 12px;
+}
+
+.tile__text {
+  z-index: 1;
+}
+
+.tile__title {
   font-weight: 800;
   letter-spacing: 0.3px;
 }
 
-.nav-actions :deep(.el-button) {
-  margin-left: 8px;
-}
-
-.hero {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  place-items: center;
-  padding: 56px 20px 24px;
-}
-
-.glass {
-  max-width: 960px;
-  width: 100%;
-  padding: 24px;
-  border-radius: 20px;
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-brd);
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35), inset 0 0 40px rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(14px) saturate(120%);
-}
-
-.title {
-  font-size: 28px;
-  line-height: 1.2;
-  font-weight: 800;
-  margin: 0 0 16px;
-}
-
-@media (min-width: 640px) {
-  .title {
-    font-size: 44px;
-  }
-}
-
-.title .gradient {
-  background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.subtitle {
-  color: rgba(255, 255, 255, 0.80);
-  margin: 0 0 24px;
-  font-size: 14px;
-}
-
-@media (min-width: 640px) {
-  .subtitle {
-    font-size: 16px;
-  }
-}
-
-.cta {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 16px;
-  flex-direction: column;
-}
-
-@media (min-width: 640px) {
-  .cta {
-    flex-direction: row;
-  }
-}
-
-.cta-btn {
-  box-shadow: 0 10px 24px rgba(124, 58, 237, 0.35);
-}
-
-.ghost-btn {
-  color: #fff;
-  border-color: rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  align-items: center;
-  color: rgba(255, 255, 255, 0.75);
+.tile__sub {
   font-size: 12px;
+  opacity: 0.85;
+  margin-top: 2px;
 }
 
-@media (min-width: 640px) {
-  .stats {
-    font-size: 14px;
+/* sizes (using grid spans) */
+.tile--s {
+  grid-column: span 1;
+  grid-row: span 1;
+  min-height: 120px;
+}
+
+.tile--m {
+  grid-column: span 2;
+  grid-row: span 1;
+  min-height: 120px;
+}
+
+.tile--w {
+  grid-column: span 3;
+  grid-row: span 1;
+  min-height: 120px;
+}
+
+.tile--t {
+  grid-column: span 1;
+  grid-row: span 2;
+  min-height: 252px;
+}
+
+.tile--l {
+  grid-column: span 2;
+  grid-row: span 2;
+  min-height: 252px;
+}
+
+@media (max-width: 900px) {
+  .tile--w {
+    grid-column: span 2;
   }
 }
 
-.stats .num {
-  color: #fff;
-  font-weight: 700;
-  margin-right: 4px;
-}
+@media (max-width: 600px) {
+  .start-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
 
-.stats .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.35);
-}
+  .tile--m,
+  .tile--w {
+    grid-column: span 1;
+  }
 
-.features {
-  position: relative;
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  max-width: 1100px;
-  padding: 24px 20px 40px;
-  margin: 0 auto;
-}
-
-@media (max-width: 1023.9px) {
-  .features {
-    grid-template-columns: repeat(2, 1fr);
+  .tile--t,
+  .tile--l {
+    grid-column: span 1;
+    grid-row: span 1;
+    min-height: 140px;
   }
 }
 
-@media (max-width: 639.9px) {
-  .features {
-    grid-template-columns: 1fr;
-  }
+/* color variants — lighter, youthful pastels */
+.tile--blue {
+  background: linear-gradient(145deg, rgba(96, 165, 250, 0.45), rgba(59, 130, 246, 0.35));
 }
 
-.feature-card {
-  background: var(--glass-bg);
-  border: 1px solid var(--glass-brd);
-  border-radius: 16px;
-  padding: 20px;
-  backdrop-filter: blur(10px) saturate(120%);
-  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.04);
+.tile--purple {
+  background: linear-gradient(145deg, rgba(167, 139, 250, 0.45), rgba(147, 51, 234, 0.32));
 }
 
-.f-icon {
-  font-size: 28px;
-  margin-bottom: 10px;
+.tile--teal {
+  background: linear-gradient(145deg, rgba(94, 234, 212, 0.45), rgba(45, 212, 191, 0.32));
 }
 
-.f-title {
-  font-weight: 700;
-  margin-bottom: 6px;
+.tile--orange {
+  background: linear-gradient(145deg, rgba(253, 186, 116, 0.48), rgba(251, 146, 60, 0.34));
 }
 
-.f-desc {
-  color: rgba(255, 255, 255, 0.80);
+.tile--pink {
+  background: linear-gradient(145deg, rgba(244, 114, 182, 0.48), rgba(236, 72, 153, 0.34));
 }
 
-.cta-strip {
-  border-radius: 20px;
-  padding: 24px;
-  background: linear-gradient(90deg, rgba(147, 51, 234, 0.30), rgba(37, 99, 235, 0.30));
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  max-width: 1100px;
-  margin: 0 auto 40px;
+.tile--slate {
+  background: linear-gradient(145deg, rgba(203, 213, 225, 0.6), rgba(148, 163, 184, 0.4));
 }
 
-.cta-strip__inner {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  justify-content: space-between;
-  flex-direction: column;
-}
-
-@media (min-width: 640px) {
-  .cta-strip__inner {
-    flex-direction: row;
-  }
-}
-
-.cta-strip__title {
-  font-size: 20px;
-  font-weight: 800;
-}
-
-@media (min-width: 640px) {
-  .cta-strip__title {
-    font-size: 24px;
-  }
-}
-
-.cta-strip__sub {
-  color: rgba(255, 255, 255, 0.80);
-  font-size: 14px;
-}
-
-.cta-strip__actions {
-  display: flex;
-  gap: 12px;
-}
-
-.footer {
-  text-align: center;
-  color: rgba(255, 255, 255, 0.65);
-  padding: 16px 0 24px;
+/* decorative highlight */
+.tile::after {
+  content: '';
+  position: absolute;
+  inset: -20% -20% auto auto;
+  height: 140px;
+  width: 140px;
+  background: radial-gradient(80px 80px at 50% 50%, rgba(255, 255, 255, 0.65), transparent 70%);
+  filter: blur(14px);
+  transform: rotate(25deg);
 }
 </style>

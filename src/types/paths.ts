@@ -1,4 +1,4 @@
-export type RoutePath = '/login' | '/register' | '/notes'
+export type RoutePath = '/login' | '/register' | '/notes' | '/credentials' | '/study'
 
 export interface InternalLink {
   path: RoutePath

@@ -1,5 +1,13 @@
 import fetch from '../fetch'
-import type { ApiLoginData, NoteItem, PaginatedList } from '@/types'
+import type {
+  ApiLoginData,
+  NoteItem,
+  PaginatedList,
+  CredentialItem,
+  RevealPasswordResult,
+  StudySubject,
+  MarkdownFile,
+} from '@/types'
 
 // Auth APIs
 
@@ -35,5 +43,78 @@ export default {
 
   async apiDeleteNote(id: string) {
     return fetch.delete<{ success?: boolean }>(`/api/notes/notes/${id}`)
+  },
+
+  // Credentials APIs
+  async apiCreateCredential(payload: {
+    account: string
+    password: string
+    website: string
+    notes?: string
+  }) {
+    return fetch.post<CredentialItem>('/api/credentials', payload)
+  },
+
+  async apiListCredentials() {
+    return fetch.get<PaginatedList<CredentialItem> | CredentialItem[]>('/api/credentials')
+  },
+
+  async apiGetCredential(id: string) {
+    return fetch.get<CredentialItem>(`/api/credentials/${id}`)
+  },
+
+  async apiRevealCredentialPassword(id: string) {
+    return fetch.post<RevealPasswordResult>(`/api/credentials/${id}/reveal`)
+  },
+
+  async apiUpdateCredential(
+    id: string,
+    payload: { account?: string; password?: string; website?: string; notes?: string },
+  ) {
+    return fetch.put<CredentialItem>(`/api/credentials/${id}`, payload)
+  },
+
+  async apiDeleteCredential(id: string) {
+    return fetch.delete<{ success?: boolean }>(`/api/credentials/${id}`)
+  },
+
+  // Study APIs
+  async apiCreateStudySubject(payload: { name: string; description?: string }) {
+    return fetch.post<StudySubject>('/api/study/subjects', payload)
+  },
+
+  async apiListStudySubjects() {
+    return fetch.get<PaginatedList<StudySubject> | StudySubject[]>('/api/study/subjects')
+  },
+
+  async apiGetStudySubject(id: string) {
+    return fetch.get<StudySubject>(`/api/study/subjects/${id}`)
+  },
+
+  async apiUpdateStudySubject(
+    id: string,
+    payload: { name?: string; description?: string; files?: string[] },
+  ) {
+    return fetch.put<StudySubject>(`/api/study/subjects/${id}`, payload)
+  },
+
+  async apiDeleteStudySubject(id: string) {
+    return fetch.delete<{ success?: boolean }>(`/api/study/subjects/${id}`)
+  },
+
+  async apiGetMarkdownFile(subjectId: string, fileName: string) {
+    return fetch.get<MarkdownFile>(`/api/study/subjects/${subjectId}/files/${fileName}`)
+  },
+
+  async apiCreateMarkdownFile(subjectId: string, payload: { name: string; content: string }) {
+    return fetch.post<MarkdownFile>(`/api/study/subjects/${subjectId}/files`, payload)
+  },
+
+  async apiUpdateMarkdownFile(subjectId: string, fileName: string, payload: { content: string }) {
+    return fetch.put<MarkdownFile>(`/api/study/subjects/${subjectId}/files/${fileName}`, payload)
+  },
+
+  async apiDeleteMarkdownFile(subjectId: string, fileName: string) {
+    return fetch.delete<{ success?: boolean }>(`/api/study/subjects/${subjectId}/files/${fileName}`)
   },
 }

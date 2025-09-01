@@ -30,6 +30,24 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/notes/Index.vue'),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/credentials',
+    name: 'credentials',
+    component: () => import('@/views/credentials/Index.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/study',
+    name: 'study',
+    component: () => import('@/views/study/Index.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/study/:id',
+    name: 'study-detail',
+    component: () => import('@/views/study/Detail.vue'),
+    meta: { requiresAuth: true },
+  },
 ]
 
 const router = createRouter({
