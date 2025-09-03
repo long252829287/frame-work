@@ -28,6 +28,7 @@ function loadFromStorage(): TodoItem[] {
   }
 }
 
+
 export const useTodoStore = defineStore('todo', () => {
   const todos = ref<TodoItem[]>(loadFromStorage())
 
