@@ -2,17 +2,9 @@
 import { onMounted, reactive, ref } from 'vue'
 import { commonService } from '@/service'
 import { useAuthStore } from '@/stores/auth'
+import type { PaginatedList, NoteItem } from '@/types'
 
 const auth = useAuthStore()
-
-interface NoteItem {
-  id: string
-  title?: string
-  content: string
-  tags?: string[]
-  createdAt?: string
-  updatedAt?: string
-}
 
 const loading = ref(false)
 const list = ref<NoteItem[]>([])
@@ -30,14 +22,10 @@ async function fetchNotes() {
   loading.value = true
   try {
     const res = await commonService.apiGetNotes()
-    const data = res.data
-    if (Array.isArray(data)) {
-      list.value = data
-      total.value = data.length
-    } else {
-      list.value = data?.items ?? data?.list ?? []
-      total.value = data?.total ?? list.value.length
-    }
+    // 根据API类型定义，响应应该是PaginatedList<NoteItem>结构
+    const data = res.data as PaginatedList<NoteItem>
+    list.value = data.data.notes || []
+    total.value = data.data.count || 0
   } finally {
     loading.value = false
   }

@@ -37,7 +37,7 @@ interface TileItem {
 
 const tiles: TileItem[] = [
   { key: 'notes', title: '笔记', subtitle: 'Notes', icon: '📝', size: 'w', color: 'purple', route: '/notes', requiresAuth: true },
-  { key: 'cred', title: '凭据', subtitle: 'Credentials', icon: '🔐', size: 'm', color: 'teal', route: '/credentials', requiresAuth: true },
+  { key: 'cred', title: '凭据', subtitle: 'Credentials', icon: '🔐', size: 'l', color: 'teal', route: '/credentials', requiresAuth: true },
   { key: 'study', title: '学习记录', subtitle: 'Study Records', icon: '📚', size: 'm', color: 'blue', route: '/study', requiresAuth: true },
   { key: 'login', title: '登录', subtitle: 'Sign in', icon: '🔑', size: 's', color: 'blue', route: '/login' },
   { key: 'register', title: '注册', subtitle: 'Create', icon: '🆕', size: 's', color: 'orange', route: '/register' },
@@ -46,7 +46,8 @@ const tiles: TileItem[] = [
   { key: 'gallery', title: '相册', subtitle: 'Coming soon', icon: '🖼️', size: 't', color: 'orange' },
   { key: 'analytics', title: '分析', subtitle: 'Coming soon', icon: '📊', size: 'm', color: 'blue' },
   { key: 'tools', title: '工具', subtitle: 'Coming soon', icon: '🧰', size: 's', color: 'teal' },
-  { key: 'settings', title: '设置', subtitle: 'Preferences', icon: '⚙️', size: 'l', color: 'slate' },
+  { key: 'settings', title: '设置', subtitle: 'Preferences', icon: '⚙️', size: 's', color: 'slate' },
+  { key: 'todo', title: '备忘录', subtitle: 'Todo List', icon: '📝', size: 'l', color: 'purple', route: '/todo' },
 ]
 
 function handleTile(t: TileItem) {

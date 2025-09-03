@@ -1,8 +1,9 @@
 // Generic API response helpers
 export interface PaginatedList<T> {
-  items?: T[]
-  list?: T[]
-  total?: number
+  data: {
+    notes: T[],
+    count: number
+  }
 }
 
 // Auth

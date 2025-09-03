@@ -21,7 +21,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/register',
     name: 'register',
-    component: () => import('@/views/resgister/Index.vue'),
+    component: () => import('@/views/register/Index.vue'),
     meta: { public: true },
   },
   {
@@ -46,6 +46,12 @@ const routes: RouteRecordRaw[] = [
     path: '/study/:id',
     name: 'study-detail',
     component: () => import('@/views/study/Detail.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/todo',
+    name: 'todo',
+    component: () => import('@/views/todo/Index.vue'),
     meta: { requiresAuth: true },
   },
 ]
