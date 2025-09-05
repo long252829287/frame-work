@@ -1,7 +1,6 @@
-// Generic API response helpers
 export interface PaginatedList<T> {
   data: {
-    notes: T[],
+    notes: T[]
     count: number
   }
 }
@@ -18,6 +17,8 @@ export interface NoteItem {
   title?: string
   content: string
   tags?: string[]
+  x_axis?: number
+  y_axis?: number
   createdAt?: string
   updatedAt?: string
 }

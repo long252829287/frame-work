@@ -3,9 +3,10 @@ import { onMounted, reactive, ref } from 'vue'
 import { commonService } from '@/service'
 import { useAuthStore } from '@/stores/auth'
 import type { PaginatedList, NoteItem } from '@/types'
-
+import { useRouter } from 'vue-router'
+import QuadrantViewComp from '@/components/quadrantView/quadrantViewComp.vue'
 const auth = useAuthStore()
-
+const router = useRouter()
 const loading = ref(false)
 const list = ref<NoteItem[]>([])
 const total = ref(0)
@@ -22,7 +23,6 @@ async function fetchNotes() {
   loading.value = true
   try {
     const res = await commonService.apiGetNotes()
-    // 根据API类型定义，响应应该是PaginatedList<NoteItem>结构
     const data = res.data as PaginatedList<NoteItem>
     list.value = data.data.notes || []
     total.value = data.data.count || 0
@@ -56,20 +56,13 @@ async function saveNote() {
 }
 
 async function removeNote(row: NoteItem) {
+  console.log('row', row);
   await commonService.apiDeleteNote(row.id)
   await fetchNotes()
 }
 
-async function handleLogout() {
-  try {
-    await auth.logout()
-    // 退出登录后跳转到登录页
-    window.location.href = '/login'
-  } catch (error) {
-    console.error('退出登录失败:', error)
-    // 即使退出失败，也清除本地状态并跳转
-    window.location.href = '/login'
-  }
+async function goHome() {
+  router.go(-1);
 }
 
 onMounted(fetchNotes)
@@ -86,7 +79,7 @@ onMounted(fetchNotes)
       </div>
       <div>
         <el-button type="primary" @click="openCreate">新建笔记</el-button>
-        <el-button @click="handleLogout">退出登录</el-button>
+        <el-button @click="goHome">返回首页</el-button>
       </div>
     </div>
 
@@ -115,6 +108,7 @@ onMounted(fetchNotes)
         </template>
       </el-table-column>
     </el-table>
+    <quadrant-view-comp />
 
     <el-drawer v-model="drawerVisible" :title="editor.id ? '编辑笔记' : '新建笔记'" size="50%">
       <el-form label-width="80px">
