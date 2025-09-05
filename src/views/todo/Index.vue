@@ -165,8 +165,3 @@ function remove(id: string) {
     </section>
   </div>
 </template>
-
-<style scoped>
-</style>
-
-<template></template>
