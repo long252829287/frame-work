@@ -17,9 +17,13 @@
         <div class="quadrant q2" ref="q2Ref">
           <h3 class="quadrant-title">重要但不紧急</h3>
           <div class="quadrant-content">
-            <div v-for="note in importantNotUrgentNotes" :key="note.id" class="note-item"
-              :ref="el => noteRefs[note.id] = el" :style="noteStyles[note.id]"
-              :title="note.content">
+            <div 
+              v-for="note in importantNotUrgentNotes" 
+              :key="note.id" 
+              class="note-item"
+              :ref="(el: Element | ComponentPublicInstance | null) => setNoteRef(note.id, el as HTMLElement | null)"
+              :title="note.content"
+            >
               {{ getDisplayText(note) }}
             </div>
           </div>
@@ -27,9 +31,13 @@
         <div class="quadrant q1" ref="q1Ref">
           <h3 class="quadrant-title">重要且紧急</h3>
           <div class="quadrant-content">
-            <div v-for="note in importantUrgentNotes" :key="note.id" class="note-item" 
-              :ref="el => noteRefs[note.id] = el" :style="noteStyles[note.id]"
-              :title="note.content">
+            <div 
+              v-for="note in importantUrgentNotes" 
+              :key="note.id" 
+              class="note-item" 
+              :ref="(el: Element | ComponentPublicInstance | null) => setNoteRef(note.id, el as HTMLElement | null)"
+              :title="note.content"
+            >
               {{ getDisplayText(note) }}
             </div>
           </div>
@@ -37,9 +45,13 @@
         <div class="quadrant q3" ref="q3Ref">
           <h3 class="quadrant-title">不重要不紧急</h3>
           <div class="quadrant-content">
-            <div v-for="note in notImportantNotUrgentNotes" :key="note.id" class="note-item"
-              :ref="el => noteRefs[note.id] = el" :style="noteStyles[note.id]"
-              :title="note.content">
+            <div 
+              v-for="note in notImportantNotUrgentNotes" 
+              :key="note.id" 
+              class="note-item"
+              :ref="(el: Element | ComponentPublicInstance | null) => setNoteRef(note.id, el as HTMLElement | null)"
+              :title="note.content"
+            >
               {{ getDisplayText(note) }}
             </div>
           </div>
@@ -47,9 +59,13 @@
         <div class="quadrant q4" ref="q4Ref">
           <h3 class="quadrant-title">不重要但紧急</h3>
           <div class="quadrant-content">
-            <div v-for="note in notImportantUrgentNotes" :key="note.id" class="note-item"
-              :ref="el => noteRefs[note.id] = el" :style="noteStyles[note.id]"
-              :title="note.content">
+            <div 
+              v-for="note in notImportantUrgentNotes" 
+              :key="note.id" 
+              class="note-item"
+              :ref="(el: Element | ComponentPublicInstance | null) => setNoteRef(note.id, el as HTMLElement | null)"
+              :title="note.content"
+            >
               {{ getDisplayText(note) }}
             </div>
           </div>
@@ -65,9 +81,13 @@
       <div class="uncategorized-area" ref="uncategorizedRef">
         <h3 class="uncategorized-title">待分类笔记 ({{ uncategorizedNotes.length }})</h3>
         <div class="uncategorized-content">
-          <div v-for="note in uncategorizedNotes" :key="note.id" class="note-item"
-            :ref="el => noteRefs[note.id] = el" :style="noteStyles[note.id]"
-            :title="note.content">
+          <div 
+            v-for="note in uncategorizedNotes" 
+            :key="note.id" 
+            class="note-item"
+            :ref="(el: Element | ComponentPublicInstance | null) => setNoteRef(note.id, el as HTMLElement | null)"
+            :title="note.content"
+          >
             {{ getDisplayText(note) }}
           </div>
         </div>
@@ -77,8 +97,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watchEffect, reactive, nextTick } from 'vue';
-import { useDraggable } from '@vueuse/core';
+import { ref, onMounted, computed, reactive } from 'vue';
+import type { ComponentPublicInstance } from 'vue';
 import { commonService } from '@/service';
 import type { NoteItem, PaginatedList } from '@/types';
 
@@ -88,6 +108,13 @@ interface QuadrantNote extends NoteItem {
   y_axis?: number;
 }
 
+// 象限坐标接口
+interface QuadrantCoords {
+  x: number;
+  y: number;
+}
+
+// 响应式引用
 const boardRef = ref<HTMLElement | null>(null);
 const q1Ref = ref<HTMLElement | null>(null);
 const q2Ref = ref<HTMLElement | null>(null);
@@ -97,14 +124,45 @@ const uncategorizedRef = ref<HTMLElement | null>(null);
 const notes = ref<QuadrantNote[]>([]);
 const isLoading = ref(true);
 
+// 拖拽相关
+const noteRefs = reactive<Record<string, HTMLElement | null>>({});
+const isDragging = ref(false);
+const draggedNote = ref<QuadrantNote | null>(null);
+const dropZone = ref<string | null>(null);
+
+// 设置笔记元素引用的函数
+function setNoteRef(noteId: string, el: HTMLElement | null) {
+  if (el) {
+    noteRefs[noteId] = el;
+    setupDragEvents(el, noteId);
+  } else {
+    delete noteRefs[noteId];
+  }
+}
+
+// 组件挂载时获取笔记
 onMounted(async () => {
   await fetchNotes();
 });
 
-async function fetchNotes() {
+// 解析笔记内容中的象限坐标
+function parseQuadrantCoords(content: string): { x: number; y: number; cleanContent: string } {
+  const quadrantMatch = content.match(/\[quadrant:(-?\d+),(-?\d+)\]/);
+  if (quadrantMatch) {
+    const x = parseInt(quadrantMatch[1], 10);
+    const y = parseInt(quadrantMatch[2], 10);
+    const cleanContent = content.replace(/\[quadrant:-?\d+,-?\d+\]\s*/, '').trim();
+    return { x, y, cleanContent };
+  }
+  return { x: 0, y: 0, cleanContent: content };
+}
+
+// 获取笔记数据
+async function fetchNotes(): Promise<void> {
   try {
     isLoading.value = true;
     const response = await commonService.apiGetNotes();
+    
     // 处理不同的响应格式
     if (response.data && typeof response.data === 'object') {
       if ('data' in response.data && response.data.data && 'notes' in response.data.data) {
@@ -117,12 +175,16 @@ async function fetchNotes() {
       }
     }
     
-    // 为没有象限坐标的笔记设置默认值
-    notes.value = notes.value.map(note => ({
-      ...note,
-      x_axis: note.x_axis ?? 0,
-      y_axis: note.y_axis ?? 0
-    }));
+    // 解析象限坐标并清理内容
+    notes.value = notes.value.map(note => {
+      const { x, y, cleanContent } = parseQuadrantCoords(note.content);
+      return {
+        ...note,
+        x_axis: note.x_axis ?? x,
+        y_axis: note.y_axis ?? y,
+        content: cleanContent
+      };
+    });
   } catch (error) {
     console.error('获取笔记失败:', error);
   } finally {
@@ -130,6 +192,7 @@ async function fetchNotes() {
   }
 }
 
+// 计算属性：按象限分类笔记
 const importantUrgentNotes = computed(() =>
   notes.value.filter(n => (n.y_axis ?? 0) > 0 && (n.x_axis ?? 0) > 0)
 );
@@ -150,43 +213,128 @@ const uncategorizedNotes = computed(() =>
   notes.value.filter(n => (n.y_axis ?? 0) === 0 || (n.x_axis ?? 0) === 0)
 );
 
-// 拖拽相关
-const noteRefs = reactive<Record<string, HTMLElement | null>>({});
-const noteStyles = reactive<Record<string, any>>({});
+// 设置拖拽事件
+function setupDragEvents(element: HTMLElement, noteId: string) {
+  let startX = 0;
+  let startY = 0;
+  let dragElement: HTMLElement | null = null;
+  
+  const note = notes.value.find(n => n.id === noteId);
+  if (!note) return;
 
-watchEffect(() => {
-  nextTick(() => {
-    notes.value.forEach(note => {
-      if (noteRefs[note.id]) {
-        const noteElement = ref(noteRefs[note.id]);
-        const { x, y, style } = useDraggable(noteElement, {
-          initialValue: { x: 0, y: 0 },
-          onEnd: (position, event) => {
-            handleDragEnd(note, event.clientX, event.clientY);
-            // 重置位置
-            x.value = 0;
-            y.value = 0;
-          }
-        });
-        noteStyles[note.id] = style;
+  // 鼠标按下事件
+  const handleMouseDown = (e: MouseEvent) => {
+    e.preventDefault();
+    isDragging.value = true;
+    draggedNote.value = note;
+    
+    startX = e.clientX;
+    startY = e.clientY;
+    
+    // 创建拖拽副本
+    dragElement = element.cloneNode(true) as HTMLElement;
+    dragElement.style.position = 'fixed';
+    dragElement.style.left = `${e.clientX - 50}px`;
+    dragElement.style.top = `${e.clientY - 20}px`;
+    dragElement.style.zIndex = '1000';
+    dragElement.style.pointerEvents = 'none';
+    dragElement.style.opacity = '0.8';
+    dragElement.style.transform = 'rotate(5deg)';
+    dragElement.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.3)';
+    dragElement.classList.add('dragging');
+    
+    // 添加到body
+    document.body.appendChild(dragElement);
+    
+    // 原元素添加拖拽状态
+    element.style.opacity = '0.5';
+    element.style.transform = 'scale(0.95)';
+    
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
+  };
+
+  // 鼠标移动事件
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDragging.value || !dragElement) return;
+    
+    dragElement.style.left = `${e.clientX - 50}px`;
+    dragElement.style.top = `${e.clientY - 20}px`;
+    
+    // 检测当前悬停的放置区域
+    const currentDropZone = getDropZoneFromPosition(e.clientX, e.clientY);
+    if (currentDropZone !== dropZone.value) {
+      // 移除之前的高亮
+      if (dropZone.value) {
+        removeDropZoneHighlight(dropZone.value);
       }
-    });
-  });
-});
+      
+      // 添加新的高亮
+      dropZone.value = currentDropZone;
+      if (dropZone.value) {
+        addDropZoneHighlight(dropZone.value);
+      }
+    }
+  };
 
-async function handleDragEnd(note: QuadrantNote, clientX: number, clientY: number) {
+  // 鼠标释放事件
+  const handleMouseUp = (e: MouseEvent) => {
+    if (!isDragging.value) return;
+    
+    isDragging.value = false;
+    
+    // 移除拖拽副本
+    if (dragElement) {
+      document.body.removeChild(dragElement);
+      dragElement = null;
+    }
+    
+    // 重置原元素样式
+    element.style.opacity = '';
+    element.style.transform = '';
+    
+    // 清理放置区域高亮
+    if (dropZone.value) {
+      removeDropZoneHighlight(dropZone.value);
+      dropZone.value = null;
+    }
+    
+    // 处理拖拽结束
+    handleDragEnd(note, e.clientX, e.clientY);
+    
+    draggedNote.value = null;
+    
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  };
+
+  element.addEventListener('mousedown', handleMouseDown);
+}
+
+// 处理拖拽结束事件
+async function handleDragEnd(note: QuadrantNote, clientX: number, clientY: number): Promise<void> {
   const newCoords = getQuadrantFromPosition(clientX, clientY);
 
   if (newCoords && (newCoords.x !== (note.x_axis ?? 0) || newCoords.y !== (note.y_axis ?? 0))) {
     try {
-      // 更新笔记，包含象限坐标
-      await commonService.apiUpdateNote(note.id, {
-        ...note,
-        x_axis: newCoords.x,
-        y_axis: newCoords.y
-      } as any);
+      // 创建包含象限坐标的内容标记
+      const coordsTag = `[quadrant:${newCoords.x},${newCoords.y}]`;
+      let updatedContent = note.content;
       
-      // 更新本地状态
+      // 移除旧的象限标记
+      updatedContent = updatedContent.replace(/\[quadrant:-?\d+,-?\d+\]/g, '');
+      
+      // 添加新的象限标记
+      updatedContent = `${coordsTag}\n${updatedContent}`.trim();
+      console.log('notes', )
+      // 更新笔记内容（包含象限信息）
+      await commonService.apiUpdateNote(note.id, {
+        content: updatedContent,
+        title: note.title,
+        tags: note.tags
+      });
+      
+      // 更新本地状态 - 保持content为清洁内容，不包含象限标记
       const noteIndex = notes.value.findIndex(n => n.id === note.id);
       if (noteIndex !== -1) {
         notes.value[noteIndex].x_axis = newCoords.x;
@@ -198,44 +346,91 @@ async function handleDragEnd(note: QuadrantNote, clientX: number, clientY: numbe
   }
 }
 
-function getQuadrantFromPosition(x: number, y: number) {
-  if (!q1Ref.value || !q2Ref.value || !q3Ref.value || !q4Ref.value || !uncategorizedRef.value) {
-    return null;
-  }
+// 根据鼠标位置确定象限
+function getQuadrantFromPosition(x: number, y: number): QuadrantCoords | null {
+  const quadrantRefs = [
+    { ref: q1Ref.value, coords: { x: 1, y: 1 } },
+    { ref: q2Ref.value, coords: { x: -1, y: 1 } },
+    { ref: q3Ref.value, coords: { x: -1, y: -1 } },
+    { ref: q4Ref.value, coords: { x: 1, y: -1 } },
+    { ref: uncategorizedRef.value, coords: { x: 0, y: 0 } }
+  ];
 
-  const q1Rect = q1Ref.value.getBoundingClientRect();
-  if (x > q1Rect.left && x < q1Rect.right && y > q1Rect.top && y < q1Rect.bottom) {
-    return { x: 1, y: 1 };
-  }
-
-  const q2Rect = q2Ref.value.getBoundingClientRect();
-  if (x > q2Rect.left && x < q2Rect.right && y > q2Rect.top && y < q2Rect.bottom) {
-    return { x: -1, y: 1 };
-  }
-
-  const q3Rect = q3Ref.value.getBoundingClientRect();
-  if (x > q3Rect.left && x < q3Rect.right && y > q3Rect.top && y < q3Rect.bottom) {
-    return { x: -1, y: -1 };
-  }
-
-  const q4Rect = q4Ref.value.getBoundingClientRect();
-  if (x > q4Rect.left && x < q4Rect.right && y > q4Rect.top && y < q4Rect.bottom) {
-    return { x: 1, y: -1 };
-  }
-
-  const uncatRect = uncategorizedRef.value.getBoundingClientRect();
-  if (x > uncatRect.left && x < uncatRect.right && y > uncatRect.top && y < uncatRect.bottom) {
-    return { x: 0, y: 0 };
+  for (const { ref, coords } of quadrantRefs) {
+    if (ref) {
+      const rect = ref.getBoundingClientRect();
+      if (x > rect.left && x < rect.right && y > rect.top && y < rect.bottom) {
+        return coords;
+      }
+    }
   }
 
   return null;
 }
 
-function getDisplayText(note: QuadrantNote): string {
-  if (note.title && note.title.trim()) {
-    return note.title.length > 30 ? note.title.substring(0, 30) + '...' : note.title;
+// 根据鼠标位置获取放置区域名称
+function getDropZoneFromPosition(x: number, y: number): string | null {
+  const zones = [
+    { ref: q1Ref.value, name: 'q1' },
+    { ref: q2Ref.value, name: 'q2' },
+    { ref: q3Ref.value, name: 'q3' },
+    { ref: q4Ref.value, name: 'q4' },
+    { ref: uncategorizedRef.value, name: 'uncategorized' }
+  ];
+
+  for (const { ref, name } of zones) {
+    if (ref) {
+      const rect = ref.getBoundingClientRect();
+      if (x > rect.left && x < rect.right && y > rect.top && y < rect.bottom) {
+        return name;
+      }
+    }
   }
-  return note.content.length > 30 ? note.content.substring(0, 30) + '...' : note.content;
+
+  return null;
+}
+
+// 添加放置区域高亮
+function addDropZoneHighlight(zoneName: string) {
+  const zoneMap: Record<string, HTMLElement | null> = {
+    q1: q1Ref.value,
+    q2: q2Ref.value,
+    q3: q3Ref.value,
+    q4: q4Ref.value,
+    uncategorized: uncategorizedRef.value
+  };
+
+  const element = zoneMap[zoneName];
+  if (element) {
+    element.classList.add('drop-zone-active');
+  }
+}
+
+// 移除放置区域高亮
+function removeDropZoneHighlight(zoneName: string) {
+  const zoneMap: Record<string, HTMLElement | null> = {
+    q1: q1Ref.value,
+    q2: q2Ref.value,
+    q3: q3Ref.value,
+    q4: q4Ref.value,
+    uncategorized: uncategorizedRef.value
+  };
+
+  const element = zoneMap[zoneName];
+  if (element) {
+    element.classList.remove('drop-zone-active');
+  }
+}
+
+// 获取笔记显示文本
+function getDisplayText(note: QuadrantNote): string {
+  const maxLength = 30;
+  let text = note.title?.trim() || note.content;
+  
+  // 确保移除任何可能的象限标记
+  text = text.replace(/\[quadrant:-?\d+,-?\d+\]\s*/g, '').trim();
+  
+  return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
 }
 </script>
 
@@ -470,6 +665,23 @@ function getDisplayText(note: QuadrantNote): string {
   opacity: 0.8;
   transform: rotate(5deg);
   z-index: 1000;
+}
+
+/* 放置区域高亮 */
+.drop-zone-active {
+  background-color: rgba(64, 158, 255, 0.1) !important;
+  border-color: #409eff !important;
+  box-shadow: inset 0 0 0 2px rgba(64, 158, 255, 0.3) !important;
+  transition: all 0.2s ease !important;
+}
+
+.quadrant.drop-zone-active {
+  background: rgba(64, 158, 255, 0.1) !important;
+}
+
+.uncategorized-area.drop-zone-active {
+  background-color: rgba(64, 158, 255, 0.05) !important;
+  border-color: #409eff !important;
 }
 
 /* 响应式设计 */
