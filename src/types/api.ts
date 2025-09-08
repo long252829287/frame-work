@@ -13,7 +13,7 @@ export interface ApiLoginData {
 
 // Notes
 export interface NoteItem {
-  id: string
+  _id: string
   title?: string
   content: string
   tags?: string[]

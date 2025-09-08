@@ -37,7 +37,17 @@ export default {
     return fetch.post<NoteItem>('/api/notes/notes', payload)
   },
 
-  async apiUpdateNote(id: string, payload: { content?: string; title?: string; tags?: string[] }) {
+  async apiUpdateNote(
+    id: string,
+    payload: {
+      content?: string
+      title?: string
+      tags?: string[]
+      x_axis?: number
+      y_axis?: number
+      order?: number
+    },
+  ) {
     return fetch.put<NoteItem>(`/api/notes/notes/${id}`, payload)
   },
 

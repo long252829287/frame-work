@@ -1,23 +1,21 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
 import { commonService } from '@/service'
-import { useAuthStore } from '@/stores/auth'
 import type { PaginatedList, NoteItem } from '@/types'
-import { useRouter } from 'vue-router'
 import QuadrantViewComp from '@/components/quadrantView/quadrantViewComp.vue'
-const auth = useAuthStore()
-const router = useRouter()
 const loading = ref(false)
 const list = ref<NoteItem[]>([])
 const total = ref(0)
 
 const editor = reactive<Partial<NoteItem>>({
-  id: '',
+  _id: '',
   title: '',
   content: '',
   tags: [],
 })
 const drawerVisible = ref(false)
+
+const componentKey = ref(0)
 
 async function fetchNotes() {
   loading.value = true
@@ -32,7 +30,7 @@ async function fetchNotes() {
 }
 
 function openCreate() {
-  Object.assign(editor, { id: '', title: '', content: '', tags: [] })
+  Object.assign(editor, { _id: '', title: '', content: '', tags: [] })
   drawerVisible.value = true
 }
 
@@ -46,40 +44,33 @@ async function saveNote() {
     window.alert('内容不能为空')
     return
   }
-  if (editor.id) {
-    await commonService.apiUpdateNote(editor.id as string, editor)
+  if (editor._id) {
+    await commonService.apiUpdateNote(editor._id as string, editor)
   } else {
     await commonService.apiCreateNote(editor as any)
   }
   drawerVisible.value = false
   await fetchNotes()
+  componentKey.value++
 }
 
 async function removeNote(row: NoteItem) {
-  console.log('row', row);
-  await commonService.apiDeleteNote(row.id)
+  await commonService.apiDeleteNote(row._id)
   await fetchNotes()
-}
-
-async function goHome() {
-  router.go(-1);
+  componentKey.value++
 }
 
 onMounted(fetchNotes)
 </script>
 
 <template>
-  <div style="max-width: 960px; margin: 20px auto;">
+  <div style="max-width: 960px; margin: 20px auto; padding-top: 60px;">
     <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 12px;">
       <div>
         <h2 style="margin:0;">我的笔记 ({{ total }})</h2>
-        <div style="color: #666; font-size: 14px; margin-top: 4px;">
-          欢迎回来，{{ auth.user?.nickname || auth.user?.username || '用户' }}
-        </div>
       </div>
       <div>
         <el-button type="primary" @click="openCreate">新建笔记</el-button>
-        <el-button @click="goHome">返回首页</el-button>
       </div>
     </div>
 
@@ -108,9 +99,10 @@ onMounted(fetchNotes)
         </template>
       </el-table-column>
     </el-table>
-    <quadrant-view-comp />
 
-    <el-drawer v-model="drawerVisible" :title="editor.id ? '编辑笔记' : '新建笔记'" size="50%">
+    <quadrant-view-comp :key="componentKey" />
+
+    <el-drawer v-model="drawerVisible" :title="editor._id ? '编辑笔记' : '新建笔记'" size="50%">
       <el-form label-width="80px">
         <el-form-item label="标题">
           <el-input v-model="editor.title" placeholder="可选" />

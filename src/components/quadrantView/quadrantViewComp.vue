@@ -4,111 +4,61 @@
       <div class="loading-spinner"></div>
       <p>加载笔记中...</p>
     </div>
-    
+
     <div v-else-if="notes.length === 0" class="empty-state">
       <p>暂无笔记，请先创建一些笔记</p>
     </div>
-    
+
     <div v-else class="quadrant-layout">
-      <div class="axis-label y-axis-label-positive">重要</div>
-      <div class="axis-label y-axis-label-negative">不重要</div>
 
       <div class="quadrant-container" ref="boardRef">
         <div class="quadrant q2" ref="q2Ref">
           <h3 class="quadrant-title">重要但不紧急</h3>
-          <div class="quadrant-content">
-            <div 
-              v-for="note in importantNotUrgentNotes" 
-              :key="note.id" 
-              class="note-item"
-              :ref="(el: Element | ComponentPublicInstance | null) => setNoteRef(note.id, el as HTMLElement | null)"
-              :title="note.content"
-            >
-              {{ getDisplayText(note) }}
-            </div>
-          </div>
+          <TransitionGroup name="note-list" tag="div" class="quadrant-content">
+            <NoteItem v-for="note in importantNotUrgentNotes" :key="note._id" :note="note"
+              @drag-move="highlightDropZone" @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
+          </TransitionGroup>
         </div>
         <div class="quadrant q1" ref="q1Ref">
           <h3 class="quadrant-title">重要且紧急</h3>
-          <div class="quadrant-content">
-            <div 
-              v-for="note in importantUrgentNotes" 
-              :key="note.id" 
-              class="note-item" 
-              :ref="(el: Element | ComponentPublicInstance | null) => setNoteRef(note.id, el as HTMLElement | null)"
-              :title="note.content"
-            >
-              {{ getDisplayText(note) }}
-            </div>
-          </div>
+          <TransitionGroup name="note-list" tag="div" class="quadrant-content">
+            <NoteItem v-for="note in importantUrgentNotes" :key="note._id" :note="note" @drag-move="highlightDropZone"
+              @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
+          </TransitionGroup>
         </div>
         <div class="quadrant q3" ref="q3Ref">
           <h3 class="quadrant-title">不重要不紧急</h3>
-          <div class="quadrant-content">
-            <div 
-              v-for="note in notImportantNotUrgentNotes" 
-              :key="note.id" 
-              class="note-item"
-              :ref="(el: Element | ComponentPublicInstance | null) => setNoteRef(note.id, el as HTMLElement | null)"
-              :title="note.content"
-            >
-              {{ getDisplayText(note) }}
-            </div>
-          </div>
+          <TransitionGroup name="note-list" tag="div" class="quadrant-content">
+            <NoteItem v-for="note in notImportantNotUrgentNotes" :key="note._id" :note="note"
+              @drag-move="highlightDropZone" @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
+          </TransitionGroup>
         </div>
         <div class="quadrant q4" ref="q4Ref">
           <h3 class="quadrant-title">不重要但紧急</h3>
-          <div class="quadrant-content">
-            <div 
-              v-for="note in notImportantUrgentNotes" 
-              :key="note.id" 
-              class="note-item"
-              :ref="(el: Element | ComponentPublicInstance | null) => setNoteRef(note.id, el as HTMLElement | null)"
-              :title="note.content"
-            >
-              {{ getDisplayText(note) }}
-            </div>
-          </div>
-        </div>
-
-        <div class="axis x-axis"></div>
-        <div class="axis y-axis"></div>
-      </div>
-
-      <div class="axis-label x-axis-label-negative">不紧急</div>
-      <div class="axis-label x-axis-label-positive">紧急</div>
-
-      <div class="uncategorized-area" ref="uncategorizedRef">
-        <h3 class="uncategorized-title">待分类笔记 ({{ uncategorizedNotes.length }})</h3>
-        <div class="uncategorized-content">
-          <div 
-            v-for="note in uncategorizedNotes" 
-            :key="note.id" 
-            class="note-item"
-            :ref="(el: Element | ComponentPublicInstance | null) => setNoteRef(note.id, el as HTMLElement | null)"
-            :title="note.content"
-          >
-            {{ getDisplayText(note) }}
-          </div>
+          <TransitionGroup name="note-list" tag="div" class="quadrant-content">
+            <NoteItem v-for="note in notImportantUrgentNotes" :key="note._id" :note="note"
+              @drag-move="highlightDropZone" @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
+          </TransitionGroup>
         </div>
       </div>
+    </div>
+
+    <div class="uncategorized-area" ref="uncategorizedRef">
+      <h3 class="uncategorized-title">待分类笔记 ({{ uncategorizedNotes.length }})</h3>
+      <TransitionGroup name="note-list" tag="div" class="uncategorized-content">
+        <NoteItem v-for="note in uncategorizedNotes" :key="note._id" :note="note" @drag-move="highlightDropZone"
+          @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
+      </TransitionGroup>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, reactive } from 'vue';
-import type { ComponentPublicInstance } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { commonService } from '@/service';
-import type { NoteItem, PaginatedList } from '@/types';
+import type { PaginatedList, QuadrantNote } from '@/types';
+import NoteItem from '@/components/noteItem/noteItemComp.vue';
 
-// 扩展 NoteItem 接口以包含象限坐标
-interface QuadrantNote extends NoteItem {
-  x_axis?: number;
-  y_axis?: number;
-}
-
-// 象限坐标接口
 interface QuadrantCoords {
   x: number;
   y: number;
@@ -116,75 +66,36 @@ interface QuadrantCoords {
 
 // 响应式引用
 const boardRef = ref<HTMLElement | null>(null);
-const q1Ref = ref<HTMLElement | null>(null);
-const q2Ref = ref<HTMLElement | null>(null);
-const q3Ref = ref<HTMLElement | null>(null);
-const q4Ref = ref<HTMLElement | null>(null);
 const uncategorizedRef = ref<HTMLElement | null>(null);
 const notes = ref<QuadrantNote[]>([]);
 const isLoading = ref(true);
 
 // 拖拽相关
-const noteRefs = reactive<Record<string, HTMLElement | null>>({});
-const isDragging = ref(false);
-const draggedNote = ref<QuadrantNote | null>(null);
-const dropZone = ref<string | null>(null);
 
-// 设置笔记元素引用的函数
-function setNoteRef(noteId: string, el: HTMLElement | null) {
-  if (el) {
-    noteRefs[noteId] = el;
-    setupDragEvents(el, noteId);
-  } else {
-    delete noteRefs[noteId];
-  }
-}
+const q1Ref = ref<HTMLElement | null>(null);
+const q2Ref = ref<HTMLElement | null>(null);
+const q3Ref = ref<HTMLElement | null>(null);
+const q4Ref = ref<HTMLElement | null>(null);
 
 // 组件挂载时获取笔记
 onMounted(async () => {
   await fetchNotes();
 });
 
-// 解析笔记内容中的象限坐标
-function parseQuadrantCoords(content: string): { x: number; y: number; cleanContent: string } {
-  const quadrantMatch = content.match(/\[quadrant:(-?\d+),(-?\d+)\]/);
-  if (quadrantMatch) {
-    const x = parseInt(quadrantMatch[1], 10);
-    const y = parseInt(quadrantMatch[2], 10);
-    const cleanContent = content.replace(/\[quadrant:-?\d+,-?\d+\]\s*/, '').trim();
-    return { x, y, cleanContent };
-  }
-  return { x: 0, y: 0, cleanContent: content };
-}
-
-// 获取笔记数据
 async function fetchNotes(): Promise<void> {
   try {
     isLoading.value = true;
     const response = await commonService.apiGetNotes();
-    
-    // 处理不同的响应格式
-    if (response.data && typeof response.data === 'object') {
-      if ('data' in response.data && response.data.data && 'notes' in response.data.data) {
-        // PaginatedList 格式
-        const paginatedData = response.data as PaginatedList<QuadrantNote>;
-        notes.value = paginatedData.data.notes || [];
-      } else if (Array.isArray(response.data)) {
-        // 直接数组格式
-        notes.value = response.data as QuadrantNote[];
-      }
-    }
-    
-    // 解析象限坐标并清理内容
-    notes.value = notes.value.map(note => {
-      const { x, y, cleanContent } = parseQuadrantCoords(note.content);
-      return {
-        ...note,
-        x_axis: note.x_axis ?? x,
-        y_axis: note.y_axis ?? y,
-        content: cleanContent
-      };
-    });
+
+    let rawNotes: QuadrantNote[] = [];
+    const paginatedData = response.data as PaginatedList<QuadrantNote>;
+    rawNotes = paginatedData.data.notes || [];
+
+    notes.value = rawNotes.map(note => ({
+      ...note,
+      x_axis: note.x_axis ?? 0,
+      y_axis: note.y_axis ?? 0,
+    }));
   } catch (error) {
     console.error('获取笔记失败:', error);
   } finally {
@@ -192,161 +103,97 @@ async function fetchNotes(): Promise<void> {
   }
 }
 
-// 计算属性：按象限分类笔记
 const importantUrgentNotes = computed(() =>
   notes.value.filter(n => (n.y_axis ?? 0) > 0 && (n.x_axis ?? 0) > 0)
+    .sort((a, b) => (a.order || 0) - (b.order || 0))
 );
 
 const importantNotUrgentNotes = computed(() =>
   notes.value.filter(n => (n.y_axis ?? 0) > 0 && (n.x_axis ?? 0) < 0)
+    .sort((a, b) => (a.order || 0) - (b.order || 0))
 );
 
 const notImportantNotUrgentNotes = computed(() =>
   notes.value.filter(n => (n.y_axis ?? 0) < 0 && (n.x_axis ?? 0) < 0)
+    .sort((a, b) => (a.order || 0) - (b.order || 0))
 );
 
 const notImportantUrgentNotes = computed(() =>
   notes.value.filter(n => (n.y_axis ?? 0) < 0 && (n.x_axis ?? 0) > 0)
+    .sort((a, b) => (a.order || 0) - (b.order || 0))
 );
 
 const uncategorizedNotes = computed(() =>
   notes.value.filter(n => (n.y_axis ?? 0) === 0 || (n.x_axis ?? 0) === 0)
+    .sort((a, b) => (a.order || 0) - (b.order || 0))
 );
 
-// 设置拖拽事件
-function setupDragEvents(element: HTMLElement, noteId: string) {
-  let startX = 0;
-  let startY = 0;
-  let dragElement: HTMLElement | null = null;
-  
-  const note = notes.value.find(n => n.id === noteId);
-  if (!note) return;
 
-  // 鼠标按下事件
-  const handleMouseDown = (e: MouseEvent) => {
-    e.preventDefault();
-    isDragging.value = true;
-    draggedNote.value = note;
-    
-    startX = e.clientX;
-    startY = e.clientY;
-    
-    // 创建拖拽副本
-    dragElement = element.cloneNode(true) as HTMLElement;
-    dragElement.style.position = 'fixed';
-    dragElement.style.left = `${e.clientX - 50}px`;
-    dragElement.style.top = `${e.clientY - 20}px`;
-    dragElement.style.zIndex = '1000';
-    dragElement.style.pointerEvents = 'none';
-    dragElement.style.opacity = '0.8';
-    dragElement.style.transform = 'rotate(5deg)';
-    dragElement.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.3)';
-    dragElement.classList.add('dragging');
-    
-    // 添加到body
-    document.body.appendChild(dragElement);
-    
-    // 原元素添加拖拽状态
-    element.style.opacity = '0.5';
-    element.style.transform = 'scale(0.95)';
-    
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-  };
-
-  // 鼠标移动事件
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isDragging.value || !dragElement) return;
-    
-    dragElement.style.left = `${e.clientX - 50}px`;
-    dragElement.style.top = `${e.clientY - 20}px`;
-    
-    // 检测当前悬停的放置区域
-    const currentDropZone = getDropZoneFromPosition(e.clientX, e.clientY);
-    if (currentDropZone !== dropZone.value) {
-      // 移除之前的高亮
-      if (dropZone.value) {
-        removeDropZoneHighlight(dropZone.value);
-      }
-      
-      // 添加新的高亮
-      dropZone.value = currentDropZone;
-      if (dropZone.value) {
-        addDropZoneHighlight(dropZone.value);
-      }
-    }
-  };
-
-  // 鼠标释放事件
-  const handleMouseUp = (e: MouseEvent) => {
-    if (!isDragging.value) return;
-    
-    isDragging.value = false;
-    
-    // 移除拖拽副本
-    if (dragElement) {
-      document.body.removeChild(dragElement);
-      dragElement = null;
-    }
-    
-    // 重置原元素样式
-    element.style.opacity = '';
-    element.style.transform = '';
-    
-    // 清理放置区域高亮
-    if (dropZone.value) {
-      removeDropZoneHighlight(dropZone.value);
-      dropZone.value = null;
-    }
-    
-    // 处理拖拽结束
-    handleDragEnd(note, e.clientX, e.clientY);
-    
-    draggedNote.value = null;
-    
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
-  };
-
-  element.addEventListener('mousedown', handleMouseDown);
-}
-
-// 处理拖拽结束事件
 async function handleDragEnd(note: QuadrantNote, clientX: number, clientY: number): Promise<void> {
+  clearAllHighlights();
+
   const newCoords = getQuadrantFromPosition(clientX, clientY);
 
-  if (newCoords && (newCoords.x !== (note.x_axis ?? 0) || newCoords.y !== (note.y_axis ?? 0))) {
-    try {
-      // 创建包含象限坐标的内容标记
-      const coordsTag = `[quadrant:${newCoords.x},${newCoords.y}]`;
-      let updatedContent = note.content;
-      
-      // 移除旧的象限标记
-      updatedContent = updatedContent.replace(/\[quadrant:-?\d+,-?\d+\]/g, '');
-      
-      // 添加新的象限标记
-      updatedContent = `${coordsTag}\n${updatedContent}`.trim();
-      console.log('notes', )
-      // 更新笔记内容（包含象限信息）
-      await commonService.apiUpdateNote(note.id, {
-        content: updatedContent,
-        title: note.title,
-        tags: note.tags
-      });
-      
-      // 更新本地状态 - 保持content为清洁内容，不包含象限标记
-      const noteIndex = notes.value.findIndex(n => n.id === note.id);
-      if (noteIndex !== -1) {
-        notes.value[noteIndex].x_axis = newCoords.x;
-        notes.value[noteIndex].y_axis = newCoords.y;
-      }
-    } catch (error) {
-      console.error('更新笔记位置失败:', error);
+  if (!newCoords || (newCoords.x === note.x_axis && newCoords.y === note.y_axis)) {
+    return;
+  }
+
+  const noteToUpdate = notes.value.find(n => n._id === note._id);
+  if (!noteToUpdate) return;
+
+  const originalState = {
+    x_axis: noteToUpdate.x_axis,
+    y_axis: noteToUpdate.y_axis,
+    order: noteToUpdate.order,
+  };
+
+  const targetList = notes.value.filter(n =>
+    n._id !== noteToUpdate._id && // 排除正在移动的笔记
+    n.x_axis === newCoords.x &&
+    n.y_axis === newCoords.y
+  );
+
+  const maxOrder = targetList.reduce((max, item) => Math.max(max, item.order || 0), -1);
+  const newOrder = maxOrder + 1;
+
+  noteToUpdate.x_axis = newCoords.x;
+  noteToUpdate.y_axis = newCoords.y;
+  noteToUpdate.order = newOrder;
+
+
+  try {
+    await commonService.apiUpdateNote(noteToUpdate._id, {
+      x_axis: newCoords.x,
+      y_axis: newCoords.y,
+      order: newOrder,
+    });
+  } catch (error) {
+    console.error('更新笔记位置失败，正在回滚:', error);
+
+    const noteToRollback = notes.value.find(n => n._id === note._id);
+    if (noteToRollback) {
+      noteToRollback.x_axis = originalState.x_axis;
+      noteToRollback.y_axis = originalState.y_axis;
+      noteToRollback.order = originalState.order;
     }
   }
 }
 
-// 根据鼠标位置确定象限
+
+let lastHighlightedZone: string | null = null;
+function highlightDropZone(position: { x: number, y: number }): void {
+  const currentZone = getDropZoneFromPosition(position.x, position.y);
+  if (currentZone !== lastHighlightedZone) {
+    if (lastHighlightedZone) removeDropZoneHighlight(lastHighlightedZone);
+    if (currentZone) addDropZoneHighlight(currentZone);
+    lastHighlightedZone = currentZone;
+  }
+}
+function clearAllHighlights() {
+  if (lastHighlightedZone) removeDropZoneHighlight(lastHighlightedZone);
+  lastHighlightedZone = null;
+}
+
 function getQuadrantFromPosition(x: number, y: number): QuadrantCoords | null {
   const quadrantRefs = [
     { ref: q1Ref.value, coords: { x: 1, y: 1 } },
@@ -368,7 +215,6 @@ function getQuadrantFromPosition(x: number, y: number): QuadrantCoords | null {
   return null;
 }
 
-// 根据鼠标位置获取放置区域名称
 function getDropZoneFromPosition(x: number, y: number): string | null {
   const zones = [
     { ref: q1Ref.value, name: 'q1' },
@@ -390,7 +236,6 @@ function getDropZoneFromPosition(x: number, y: number): string | null {
   return null;
 }
 
-// 添加放置区域高亮
 function addDropZoneHighlight(zoneName: string) {
   const zoneMap: Record<string, HTMLElement | null> = {
     q1: q1Ref.value,
@@ -406,7 +251,6 @@ function addDropZoneHighlight(zoneName: string) {
   }
 }
 
-// 移除放置区域高亮
 function removeDropZoneHighlight(zoneName: string) {
   const zoneMap: Record<string, HTMLElement | null> = {
     q1: q1Ref.value,
@@ -422,16 +266,6 @@ function removeDropZoneHighlight(zoneName: string) {
   }
 }
 
-// 获取笔记显示文本
-function getDisplayText(note: QuadrantNote): string {
-  const maxLength = 30;
-  let text = note.title?.trim() || note.content;
-  
-  // 确保移除任何可能的象限标记
-  text = text.replace(/\[quadrant:-?\d+,-?\d+\]\s*/g, '').trim();
-  
-  return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-}
 </script>
 
 <style scoped>
@@ -463,8 +297,13 @@ function getDisplayText(note: QuadrantNote): string {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* 空状态 */
@@ -479,18 +318,12 @@ function getDisplayText(note: QuadrantNote): string {
 
 /* 有内容时的网格布局 */
 .quadrant-layout {
-  display: grid;
-  grid-template-columns: 60px 1fr 1fr 60px;
-  grid-template-rows: 40px 1fr 1fr 40px;
-  grid-template-areas:
-    ".    y-pos y-pos ."
-    "x-neg container container x-pos"
-    "x-neg container container x-pos"
-    ".    uncat uncat .";
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .quadrant-container {
-  grid-area: container;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
@@ -500,6 +333,7 @@ function getDisplayText(note: QuadrantNote): string {
   height: 600px;
   background: #fafafa;
   overflow: hidden;
+  gap: 0;
 }
 
 .quadrant {
@@ -526,29 +360,39 @@ function getDisplayText(note: QuadrantNote): string {
 }
 
 .quadrant-content {
-  height: calc(100% - 40px);
   overflow-y: auto;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 /* 象限特殊颜色 */
 .q1 {
   background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
   border-top-right-radius: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .q2 {
   background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%);
   border-top-left-radius: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .q3 {
   background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
   border-bottom-left-radius: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 .q4 {
   background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
   border-bottom-right-radius: 12px;
+  position: relative;
+  z-index: 1;
 }
 
 /* 坐标轴 */
@@ -558,64 +402,16 @@ function getDisplayText(note: QuadrantNote): string {
   z-index: 1;
 }
 
-.x-axis {
-  width: 100%;
-  height: 2px;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-}
-
-.y-axis {
-  width: 2px;
-  height: 100%;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-/* 坐标轴标签 */
-.axis-label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  font-weight: bold;
-  color: #555;
-}
-
-.y-axis-label-positive {
-  grid-area: y-pos;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-}
-
-.y-axis-label-negative {
-  grid-area: y-pos;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  align-self: end;
-}
-
-.x-axis-label-negative {
-  grid-area: x-neg;
-  justify-content: flex-start;
-}
-
-.x-axis-label-positive {
-  grid-area: x-pos;
-  justify-content: flex-end;
-}
 
 /* 待分类区域 */
 .uncategorized-area {
-  grid-area: uncat;
   margin-top: 20px;
   border: 2px dashed #ccc;
   border-radius: 12px;
   padding: 15px;
   min-height: 150px;
   background: #fafafa;
+  transition: all 0.3s ease;
 }
 
 .uncategorized-title {
@@ -632,39 +428,28 @@ function getDisplayText(note: QuadrantNote): string {
   gap: 8px;
 }
 
-/* 笔记项目 */
-.note-item {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 10px 12px;
-  margin-bottom: 8px;
-  cursor: grab;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transition: all 0.2s ease-in-out;
-  font-size: 14px;
-  line-height: 1.4;
-  word-break: break-word;
-  position: relative;
-  z-index: 2;
+/* TransitionGroup 动画效果 */
+.note-list-enter-active,
+.note-list-leave-active {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
-.note-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
-  border-color: #409eff;
+.note-list-enter-from {
+  opacity: 0;
+  transform: translateY(-20px) scale(0.9);
 }
 
-.note-item:active {
-  cursor: grabbing;
-  transform: scale(1.02);
+.note-list-leave-to {
+  opacity: 0;
+  transform: translateY(20px) scale(0.9);
 }
 
-/* 拖拽时的样式 */
-.note-item.dragging {
-  opacity: 0.8;
-  transform: rotate(5deg);
-  z-index: 1000;
+.note-list-move {
+  transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.note-list-move.dragging {
+  transition: none !important;
 }
 
 /* 放置区域高亮 */
@@ -689,15 +474,15 @@ function getDisplayText(note: QuadrantNote): string {
   .quadrant-board {
     padding: 10px;
   }
-  
+
   .quadrant-container {
     height: 400px;
   }
-  
+
   .quadrant {
     padding: 10px;
   }
-  
+
   .note-item {
     font-size: 12px;
     padding: 8px 10px;

@@ -67,6 +67,7 @@ function handleTile(t: TileItem) {
 .desktop {
   min-height: 100vh;
   padding: 28px;
+  padding-top: 60px;
   background:
     radial-gradient(1200px 800px at 10% 10%, rgba(99, 102, 241, 0.14) 0%, transparent 60%),
     radial-gradient(1000px 700px at 90% 20%, rgba(56, 189, 248, 0.12) 0%, transparent 60%),
