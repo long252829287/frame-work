@@ -74,6 +74,9 @@ onMounted(fetchNotes)
       </div>
     </div>
 
+    <quadrant-view-comp :key="componentKey" />
+
+
     <el-table :data="list" v-loading="loading" border>
       <el-table-column prop="title" label="标题" width="240" />
       <el-table-column prop="content" label="内容">
@@ -99,8 +102,6 @@ onMounted(fetchNotes)
         </template>
       </el-table-column>
     </el-table>
-
-    <quadrant-view-comp :key="componentKey" />
 
     <el-drawer v-model="drawerVisible" :title="editor._id ? '编辑笔记' : '新建笔记'" size="50%">
       <el-form label-width="80px">
