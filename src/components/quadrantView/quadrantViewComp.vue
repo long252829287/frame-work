@@ -272,7 +272,6 @@ function removeDropZoneHighlight(zoneName: string) {
 .quadrant-board {
   width: 100%;
   max-width: 1200px;
-  margin: 40px auto;
   padding: 20px;
 }
 

@@ -43,5 +43,9 @@ const router = useRouter()
   align-items: center;
   justify-content: space-between;
   padding: 0 20px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  // 1px 的阴影
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 </style>

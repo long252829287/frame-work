@@ -73,7 +73,7 @@ onMounted(fetchList)
 </script>
 
 <template>
-  <div style="max-width: 1000px; margin: 20px auto;">
+  <div style="max-width: 1000px; margin: 20px auto; margin-top: 60px;">
     <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 12px;">
       <h2 style="margin:0;">凭据管理</h2>
       <el-button type="primary" @click="openCreate">新增凭据</el-button>
