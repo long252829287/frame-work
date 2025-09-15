@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tool-container">
     <el-input v-model="input" placeholder="请输入内容" />
     <el-button @click="checkIsOwnId">检查是否存在重复的id</el-button>
   </div>
@@ -16,4 +16,8 @@ const checkIsOwnId = () => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.tool-container {
+  margin-top: 80px;
+}
+</style>

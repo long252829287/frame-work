@@ -53,6 +53,16 @@ const routes: RouteRecordRaw[] = [
     name: 'todo',
     component: () => import('@/views/todo/Index.vue'),
   },
+  {
+    path: '/tool',
+    name: 'tool',
+    component: () => import('@/views/tool/Index.vue'),
+  },
+  {
+    path: '/imageMagic',
+    name: 'imageMagic',
+    component: () => import('@/views/imageMagic/Index.vue'),
+  }
 ]
 
 const router = createRouter({

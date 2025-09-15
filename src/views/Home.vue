@@ -23,7 +23,7 @@ const auth = useAuthStore()
 const isAuthed = computed(() => auth.checkAuth())
 
 type TileSize = 's' | 'm' | 'w' | 't' | 'l'
-type TileColor = 'blue' | 'purple' | 'teal' | 'orange' | 'pink' | 'slate'
+type TileColor = 'blue' | 'purple' | 'teal' | 'orange' | 'pink' | 'slate' | 'green'
 interface TileItem {
   key: string
   title: string
@@ -45,9 +45,10 @@ const tiles: TileItem[] = [
   { key: 'media', title: '媒体', subtitle: 'Coming soon', icon: '🎬', size: 'm', color: 'pink' },
   { key: 'gallery', title: '相册', subtitle: 'Coming soon', icon: '🖼️', size: 't', color: 'orange' },
   { key: 'analytics', title: '分析', subtitle: 'Coming soon', icon: '📊', size: 'm', color: 'blue' },
-  { key: 'tools', title: '工具', subtitle: 'Coming soon', icon: '🧰', size: 's', color: 'teal' },
+  { key: 'tools', title: '工具', subtitle: 'Coming soon', icon: '🧰', size: 's', color: 'teal', route: '/tool' },
   { key: 'settings', title: '设置', subtitle: 'Preferences', icon: '⚙️', size: 's', color: 'slate' },
   { key: 'todo', title: '备忘录', subtitle: 'Todo List', icon: '📝', size: 'l', color: 'purple', route: '/todo' },
+  { key: 'imageMagic', title: '取色器', subtitle: 'Image Color Picker', icon: '🔄', size: 'l', color: 'green', route: '/imageMagic' },
 ]
 
 function handleTile(t: TileItem) {
@@ -67,7 +68,7 @@ function handleTile(t: TileItem) {
 .desktop {
   min-height: 100vh;
   padding: 28px;
-  padding-top: 60px;
+  padding-top: 80px;
   background:
     radial-gradient(1200px 800px at 10% 10%, rgba(99, 102, 241, 0.14) 0%, transparent 60%),
     radial-gradient(1000px 700px at 90% 20%, rgba(56, 189, 248, 0.12) 0%, transparent 60%),
@@ -216,6 +217,10 @@ function handleTile(t: TileItem) {
 
 .tile--slate {
   background: linear-gradient(145deg, rgba(203, 213, 225, 0.6), rgba(148, 163, 184, 0.4));
+}
+
+.tile--green {
+  background: linear-gradient(145deg, rgba(110, 231, 183, 0.45), rgba(34, 197, 94, 0.35));
 }
 
 /* decorative highlight */
