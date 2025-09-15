@@ -5,6 +5,10 @@ self.onmessage = (event: MessageEvent) => {
 
   // 结果数组，存储每个格子的平均颜色
   const pixelatedColors: { r: number; g: number; b: number; a: number }[] = [];
+  const slicesX = Math.ceil(width / cellSize);
+  const slicesY = Math.ceil(height / cellSize);
+  const totalSlices = slicesX * slicesY;
+  let processedSlices = 0;
 
   // 按 cellSize 步长遍历图片
   for (let y = 0; y < height; y += cellSize) {
@@ -31,9 +35,18 @@ self.onmessage = (event: MessageEvent) => {
       const avgA = a / pixelCount;
 
       pixelatedColors.push({ r: avgR, g: avgG, b: avgB, a: avgA });
+      processedSlices ++
+      self.postMessage({
+        type: 'progress',
+        current: processedSlices,
+        total: totalSlices
+      })
     }
   }
 
   // 将计算结果发送回主线程
-  self.postMessage(pixelatedColors);
+  self.postMessage({
+    type: 'complete',
+    data: pixelatedColors
+  });
 };
