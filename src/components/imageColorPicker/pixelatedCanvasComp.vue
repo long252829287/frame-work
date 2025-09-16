@@ -5,6 +5,13 @@
       <input type="range" id="cellSize" min="5" max="100" step="1" v-model.number="cellSize"
         @input="debouncedProcessImage" />
 
+      <label for="scaleSlider">缩放比例: {{ Math.round(scaleFactor * 100) }}%</label>
+      <input type="range" id="scaleSlider" min="0.1" max="3" step="0.1" v-model.number="scaleFactor"
+        @input="debouncedProcessImage" />
+
+      <button @click="resetScale">重置缩放</button>
+      <button @click="autoScale">自适应缩放</button>
+
       <button @click="analyzeColors">解析颜色</button>
       <select v-model="colorFormat">
         <option value="hex">HEX</option>
@@ -55,13 +62,16 @@ const props = defineProps<{
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 const cellSize = ref(20);
+const scaleFactor = ref(1.0); // 新增缩放比例
 const isLoading = ref(false);
 const colorFormat = ref<'rgb' | 'hex' | 'hsl'>('hex');
 const progress = ref(0);
 
 let pixelatedColorData: { r: number; g: number; b: number; a: number }[] = [];
-let imageWidth = 0;
-let imageHeight = 0;
+let originalImageWidth = 0;
+let originalImageHeight = 0;
+let scaledImageWidth = 0;
+let scaledImageHeight = 0;
 let isAnalyzed = ref(false);
 
 
@@ -93,18 +103,28 @@ const processImage = () => {
   img.src = props.imageUrl;
 
   img.onload = () => {
-    imageWidth = img.width;
-    imageHeight = img.height;
-    canvas.width = imageWidth + margin;
-    canvas.height = imageHeight + margin;
+    // 保存原始尺寸
+    originalImageWidth = img.width;
+    originalImageHeight = img.height;
 
-    const offscreenCanvas = document.createElement('canvas');
-    const offscreenCtx = offscreenCanvas.getContext('2d');
-    if (!offscreenCtx) return;
-    offscreenCanvas.width = imageWidth;
-    offscreenCanvas.height = imageHeight;
-    offscreenCtx.drawImage(img, 0, 0);
-    const imageData = offscreenCtx.getImageData(0, 0, imageWidth, imageHeight);
+    // 计算缩放后的尺寸
+    scaledImageWidth = Math.round(originalImageWidth * scaleFactor.value);
+    scaledImageHeight = Math.round(originalImageHeight * scaleFactor.value);
+
+    canvas.width = scaledImageWidth + margin;
+    canvas.height = scaledImageHeight + margin;
+
+    // 创建临时canvas来处理缩放
+    const tempCanvas = document.createElement('canvas');
+    const tempCtx = tempCanvas.getContext('2d');
+    if (!tempCtx) return;
+
+    tempCanvas.width = scaledImageWidth;
+    tempCanvas.height = scaledImageHeight;
+
+    // 在临时canvas上绘制缩放后的图片
+    tempCtx.drawImage(img, 0, 0, scaledImageWidth, scaledImageHeight);
+    const imageData = tempCtx.getImageData(0, 0, scaledImageWidth, scaledImageHeight);
 
     const worker = new Worker(new URL('../../workers/pixelate.worker.ts', import.meta.url), { type: 'module' });
 
@@ -147,20 +167,20 @@ const drawPixelatedImage = (colors: { r: number; g: number; b: number; a: number
 
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  for (let y = 0; y < imageHeight; y += cellSize.value) {
+  for (let y = 0; y < scaledImageHeight; y += cellSize.value) {
     const label = (y / cellSize.value) + 1;
     const textY = y + margin + (cellSize.value / 2);
     ctx.fillText(label.toString(), margin / 2, textY);
   }
 
-  for (let x = 0; x < imageWidth; x += cellSize.value) {
+  for (let x = 0; x < scaledImageWidth; x += cellSize.value) {
     const label = (x / cellSize.value) + 1;
     const textX = x + margin + (cellSize.value / 2);
     ctx.fillText(label.toString(), textX, margin / 2);
   }
-  
-  for (let y = 0; y < imageHeight; y += cellSize.value) {
-    for (let x = 0; x < imageWidth; x += cellSize.value) {
+
+  for (let y = 0; y < scaledImageHeight; y += cellSize.value) {
+    for (let x = 0; x < scaledImageWidth; x += cellSize.value) {
       if (colorIndex < colors.length) {
         const color = colors[colorIndex];
 
@@ -179,6 +199,7 @@ const drawPixelatedImage = (colors: { r: number; g: number; b: number; a: number
 };
 
 watch(() => props.imageUrl, processImage, { immediate: true });
+watch(() => scaleFactor.value, debouncedProcessImage);
 
 onMounted(processImage);
 
@@ -186,6 +207,32 @@ const analyzeColors = () => {
   if (pixelatedColorData.length > 0) {
     isAnalyzed.value = true;
     drawPixelatedImage(pixelatedColorData, true);
+  }
+};
+
+// 重置缩放比例
+const resetScale = () => {
+  scaleFactor.value = 1.0;
+};
+
+// 自适应缩放 - 让小图片放大到合适尺寸
+const autoScale = () => {
+  if (originalImageWidth === 0 || originalImageHeight === 0) return;
+
+  const minDesiredSize = 400; // 最小期望尺寸
+  const maxDesiredSize = 800; // 最大期望尺寸
+
+  const maxOriginalSize = Math.max(originalImageWidth, originalImageHeight);
+
+  if (maxOriginalSize < minDesiredSize) {
+    // 图片太小，放大
+    scaleFactor.value = minDesiredSize / maxOriginalSize;
+  } else if (maxOriginalSize > maxDesiredSize) {
+    // 图片太大，缩小
+    scaleFactor.value = maxDesiredSize / maxOriginalSize;
+  } else {
+    // 尺寸合适，保持原样
+    scaleFactor.value = 1.0;
   }
 };
 
@@ -250,15 +297,79 @@ watch(colorFormat, () => {
 }
 
 .controls {
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.controls label {
+  font-weight: 500;
+  color: #333;
+  white-space: nowrap;
+}
+
+.controls input[type="range"] {
+  min-width: 120px;
+}
+
+.controls button {
+  padding: 8px 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.controls button:hover {
+  background-color: #0056b3;
+}
+
+.controls select {
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.canvas-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   align-items: center;
-  gap: 15px;
+  justify-content: center;
+  z-index: 10;
+}
+
+.loading-overlay span {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: 500;
 }
 
 canvas {
   max-width: 100%;
-  border: 1px solid #ddd;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .loading-indicator {
