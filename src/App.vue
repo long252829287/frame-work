@@ -63,6 +63,8 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
 </template>
 
 <style lang="scss" scoped>
+@import url('../src/assets/css/normalize.css');
+
 /* CSS变量定义 */
 :root {
   --glass-bg: rgba(255, 255, 255, 0.08);

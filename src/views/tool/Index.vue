@@ -1,7 +1,8 @@
 <template>
   <div class="tool-container">
-    <el-input v-model="input" placeholder="请输入内容" />
-    <el-button @click="checkIsOwnId">检查是否存在重复的id</el-button>
+    <h3>检查是否存在重复的id</h3>
+    <el-input type="textarea" v-model="input" placeholder="请输入内容" />
+    <el-button type="primary" @click="checkIsOwnId" round size="small">开始</el-button>
   </div>
 </template>
 
@@ -18,6 +19,11 @@ const checkIsOwnId = () => {
 
 <style lang="scss" scoped>
 .tool-container {
-  margin-top: 80px;
+  padding: 20px;
+  margin-top: 90px;
+  width: 400px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 </style>

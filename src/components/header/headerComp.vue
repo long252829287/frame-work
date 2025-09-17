@@ -19,13 +19,8 @@
       <div v-if="showBackButton" class="back-button" @click="goBack" :title="'返回'">
         <div class="back-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path
-              d="M19 12H5M12 19L5 12L12 5"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
+            <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+              stroke-linejoin="round" />
           </svg>
         </div>
         <span class="back-text">返回</span>
@@ -57,11 +52,11 @@
 
       <!-- 用户信息区域 -->
       <div v-else class="user-section">
+        <div class="avatar-frame">🌻</div>
+        <div class="status-indicator">💚</div>
         <div class="user-dropdown" @click="toggleUserMenu">
           <div class="user-avatar">
-            <div class="avatar-frame">🌻</div>
             <img :src="userAvatar" :alt="displayName" class="avatar-img" />
-            <div class="status-indicator">💚</div>
           </div>
 
           <div class="user-info">
@@ -212,12 +207,10 @@ onUnmounted(() => {
     box-shadow: 0 2px 20px rgba(139, 69, 19, 0.4);
 
     .header-bg {
-      background: linear-gradient(
-        135deg,
-        rgba(255, 248, 220, 0.98) 0%,
-        rgba(240, 230, 140, 0.95) 50%,
-        rgba(255, 239, 213, 0.98) 100%
-      );
+      background: linear-gradient(135deg,
+          rgba(255, 248, 220, 0.98) 0%,
+          rgba(240, 230, 140, 0.95) 50%,
+          rgba(255, 239, 213, 0.98) 100%);
     }
 
     .logo-container .logo-icon {
@@ -240,12 +233,10 @@ onUnmounted(() => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 248, 220, 0.95) 0%,
-      rgba(240, 230, 140, 0.9) 50%,
-      rgba(255, 239, 213, 0.95) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(255, 248, 220, 0.95) 0%,
+        rgba(240, 230, 140, 0.9) 50%,
+        rgba(255, 239, 213, 0.95) 100%);
     z-index: -1;
     transition: all 0.3s ease;
   }
@@ -279,13 +270,13 @@ onUnmounted(() => {
 
       &.flower-1 {
         top: 15%;
-        right: 8%;
+        right: 58%;
         animation-delay: 2s;
       }
 
       &.flower-2 {
-        top: 70%;
-        left: 5%;
+        top: 60%;
+        left: 25%;
         animation-delay: 3s;
       }
 
@@ -305,11 +296,13 @@ onUnmounted(() => {
 }
 
 @keyframes float {
+
   0%,
   100% {
     transform: translateY(0px) scale(1);
     opacity: 0.7;
   }
+
   50% {
     transform: translateY(-10px) scale(1.1);
     opacity: 1;
@@ -399,10 +392,12 @@ onUnmounted(() => {
 }
 
 @keyframes bounce {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-5px);
   }
@@ -451,6 +446,24 @@ onUnmounted(() => {
 
 .user-section {
   position: relative;
+
+  .avatar-frame {
+    position: absolute;
+    top: 0px;
+    left: -700px;
+    font-size: 2.5rem;
+    z-index: 1;
+    animation: rotate 6s linear infinite;
+  }
+
+  .status-indicator {
+    position: absolute;
+    top: 0px;
+    left: -250px;
+    font-size: 1rem;
+    z-index: 3;
+    animation: heartbeat 2s ease-in-out infinite;
+  }
 }
 
 .user-dropdown {
@@ -474,15 +487,6 @@ onUnmounted(() => {
   width: 40px;
   height: 40px;
 
-  .avatar-frame {
-    position: absolute;
-    top: -5px;
-    left: -5px;
-    font-size: 2.5rem;
-    z-index: 1;
-    animation: rotate 6s linear infinite;
-  }
-
   .avatar-img {
     width: 40px;
     height: 40px;
@@ -492,31 +496,25 @@ onUnmounted(() => {
     position: relative;
     z-index: 2;
   }
-
-  .status-indicator {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    font-size: 1rem;
-    z-index: 3;
-    animation: heartbeat 2s ease-in-out infinite;
-  }
 }
 
 @keyframes rotate {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
 @keyframes heartbeat {
+
   0%,
   100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.2);
   }
@@ -674,6 +672,7 @@ onUnmounted(() => {
 
 /* 现代网站优化：减少动画偏好 */
 @media (prefers-reduced-motion: reduce) {
+
   .stardew-header,
   .decoration,
   .logo-icon,

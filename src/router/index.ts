@@ -89,7 +89,7 @@ router.beforeEach((to, from, next) => {
 
   if ((to.name === 'login' || to.name === 'register') && isAuthenticated) {
     // 已登录用户访问登录/注册页，重定向到最后访问的页面或首页
-    const redirectTo = authStore.lastRoute.value || '/home'
+    const redirectTo = authStore.lastRoute || '/home'
     next(redirectTo)
     return
   }

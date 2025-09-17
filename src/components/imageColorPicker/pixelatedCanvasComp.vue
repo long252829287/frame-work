@@ -1,24 +1,26 @@
 <template>
   <div class="pixelated-canvas-container">
-    <div class="controls">
-      <label for="cellSize">格子边长: {{ cellSize }}px</label>
-      <input type="range" id="cellSize" min="5" max="100" step="1" v-model.number="cellSize"
-        @input="debouncedProcessImage" />
-
-      <label for="scaleSlider">缩放比例: {{ Math.round(scaleFactor * 100) }}%</label>
-      <input type="range" id="scaleSlider" min="0.1" max="3" step="0.1" v-model.number="scaleFactor"
-        @input="debouncedProcessImage" />
-
-      <button @click="resetScale">重置缩放</button>
-      <button @click="autoScale">自适应缩放</button>
-
-      <button @click="analyzeColors">解析颜色</button>
-      <select v-model="colorFormat">
-        <option value="hex">HEX</option>
-        <option value="rgb">RGB</option>
-        <option value="hsl">HSL</option>
-      </select>
-    </div>
+    <el-form class="controls" label-width="auto" :model="formLabelAlign" style="max-width: 600px" label-position="left">
+      <el-form-item :label="`格子边长: ${cellSize}px`">
+        <el-slider v-model.number="cellSize" :min="5" :max="100" show-input size="small"
+          @change="debouncedProcessImage" />
+      </el-form-item>
+      <el-form-item :label="`缩放比例: ${Math.round(scaleFactor * 100)}%`">
+        <el-slider v-model.number="scaleFactor" :min="0.3" :max="3" show-input size="small"
+          @change="debouncedProcessImage" />
+      </el-form-item>
+      <el-form-item label="颜色格式">
+        <el-select v-model="colorFormat" placeholder="" style="width: 120px">
+          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="操作">
+        <el-button @click="resetScale">重置缩放</el-button>
+        <el-button @click="autoScale">自适应缩放</el-button>
+        <el-button @click="analyzeColors" type="primary">开始解析</el-button>
+      </el-form-item>
+    </el-form>
 
     <div class="canvas-wrapper">
       <div v-if="isLoading" class="loading-overlay">
@@ -31,9 +33,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch, onMounted, reactive } from 'vue'
 import Color from 'color'
 import colorData from '@/json/oshshabi.json'
+
+const formLabelAlign = reactive({
+  name: '',
+  region: '',
+  type: '',
+})
 type PaletteColor = {
   name: string
   r: number
@@ -66,6 +74,11 @@ const scaleFactor = ref(1.0) // 新增缩放比例
 const isLoading = ref(false)
 const colorFormat = ref<'rgb' | 'hex' | 'hsl'>('hex')
 const progress = ref(0)
+const options = [
+  { value: 'hex', label: 'HEX' },
+  { value: 'rgb', label: 'RGB' },
+  { value: 'hsl', label: 'HSL' },
+]
 
 let pixelatedColorData: { r: number; g: number; b: number; a: number }[] = []
 let originalImageWidth = 0
@@ -304,10 +317,7 @@ watch(colorFormat, () => {
 
 .controls {
   margin-bottom: 20px;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 20px;
+  gap: 5px;
   padding: 15px;
   background-color: #f5f5f5;
   border-radius: 8px;
@@ -318,31 +328,7 @@ watch(colorFormat, () => {
   font-weight: 500;
   color: #333;
   white-space: nowrap;
-}
-
-.controls input[type='range'] {
-  min-width: 120px;
-}
-
-.controls button {
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.controls button:hover {
-  background-color: #0056b3;
-}
-
-.controls select {
-  padding: 6px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background-color: white;
+  margin-right: 10px;
 }
 
 .canvas-wrapper {

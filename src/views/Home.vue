@@ -1,16 +1,8 @@
 <template>
   <div class="desktop">
     <div class="start-grid" role="grid" aria-label="start modules">
-      <button
-        v-for="t in tiles"
-        :key="t.key"
-        class="tile"
-        :class="['tile--' + t.size, 'tile--' + t.color]"
-        type="button"
-        role="button"
-        tabindex="0"
-        @click="handleTile(t)"
-      >
+      <button v-for="t in tiles" :key="t.key" class="tile" :class="['tile--' + t.size, 'tile--' + t.color]"
+        type="button" role="button" tabindex="0" @click="handleTile(t)">
         <div class="tile__icon" aria-hidden="true">{{ t.icon }}</div>
         <div class="tile__text">
           <div class="tile__title">{{ t.title }}</div>
@@ -74,24 +66,24 @@ const tiles: TileItem[] = [
     route: '/study',
     requiresAuth: true,
   },
-  {
-    key: 'login',
-    title: '登录',
-    subtitle: 'Sign in',
-    icon: '🔑',
-    size: 's',
-    color: 'blue',
-    route: '/login',
-  },
-  {
-    key: 'register',
-    title: '注册',
-    subtitle: 'Create',
-    icon: '🆕',
-    size: 's',
-    color: 'orange',
-    route: '/register',
-  },
+  // {
+  //   key: 'login',
+  //   title: '登录',
+  //   subtitle: 'Sign in',
+  //   icon: '🔑',
+  //   size: 's',
+  //   color: 'blue',
+  //   route: '/login',
+  // },
+  // {
+  //   key: 'register',
+  //   title: '注册',
+  //   subtitle: 'Create',
+  //   icon: '🆕',
+  //   size: 's',
+  //   color: 'orange',
+  //   route: '/register',
+  // },
   { key: 'tasks', title: '任务', subtitle: 'Coming soon', icon: '✅', size: 'm', color: 'slate' },
   { key: 'media', title: '媒体', subtitle: 'Coming soon', icon: '🎬', size: 'm', color: 'pink' },
   {
@@ -164,7 +156,7 @@ function handleTile(t: TileItem) {
 .desktop {
   min-height: 100vh;
   padding: 28px;
-  padding-top: 80px;
+  padding-top: 90px;
   background:
     radial-gradient(1200px 800px at 10% 10%, rgba(99, 102, 241, 0.14) 0%, transparent 60%),
     radial-gradient(1000px 700px at 90% 20%, rgba(56, 189, 248, 0.12) 0%, transparent 60%),
