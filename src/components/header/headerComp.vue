@@ -1,13 +1,16 @@
 <template>
-  <header class="cyber-header">
-    <!-- 毛玻璃背景 -->
+  <header :class="headerClasses">
+    <!-- 温暖的乡村背景 -->
     <div class="header-bg"></div>
 
-    <!-- 科技线条装饰 -->
-    <div class="tech-lines">
-      <div class="line line-1"></div>
-      <div class="line line-2"></div>
-      <div class="line line-3"></div>
+    <!-- 装饰性点点 -->
+    <div class="nature-decorations">
+      <div class="decoration leaf leaf-1">🍃</div>
+      <div class="decoration leaf leaf-2">🌿</div>
+      <div class="decoration flower flower-1">🌸</div>
+      <div class="decoration flower flower-2">🌼</div>
+      <div class="decoration star star-1">✨</div>
+      <div class="decoration star star-2">⭐</div>
     </div>
 
     <!-- 左侧导航区域 -->
@@ -30,10 +33,10 @@
 
       <!-- Logo区域 -->
       <div class="logo-container" @click="router.push({ name: 'home' })">
-        <div class="logo-glow"></div>
+        <div class="logo-icon">🏡</div>
         <div class="logo-text">
           <span class="logo-main">Osheeep</span>
-          <div class="logo-subtitle">Framework</div>
+          <div class="logo-subtitle">diy everyThing</div>
         </div>
       </div>
     </div>
@@ -43,14 +46,12 @@
       <div v-if="!auth.isAuthenticated" class="auth-buttons">
         <!-- 登录按钮 -->
         <button class="auth-btn login-btn" @click="router.push({ name: 'login' })">
-          <span>登录</span>
-          <div class="btn-bg"></div>
+          <span>🚪 登录</span>
         </button>
 
         <!-- 注册按钮 -->
         <button class="auth-btn register-btn" @click="router.push({ name: 'register' })">
-          <span>注册</span>
-          <div class="btn-bg"></div>
+          <span>📝 注册</span>
         </button>
       </div>
 
@@ -58,108 +59,48 @@
       <div v-else class="user-section">
         <div class="user-dropdown" @click="toggleUserMenu">
           <div class="user-avatar">
-            <div class="avatar-ring"></div>
+            <div class="avatar-frame">🌻</div>
             <img :src="userAvatar" :alt="displayName" class="avatar-img" />
-            <div class="status-indicator"></div>
+            <div class="status-indicator">💚</div>
           </div>
 
           <div class="user-info">
             <div class="user-name">{{ displayName }}</div>
-            <div class="user-status">在线</div>
+            <div class="user-status">🌱 活跃中</div>
           </div>
 
           <div class="dropdown-arrow" :class="{ open: showUserMenu }">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M6 9L12 15L18 9"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <span class="arrow-icon">🔽</span>
           </div>
         </div>
 
         <!-- 下拉菜单 -->
         <div class="user-menu" :class="{ show: showUserMenu }">
           <div class="menu-item" @click="viewProfile">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <circle
-                cx="12"
-                cy="7"
-                r="4"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <span class="menu-icon">👤</span>
             <span>个人资料</span>
           </div>
 
           <div class="menu-item" @click="viewSettings">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" />
-              <path
-                d="M19.4 15A1.65 1.65 0 0 0 20.25 13.5L20.4 12L20.25 10.5A1.65 1.65 0 0 0 19.4 9L18.75 8.15A1.65 1.65 0 0 0 17.25 7.85L16 7.5L14.75 7.85A1.65 1.65 0 0 0 13.25 8.15L12.6 9A1.65 1.65 0 0 0 11.75 10.5L11.6 12L11.75 13.5A1.65 1.65 0 0 0 12.6 15L13.25 15.85A1.65 1.65 0 0 0 14.75 16.15L16 16.5L17.25 16.15A1.65 1.65 0 0 0 18.75 15.85L19.4 15Z"
-                stroke="currentColor"
-                stroke-width="2"
-              />
-            </svg>
+            <span class="menu-icon">⚙️</span>
             <span>设置</span>
           </div>
 
           <div class="menu-divider"></div>
 
           <div class="menu-item logout" @click="handleLogout">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <polyline
-                points="16,17 21,12 16,7"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <line
-                x1="21"
-                y1="12"
-                x2="9"
-                y2="12"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <span class="menu-icon">🚪</span>
             <span>退出登录</span>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- 背景点击遮罩 -->
-    <div v-if="showUserMenu" class="menu-overlay" @click="showUserMenu = false"></div>
   </header>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useAuthStore } from '@/stores/auth'
+import { useAuthStore } from '../../stores/auth'
 import { useRouter, useRoute } from 'vue-router'
 
 const auth = useAuthStore()
@@ -167,16 +108,25 @@ const router = useRouter()
 const route = useRoute()
 
 const showUserMenu = ref(false)
+const isScrolled = ref(false)
 
 // 计算属性
 const displayName = computed(() => auth.user?.nickname || auth.user?.username || '用户')
 
 const userAvatar = computed(
-  () => 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
+  () => 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
 )
 
 const showBackButton = computed(() => {
   return route.name !== 'home' && window.history.length > 1
+})
+
+// 现代网站特性：滚动时header样式变化
+const headerClasses = computed(() => {
+  return {
+    'stardew-header': true,
+    'stardew-header--scrolled': isScrolled.value
+  }
 })
 
 // 方法
@@ -194,13 +144,11 @@ const goBack = () => {
 
 const viewProfile = () => {
   showUserMenu.value = false
-  // TODO: 跳转到个人资料页面
   console.log('查看个人资料')
 }
 
 const viewSettings = () => {
   showUserMenu.value = false
-  // TODO: 跳转到设置页面
   console.log('查看设置')
 }
 
@@ -214,25 +162,32 @@ const handleLogout = async () => {
   }
 }
 
+// 现代网站特性：监听滚动
+const handleScroll = () => {
+  isScrolled.value = window.scrollY > 20
+}
+
 // 监听点击外部关闭菜单
 const handleClickOutside = (event: Event) => {
   const target = event.target as HTMLElement
-  if (!target.closest('.user-section')) {
+  if (!target.closest('.user-dropdown') && !target.closest('.user-menu')) {
     showUserMenu.value = false
   }
 }
 
 onMounted(() => {
   document.addEventListener('click', handleClickOutside)
+  window.addEventListener('scroll', handleScroll, { passive: true })
 })
 
 onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
+  window.removeEventListener('scroll', handleScroll)
 })
 </script>
 
 <style lang="scss" scoped>
-.cyber-header {
+.stardew-header {
   position: fixed;
   top: 0;
   left: 0;
@@ -243,10 +198,41 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 0 2rem;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+  overflow: visible;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 现代网站特性：滚动时样式变化 */
+  &--scrolled {
+    height: 60px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 2px 20px rgba(139, 69, 19, 0.4);
+
+    .header-bg {
+      background: linear-gradient(
+        135deg,
+        rgba(255, 248, 220, 0.98) 0%,
+        rgba(240, 230, 140, 0.95) 50%,
+        rgba(255, 239, 213, 0.98) 100%
+      );
+    }
+
+    .logo-container .logo-icon {
+      font-size: 1.8rem;
+    }
+
+    .logo-container .logo-text .logo-main {
+      font-size: 1.5rem;
+    }
+
+    .nature-decorations .decoration {
+      opacity: 0.6;
+      transform: scale(0.8);
+    }
+  }
 
   .header-bg {
     position: absolute;
@@ -256,14 +242,15 @@ onUnmounted(() => {
     bottom: 0;
     background: linear-gradient(
       135deg,
-      rgba(0, 0, 0, 0.9) 0%,
-      rgba(15, 23, 42, 0.95) 50%,
-      rgba(30, 41, 59, 0.9) 100%
+      rgba(255, 248, 220, 0.95) 0%,
+      rgba(240, 230, 140, 0.9) 50%,
+      rgba(255, 239, 213, 0.95) 100%
     );
     z-index: -1;
+    transition: all 0.3s ease;
   }
 
-  .tech-lines {
+  .nature-decorations {
     position: absolute;
     top: 0;
     left: 0;
@@ -272,52 +259,60 @@ onUnmounted(() => {
     pointer-events: none;
     z-index: -1;
 
-    .line {
+    .decoration {
       position: absolute;
-      background: linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(59, 130, 246, 0.5) 50%,
-        transparent 100%
-      );
-      height: 1px;
-      animation: tech-flow 3s ease-in-out infinite;
+      font-size: 1.2rem;
+      animation: float 4s ease-in-out infinite;
+      transition: all 0.3s ease;
 
-      &.line-1 {
+      &.leaf-1 {
         top: 20%;
-        left: -100%;
-        width: 40%;
+        left: 10%;
         animation-delay: 0s;
       }
 
-      &.line-2 {
+      &.leaf-2 {
         top: 60%;
-        right: -100%;
-        width: 30%;
+        right: 15%;
         animation-delay: 1s;
       }
 
-      &.line-3 {
-        top: 80%;
-        left: -100%;
-        width: 50%;
+      &.flower-1 {
+        top: 15%;
+        right: 8%;
         animation-delay: 2s;
+      }
+
+      &.flower-2 {
+        top: 70%;
+        left: 5%;
+        animation-delay: 3s;
+      }
+
+      &.star-1 {
+        top: 30%;
+        left: 70%;
+        animation-delay: 0.5s;
+      }
+
+      &.star-2 {
+        top: 50%;
+        right: 40%;
+        animation-delay: 2.5s;
       }
     }
   }
 }
 
-@keyframes tech-flow {
-  0% {
-    transform: translateX(0);
-    opacity: 0;
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px) scale(1);
+    opacity: 0.7;
   }
   50% {
+    transform: translateY(-10px) scale(1.1);
     opacity: 1;
-  }
-  100% {
-    transform: translateX(200vw);
-    opacity: 0;
   }
 }
 
@@ -332,39 +327,16 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
-  color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  color: #8b4513;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      rgba(59, 130, 246, 0.2) 50%,
-      transparent 100%
-    );
-    transition: left 0.5s ease;
-  }
+  font-weight: bold;
 
   &:hover {
-    border-color: rgba(59, 130, 246, 0.5);
-    color: #3b82f6;
-    transform: translateX(-2px);
-
-    &::before {
-      left: 100%;
-    }
+    background: rgba(139, 69, 19, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(139, 69, 19, 0.3);
   }
 
   .back-icon {
@@ -375,11 +347,11 @@ onUnmounted(() => {
 
   .back-text {
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: bold;
   }
 
   &:hover .back-icon {
-    transform: translateX(-2px);
+    transform: translateX(-3px);
   }
 }
 
@@ -388,59 +360,51 @@ onUnmounted(() => {
   cursor: pointer;
   user-select: none;
   padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: transform 0.3s ease;
 
-  .logo-glow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 60px;
-    height: 60px;
-    transform: translate(-50%, -50%);
-    background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 0.3s ease;
+  &:hover {
+    transform: scale(1.05);
   }
 
-  &:hover .logo-glow {
-    opacity: 1;
-    animation: pulse 2s ease-in-out infinite;
+  .logo-icon {
+    font-size: 2rem;
+    animation: bounce 2s ease-in-out infinite;
+    transition: all 0.3s ease;
   }
 
   .logo-text {
-    position: relative;
-    z-index: 1;
-
     .logo-main {
       font-size: 1.75rem;
-      font-weight: 700;
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6, #06b6d4);
+      font-weight: bold;
+      background: linear-gradient(45deg, #8b4513, #d2691e, #cd853f);
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      letter-spacing: -0.5px;
+      text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3);
+      transition: all 0.3s ease;
     }
 
     .logo-subtitle {
-      font-size: 0.6rem;
-      color: rgba(255, 255, 255, 0.6);
-      text-transform: uppercase;
-      letter-spacing: 2px;
+      font-size: 0.7rem;
+      color: #8b4513;
+      text-transform: none;
+      letter-spacing: 1px;
       margin-top: -2px;
-      margin-left: 2px;
+      opacity: 0.8;
     }
   }
 }
 
-@keyframes pulse {
+@keyframes bounce {
   0%,
   100% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.3;
+    transform: translateY(0);
   }
   50% {
-    transform: translate(-50%, -50%) scale(1.2);
-    opacity: 0.6;
+    transform: translateY(-5px);
   }
 }
 
@@ -456,44 +420,31 @@ onUnmounted(() => {
 
 .auth-btn {
   position: relative;
-  padding: 0.625rem 1.25rem;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.5rem;
-  color: rgba(255, 255, 255, 0.9);
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #90ee90, #98fb98);
+  border: 2px solid #228b22;
+  border-radius: 25px;
+  color: #006400;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
-  overflow: hidden;
-
-  .btn-bg {
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(139, 92, 246, 0.3));
-    transition: left 0.3s ease;
-    z-index: -1;
-  }
+  box-shadow: 0 3px 8px rgba(34, 139, 34, 0.3);
 
   &:hover {
-    border-color: rgba(59, 130, 246, 0.6);
-    color: #fff;
-    transform: translateY(-1px);
-
-    .btn-bg {
-      left: 0;
-    }
+    background: linear-gradient(135deg, #98fb98, #90ee90);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(34, 139, 34, 0.4);
   }
 
   &.register-btn {
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2));
-    border-color: rgba(59, 130, 246, 0.4);
+    background: linear-gradient(135deg, #ffb6c1, #ffc0cb);
+    border-color: #ff69b4;
+    color: #8b008b;
 
     &:hover {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.4), rgba(139, 92, 246, 0.4));
+      background: linear-gradient(135deg, #ffc0cb, #ffb6c1);
+      box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
     }
   }
 }
@@ -506,16 +457,15 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
   cursor: pointer;
   transition: all 0.3s ease;
+  border: 2px solid #d2691e;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(59, 130, 246, 0.3);
+    background: linear-gradient(135deg, rgba(255, 239, 213, 0.95), rgba(255, 248, 220, 0.95));
+    transform: translateY(-1px);
   }
 }
 
@@ -524,20 +474,13 @@ onUnmounted(() => {
   width: 40px;
   height: 40px;
 
-  .avatar-ring {
+  .avatar-frame {
     position: absolute;
-    top: -2px;
-    left: -2px;
-    width: 44px;
-    height: 44px;
-    border: 2px solid transparent;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6) border-box;
-    mask:
-      linear-gradient(#fff 0 0) padding-box,
-      linear-gradient(#fff 0 0);
-    mask-composite: subtract;
-    animation: rotate 3s linear infinite;
+    top: -5px;
+    left: -5px;
+    font-size: 2.5rem;
+    z-index: 1;
+    animation: rotate 6s linear infinite;
   }
 
   .avatar-img {
@@ -545,17 +488,17 @@ onUnmounted(() => {
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
+    border: 2px solid #fff;
+    position: relative;
+    z-index: 2;
   }
 
   .status-indicator {
     position: absolute;
-    bottom: 2px;
-    right: 2px;
-    width: 12px;
-    height: 12px;
-    background: #10b981;
-    border: 2px solid #0f172a;
-    border-radius: 50%;
+    bottom: 0;
+    right: 0;
+    font-size: 1rem;
+    z-index: 3;
     animation: heartbeat 2s ease-in-out infinite;
   }
 }
@@ -575,7 +518,7 @@ onUnmounted(() => {
     transform: scale(1);
   }
   50% {
-    transform: scale(1.1);
+    transform: scale(1.2);
   }
 }
 
@@ -586,21 +529,26 @@ onUnmounted(() => {
 
   .user-name {
     font-size: 0.875rem;
-    font-weight: 600;
-    color: rgba(255, 255, 255, 0.9);
+    font-weight: bold;
+    color: #8b4513;
     line-height: 1;
   }
 
   .user-status {
     font-size: 0.75rem;
-    color: #10b981;
+    color: #228b22;
     line-height: 1;
+    font-weight: bold;
   }
 }
 
 .dropdown-arrow {
   transition: transform 0.3s ease;
-  color: rgba(255, 255, 255, 0.6);
+
+  .arrow-icon {
+    font-size: 0.8rem;
+    color: #8b4513;
+  }
 
   &.open {
     transform: rotate(180deg);
@@ -612,16 +560,16 @@ onUnmounted(() => {
   top: calc(100% + 0.5rem);
   right: 0;
   min-width: 200px;
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 0.75rem;
+  background: linear-gradient(135deg, rgba(255, 248, 220, 0.98), rgba(255, 239, 213, 0.98));
+  backdrop-filter: blur(10px);
+  border: 2px solid #d2691e;
+  border-radius: 15px;
   padding: 0.5rem;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
   transition: all 0.3s ease;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 25px rgba(210, 105, 30, 0.4);
 
   &.show {
     opacity: 1;
@@ -635,55 +583,53 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  border-radius: 0.5rem;
-  color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  color: #8b4513;
   cursor: pointer;
   transition: all 0.2s ease;
+  font-weight: bold;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    background: rgba(210, 105, 30, 0.2);
+    transform: translateX(5px);
   }
 
   &.logout {
-    color: #ef4444;
+    color: #dc143c;
 
     &:hover {
-      background: rgba(239, 68, 68, 0.1);
-      color: #ef4444;
+      background: rgba(220, 20, 60, 0.1);
+      color: #dc143c;
     }
   }
 
-  svg {
+  .menu-icon {
+    font-size: 1rem;
     flex-shrink: 0;
   }
 
-  span {
+  span:last-child {
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: bold;
   }
 }
 
 .menu-divider {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.1);
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #d2691e, transparent);
   margin: 0.5rem 0;
-}
-
-.menu-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
+  border-radius: 1px;
 }
 
 // 响应式设计
 @media (max-width: 768px) {
-  .cyber-header {
+  .stardew-header {
     padding: 0 1rem;
     height: 60px;
+
+    &--scrolled {
+      height: 50px;
+    }
   }
 
   .header-left {
@@ -696,7 +642,7 @@ onUnmounted(() => {
     }
 
     .logo-subtitle {
-      font-size: 0.5rem;
+      font-size: 0.6rem;
     }
   }
 
@@ -719,6 +665,34 @@ onUnmounted(() => {
 
   .user-info {
     display: none;
+  }
+
+  .nature-decorations .decoration {
+    font-size: 1rem;
+  }
+}
+
+/* 现代网站优化：减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .stardew-header,
+  .decoration,
+  .logo-icon,
+  .avatar-frame,
+  .status-indicator {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* 现代网站优化：高对比度模式 */
+@media (prefers-contrast: high) {
+  .stardew-header {
+    border-bottom: 2px solid currentColor;
+  }
+
+  .user-dropdown,
+  .auth-btn {
+    border-width: 2px;
   }
 }
 </style>

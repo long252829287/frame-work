@@ -70,11 +70,16 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to, _from, next) => {
+router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
 
   // 检查是否有有效的登录状态
   const isAuthenticated = authStore.checkAuth()
+
+  // 记录最后访问的路由（排除登录和注册页面）
+  if (from.name && from.name !== 'login' && from.name !== 'register' && isAuthenticated) {
+    authStore.setLastRoute(from.fullPath)
+  }
 
   if (to.meta?.requiresAuth && !isAuthenticated) {
     // 需要登录但未登录，重定向到登录页
@@ -83,8 +88,9 @@ router.beforeEach((to, _from, next) => {
   }
 
   if ((to.name === 'login' || to.name === 'register') && isAuthenticated) {
-    // 已登录用户访问登录/注册页，重定向到笔记页
-    next({ name: 'notes' })
+    // 已登录用户访问登录/注册页，重定向到最后访问的页面或首页
+    const redirectTo = authStore.lastRoute.value || '/home'
+    next(redirectTo)
     return
   }
 

@@ -15,6 +15,9 @@ export const useAuthStore = defineStore('auth', () => {
   const savedUserRaw = localStorage.getItem('user')
   const user = ref<UserInfo | null>(savedUserRaw ? JSON.parse(savedUserRaw) : null)
 
+  // 最后访问的路由（用于登录后跳转）
+  const lastRoute = ref<string | null>(localStorage.getItem('lastRoute') || '/home')
+
   const isAuthenticated = computed(() => Boolean(token.value))
 
   function setToken(newToken: string | null) {
@@ -64,6 +67,15 @@ export const useAuthStore = defineStore('auth', () => {
     setUser(null)
   }
 
+  function setLastRoute(route: string | null) {
+    lastRoute.value = route
+    if (route) {
+      localStorage.setItem('lastRoute', route)
+    } else {
+      localStorage.removeItem('lastRoute')
+    }
+  }
+
   // 检查登录状态
   function checkAuth() {
     const savedToken = localStorage.getItem('token')
@@ -86,9 +98,11 @@ export const useAuthStore = defineStore('auth', () => {
   return {
     token,
     user,
+    lastRoute,
     isAuthenticated,
     setToken,
     setUser,
+    setLastRoute,
     login,
     register,
     logout,
