@@ -1,12 +1,7 @@
 <template>
   <div class="image-uploader">
     <label for="file-upload" class="custom-file-upload"> 点击上传图片 </label>
-    <input
-      id="file-upload"
-      type="file"
-      accept="image/png, image/jpeg, image/jpg"
-      @change="handleImageUpload"
-    />
+    <input id="file-upload" type="file" accept="image/png, image/jpeg, image/jpg" @change="handleImageUpload" />
     <p v-if="!imageUrl">请选择一张本地图片</p>
   </div>
 </template>
@@ -41,7 +36,7 @@ const handleImageUpload = (event: Event) => {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .image-uploader input[type='file'] {
   display: none;
 }

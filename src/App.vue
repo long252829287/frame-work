@@ -54,11 +54,7 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
     <main :class="mainClasses">
       <RouterView v-slot="{ Component, route: currentRoute }">
         <!-- 页面过渡动画 -->
-        <Transition
-          :name="getTransitionName(currentRoute)"
-          mode="out-in"
-          appear
-        >
+        <Transition :name="getTransitionName(currentRoute)" mode="out-in" appear>
           <component :is="Component" :key="currentRoute.path" />
         </Transition>
       </RouterView>
@@ -66,7 +62,7 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 /* CSS变量定义 */
 :root {
   --glass-bg: rgba(255, 255, 255, 0.08);
@@ -202,6 +198,7 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
 
 /* 现代网站优化：减少动画偏好 */
 @media (prefers-reduced-motion: reduce) {
+
   .header-enter-active,
   .header-leave-active,
   .auth-page-enter-active,

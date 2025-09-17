@@ -62,14 +62,8 @@ async function onSubmit() {
             <span class="label-icon">👤</span>
             <span class="label-text">用户名</span>
           </label>
-          <input
-            v-model="form.username"
-            type="text"
-            class="form-input"
-            autocomplete="username"
-            placeholder="输入你的用户名"
-            required
-          />
+          <input v-model="form.username" type="text" class="form-input" autocomplete="username" placeholder="输入你的用户名"
+            required />
         </div>
 
         <div class="form-group">
@@ -77,14 +71,8 @@ async function onSubmit() {
             <span class="label-icon">🔐</span>
             <span class="label-text">密码</span>
           </label>
-          <input
-            v-model="form.password"
-            type="password"
-            class="form-input"
-            autocomplete="current-password"
-            placeholder="输入你的密码"
-            required
-          />
+          <input v-model="form.password" type="password" class="form-input" autocomplete="current-password"
+            placeholder="输入你的密码" required />
         </div>
 
         <div class="form-actions">
@@ -93,11 +81,7 @@ async function onSubmit() {
             <span class="btn-text">{{ loading ? '登录中...' : '进入小屋' }}</span>
           </button>
 
-          <button
-            type="button"
-            class="btn btn-secondary"
-            @click="$router.push({ name: 'register' })"
-          >
+          <button type="button" class="btn btn-secondary" @click="$router.push({ name: 'register' })">
             <span class="btn-icon">📝</span>
             <span class="btn-text">注册新家</span>
           </button>
@@ -107,17 +91,15 @@ async function onSubmit() {
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
 .stardew-login-container {
   min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #87ceeb 0%,
-    #98fb98 25%,
-    #f0e68c 50%,
-    #dda0dd 75%,
-    #ffa07a 100%
-  );
+  background: linear-gradient(135deg,
+      #87ceeb 0%,
+      #98fb98 25%,
+      #f0e68c 50%,
+      #dda0dd 75%,
+      #ffa07a 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -210,11 +192,13 @@ async function onSubmit() {
 }
 
 @keyframes float {
+
   0%,
   100% {
     transform: translateY(0px) scale(1);
     opacity: 0.8;
   }
+
   50% {
     transform: translateY(-15px) scale(1.1);
     opacity: 1;
@@ -281,10 +265,12 @@ async function onSubmit() {
 }
 
 @keyframes bounce {
+
   0%,
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-8px);
   }

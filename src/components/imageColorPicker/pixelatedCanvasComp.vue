@@ -2,26 +2,12 @@
   <div class="pixelated-canvas-container">
     <div class="controls">
       <label for="cellSize">格子边长: {{ cellSize }}px</label>
-      <input
-        type="range"
-        id="cellSize"
-        min="5"
-        max="100"
-        step="1"
-        v-model.number="cellSize"
-        @input="debouncedProcessImage"
-      />
+      <input type="range" id="cellSize" min="5" max="100" step="1" v-model.number="cellSize"
+        @input="debouncedProcessImage" />
 
       <label for="scaleSlider">缩放比例: {{ Math.round(scaleFactor * 100) }}%</label>
-      <input
-        type="range"
-        id="scaleSlider"
-        min="0.1"
-        max="3"
-        step="0.1"
-        v-model.number="scaleFactor"
-        @input="debouncedProcessImage"
-      />
+      <input type="range" id="scaleSlider" min="0.1" max="3" step="0.1" v-model.number="scaleFactor"
+        @input="debouncedProcessImage" />
 
       <button @click="resetScale">重置缩放</button>
       <button @click="autoScale">自适应缩放</button>
@@ -311,7 +297,7 @@ watch(colorFormat, () => {
 })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .pixelated-canvas-container {
   margin-top: 20px;
 }
