@@ -1,83 +1,152 @@
-# CLAUDE.md
+# Development Guidelines
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+## Philosophy
 
-## Development Commands
+### Core Beliefs
 
-### Development Server
-```bash
-pnpm dev
+- **Incremental progress over big bangs** - Small changes that compile and pass tests
+- **Learning from existing code** - Study and plan before implementing
+- **Pragmatic over dogmatic** - Adapt to project reality
+- **Clear intent over clever code** - Be boring and obvious
+
+### Simplicity Means
+
+- Single responsibility per function/class
+- Avoid premature abstractions
+- No clever tricks - choose the boring solution
+- If you need to explain it, it's too complex
+
+## Process
+
+### 1. Planning & Staging
+
+Break complex work into 3-5 stages. Document in `IMPLEMENTATION_PLAN.md`:
+
+```markdown
+## Stage N: [Name]
+**Goal**: [Specific deliverable]
+**Success Criteria**: [Testable outcomes]
+**Tests**: [Specific test cases]
+**Status**: [Not Started|In Progress|Complete]
 ```
-Starts the Vite development server with hot module replacement.
+- Update status as you progress
+- Remove file when all stages are done
 
-### Build Commands
-```bash
-pnpm build      # Full build with type checking
-pnpm build-only # Build without type checking
-pnpm preview    # Preview production build
-```
+### 2. Implementation Flow
 
-### Type Checking and Formatting
-```bash
-pnpm type-check # Run TypeScript type checking
-pnpm format     # Format code with Prettier
-```
+1. **Understand** - Study existing patterns in codebase
+2. **Test** - Write test first (red)
+3. **Implement** - Minimal code to pass (green)
+4. **Refactor** - Clean up with tests passing
+5. **Commit** - With clear message linking to plan
 
-## Architecture Overview
+### 3. When Stuck (After 3 Attempts)
 
-This is a Vue 3 + TypeScript single-page application built with:
+**CRITICAL**: Maximum 3 attempts per issue, then STOP.
 
-### Core Stack
-- **Vue 3** with Composition API
-- **TypeScript** for type safety
-- **Vite** as build tool
-- **Pinia** for state management
-- **Vue Router** for routing
-- **Element Plus** UI component library
-- **Tailwind CSS** for styling
-- **Axios** for HTTP requests
+1. **Document what failed**:
+   - What you tried
+   - Specific error messages
+   - Why you think it failed
 
-### Project Structure
+2. **Research alternatives**:
+   - Find 2-3 similar implementations
+   - Note different approaches used
 
-**Authentication & State Management:**
-- `src/stores/auth.ts` - Authentication store with token/user management
-- Routes with `requiresAuth: true` meta field require authentication
-- Token stored in localStorage, automatic logout on token expiration
+3. **Question fundamentals**:
+   - Is this the right abstraction level?
+   - Can this be split into smaller problems?
+   - Is there a simpler approach entirely?
 
-**API Layer:**
-- `src/service/fetch.ts` - Axios instance with request/response interceptors
-- `src/service/modules/common.ts` - API endpoint definitions
-- API proxy configured to `https://www.osheeep.com` for `/api` routes
+4. **Try different angle**:
+   - Different library/framework feature?
+   - Different architectural pattern?
+   - Remove abstraction instead of adding?
 
-**Key Features:**
-- **Notes Management** - CRUD operations for user notes with quadrant view positioning
-- **Credentials Manager** - Secure password storage with reveal functionality
-- **Study System** - Subject-based markdown file organization
-- **Image Magic** - Image processing with color picker and pixelation worker
-- **Todo Management** - Task organization system
+## Technical Standards
 
-**Component Architecture:**
-- Components organized by feature in `src/components/`
-- Views in `src/views/` follow feature-based structure
-- Composables and utilities in respective directories
+### Architecture Principles
 
-### Development Notes
+- **Composition over inheritance** - Use dependency injection
+- **Interfaces over singletons** - Enable testing and flexibility
+- **Explicit over implicit** - Clear data flow and dependencies
+- **Test-driven when possible** - Never disable tests, fix them
 
-**API Integration:**
-- All API calls go through the centralized fetch instance
-- Authentication token automatically attached to requests
-- Automatic token expiration handling with redirect to login
+### Code Quality
 
-**Routing:**
-- Protected routes require authentication (`meta.requiresAuth: true`)
-- Public routes accessible without login (`meta.public: true`)
-- Automatic redirect handling for authenticated users
+- **Every commit must**:
+  - Compile successfully
+  - Pass all existing tests
+  - Include tests for new functionality
+  - Follow project formatting/linting
 
-**Type Safety:**
-- Comprehensive TypeScript types in `src/types/`
-- API response types defined for all endpoints
-- Vue component props and emits properly typed
+- **Before committing**:
+  - Run formatters/linters
+  - Self-review changes
+  - Ensure commit message explains "why"
 
-**Image Processing:**
-- Web Worker implementation for pixel processing (`src/workers/pixelate.worker.ts`)
-- Canvas-based image manipulation in image magic features
+### Error Handling
+
+- Fail fast with descriptive messages
+- Include context for debugging
+- Handle errors at appropriate level
+- Never silently swallow exceptions
+
+## Decision Framework
+
+When multiple valid approaches exist, choose based on:
+
+1. **Testability** - Can I easily test this?
+2. **Readability** - Will someone understand this in 6 months?
+3. **Consistency** - Does this match project patterns?
+4. **Simplicity** - Is this the simplest solution that works?
+5. **Reversibility** - How hard to change later?
+
+## Project Integration
+
+### Learning the Codebase
+
+- Find 3 similar features/components
+- Identify common patterns and conventions
+- Use same libraries/utilities when possible
+- Follow existing test patterns
+
+### Tooling
+
+- Use project's existing build system
+- Use project's test framework
+- Use project's formatter/linter settings
+- Don't introduce new tools without strong justification
+
+## Quality Gates
+
+### Definition of Done
+
+- [ ] Tests written and passing
+- [ ] Code follows project conventions
+- [ ] No linter/formatter warnings
+- [ ] Commit messages are clear
+- [ ] Implementation matches plan
+- [ ] No TODOs without issue numbers
+
+### Test Guidelines
+
+- Test behavior, not implementation
+- One assertion per test when possible
+- Clear test names describing scenario
+- Use existing test utilities/helpers
+- Tests should be deterministic
+
+## Important Reminders
+
+**NEVER**:
+- Use `--no-verify` to bypass commit hooks
+- Disable tests instead of fixing them
+- Commit code that doesn't compile
+- Make assumptions - verify with existing code
+
+**ALWAYS**:
+- Commit working code incrementally
+- Update plan documentation as you go
+- Learn from existing implementations
+- Stop after 3 failed attempts and reassess
