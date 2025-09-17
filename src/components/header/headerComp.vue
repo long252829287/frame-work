@@ -38,6 +38,8 @@
 
     <!-- 右侧用户区域 -->
     <div class="header-right">
+      <!-- <ThemeSwitcher /> -->
+
       <div v-if="!auth.isAuthenticated" class="auth-buttons">
         <!-- 登录按钮 -->
         <button class="auth-btn login-btn" @click="router.push({ name: 'login' })">
@@ -97,6 +99,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '../../stores/auth'
 import { useRouter, useRoute } from 'vue-router'
+// import ThemeSwitcher from '../themeSwitcher/themeSwitcherComp.vue.vue'
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -182,35 +185,34 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@use '@/assets/scss/themes/theme-manager.scss' as theme;
+
 .stardew-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   height: 70px;
-  z-index: 1000;
+  z-index: theme.$stardew-z-dropdown;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
+  padding: 0 #{theme.theme-spacing('2xl')};
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(139, 69, 19, 0.3);
+  box-shadow: 0 4px 15px #{theme.$stardew-shadow-dark};
   overflow: visible;
   font-family: 'Comic Sans MS', cursive, sans-serif;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all #{theme.$stardew-transition-slow};
 
   /* 现代网站特性：滚动时样式变化 */
   &--scrolled {
     height: 60px;
     backdrop-filter: blur(20px);
-    box-shadow: 0 2px 20px rgba(139, 69, 19, 0.4);
+    box-shadow: 0 2px 20px #{theme.$stardew-shadow-card};
 
     .header-bg {
-      background: linear-gradient(135deg,
-          rgba(255, 248, 220, 0.98) 0%,
-          rgba(240, 230, 140, 0.95) 50%,
-          rgba(255, 239, 213, 0.98) 100%);
+      background: #{theme.theme-bg('bg-secondary')};
     }
 
     .logo-container .logo-icon {
@@ -233,12 +235,9 @@ onUnmounted(() => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg,
-        rgba(255, 248, 220, 0.95) 0%,
-        rgba(240, 230, 140, 0.9) 50%,
-        rgba(255, 239, 213, 0.95) 100%);
+    background: #{theme.theme-bg('bg-secondary')};
     z-index: -1;
-    transition: all 0.3s ease;
+    transition: all #{theme.$stardew-transition-slow};
   }
 
   .nature-decorations {
@@ -254,7 +253,7 @@ onUnmounted(() => {
       position: absolute;
       font-size: 1.2rem;
       animation: float 4s ease-in-out infinite;
-      transition: all 0.3s ease;
+      transition: all #{theme.$stardew-transition-slow};
 
       &.leaf-1 {
         top: 20%;
@@ -312,35 +311,35 @@ onUnmounted(() => {
 .header-left {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: #{theme.theme-spacing('xl')};
 }
 
 .back-button {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  gap: #{theme.theme-spacing('sm')};
+  padding: #{theme.theme-spacing('sm')} #{theme.theme-spacing('lg')};
   border-radius: 20px;
-  color: #8b4513;
+  color: #{theme.theme-color('text-primary')};
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: bold;
+  transition: all #{theme.$stardew-transition-slow};
+  font-weight: #{theme.$stardew-font-weight-semibold};
 
   &:hover {
     background: rgba(139, 69, 19, 0.3);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(139, 69, 19, 0.3);
+    box-shadow: 0 4px 10px #{theme.$stardew-shadow-dark};
   }
 
   .back-icon {
     display: flex;
     align-items: center;
-    transition: transform 0.3s ease;
+    transition: transform #{theme.$stardew-transition-slow};
   }
 
   .back-text {
     font-size: 0.875rem;
-    font-weight: bold;
+    font-weight: #{theme.$stardew-font-weight-semibold};
   }
 
   &:hover .back-icon {
@@ -352,11 +351,11 @@ onUnmounted(() => {
   position: relative;
   cursor: pointer;
   user-select: none;
-  padding: 0.5rem;
+  padding: #{theme.theme-spacing('sm')};
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  transition: transform 0.3s ease;
+  gap: #{theme.theme-spacing('md')};
+  transition: transform #{theme.$stardew-transition-slow};
 
   &:hover {
     transform: scale(1.05);
@@ -365,24 +364,24 @@ onUnmounted(() => {
   .logo-icon {
     font-size: 2rem;
     animation: bounce 2s ease-in-out infinite;
-    transition: all 0.3s ease;
+    transition: all #{theme.$stardew-transition-slow};
   }
 
   .logo-text {
     .logo-main {
       font-size: 1.75rem;
-      font-weight: bold;
-      background: linear-gradient(45deg, #8b4513, #d2691e, #cd853f);
+      font-weight: #{theme.$stardew-font-weight-bold};
+      background: linear-gradient(45deg, #{theme.theme-color('primary-dark')}, #{theme.theme-color('primary')}, #{theme.theme-color('primary-light')});
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3);
-      transition: all 0.3s ease;
+      text-shadow: 2px 2px 4px #{theme.$stardew-shadow-dark};
+      transition: all #{theme.$stardew-transition-slow};
     }
 
     .logo-subtitle {
       font-size: 0.7rem;
-      color: #8b4513;
+      color: #{theme.theme-color('text-primary')};
       text-transform: none;
       letter-spacing: 1px;
       margin-top: -2px;
@@ -406,41 +405,29 @@ onUnmounted(() => {
 .header-right {
   display: flex;
   align-items: center;
+  gap: #{theme.theme-spacing('md')};
 }
 
 .auth-buttons {
   display: flex;
-  gap: 0.75rem;
+  gap: #{theme.theme-spacing('md')};
 }
 
 .auth-btn {
   position: relative;
-  padding: 0.75rem 1.5rem;
-  background: linear-gradient(135deg, #90ee90, #98fb98);
-  border: 2px solid #228b22;
+  padding: #{theme.theme-spacing('md')} #{theme.theme-spacing('xl')};
+  @include theme.theme-button('default');
   border-radius: 25px;
-  color: #006400;
   font-size: 0.875rem;
-  font-weight: bold;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 3px 8px rgba(34, 139, 34, 0.3);
+  transition: all #{theme.$stardew-transition-slow};
 
   &:hover {
-    background: linear-gradient(135deg, #98fb98, #90ee90);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(34, 139, 34, 0.4);
   }
 
   &.register-btn {
-    background: linear-gradient(135deg, #ffb6c1, #ffc0cb);
-    border-color: #ff69b4;
-    color: #8b008b;
-
-    &:hover {
-      background: linear-gradient(135deg, #ffc0cb, #ffb6c1);
-      box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
-    }
+    @include theme.theme-button('secondary');
   }
 }
 
@@ -469,15 +456,15 @@ onUnmounted(() => {
 .user-dropdown {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 1rem;
+  gap: #{theme.theme-spacing('md')};
+  padding: #{theme.theme-spacing('sm')} #{theme.theme-spacing('lg')};
   border-radius: 25px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  border: 2px solid #d2691e;
+  transition: all #{theme.$stardew-transition-slow};
+  border: 2px solid #{theme.theme-color('border-primary')};
 
   &:hover {
-    background: linear-gradient(135deg, rgba(255, 239, 213, 0.95), rgba(255, 248, 220, 0.95));
+    background: #{theme.theme-bg('bg-secondary')};
     transform: translateY(-1px);
   }
 }
@@ -492,7 +479,7 @@ onUnmounted(() => {
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #fff;
+    border: 2px solid #{theme.theme-color('text-inverse')};
     position: relative;
     z-index: 2;
   }
@@ -527,25 +514,25 @@ onUnmounted(() => {
 
   .user-name {
     font-size: 0.875rem;
-    font-weight: bold;
-    color: #8b4513;
+    font-weight: #{theme.$stardew-font-weight-semibold};
+    color: #{theme.theme-color('text-primary')};
     line-height: 1;
   }
 
   .user-status {
     font-size: 0.75rem;
-    color: #228b22;
+    color: #{theme.theme-color('accent-green')};
     line-height: 1;
-    font-weight: bold;
+    font-weight: #{theme.$stardew-font-weight-semibold};
   }
 }
 
 .dropdown-arrow {
-  transition: transform 0.3s ease;
+  transition: transform #{theme.$stardew-transition-slow};
 
   .arrow-icon {
     font-size: 0.8rem;
-    color: #8b4513;
+    color: #{theme.theme-color('text-primary')};
   }
 
   &.open {
@@ -554,20 +541,17 @@ onUnmounted(() => {
 }
 
 .user-menu {
+  @include theme.theme-card;
   position: absolute;
-  top: calc(100% + 0.5rem);
+  top: calc(100% + #{theme.theme-spacing('sm')});
   right: 0;
   min-width: 200px;
-  background: linear-gradient(135deg, rgba(255, 248, 220, 0.98), rgba(255, 239, 213, 0.98));
-  backdrop-filter: blur(10px);
-  border: 2px solid #d2691e;
-  border-radius: 15px;
-  padding: 0.5rem;
+  padding: #{theme.theme-spacing('sm')};
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
-  transition: all 0.3s ease;
-  box-shadow: 0 10px 25px rgba(210, 105, 30, 0.4);
+  transition: all #{theme.$stardew-transition-slow};
+  z-index: theme.$stardew-z-dropdown;
 
   &.show {
     opacity: 1;
@@ -579,25 +563,25 @@ onUnmounted(() => {
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border-radius: 10px;
-  color: #8b4513;
+  gap: #{theme.theme-spacing('md')};
+  padding: #{theme.theme-spacing('md')};
+  border-radius: #{theme.theme-radius('md')};
+  color: #{theme.theme-color('text-primary')};
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: bold;
+  transition: all #{theme.$stardew-transition-normal};
+  font-weight: #{theme.$stardew-font-weight-semibold};
 
   &:hover {
-    background: rgba(210, 105, 30, 0.2);
+    background: #{theme.theme-color('secondary-light')};
     transform: translateX(5px);
   }
 
   &.logout {
-    color: #dc143c;
+    color: #{theme.theme-color('error')};
 
     &:hover {
       background: rgba(220, 20, 60, 0.1);
-      color: #dc143c;
+      color: #{theme.theme-color('error')};
     }
   }
 
@@ -608,21 +592,21 @@ onUnmounted(() => {
 
   span:last-child {
     font-size: 0.875rem;
-    font-weight: bold;
+    font-weight: #{theme.$stardew-font-weight-semibold};
   }
 }
 
 .menu-divider {
   height: 2px;
-  background: linear-gradient(90deg, transparent, #d2691e, transparent);
-  margin: 0.5rem 0;
+  background: linear-gradient(90deg, transparent, #{theme.theme-color('border-primary')}, transparent);
+  margin: #{theme.theme-spacing('sm')} 0;
   border-radius: 1px;
 }
 
 // 响应式设计
 @media (max-width: 768px) {
   .stardew-header {
-    padding: 0 1rem;
+    padding: 0 #{theme.theme-spacing('lg')};
     height: 60px;
 
     &--scrolled {
@@ -631,7 +615,7 @@ onUnmounted(() => {
   }
 
   .header-left {
-    gap: 1rem;
+    gap: #{theme.theme-spacing('lg')};
   }
 
   .logo-container .logo-text {
@@ -645,16 +629,16 @@ onUnmounted(() => {
   }
 
   .auth-buttons {
-    gap: 0.5rem;
+    gap: #{theme.theme-spacing('sm')};
   }
 
   .auth-btn {
-    padding: 0.5rem 1rem;
+    padding: #{theme.theme-spacing('sm')} #{theme.theme-spacing('lg')};
     font-size: 0.8rem;
   }
 
   .back-button {
-    padding: 0.375rem 0.75rem;
+    padding: 0.375rem #{theme.theme-spacing('md')};
 
     .back-text {
       display: none;

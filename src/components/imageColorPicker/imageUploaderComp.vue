@@ -1,6 +1,6 @@
 <template>
   <div class="image-uploader">
-    <label for="file-upload" class="custom-file-upload"> 上传图片 </label>
+    <el-button type="primary" for="file-upload" class="custom-file-upload">上传图片</el-button>
     <input id="file-upload" type="file" accept="image/png, image/jpeg, image/jpg" @change="handleImageUpload" />
     <p class="file-upload-tips" v-if="!imageUrl">请选择一张本地图片</p>
   </div>
@@ -42,24 +42,15 @@ const handleImageUpload = (event: Event) => {
 }
 
 .custom-file-upload {
-  border: 1px solid #409eff;
   display: inline-block;
   padding: 6px 12px;
   cursor: pointer;
-  background-color: #409eff;
-  border-radius: 4px;
   font-size: 12px;
-  color: #fff;
-
-  &:hover {
-    background-color: #66b1ff;
-    border-color: #66b1ff;
-  }
 }
 
 .file-upload-tips {
   font-size: 12px;
-  color: #666;
+  color: #fff;
   margin-top: 10px;
 }
 </style>

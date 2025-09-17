@@ -1,0 +1,376 @@
+// ====================================
+// 全局主题样式 - Global Theme Styles
+// ====================================
+
+@use './themes/theme-manager.scss' as theme;
+
+// 全局根元素样式
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  background: #{theme.theme-bg('bg-primary')};
+  color: #{theme.theme-color('text-primary')};
+  @include theme.theme-texture-bg;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+// 重写 Element Plus 组件的全局样式
+:root {
+  // Element Plus 主题变量覆盖
+  --el-color-primary: #{theme.theme-color('accent-green')};
+  --el-color-success: #{theme.theme-color('success')};
+  --el-color-warning: #{theme.theme-color('warning')};
+  --el-color-danger: #{theme.theme-color('error')};
+  --el-color-info: #{theme.theme-color('info')};
+
+  // 背景色覆盖
+  --el-bg-color: #{theme.theme-color('secondary')};
+  --el-bg-color-page: #{theme.theme-color('secondary-light')};
+  --el-bg-color-overlay: #{theme.theme-color('secondary-dark')};
+
+  // 文字色覆盖
+  --el-text-color-primary: #{theme.theme-color('text-primary')};
+  --el-text-color-regular: #{theme.theme-color('text-secondary')};
+  --el-text-color-secondary: #{theme.theme-color('text-light')};
+  --el-text-color-placeholder: #{theme.theme-color('text-disabled')};
+  --el-text-color-disabled: #{theme.theme-color('text-disabled')};
+
+  // 边框色覆盖
+  --el-border-color: #{theme.theme-color('border-primary')};
+  --el-border-color-light: #{theme.theme-color('border-light')};
+  --el-border-color-lighter: #{theme.theme-color('border-secondary')};
+  --el-border-color-extra-light: #{theme.theme-color('border-light')};
+  --el-border-color-dark: #{theme.theme-color('border-primary')};
+  --el-border-color-darker: #{theme.theme-color('primary-dark')};
+
+  // 圆角覆盖
+  --el-border-radius-base: #{theme.theme-radius('md')};
+  --el-border-radius-small: #{theme.theme-radius('sm')};
+  --el-border-radius-round: #{theme.theme-radius('xl')};
+  --el-border-radius-circle: 50%;
+
+  // 阴影覆盖
+  --el-box-shadow: 0 2px 12px 0 #{theme.$stardew-shadow-dark};
+  --el-box-shadow-light: 0 2px 4px #{theme.$stardew-shadow-inset};
+  --el-box-shadow-base: 0 2px 4px #{theme.$stardew-shadow-dark};
+  --el-box-shadow-dark: 0 4px 12px #{theme.$stardew-shadow-dark};
+}
+
+// 全局 Element Plus 组件样式覆盖
+.el-button {
+  @include theme.theme-button('default');
+
+  &.el-button--primary {
+    @include theme.theme-button('secondary');
+  }
+
+  &.el-button--success {
+    background: #{theme.theme-btn('btn-primary-bg')};
+    border-color: #{theme.theme-btn('btn-primary-border')};
+
+    &:hover {
+      background: #{theme.theme-btn('btn-primary-hover')};
+    }
+  }
+}
+
+.el-input {
+  .el-input__wrapper {
+    @include theme.theme-input;
+  }
+}
+
+.el-textarea {
+  .el-textarea__inner {
+    @include theme.theme-input;
+  }
+}
+
+.el-select {
+  .el-select__wrapper {
+    @include theme.theme-input;
+  }
+}
+
+.el-form-item {
+  .el-form-item__label {
+    color: #{theme.theme-color('text-primary')};
+    font-weight: #{theme.$stardew-font-weight-medium};
+  }
+}
+
+.el-card {
+  @include theme.theme-card;
+
+  .el-card__header {
+    background: #{theme.theme-bg('bg-secondary')};
+    border-bottom: 2px solid #{theme.theme-color('border-primary')};
+    color: #{theme.theme-color('text-primary')};
+    font-weight: #{theme.$stardew-font-weight-semibold};
+  }
+
+  .el-card__body {
+    color: #{theme.theme-color('text-primary')};
+  }
+}
+
+.el-dialog {
+  @include theme.theme-card;
+
+  .el-dialog__header {
+    background: #{theme.theme-bg('bg-secondary')};
+    color: #{theme.theme-color('text-primary')};
+    font-weight: #{theme.$stardew-font-weight-semibold};
+    border-bottom: 2px solid #{theme.theme-color('border-primary')};
+  }
+
+  .el-dialog__body {
+    background: #{theme.theme-bg('bg-card')};
+    color: #{theme.theme-color('text-primary')};
+  }
+}
+
+.el-message-box {
+  @include theme.theme-card;
+
+  .el-message-box__header {
+    color: #{theme.theme-color('text-primary')};
+    font-weight: #{theme.$stardew-font-weight-semibold};
+  }
+
+  .el-message-box__content {
+    color: #{theme.theme-color('text-secondary')};
+  }
+}
+
+.el-notification {
+  @include theme.theme-card;
+
+  .el-notification__title {
+    color: #{theme.theme-color('text-primary')};
+    font-weight: #{theme.$stardew-font-weight-semibold};
+  }
+
+  .el-notification__content {
+    color: #{theme.theme-color('text-secondary')};
+  }
+}
+
+.el-table {
+  background: #{theme.theme-bg('bg-card')};
+  border: 2px solid #{theme.theme-color('border-primary')};
+  border-radius: #{theme.theme-radius('lg')};
+
+  .el-table__header {
+    background: #{theme.theme-bg('bg-secondary')};
+
+    th {
+      background: #{theme.theme-bg('bg-secondary')};
+      color: #{theme.theme-color('text-primary')};
+      font-weight: #{theme.$stardew-font-weight-semibold};
+      border-bottom: 2px solid #{theme.theme-color('border-primary')};
+    }
+  }
+
+  .el-table__body {
+    tr {
+      background: #{theme.theme-bg('bg-card')};
+
+      &:hover {
+        background: #{theme.theme-color('secondary-light')};
+      }
+
+      td {
+        color: #{theme.theme-color('text-primary')};
+        border-bottom: 1px solid #{theme.theme-color('border-light')};
+      }
+    }
+  }
+}
+
+.el-menu {
+  background: #{theme.theme-bg('bg-card')};
+  border-right: 2px solid #{theme.theme-color('border-primary')};
+
+  .el-menu-item {
+    color: #{theme.theme-color('text-primary')};
+
+    &:hover {
+      background: #{theme.theme-color('secondary-light')};
+      color: #{theme.theme-color('accent-green')};
+    }
+
+    &.is-active {
+      background: #{theme.theme-color('accent-green')};
+      color: #{theme.theme-color('text-inverse')};
+    }
+  }
+}
+
+.el-pagination {
+  .el-pager li {
+    background: #{theme.theme-bg('bg-card')};
+    border: 1px solid #{theme.theme-color('border-primary')};
+    color: #{theme.theme-color('text-primary')};
+
+    &:hover {
+      background: #{theme.theme-color('secondary-light')};
+    }
+
+    &.is-active {
+      background: #{theme.theme-color('accent-green')};
+      color: #{theme.theme-color('text-inverse')};
+    }
+  }
+
+  .btn-prev, .btn-next {
+    background: #{theme.theme-bg('bg-card')};
+    border: 1px solid #{theme.theme-color('border-primary')};
+    color: #{theme.theme-color('text-primary')};
+
+    &:hover {
+      background: #{theme.theme-color('secondary-light')};
+    }
+  }
+}
+
+.el-loading-mask {
+  background-color: #{theme.theme-bg('bg-overlay')};
+
+  .el-loading-spinner {
+    .circular {
+      color: #{theme.theme-color('accent-green')};
+    }
+
+    .el-loading-text {
+      color: #{theme.theme-color('text-inverse')};
+      font-weight: #{theme.$stardew-font-weight-medium};
+    }
+  }
+}
+
+// 滚动条样式
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #{theme.theme-color('secondary-dark')};
+  border-radius: #{theme.theme-radius('sm')};
+}
+
+::-webkit-scrollbar-thumb {
+  background: #{theme.theme-color('primary-dark')};
+  border-radius: #{theme.theme-radius('sm')};
+
+  &:hover {
+    background: #{theme.theme-color('primary')};
+  }
+}
+
+// 选中文字样式
+::selection {
+  background: #{theme.theme-color('accent-green')};
+  color: #{theme.theme-color('text-inverse')};
+}
+
+::-moz-selection {
+  background: #{theme.theme-color('accent-green')};
+  color: #{theme.theme-color('text-inverse')};
+}
+
+// 焦点样式
+:focus-visible {
+  outline: 2px solid #{theme.theme-color('accent-green')};
+  outline-offset: 2px;
+  border-radius: #{theme.theme-radius('sm')};
+}
+
+// 链接样式
+a {
+  color: #{theme.theme-color('accent-green')};
+  text-decoration: none;
+  transition: color #{theme.$stardew-transition-normal};
+
+  &:hover {
+    color: #{theme.theme-color('accent-green-light')};
+    text-decoration: underline;
+  }
+
+  &:visited {
+    color: #{theme.theme-color('accent-green-dark')};
+  }
+}
+
+// 代码块样式
+code {
+  background: #{theme.theme-color('secondary-dark')};
+  color: #{theme.theme-color('text-primary')};
+  padding: 2px 4px;
+  border-radius: #{theme.theme-radius('sm')};
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+}
+
+pre {
+  background: #{theme.theme-color('secondary-dark')};
+  color: #{theme.theme-color('text-primary')};
+  padding: #{theme.theme-spacing('md')};
+  border-radius: #{theme.theme-radius('md')};
+  border: 1px solid #{theme.theme-color('border-primary')};
+  overflow-x: auto;
+
+  code {
+    background: none;
+    padding: 0;
+  }
+}
+
+// 引用块样式
+blockquote {
+  background: #{theme.theme-color('secondary-light')};
+  border-left: 4px solid #{theme.theme-color('accent-green')};
+  padding: #{theme.theme-spacing('md')};
+  margin: #{theme.theme-spacing('md')} 0;
+  border-radius: 0 #{theme.theme-radius('md')} #{theme.theme-radius('md')} 0;
+  color: #{theme.theme-color('text-secondary')};
+  font-style: italic;
+}
+
+// 分割线样式
+hr {
+  border: none;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #{theme.theme-color('border-primary')}, transparent);
+  margin: #{theme.theme-spacing('xl')} 0;
+}
+
+// 响应式调整
+@media (max-width: 768px) {
+  .el-dialog {
+    width: 90% !important;
+    margin: 5vh auto !important;
+  }
+
+  .el-message-box {
+    width: 90% !important;
+  }
+
+  .el-table {
+    font-size: 14px;
+  }
+}
+
+// 打印样式
+@media print {
+  * {
+    background: white !important;
+    color: black !important;
+    box-shadow: none !important;
+  }
+}

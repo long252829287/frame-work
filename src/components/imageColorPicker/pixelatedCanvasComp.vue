@@ -1,13 +1,21 @@
 <template>
   <div class="pixelated-canvas-container">
-    <el-form class="controls" label-width="auto" :model="formLabelAlign" style="max-width: 600px" label-position="left">
+    <el-form class="controls" label-width="auto" :model="formLabelAlign" label-position="left">
       <el-form-item :label="`格子边长: ${cellSize}px`">
-        <el-slider v-model.number="cellSize" :min="5" :max="100" show-input size="small"
-          @change="debouncedProcessImage" />
+        <div class="slider-container">
+          <el-slider v-model.number="cellSize" :min="5" :max="100" size="small" class="mobile-slider"
+            @change="debouncedProcessImage" />
+          <el-input-number v-model="cellSize" :min="5" :max="100" size="small" class="slider-input"
+            @change="debouncedProcessImage" />
+        </div>
       </el-form-item>
       <el-form-item :label="`缩放比例: ${Math.round(scaleFactor * 100)}%`">
-        <el-slider v-model.number="scaleFactor" :min="0.3" :max="3" show-input size="small"
-          @change="debouncedProcessImage" />
+        <div class="slider-container">
+          <el-slider v-model.number="scaleFactor" :min="0.3" :max="3" :step="0.1" size="small" class="mobile-slider"
+            @change="debouncedProcessImage" />
+          <el-input-number v-model="scaleFactor" :min="0.3" :max="3" :step="0.1" size="small" class="slider-input"
+            @change="debouncedProcessImage" />
+        </div>
       </el-form-item>
       <el-form-item label="颜色格式">
         <el-select v-model="colorFormat" placeholder="" style="width: 120px">
@@ -16,9 +24,11 @@
         </el-select>
       </el-form-item>
       <el-form-item label="操作">
-        <el-button @click="resetScale">重置缩放</el-button>
-        <el-button @click="autoScale">自适应缩放</el-button>
-        <el-button @click="analyzeColors" type="primary">开始解析</el-button>
+        <div class="button-group">
+          <el-button @click="resetScale" size="small">重置缩放</el-button>
+          <el-button @click="autoScale" size="small">自适应缩放</el-button>
+          <el-button @click="analyzeColors" type="primary" size="small">开始解析</el-button>
+        </div>
       </el-form-item>
     </el-form>
 
@@ -35,7 +45,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, reactive } from 'vue'
 import Color from 'color'
-import colorData from '@/json/oshshabi.json'
+import colorData from '../../json/oshshabi.json'
 
 const formLabelAlign = reactive({
   name: '',
@@ -311,29 +321,152 @@ watch(colorFormat, () => {
 </script>
 
 <style lang="scss" scoped>
+@use '@/assets/scss/themes/theme-manager.scss' as theme;
+
 .pixelated-canvas-container {
-  margin-top: 20px;
+  margin-top: #{theme.theme-spacing('xl')};
+  background: #{theme.theme-bg('bg-primary')};
+  min-height: 100vh;
+  padding: #{theme.theme-spacing('xl')};
+  position: relative;
+
+  @include theme.theme-texture-bg;
+
+  >* {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .controls {
-  margin-bottom: 20px;
-  gap: 5px;
-  padding: 15px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+  @include theme.theme-card;
+  margin-bottom: #{theme.theme-spacing('xl')};
+  gap: #{theme.theme-spacing('sm')};
+  padding: #{theme.theme-spacing('xl')};
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.controls label {
-  font-weight: 500;
-  color: #333;
-  white-space: nowrap;
-  margin-right: 10px;
+.controls :deep(.el-form-item) {
+  margin-bottom: #{theme.theme-spacing('lg')};
+
+  .el-form-item__label {
+    font-weight: #{theme.$stardew-font-weight-semibold};
+    color: #{theme.theme-color('text-primary')};
+    white-space: nowrap;
+    font-size: 14px;
+    text-shadow: 1px 1px 2px #{theme.$stardew-shadow-light};
+  }
+}
+
+// 滑块容器响应式布局
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: #{theme.theme-spacing('md')};
+  width: 100%;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: #{theme.theme-spacing('sm')};
+  }
+}
+
+.mobile-slider {
+  flex: 1;
+  min-width: 0;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+.slider-input {
+  width: 80px;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+}
+
+// 按钮组响应式布局
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: #{theme.theme-spacing('sm')};
+  width: 100%;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+
+    .el-button {
+      width: 100%;
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1024px) {
+    .el-button {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+}
+
+// 按钮样式 - 使用主题系统
+.controls :deep(.el-button) {
+  @include theme.theme-button('default');
+
+  &.el-button--primary {
+    @include theme.theme-button('secondary');
+  }
+}
+
+// 下拉选择框样式
+.controls :deep(.el-select) {
+  .el-select__wrapper {
+    @include theme.theme-input;
+  }
+}
+
+// 滑块样式
+.controls :deep(.el-slider) {
+  .el-slider__runway {
+    background: #{theme.$stardew-slider-track};
+    border-radius: #{theme.theme-radius('sm')};
+  }
+
+  .el-slider__bar {
+    background: #{theme.$stardew-slider-fill};
+    border-radius: #{theme.theme-radius('sm')};
+  }
+
+  .el-slider__button {
+    background: #{theme.$stardew-slider-thumb};
+    border: 2px solid #{theme.theme-color('border-primary')};
+    box-shadow: 0 2px 6px #{theme.$stardew-shadow-dark};
+  }
+}
+
+// 数字输入框样式
+.controls :deep(.el-input-number) {
+  .el-input__wrapper {
+    @include theme.theme-input;
+  }
+
+  .el-input__inner {
+    color: #{theme.theme-color('text-primary')};
+    font-weight: #{theme.$stardew-font-weight-medium};
+  }
 }
 
 .canvas-wrapper {
   position: relative;
   display: inline-block;
+  @include theme.theme-card;
+  padding: #{theme.theme-spacing('lg')};
 }
 
 .loading-overlay {
@@ -342,31 +475,51 @@ watch(colorFormat, () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.8);
+  background-color: #{theme.theme-bg('bg-overlay')};
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: #{theme.$stardew-z-overlay};
+  border-radius: #{theme.theme-radius('xl')};
 }
 
 .loading-overlay span {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 4px;
-  font-weight: 500;
+  @include theme.theme-button('secondary');
+  padding: #{theme.theme-spacing('md')} #{theme.theme-spacing('2xl')};
+  border-radius: #{theme.theme-radius('lg')};
 }
 
 canvas {
   max-width: 100%;
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 3px solid #{theme.theme-color('border-primary')};
+  border-radius: #{theme.theme-radius('lg')};
+  box-shadow: inset 0 2px 4px #{theme.$stardew-shadow-inset},
+  0 4px 12px #{theme.$stardew-shadow-card};
+  background: #{theme.theme-color('secondary-lightest')};
 }
 
 .loading-indicator {
-  padding: 20px;
-  background-color: #f0f0f0;
+  padding: #{theme.theme-spacing('xl')};
+  @include theme.theme-card;
   text-align: center;
+  color: #{theme.theme-color('text-primary')};
+  font-weight: #{theme.$stardew-font-weight-medium};
+}
+
+// 响应式调整
+@media (max-width: 768px) {
+  .pixelated-canvas-container {
+    padding: #{theme.theme-spacing('md')};
+    margin-top: #{theme.theme-spacing('md')};
+  }
+
+  .controls {
+    padding: #{theme.theme-spacing('lg')};
+    margin-bottom: #{theme.theme-spacing('lg')};
+  }
+
+  .canvas-wrapper {
+    padding: #{theme.theme-spacing('md')};
+  }
 }
 </style>

@@ -1,0 +1,252 @@
+// ====================================
+// 主题管理器 - Theme Manager
+// ====================================
+
+// 当前激活的主题
+$current-theme: 'stardew-valley' !default;
+
+// 导入主题文件
+@use './stardew-valley.scss' as stardew;
+@use 'sass:map';
+
+// 主题变量映射 - 便于后续扩展其他主题
+// Theme Variable Mapping - Easy to extend for other themes
+$theme-colors: (
+  // 主色调
+  'primary-darkest': stardew.$stardew-primary-darkest,
+  'primary-dark': stardew.$stardew-primary-dark,
+  'primary': stardew.$stardew-primary,
+  'primary-light': stardew.$stardew-primary-light,
+  'primary-lightest': stardew.$stardew-primary-lightest,
+
+  // 次要色调
+  'secondary-darkest': stardew.$stardew-secondary-darkest,
+  'secondary-dark': stardew.$stardew-secondary-dark,
+  'secondary': stardew.$stardew-secondary,
+  'secondary-light': stardew.$stardew-secondary-light,
+  'secondary-lightest': stardew.$stardew-secondary-lightest,
+
+  // 强调色
+  'accent-green-dark': stardew.$stardew-accent-green-dark,
+  'accent-green': stardew.$stardew-accent-green,
+  'accent-green-light': stardew.$stardew-accent-green-light,
+  'accent-green-bright': stardew.$stardew-accent-green-bright,
+
+  'accent-orange-dark': stardew.$stardew-accent-orange-dark,
+  'accent-orange': stardew.$stardew-accent-orange,
+  'accent-orange-light': stardew.$stardew-accent-orange-light,
+  'accent-orange-bright': stardew.$stardew-accent-orange-bright,
+
+  // 功能色
+  'success': stardew.$stardew-success,
+  'warning': stardew.$stardew-warning,
+  'error': stardew.$stardew-error,
+  'info': stardew.$stardew-info,
+
+  // 文字色
+  'text-primary': stardew.$stardew-text-primary,
+  'text-secondary': stardew.$stardew-text-secondary,
+  'text-light': stardew.$stardew-text-light,
+  'text-inverse': stardew.$stardew-text-inverse,
+  'text-disabled': stardew.$stardew-text-disabled,
+
+  // 边框色
+  'border-primary': stardew.$stardew-border-primary,
+  'border-secondary': stardew.$stardew-border-secondary,
+  'border-light': stardew.$stardew-border-light,
+  'border-accent': stardew.$stardew-border-accent,
+) !default;
+
+$theme-backgrounds: (
+  'bg-primary': stardew.$stardew-bg-primary,
+  'bg-secondary': stardew.$stardew-bg-secondary,
+  'bg-card': stardew.$stardew-bg-card,
+  'bg-overlay': stardew.$stardew-bg-overlay,
+) !default;
+
+$theme-buttons: (
+  'btn-primary-bg': stardew.$stardew-btn-primary-bg,
+  'btn-primary-border': stardew.$stardew-btn-primary-border,
+  'btn-primary-hover': stardew.$stardew-btn-primary-hover,
+  'btn-secondary-bg': stardew.$stardew-btn-secondary-bg,
+  'btn-secondary-border': stardew.$stardew-btn-secondary-border,
+  'btn-secondary-hover': stardew.$stardew-btn-secondary-hover,
+  'btn-default-bg': stardew.$stardew-btn-default-bg,
+  'btn-default-border': stardew.$stardew-btn-default-border,
+  'btn-default-hover': stardew.$stardew-btn-default-hover,
+) !default;
+
+$theme-inputs: (
+  'input-bg': stardew.$stardew-input-bg,
+  'input-border': stardew.$stardew-input-border,
+  'input-focus': stardew.$stardew-input-focus,
+  'input-disabled': stardew.$stardew-input-disabled,
+) !default;
+
+$theme-spacing: (
+  'xs': stardew.$stardew-spacing-xs,
+  'sm': stardew.$stardew-spacing-sm,
+  'md': stardew.$stardew-spacing-md,
+  'lg': stardew.$stardew-spacing-lg,
+  'xl': stardew.$stardew-spacing-xl,
+  '2xl': stardew.$stardew-spacing-2xl,
+) !default;
+
+$theme-radius: (
+  'sm': stardew.$stardew-radius-sm,
+  'md': stardew.$stardew-radius-md,
+  'lg': stardew.$stardew-radius-lg,
+  'xl': stardew.$stardew-radius-xl,
+) !default;
+
+// 工具函数 - 获取主题色彩
+// Utility Functions - Get theme colors
+@function theme-color($key) {
+  @if map.has-key($theme-colors, $key) {
+    @return map.get($theme-colors, $key);
+  }
+  @warn "Unknown theme color: #{$key}";
+  @return null;
+}
+
+@function theme-bg($key) {
+  @if map.has-key($theme-backgrounds, $key) {
+    @return map.get($theme-backgrounds, $key);
+  }
+  @warn "Unknown theme background: #{$key}";
+  @return null;
+}
+
+@function theme-btn($key) {
+  @if map.has-key($theme-buttons, $key) {
+    @return map.get($theme-buttons, $key);
+  }
+  @warn "Unknown theme button: #{$key}";
+  @return null;
+}
+
+@function theme-input($key) {
+  @if map.has-key($theme-inputs, $key) {
+    @return map.get($theme-inputs, $key);
+  }
+  @warn "Unknown theme input: #{$key}";
+  @return null;
+}
+
+@function theme-spacing($key) {
+  @if map.has-key($theme-spacing, $key) {
+    @return map.get($theme-spacing, $key);
+  }
+  @warn "Unknown theme spacing: #{$key}";
+  @return null;
+}
+
+@function theme-radius($key) {
+  @if map.has-key($theme-radius, $key) {
+    @return map.get($theme-radius, $key);
+  }
+  @warn "Unknown theme radius: #{$key}";
+  @return null;
+}
+
+// 主题混合器导出
+// Theme Mixins Export
+@mixin theme-card {
+  @include stardew.stardew-card;
+}
+
+@mixin theme-button($type: 'default') {
+  @include stardew.stardew-button($type);
+}
+
+@mixin theme-input {
+  @include stardew.stardew-input;
+}
+
+@mixin theme-texture-bg {
+  @include stardew.stardew-texture-bg;
+}
+
+// 导出变量供其他模块使用
+$stardew-font-weight-normal: stardew.$stardew-font-weight-normal;
+$stardew-font-weight-medium: stardew.$stardew-font-weight-medium;
+$stardew-font-weight-semibold: stardew.$stardew-font-weight-semibold;
+$stardew-font-weight-bold: stardew.$stardew-font-weight-bold;
+
+$stardew-transition-fast: stardew.$stardew-transition-fast;
+$stardew-transition-normal: stardew.$stardew-transition-normal;
+$stardew-transition-slow: stardew.$stardew-transition-slow;
+
+$stardew-z-dropdown: stardew.$stardew-z-dropdown;
+$stardew-z-modal: stardew.$stardew-z-modal;
+$stardew-z-tooltip: stardew.$stardew-z-tooltip;
+$stardew-z-overlay: stardew.$stardew-z-overlay;
+
+$stardew-shadow-light: stardew.$stardew-shadow-light;
+$stardew-shadow-dark: stardew.$stardew-shadow-dark;
+$stardew-shadow-inset: stardew.$stardew-shadow-inset;
+$stardew-shadow-card: stardew.$stardew-shadow-card;
+
+$stardew-wood-pattern: stardew.$stardew-wood-pattern;
+$stardew-dot-pattern: stardew.$stardew-dot-pattern;
+
+$stardew-slider-track: stardew.$stardew-slider-track;
+$stardew-slider-fill: stardew.$stardew-slider-fill;
+$stardew-slider-thumb: stardew.$stardew-slider-thumb;
+
+// CSS 自定义属性导出（用于运行时主题切换）
+// CSS Custom Properties Export (for runtime theme switching)
+:root {
+  // 颜色变量
+  --theme-primary-darkest: #{theme-color('primary-darkest')};
+  --theme-primary-dark: #{theme-color('primary-dark')};
+  --theme-primary: #{theme-color('primary')};
+  --theme-primary-light: #{theme-color('primary-light')};
+  --theme-primary-lightest: #{theme-color('primary-lightest')};
+
+  --theme-secondary-darkest: #{theme-color('secondary-darkest')};
+  --theme-secondary-dark: #{theme-color('secondary-dark')};
+  --theme-secondary: #{theme-color('secondary')};
+  --theme-secondary-light: #{theme-color('secondary-light')};
+  --theme-secondary-lightest: #{theme-color('secondary-lightest')};
+
+  --theme-accent-green-dark: #{theme-color('accent-green-dark')};
+  --theme-accent-green: #{theme-color('accent-green')};
+  --theme-accent-green-light: #{theme-color('accent-green-light')};
+  --theme-accent-green-bright: #{theme-color('accent-green-bright')};
+
+  --theme-accent-orange-dark: #{theme-color('accent-orange-dark')};
+  --theme-accent-orange: #{theme-color('accent-orange')};
+  --theme-accent-orange-light: #{theme-color('accent-orange-light')};
+  --theme-accent-orange-bright: #{theme-color('accent-orange-bright')};
+
+  --theme-success: #{theme-color('success')};
+  --theme-warning: #{theme-color('warning')};
+  --theme-error: #{theme-color('error')};
+  --theme-info: #{theme-color('info')};
+
+  --theme-text-primary: #{theme-color('text-primary')};
+  --theme-text-secondary: #{theme-color('text-secondary')};
+  --theme-text-light: #{theme-color('text-light')};
+  --theme-text-inverse: #{theme-color('text-inverse')};
+  --theme-text-disabled: #{theme-color('text-disabled')};
+
+  --theme-border-primary: #{theme-color('border-primary')};
+  --theme-border-secondary: #{theme-color('border-secondary')};
+  --theme-border-light: #{theme-color('border-light')};
+  --theme-border-accent: #{theme-color('border-accent')};
+
+  // 间距变量
+  --theme-spacing-xs: #{theme-spacing('xs')};
+  --theme-spacing-sm: #{theme-spacing('sm')};
+  --theme-spacing-md: #{theme-spacing('md')};
+  --theme-spacing-lg: #{theme-spacing('lg')};
+  --theme-spacing-xl: #{theme-spacing('xl')};
+  --theme-spacing-2xl: #{theme-spacing('2xl')};
+
+  // 圆角变量
+  --theme-radius-sm: #{theme-radius('sm')};
+  --theme-radius-md: #{theme-radius('md')};
+  --theme-radius-lg: #{theme-radius('lg')};
+  --theme-radius-xl: #{theme-radius('xl')};
+}

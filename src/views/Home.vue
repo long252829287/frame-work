@@ -134,7 +134,7 @@ const tiles: TileItem[] = [
     subtitle: 'Image Color Picker',
     icon: '🔄',
     size: 'l',
-    color: 'green',
+    color: 'orange',
     route: '/imageMagic',
   },
 ]
@@ -153,66 +153,103 @@ function handleTile(t: TileItem) {
 </script>
 
 <style scoped lang="scss">
+@use '@/assets/scss/themes/theme-manager.scss' as theme;
+
 .desktop {
   min-height: 100vh;
-  padding: 28px;
+  padding: #{theme.theme-spacing('2xl')};
   padding-top: 90px;
-  background:
-    radial-gradient(1200px 800px at 10% 10%, rgba(99, 102, 241, 0.14) 0%, transparent 60%),
-    radial-gradient(1000px 700px at 90% 20%, rgba(56, 189, 248, 0.12) 0%, transparent 60%),
-    radial-gradient(1400px 900px at 50% 100%, rgba(244, 114, 182, 0.12) 0%, transparent 70%),
-    linear-gradient(180deg, #fbfdff 0%, #f9fbff 40%, #f8f8ff 100%);
+  background: #{theme.theme-bg('bg-primary')};
+  @include theme.theme-texture-bg;
+  position: relative;
+
+  // 添加星露谷风格的装饰效果
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(34, 139, 34, 0.1) 0%, transparent 40%),
+      radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
+      radial-gradient(circle at 50% 80%, rgba(244, 228, 188, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  >* {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .start-grid {
   display: grid;
   grid-auto-flow: dense;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
+  gap: #{theme.theme-spacing('md')};
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .tile {
+  @include theme.theme-card;
   position: relative;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
   cursor: pointer;
-  border-radius: 14px;
-  padding: 14px;
-  color: #0f172a;
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(10px) saturate(120%);
+  padding: #{theme.theme-spacing('lg')};
+  color: #{theme.theme-color('text-primary')};
   transform: translateZ(0);
-  transition:
-    transform 160ms ease,
-    box-shadow 160ms ease,
-    filter 160ms ease;
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
+  transition: transform #{theme.$stardew-transition-normal},
+  box-shadow #{theme.$stardew-transition-normal},
+  filter #{theme.$stardew-transition-normal};
+
+  // 添加木质纹理效果
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: #{theme.$stardew-wood-pattern};
+    opacity: 0.3;
+    z-index: 0;
+  }
+
+  >* {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .tile:focus-visible {
-  outline: 2px solid rgba(59, 130, 246, 0.6);
+  outline: 2px solid #{theme.theme-color('accent-green')};
   outline-offset: 2px;
 }
 
 .tile:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.03);
+  transform: translateY(-2px) scale(1.02);
+  filter: brightness(1.05);
+  box-shadow: inset 0 2px 4px #{theme.$stardew-shadow-light},
+  0 8px 20px #{theme.$stardew-shadow-card};
 }
 
 .tile:active {
-  transform: translateY(0);
-  filter: brightness(0.98);
+  transform: translateY(0) scale(0.98);
+  filter: brightness(0.95);
 }
 
 .tile__icon {
   font-size: 28px;
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: #{theme.theme-spacing('md')};
+  left: #{theme.theme-spacing('md')};
+  filter: drop-shadow(2px 2px 4px #{theme.$stardew-shadow-dark});
 }
 
 .tile__text {
@@ -220,14 +257,17 @@ function handleTile(t: TileItem) {
 }
 
 .tile__title {
-  font-weight: 800;
+  font-weight: #{theme.$stardew-font-weight-bold};
   letter-spacing: 0.3px;
+  color: #{theme.theme-color('text-secondary')};
+  text-shadow: 1px 1px 2px #{theme.$stardew-shadow-light};
 }
 
 .tile__sub {
   font-size: 12px;
   opacity: 0.85;
   margin-top: 2px;
+  color: #{theme.theme-color('text-secondary')};
 }
 
 /* sizes (using grid spans) */
@@ -268,8 +308,18 @@ function handleTile(t: TileItem) {
 }
 
 @media (max-width: 600px) {
+  .desktop {
+    padding: #{theme.theme-spacing('lg')};
+    padding-top: 80px;
+  }
+
   .start-grid {
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: #{theme.theme-spacing('sm')};
+  }
+
+  .tile {
+    padding: #{theme.theme-spacing('sm')};
   }
 
   .tile--m,
@@ -285,44 +335,89 @@ function handleTile(t: TileItem) {
   }
 }
 
-/* color variants — lighter, youthful pastels */
+/* color variants — 星露谷风格配色 */
 .tile--blue {
-  background: linear-gradient(145deg, rgba(96, 165, 250, 0.45), rgba(59, 130, 246, 0.35));
+  background: linear-gradient(145deg,
+      rgba(56, 168, 237, 0.5) 0%,
+      rgba(19, 145, 224, 0.7) 100%);
+  border-color: #0e1ab9f7;
 }
 
 .tile--purple {
-  background: linear-gradient(145deg, rgba(167, 139, 250, 0.45), rgba(147, 51, 234, 0.32));
+  background: linear-gradient(145deg,
+      rgba(236, 188, 154, 0.7) 0%,
+      rgba(157, 97, 70, 0.9) 100%);
+  border-color: #{theme.theme-color('primary-dark')};
 }
 
 .tile--teal {
-  background: linear-gradient(145deg, rgba(94, 234, 212, 0.45), rgba(45, 212, 191, 0.32));
+  background: linear-gradient(145deg,
+      rgba(94, 234, 212, 0.45) 0%,
+      rgba(45, 212, 191, 0.32) 100%);
+  border-color: #{theme.theme-color('secondary-dark')};
 }
 
 .tile--orange {
-  background: linear-gradient(145deg, rgba(253, 186, 116, 0.48), rgba(251, 146, 60, 0.34));
+  background: linear-gradient(145deg,
+      rgba(253, 186, 116, 0.48) 0%,
+      rrgba(251, 146, 60, 0.35) 100%);
+  border-color: #{theme.theme-color('accent-orange-dark')};
 }
 
 .tile--pink {
-  background: linear-gradient(145deg, rgba(244, 114, 182, 0.48), rgba(236, 72, 153, 0.34));
+  background: linear-gradient(145deg,
+      rgba(244, 114, 182, 0.48) 0%,
+      rgba(236, 72, 153, 0.34) 100%);
+  border-color: #e874ae;
 }
 
 .tile--slate {
-  background: linear-gradient(145deg, rgba(203, 213, 225, 0.6), rgba(148, 163, 184, 0.4));
+  background: linear-gradient(145deg,
+      rgba(203, 213, 225, 0.9) 0%,
+      rgba(148, 163, 184, 1) 100%);
+  border-color: #{theme.theme-color('text-secondary')};
 }
 
 .tile--green {
-  background: linear-gradient(145deg, rgba(110, 231, 183, 0.45), rgba(34, 197, 94, 0.35));
+  background: linear-gradient(145deg,
+      rgba(110, 231, 183, 0.45) 0%,
+      rgba(34, 197, 94, 0.35) 100%);
+  border-color: #{theme.theme-color('accent-green')};
 }
 
-/* decorative highlight */
+/* 装饰性高光 - 更适合星露谷风格 */
 .tile::after {
   content: '';
   position: absolute;
   inset: -20% -20% auto auto;
   height: 140px;
   width: 140px;
-  background: radial-gradient(80px 80px at 50% 50%, rgba(255, 255, 255, 0.65), transparent 70%);
+  background: radial-gradient(80px 80px at 50% 50%, rgba(244, 228, 188, 0.4), transparent 70%);
   filter: blur(14px);
   transform: rotate(25deg);
+  z-index: 0;
+}
+
+/* 现代网站优化：减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .tile {
+    transition: none;
+  }
+
+  .tile:hover {
+    transform: none;
+    filter: none;
+  }
+}
+
+/* 现代网站优化：高对比度模式 */
+@media (prefers-contrast: high) {
+  .tile {
+    border-width: 2px;
+  }
+
+  .tile__title {
+    text-shadow: none;
+  }
 }
 </style>
