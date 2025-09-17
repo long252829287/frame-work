@@ -36,7 +36,7 @@ export const useTodoStore = defineStore('todo', () => {
     (val) => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(val))
     },
-    { deep: true }
+    { deep: true },
   )
 
   const byQuadrant = computed(() => ({
@@ -87,5 +87,3 @@ export const useTodoStore = defineStore('todo', () => {
     clearCompleted,
   }
 })
-
-

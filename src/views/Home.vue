@@ -1,8 +1,16 @@
 <template>
   <div class="desktop">
     <div class="start-grid" role="grid" aria-label="start modules">
-      <button v-for="t in tiles" :key="t.key" class="tile" :class="['tile--' + t.size, 'tile--' + t.color]"
-        type="button" role="button" tabindex="0" @click="handleTile(t)">
+      <button
+        v-for="t in tiles"
+        :key="t.key"
+        class="tile"
+        :class="['tile--' + t.size, 'tile--' + t.color]"
+        type="button"
+        role="button"
+        tabindex="0"
+        @click="handleTile(t)"
+      >
         <div class="tile__icon" aria-hidden="true">{{ t.icon }}</div>
         <div class="tile__text">
           <div class="tile__title">{{ t.title }}</div>
@@ -36,19 +44,107 @@ interface TileItem {
 }
 
 const tiles: TileItem[] = [
-  { key: 'notes', title: '笔记', subtitle: 'Notes', icon: '📝', size: 'w', color: 'purple', route: '/notes', requiresAuth: true },
-  { key: 'cred', title: '凭据', subtitle: 'Credentials', icon: '🔐', size: 'l', color: 'teal', route: '/credentials', requiresAuth: true },
-  { key: 'study', title: '学习记录', subtitle: 'Study Records', icon: '📚', size: 'm', color: 'blue', route: '/study', requiresAuth: true },
-  { key: 'login', title: '登录', subtitle: 'Sign in', icon: '🔑', size: 's', color: 'blue', route: '/login' },
-  { key: 'register', title: '注册', subtitle: 'Create', icon: '🆕', size: 's', color: 'orange', route: '/register' },
+  {
+    key: 'notes',
+    title: '笔记',
+    subtitle: 'Notes',
+    icon: '📝',
+    size: 'w',
+    color: 'purple',
+    route: '/notes',
+    requiresAuth: true,
+  },
+  {
+    key: 'cred',
+    title: '凭据',
+    subtitle: 'Credentials',
+    icon: '🔐',
+    size: 'l',
+    color: 'teal',
+    route: '/credentials',
+    requiresAuth: true,
+  },
+  {
+    key: 'study',
+    title: '学习记录',
+    subtitle: 'Study Records',
+    icon: '📚',
+    size: 'm',
+    color: 'blue',
+    route: '/study',
+    requiresAuth: true,
+  },
+  {
+    key: 'login',
+    title: '登录',
+    subtitle: 'Sign in',
+    icon: '🔑',
+    size: 's',
+    color: 'blue',
+    route: '/login',
+  },
+  {
+    key: 'register',
+    title: '注册',
+    subtitle: 'Create',
+    icon: '🆕',
+    size: 's',
+    color: 'orange',
+    route: '/register',
+  },
   { key: 'tasks', title: '任务', subtitle: 'Coming soon', icon: '✅', size: 'm', color: 'slate' },
   { key: 'media', title: '媒体', subtitle: 'Coming soon', icon: '🎬', size: 'm', color: 'pink' },
-  { key: 'gallery', title: '相册', subtitle: 'Coming soon', icon: '🖼️', size: 't', color: 'orange' },
-  { key: 'analytics', title: '分析', subtitle: 'Coming soon', icon: '📊', size: 'm', color: 'blue' },
-  { key: 'tools', title: '工具', subtitle: 'Coming soon', icon: '🧰', size: 's', color: 'teal', route: '/tool' },
-  { key: 'settings', title: '设置', subtitle: 'Preferences', icon: '⚙️', size: 's', color: 'slate' },
-  { key: 'todo', title: '备忘录', subtitle: 'Todo List', icon: '📝', size: 'l', color: 'purple', route: '/todo' },
-  { key: 'imageMagic', title: '取色器', subtitle: 'Image Color Picker', icon: '🔄', size: 'l', color: 'green', route: '/imageMagic' },
+  {
+    key: 'gallery',
+    title: '相册',
+    subtitle: 'Coming soon',
+    icon: '🖼️',
+    size: 't',
+    color: 'orange',
+  },
+  {
+    key: 'analytics',
+    title: '分析',
+    subtitle: 'Coming soon',
+    icon: '📊',
+    size: 'm',
+    color: 'blue',
+  },
+  {
+    key: 'tools',
+    title: '工具',
+    subtitle: 'Coming soon',
+    icon: '🧰',
+    size: 's',
+    color: 'teal',
+    route: '/tool',
+  },
+  {
+    key: 'settings',
+    title: '设置',
+    subtitle: 'Preferences',
+    icon: '⚙️',
+    size: 's',
+    color: 'slate',
+  },
+  {
+    key: 'todo',
+    title: '备忘录',
+    subtitle: 'Todo List',
+    icon: '📝',
+    size: 'l',
+    color: 'purple',
+    route: '/todo',
+  },
+  {
+    key: 'imageMagic',
+    title: '取色器',
+    subtitle: 'Image Color Picker',
+    icon: '🔄',
+    size: 'l',
+    color: 'green',
+    route: '/imageMagic',
+  },
 ]
 
 function handleTile(t: TileItem) {
@@ -98,7 +194,10 @@ function handleTile(t: TileItem) {
   background: rgba(255, 255, 255, 0.65);
   backdrop-filter: blur(10px) saturate(120%);
   transform: translateZ(0);
-  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    filter 160ms ease;
   box-shadow: 0 6px 18px rgba(15, 23, 42, 0.12);
 }
 

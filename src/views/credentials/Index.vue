@@ -10,7 +10,13 @@ const editorVisible = ref(false)
 const revealVisible = ref(false)
 const revealPassword = ref('')
 
-const form = reactive<{ id?: string; account: string; password?: string; website: string; notes?: string }>({
+const form = reactive<{
+  id?: string
+  account: string
+  password?: string
+  website: string
+  notes?: string
+}>({
   account: '',
   password: '',
   website: '',
@@ -22,7 +28,7 @@ async function fetchList() {
   try {
     const res = await commonService.apiListCredentials()
     const data = res.data as any
-    list.value = Array.isArray(data) ? data : data?.items ?? data?.list ?? []
+    list.value = Array.isArray(data) ? data : (data?.items ?? data?.list ?? [])
   } finally {
     loading.value = false
   }
@@ -34,7 +40,13 @@ function openCreate() {
 }
 
 function openEdit(row: CredentialItem) {
-  Object.assign(form, { id: row.id, account: row.account, password: '', website: row.website, notes: row.notes || '' })
+  Object.assign(form, {
+    id: row.id,
+    account: row.account,
+    password: '',
+    website: row.website,
+    notes: row.notes || '',
+  })
   editorVisible.value = true
 }
 
@@ -73,9 +85,16 @@ onMounted(fetchList)
 </script>
 
 <template>
-  <div style="max-width: 1000px; margin: 20px auto; margin-top: 60px;">
-    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 12px;">
-      <h2 style="margin:0;">凭据管理</h2>
+  <div style="max-width: 1000px; margin: 20px auto; margin-top: 60px">
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      "
+    >
+      <h2 style="margin: 0">凭据管理</h2>
       <el-button type="primary" @click="openCreate">新增凭据</el-button>
     </div>
 
@@ -122,7 +141,9 @@ onMounted(fetchList)
     </el-drawer>
 
     <el-dialog v-model="revealVisible" title="明文密码" width="400px">
-      <div style="font-size: 18px; font-weight: 700; letter-spacing: 0.3px;">{{ revealPassword || '无' }}</div>
+      <div style="font-size: 18px; font-weight: 700; letter-spacing: 0.3px">
+        {{ revealPassword || '无' }}
+      </div>
       <template #footer>
         <el-button type="primary" @click="revealVisible = false">我知道了</el-button>
       </template>

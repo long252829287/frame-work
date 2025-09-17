@@ -64,10 +64,17 @@ onMounted(fetchNotes)
 </script>
 
 <template>
-  <div style="max-width: 960px; margin: 20px auto; padding-top: 60px;">
-    <div style="display:flex; justify-content: space-between; align-items:center; margin-bottom: 12px;">
+  <div style="max-width: 960px; margin: 20px auto; padding-top: 60px">
+    <div
+      style="
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      "
+    >
       <div>
-        <h2 style="margin:0;">我的笔记 ({{ total }})</h2>
+        <h2 style="margin: 0">我的笔记 ({{ total }})</h2>
       </div>
       <div>
         <el-button type="primary" @click="openCreate">新建笔记</el-button>
@@ -76,12 +83,11 @@ onMounted(fetchNotes)
 
     <quadrant-view-comp :key="componentKey" />
 
-
     <el-table :data="list" v-loading="loading" border>
       <el-table-column prop="title" label="标题" width="240" />
       <el-table-column prop="content" label="内容">
         <template #default="{ row }">
-          <div style="white-space: pre-wrap;">{{ row.content }}</div>
+          <div style="white-space: pre-wrap">{{ row.content }}</div>
         </template>
       </el-table-column>
       <el-table-column label="标签" width="200">
@@ -112,8 +118,15 @@ onMounted(fetchNotes)
           <el-input v-model="editor.content" type="textarea" :autosize="{ minRows: 8 }" />
         </el-form-item>
         <el-form-item label="标签">
-          <el-select v-model="editor.tags" multiple filterable allow-create default-first-option style="width:100%">
-            <el-option v-for="t in (editor.tags || [])" :key="t" :label="t" :value="t" />
+          <el-select
+            v-model="editor.tags"
+            multiple
+            filterable
+            allow-create
+            default-first-option
+            style="width: 100%"
+          >
+            <el-option v-for="t in editor.tags || []" :key="t" :label="t" :value="t" />
           </el-select>
         </el-form-item>
         <el-form-item>

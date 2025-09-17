@@ -32,7 +32,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div style="max-width: 420px; margin: 60px auto;">
+  <div style="max-width: 420px; margin: 60px auto">
     <el-card>
       <template #header>
         <div class="card-header">登录</div>

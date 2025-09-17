@@ -19,8 +19,13 @@
           <span class="file-count">{{ subject?.files.length || 0 }} 个文件</span>
         </div>
         <div class="files">
-          <div v-for="fileName in subject?.files" :key="fileName" class="file-item"
-            :class="{ active: selectedFile === fileName }" @click="selectFile(fileName)">
+          <div
+            v-for="fileName in subject?.files"
+            :key="fileName"
+            class="file-item"
+            :class="{ active: selectedFile === fileName }"
+            @click="selectFile(fileName)"
+          >
             <el-icon>📄</el-icon>
             <span>{{ fileName }}</span>
             <div class="file-actions">
@@ -58,13 +63,26 @@
     </div>
 
     <!-- Create/Edit File Dialog -->
-    <el-dialog v-model="showCreateFileDialog" :title="editingFile ? '编辑文件' : '新建文件'" width="80%">
+    <el-dialog
+      v-model="showCreateFileDialog"
+      :title="editingFile ? '编辑文件' : '新建文件'"
+      width="80%"
+    >
       <el-form ref="fileFormRef" :model="fileForm" :rules="fileFormRules" label-width="80px">
         <el-form-item label="文件名" prop="name">
-          <el-input v-model="fileForm.name" placeholder="请输入文件名（不需要.md后缀）" :disabled="editingFile" />
+          <el-input
+            v-model="fileForm.name"
+            placeholder="请输入文件名（不需要.md后缀）"
+            :disabled="editingFile"
+          />
         </el-form-item>
         <el-form-item label="内容" prop="content">
-          <el-input v-model="fileForm.content" type="textarea" :rows="20" placeholder="请输入Markdown内容" />
+          <el-input
+            v-model="fileForm.content"
+            type="textarea"
+            :rows="20"
+            placeholder="请输入Markdown内容"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -98,12 +116,12 @@ const savingFile = ref(false)
 const fileFormRef = ref()
 const fileForm = reactive({
   name: '',
-  content: ''
+  content: '',
 })
 
 const fileFormRules = {
   name: [{ required: true, message: '请输入文件名', trigger: 'blur' }],
-  content: [{ required: true, message: '请输入文件内容', trigger: 'blur' }]
+  content: [{ required: true, message: '请输入文件内容', trigger: 'blur' }],
 }
 
 const renderedMarkdown = computed(() => {
@@ -163,17 +181,15 @@ async function saveFile() {
     if (!subject.value) return
 
     if (editingFile.value) {
-      await commonService.apiUpdateMarkdownFile(
-        subject.value.id,
-        editingFile.value,
-        { content: fileForm.content }
-      )
+      await commonService.apiUpdateMarkdownFile(subject.value.id, editingFile.value, {
+        content: fileForm.content,
+      })
       ElMessage.success('文件更新成功')
     } else {
-      await commonService.apiCreateMarkdownFile(
-        subject.value.id,
-        { name: fileForm.name, content: fileForm.content }
-      )
+      await commonService.apiCreateMarkdownFile(subject.value.id, {
+        name: fileForm.name,
+        content: fileForm.content,
+      })
       ElMessage.success('文件创建成功')
     }
 

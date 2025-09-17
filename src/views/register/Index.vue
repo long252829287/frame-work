@@ -29,7 +29,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div style="max-width: 420px; margin: 60px auto;">
+  <div style="max-width: 420px; margin: 60px auto">
     <el-card>
       <template #header>
         <div class="card-header">注册</div>
@@ -51,7 +51,6 @@ async function onSubmit() {
       </el-form>
     </el-card>
   </div>
-
 </template>
 
 <style scoped>

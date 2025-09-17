@@ -23,8 +23,8 @@ function trigger(target, key) {
   // 这里面就需要运行依赖的函数
   const deps = depsMap.get(key)
   if (deps) {
-    const effectsToRun = new Set(deps); // 复制一份集合，防止在执行过程中修改原集合
-    effectsToRun.forEach(effect => effect())
+    const effectsToRun = new Set(deps) // 复制一份集合，防止在执行过程中修改原集合
+    effectsToRun.forEach((effect) => effect())
   }
 }
 // 原始对象
@@ -51,7 +51,7 @@ function effect(fn) {
     // 将当前的函数推入到栈中，其实就是在模拟真是的函数栈
     effectStack.push(environment)
     // 清理依赖
-    cleanup(environment);
+    cleanup(environment)
     // 记录当前的函数
     fn()
     effectStack.pop()
@@ -60,14 +60,14 @@ function effect(fn) {
   // 用来记录该环境是在哪些集合中的
 
   environment.deps = []
-  environment();
+  environment()
 }
 
 function cleanup(environment) {
-  // 拿到当前环境的依赖数组 
+  // 拿到当前环境的依赖数组
   let deps = environment.deps
   if (deps) {
-    deps.forEach(dep => {
+    deps.forEach((dep) => {
       dep.delete(environment)
       if (dep.size === 0) {
         for (let [key, value] of depsMap) {
@@ -82,15 +82,15 @@ function cleanup(environment) {
 }
 effect(() => {
   if (state.a === 1) {
-    state.b;
+    state.b
   } else {
-    state.c;
+    state.c
   }
-  console.log("执行了函数1");
-});
+  console.log('执行了函数1')
+})
 effect(() => {
-  console.log(state.a);
-  console.log(state.c);
-  console.log("执行了函数2");
-});
-state.a = 2;
+  console.log(state.a)
+  console.log(state.c)
+  console.log('执行了函数2')
+})
+state.a = 2

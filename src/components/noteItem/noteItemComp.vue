@@ -5,34 +5,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, defineEmits, computed } from 'vue';
-import { useDraggable } from '@vueuse/core';
-import type { QuadrantNote } from '@/types';
-import type { StyleValue } from 'vue';
+import { ref, defineProps, defineEmits, computed } from 'vue'
+import { useDraggable } from '@vueuse/core'
+import type { QuadrantNote } from '@/types'
+import type { StyleValue } from 'vue'
 
 const props = defineProps<{
-  note: QuadrantNote;
-}>();
+  note: QuadrantNote
+}>()
 
 const emit = defineEmits<{
-  (e: 'drag-move', position: { x: number; y: number }): void;
-  (e: 'drag-end', position: { x: number; y: number }): void;
-}>();
+  (e: 'drag-move', position: { x: number; y: number }): void
+  (e: 'drag-end', position: { x: number; y: number }): void
+}>()
 
-const noteEl = ref<HTMLElement | null>(null);
+const noteEl = ref<HTMLElement | null>(null)
 
 const { x, y, isDragging } = useDraggable(noteEl, {
   onStart: (_, event) => {
-    document.body.style.cursor = 'grabbing';
+    document.body.style.cursor = 'grabbing'
   },
   onMove: (position) => {
-    emit('drag-move', position);
+    emit('drag-move', position)
   },
   onEnd: (position) => {
-    document.body.style.cursor = '';
-    emit('drag-end', position);
+    document.body.style.cursor = ''
+    emit('drag-end', position)
   },
-});
+})
 
 const style = computed<StyleValue>(() => {
   if (isDragging.value) {
@@ -45,15 +45,15 @@ const style = computed<StyleValue>(() => {
       boxShadow: '0 12px 32px rgba(0, 0, 0, 0.25)',
       zIndex: '1000',
       opacity: '0.9',
-    };
+    }
   }
-  return {};
-});
+  return {}
+})
 
 function getDisplayText(note: QuadrantNote): string {
-  const maxLength = 30;
-  const text = note.title?.trim() || note.content;
-  return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  const maxLength = 30
+  const text = note.title?.trim() || note.content
+  return text.length > maxLength ? text.substring(0, maxLength) + '...' : text
 }
 </script>
 

@@ -9,7 +9,12 @@
     </div>
 
     <div class="subjects-grid">
-      <div v-for="subject in subjects" :key="subject.id" class="subject-card" @click="openSubject(subject)">
+      <div
+        v-for="subject in subjects"
+        :key="subject.id"
+        class="subject-card"
+        @click="openSubject(subject)"
+      >
         <div class="card-header">
           <h3>{{ subject.name }}</h3>
           <div class="card-actions">
@@ -34,13 +39,22 @@
     </div>
 
     <!-- Create/Edit Subject Dialog -->
-    <el-dialog v-model="showCreateDialog" :title="editingSubject ? '编辑科目' : '新建科目'" width="500px">
+    <el-dialog
+      v-model="showCreateDialog"
+      :title="editingSubject ? '编辑科目' : '新建科目'"
+      width="500px"
+    >
       <el-form ref="formRef" :model="subjectForm" :rules="formRules" label-width="80px">
         <el-form-item label="科目名称" prop="name">
           <el-input v-model="subjectForm.name" placeholder="请输入科目名称" />
         </el-form-item>
         <el-form-item label="描述" prop="description">
-          <el-input v-model="subjectForm.description" type="textarea" :rows="3" placeholder="请输入科目描述（可选）" />
+          <el-input
+            v-model="subjectForm.description"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入科目描述（可选）"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -69,18 +83,18 @@ const saving = ref(false)
 const formRef = ref()
 const subjectForm = reactive({
   name: '',
-  description: ''
+  description: '',
 })
 
 const formRules = {
-  name: [{ required: true, message: '请输入科目名称', trigger: 'blur' }]
+  name: [{ required: true, message: '请输入科目名称', trigger: 'blur' }],
 }
 
 async function loadSubjects() {
   try {
     const response = await commonService.apiListStudySubjects()
     const data = response?.data as any
-    subjects.value = Array.isArray(data) ? data : (data?.items || [])
+    subjects.value = Array.isArray(data) ? data : data?.items || []
   } catch (error) {
     console.error('加载科目失败:', error)
     ElMessage.error('加载科目失败')

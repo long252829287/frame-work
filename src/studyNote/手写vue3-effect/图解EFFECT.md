@@ -5,24 +5,22 @@ effect 方法的作用：就是将 **函数** 和 **数据** 关联起来。
 回忆 watchEffect
 
 ```js
-import { ref, watchEffect } from "vue";
-const state = ref({ a: 1 });
-const k = state.value;
-const n = k.a;
+import { ref, watchEffect } from 'vue'
+const state = ref({ a: 1 })
+const k = state.value
+const n = k.a
 // 这里就会整理出 state.value、state.value.a
 watchEffect(() => {
-  console.log("运行");
-  state;
-  state.value;
-  state.value.a;
-  n;
-});
+  console.log('运行')
+  state
+  state.value
+  state.value.a
+  n
+})
 setTimeout(() => {
-  state.value = { a: 3 }; // 要重新运行，因为是对 value 的写入操作
-}, 500);
+  state.value = { a: 3 } // 要重新运行，因为是对 value 的写入操作
+}, 500)
 ```
-
-
 
 effect函数的设计：
 
@@ -45,28 +43,28 @@ effect(() => {
 第一版实现如下：
 
 ```js
-let activeEffect = null; // 记录当前的函数
-const depsMap = new Map(); // 保存依赖关系
+let activeEffect = null // 记录当前的函数
+const depsMap = new Map() // 保存依赖关系
 
 function track(target, key) {
   // 建立依赖关系
   if (activeEffect) {
-    let deps = depsMap.get(key); // 根据属性值去拿依赖的函数集合
+    let deps = depsMap.get(key) // 根据属性值去拿依赖的函数集合
     if (!deps) {
-      deps = new Set(); // 创建一个新的集合
-      depsMap.set(key, deps); // 将集合存入 depsMap
+      deps = new Set() // 创建一个新的集合
+      depsMap.set(key, deps) // 将集合存入 depsMap
     }
     // 将依赖的函数添加到集合里面
-    deps.add(activeEffect);
+    deps.add(activeEffect)
   }
-  console.log(depsMap);
+  console.log(depsMap)
 }
 
 function trigger(target, key) {
   // 这里面就需要运行依赖的函数
-  const deps = depsMap.get(key);
+  const deps = depsMap.get(key)
   if (deps) {
-    deps.forEach((effect) => effect());
+    deps.forEach((effect) => effect())
   }
 }
 
@@ -75,37 +73,36 @@ const data = {
   a: 1,
   b: 2,
   c: 3,
-};
+}
 // 代理对象
 const state = new Proxy(data, {
   get(target, key) {
-    track(target, key); // 进行依赖收集
-    return target[key];
+    track(target, key) // 进行依赖收集
+    return target[key]
   },
   set(target, key, value) {
-    target[key] = value;
-    trigger(target, key); // 派发更新
-    return true;
+    target[key] = value
+    trigger(target, key) // 派发更新
+    return true
   },
-});
+})
 
 /**
  *
  * @param {*} fn 回调函数
  */
 function effect(fn) {
-  activeEffect = fn;
-  fn();
-  activeEffect = null;
+  activeEffect = fn
+  fn()
+  activeEffect = null
 }
 
 effect(() => {
   // 这里在访问 a 成员时，会触发 get 方法，进行依赖收集
   console.log('执行函数')
-  console.log(state.a);
-});
-state.a = 10;
-
+  console.log(state.a)
+})
+state.a = 10
 ```
 
 第一版实现，**每个属性对应一个 Set 集合**，该集合里面是所依赖的函数，所有属性与其对应的依赖函数集合形成一个 map 结构，如下图所示：
@@ -123,12 +120,12 @@ activeEffect 起到一个中间变量的作用，临时存储这个回调函数�
 ```js
 effect(() => {
   if (state.a === 1) {
-    state.b;
+    state.b
   } else {
-    state.c;
+    state.c
   }
-  console.log("执行了函数");
-});
+  console.log('执行了函数')
+})
 ```
 
 在上面的代码中，两次运行回调函数，所建立的依赖关系应该是不一样的：
@@ -197,11 +194,11 @@ function track(target, key) {
 ```js
 function effect(fn) {
   const environment = () => {
-    activeEffect = environment;
-    fn();
-    activeEffect = null;
-  };
-  environment();
+    activeEffect = environment
+    fn()
+    activeEffect = null
+  }
+  environment()
 }
 ```
 
@@ -219,19 +216,19 @@ function effect(fn) {
 
 ```js
 function cleanup(environment) {
-  let deps = environment.deps; // 拿到当前环境函数的依赖（是个数组）
+  let deps = environment.deps // 拿到当前环境函数的依赖（是个数组）
   if (deps.length) {
     deps.forEach((dep) => {
-      dep.delete(environment);
+      dep.delete(environment)
       if (dep.size === 0) {
         for (let [key, value] of depsMap) {
           if (value === dep) {
-            depsMap.delete(key);
+            depsMap.delete(key)
           }
         }
       }
-    });
-    deps.length = 0;
+    })
+    deps.length = 0
   }
 }
 ```
@@ -240,65 +237,61 @@ function cleanup(environment) {
 
 <img src="https://xiejie-typora.oss-cn-chengdu.aliyuncs.com/2024-05-30-014306.png" alt="image-20240530094306251" style="zoom:50%;" />
 
-
-
 **测试多个依赖函数**
 
 ```js
 effect(() => {
   if (state.a === 1) {
-    state.b;
+    state.b
   } else {
-    state.c;
+    state.c
   }
-  console.log("执行了函数1");
-});
+  console.log('执行了函数1')
+})
 effect(() => {
-  console.log(state.c);
-  console.log("执行了函数2");
-});
-state.a = 2;
+  console.log(state.c)
+  console.log('执行了函数2')
+})
+state.a = 2
 ```
 
 ```js
 effect(() => {
   if (state.a === 1) {
-    state.b;
+    state.b
   } else {
-    state.c;
+    state.c
   }
-  console.log("执行了函数1");
-});
+  console.log('执行了函数1')
+})
 effect(() => {
-  console.log(state.a);
-  console.log(state.c);
-  console.log("执行了函数2");
-});
-state.a = 2;
+  console.log(state.a)
+  console.log(state.c)
+  console.log('执行了函数2')
+})
+state.a = 2
 ```
 
 解决无限循环问题：
 
 在 track 函数中，每次 state.a 被访问时，都会重新添加当前的 activeEffect 到依赖集合中。而在 trigger 函数中，当 state.a 被修改时，会触发所有依赖 state.a 的 effect 函数，这些 effect 函数中又会重新访问 state.a，从而导致了无限循环。具体来讲：
 
-1. 初始执行 effect 时，state.a 的值为 1，因此第一个 effect 会访问 state.b，第二个 effect 会访问 state.a 和 state.c。 
-2. state.a 被修改为 2 时，trigger 函数会触发所有依赖 state.a 的 effect 函数。 
-3. 第二个 effect 函数被触发后，会访问 state.a，这时 track 函数又会把当前的 activeEffect 添加到 state.a 的依赖集合中。 
+1. 初始执行 effect 时，state.a 的值为 1，因此第一个 effect 会访问 state.b，第二个 effect 会访问 state.a 和 state.c。
+2. state.a 被修改为 2 时，trigger 函数会触发所有依赖 state.a 的 effect 函数。
+3. 第二个 effect 函数被触发后，会访问 state.a，这时 track 函数又会把当前的 activeEffect 添加到 state.a 的依赖集合中。
 4. 因为 state.a 的值被修改，会再次触发 trigger，导致第二个 effect 函数再次执行，如此循环往复，导致无限循环。
 
 要解决这个问题，可以在 trigger 函数中添加一些机制来防止重复触发同一个 effect 函数，比如使用一个 Set 来记录已经触发过的 effect 函数：
 
 ```js
 function trigger(target, key) {
-  const deps = depsMap.get(key);
+  const deps = depsMap.get(key)
   if (deps) {
-    const effectsToRun = new Set(deps); // 复制一份集合，防止在执行过程中修改原集合
-    effectsToRun.forEach((effect) => effect());
+    const effectsToRun = new Set(deps) // 复制一份集合，防止在执行过程中修改原集合
+    effectsToRun.forEach((effect) => effect())
   }
 }
 ```
-
-
 
 **测试嵌套函数**
 
@@ -306,11 +299,11 @@ function trigger(target, key) {
 effect(() => {
   effect(() => {
     state.a
-    console.log("执行了函数2");
-  });
-  state.b;
-  console.log("执行了函数1");
-});
+    console.log('执行了函数2')
+  })
+  state.b
+  console.log('执行了函数1')
+})
 ```
 
 会发现所建立的依赖又不正常了：
@@ -331,4 +324,3 @@ Map(1) { 'a' => Set(1) { [Function: environment] { deps: [Array] } } }
 ---
 
 -EOF-
-

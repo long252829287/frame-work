@@ -62,7 +62,7 @@ const routes: RouteRecordRaw[] = [
     path: '/imageMagic',
     name: 'imageMagic',
     component: () => import('@/views/imageMagic/Index.vue'),
-  }
+  },
 ]
 
 const router = createRouter({

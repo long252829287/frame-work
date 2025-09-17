@@ -76,13 +76,23 @@ function remove(id: string) {
           <li v-for="t in store.byQuadrant.q1" :key="t.id" class="p-3 flex items-start gap-3">
             <input type="checkbox" :checked="t.completed" @change="toggle(t.id)" />
             <div class="flex-1">
-              <div class="font-medium" :class="{ 'line-through opacity-60': t.completed }">{{ t.title }}</div>
+              <div class="font-medium" :class="{ 'line-through opacity-60': t.completed }">
+                {{ t.title }}
+              </div>
               <div v-if="t.description" class="text-sm opacity-80">{{ t.description }}</div>
               <div class="mt-2 flex flex-wrap gap-2">
-                <button class="text-xs px-2 py-1 rounded bg-blue-500/20" @click="move(t.id, 'q2')">移到 重要不紧急</button>
-                <button class="text-xs px-2 py-1 rounded bg-amber-500/20" @click="move(t.id, 'q3')">移到 紧急不重要</button>
-                <button class="text-xs px-2 py-1 rounded bg-gray-500/20" @click="move(t.id, 'q4')">移到 不紧急不重要</button>
-                <button class="text-xs px-2 py-1 rounded bg-rose-500/30" @click="remove(t.id)">删除</button>
+                <button class="text-xs px-2 py-1 rounded bg-blue-500/20" @click="move(t.id, 'q2')">
+                  移到 重要不紧急
+                </button>
+                <button class="text-xs px-2 py-1 rounded bg-amber-500/20" @click="move(t.id, 'q3')">
+                  移到 紧急不重要
+                </button>
+                <button class="text-xs px-2 py-1 rounded bg-gray-500/20" @click="move(t.id, 'q4')">
+                  移到 不紧急不重要
+                </button>
+                <button class="text-xs px-2 py-1 rounded bg-rose-500/30" @click="remove(t.id)">
+                  删除
+                </button>
               </div>
             </div>
           </li>
@@ -90,18 +100,30 @@ function remove(id: string) {
       </section>
 
       <section class="border border-emerald-400/40 rounded-xl overflow-hidden">
-        <header class="bg-emerald-500/20 text-emerald-200 font-semibold px-4 py-2">重要不紧急</header>
+        <header class="bg-emerald-500/20 text-emerald-200 font-semibold px-4 py-2">
+          重要不紧急
+        </header>
         <ul class="divide-y divide-white/10">
           <li v-for="t in store.byQuadrant.q2" :key="t.id" class="p-3 flex items-start gap-3">
             <input type="checkbox" :checked="t.completed" @change="toggle(t.id)" />
             <div class="flex-1">
-              <div class="font-medium" :class="{ 'line-through opacity-60': t.completed }">{{ t.title }}</div>
+              <div class="font-medium" :class="{ 'line-through opacity-60': t.completed }">
+                {{ t.title }}
+              </div>
               <div v-if="t.description" class="text-sm opacity-80">{{ t.description }}</div>
               <div class="mt-2 flex flex-wrap gap-2">
-                <button class="text-xs px-2 py-1 rounded bg-red-500/20" @click="move(t.id, 'q1')">移到 紧急且重要</button>
-                <button class="text-xs px-2 py-1 rounded bg-amber-500/20" @click="move(t.id, 'q3')">移到 紧急不重要</button>
-                <button class="text-xs px-2 py-1 rounded bg-gray-500/20" @click="move(t.id, 'q4')">移到 不紧急不重要</button>
-                <button class="text-xs px-2 py-1 rounded bg-rose-500/30" @click="remove(t.id)">删除</button>
+                <button class="text-xs px-2 py-1 rounded bg-red-500/20" @click="move(t.id, 'q1')">
+                  移到 紧急且重要
+                </button>
+                <button class="text-xs px-2 py-1 rounded bg-amber-500/20" @click="move(t.id, 'q3')">
+                  移到 紧急不重要
+                </button>
+                <button class="text-xs px-2 py-1 rounded bg-gray-500/20" @click="move(t.id, 'q4')">
+                  移到 不紧急不重要
+                </button>
+                <button class="text-xs px-2 py-1 rounded bg-rose-500/30" @click="remove(t.id)">
+                  删除
+                </button>
               </div>
             </div>
           </li>
@@ -114,13 +136,23 @@ function remove(id: string) {
           <li v-for="t in store.byQuadrant.q3" :key="t.id" class="p-3 flex items-start gap-3">
             <input type="checkbox" :checked="t.completed" @change="toggle(t.id)" />
             <div class="flex-1">
-              <div class="font-medium" :class="{ 'line-through opacity-60': t.completed }">{{ t.title }}</div>
+              <div class="font-medium" :class="{ 'line-through opacity-60': t.completed }">
+                {{ t.title }}
+              </div>
               <div v-if="t.description" class="text-sm opacity-80">{{ t.description }}</div>
               <div class="mt-2 flex flex-wrap gap-2">
-                <button class="text-xs px-2 py-1 rounded bg-red-500/20" @click="move(t.id, 'q1')">移到 紧急且重要</button>
-                <button class="text-xs px-2 py-1 rounded bg-green-500/20" @click="move(t.id, 'q2')">移到 重要不紧急</button>
-                <button class="text-xs px-2 py-1 rounded bg-gray-500/20" @click="move(t.id, 'q4')">移到 不紧急不重要</button>
-                <button class="text-xs px-2 py-1 rounded bg-rose-500/30" @click="remove(t.id)">删除</button>
+                <button class="text-xs px-2 py-1 rounded bg-red-500/20" @click="move(t.id, 'q1')">
+                  移到 紧急且重要
+                </button>
+                <button class="text-xs px-2 py-1 rounded bg-green-500/20" @click="move(t.id, 'q2')">
+                  移到 重要不紧急
+                </button>
+                <button class="text-xs px-2 py-1 rounded bg-gray-500/20" @click="move(t.id, 'q4')">
+                  移到 不紧急不重要
+                </button>
+                <button class="text-xs px-2 py-1 rounded bg-rose-500/30" @click="remove(t.id)">
+                  删除
+                </button>
               </div>
             </div>
           </li>
@@ -133,13 +165,23 @@ function remove(id: string) {
           <li v-for="t in store.byQuadrant.q4" :key="t.id" class="p-3 flex items-start gap-3">
             <input type="checkbox" :checked="t.completed" @change="toggle(t.id)" />
             <div class="flex-1">
-              <div class="font-medium" :class="{ 'line-through opacity-60': t.completed }">{{ t.title }}</div>
+              <div class="font-medium" :class="{ 'line-through opacity-60': t.completed }">
+                {{ t.title }}
+              </div>
               <div v-if="t.description" class="text-sm opacity-80">{{ t.description }}</div>
               <div class="mt-2 flex flex-wrap gap-2">
-                <button class="text-xs px-2 py-1 rounded bg-red-500/20" @click="move(t.id, 'q1')">移到 紧急且重要</button>
-                <button class="text-xs px-2 py-1 rounded bg-green-500/20" @click="move(t.id, 'q2')">移到 重要不紧急</button>
-                <button class="text-xs px-2 py-1 rounded bg-amber-500/20" @click="move(t.id, 'q3')">移到 紧急不重要</button>
-                <button class="text-xs px-2 py-1 rounded bg-rose-500/30" @click="remove(t.id)">删除</button>
+                <button class="text-xs px-2 py-1 rounded bg-red-500/20" @click="move(t.id, 'q1')">
+                  移到 紧急且重要
+                </button>
+                <button class="text-xs px-2 py-1 rounded bg-green-500/20" @click="move(t.id, 'q2')">
+                  移到 重要不紧急
+                </button>
+                <button class="text-xs px-2 py-1 rounded bg-amber-500/20" @click="move(t.id, 'q3')">
+                  移到 紧急不重要
+                </button>
+                <button class="text-xs px-2 py-1 rounded bg-rose-500/30" @click="remove(t.id)">
+                  删除
+                </button>
               </div>
             </div>
           </li>
@@ -150,16 +192,24 @@ function remove(id: string) {
     <section class="bg-white/5 border border-white/10 rounded-xl p-4">
       <div class="flex items-center justify-between">
         <h2 class="font-semibold">已完成</h2>
-        <button class="text-sm text-rose-300 hover:text-rose-200" @click="store.clearCompleted()">清空</button>
+        <button class="text-sm text-rose-300 hover:text-rose-200" @click="store.clearCompleted()">
+          清空
+        </button>
       </div>
       <ul class="mt-2 divide-y divide-white/10">
-        <li v-for="t in store.byQuadrant.done" :key="t.id" class="p-3 flex items-start gap-3 opacity-70">
+        <li
+          v-for="t in store.byQuadrant.done"
+          :key="t.id"
+          class="p-3 flex items-start gap-3 opacity-70"
+        >
           <input type="checkbox" :checked="t.completed" @change="toggle(t.id)" />
           <div class="flex-1">
             <div class="line-through">{{ t.title }}</div>
             <div v-if="t.description" class="text-sm">{{ t.description }}</div>
           </div>
-          <button class="text-xs px-2 py-1 rounded bg-rose-500/30" @click="remove(t.id)">删除</button>
+          <button class="text-xs px-2 py-1 rounded bg-rose-500/30" @click="remove(t.id)">
+            删除
+          </button>
         </li>
       </ul>
     </section>

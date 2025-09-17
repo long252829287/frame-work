@@ -16,7 +16,7 @@ http.interceptors.request.use((config) => {
 })
 
 http.interceptors.response.use(
-  (response) => {    
+  (response) => {
     // 检查响应中是否包含过期令牌消息
     const responseData = response.data
     if (responseData && typeof responseData === 'object') {
@@ -26,8 +26,8 @@ http.interceptors.response.use(
         return Promise.reject(new Error(message))
       }
     }
-    
-    return response;
+
+    return response
   },
   (error) => {
     // 检查错误响应中是否包含过期令牌消息
@@ -39,7 +39,7 @@ http.interceptors.response.use(
         return Promise.reject(new Error(message))
       }
     }
-    
+
     return Promise.reject(error)
   },
 )
@@ -47,10 +47,10 @@ http.interceptors.response.use(
 // 处理令牌过期的函数
 function handleTokenExpired() {
   console.warn('访问令牌已过期，正在清理登录状态并重定向到登录页')
-  
+
   // 获取当前路由路径，用于登录后重定向
   const currentPath = router.currentRoute.value.fullPath
-  
+
   // 清理认证状态
   const authStore = useAuthStore()
   authStore.logout().catch(() => {
@@ -58,12 +58,12 @@ function handleTokenExpired() {
     authStore.setToken(null)
     authStore.setUser(null)
   })
-  
+
   // 重定向到登录页，并保存当前路径用于登录后跳转
   if (router.currentRoute.value.name !== 'login') {
     router.push({
       name: 'login',
-      query: { redirect: currentPath !== '/login' ? currentPath : '/home' }
+      query: { redirect: currentPath !== '/login' ? currentPath : '/home' },
     })
   }
 }
