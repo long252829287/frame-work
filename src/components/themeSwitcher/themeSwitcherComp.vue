@@ -6,7 +6,7 @@
       @click="showThemeSelector = !showThemeSelector"
       class="theme-toggle-btn"
     >
-      🎨 {{ currentTheme.displayName }}
+      🎨 {{ currentThemeData.displayName }}
     </el-button>
 
     <!-- 主题选择器 -->
@@ -28,7 +28,7 @@
             v-for="theme in availableThemes"
             :key="theme.name"
             class="theme-option"
-            :class="{ 'theme-option--active': currentTheme.name === theme.name }"
+            :class="{ 'theme-option--active': currentTheme.value === theme.name }"
             @click="selectTheme(theme.name as ThemeType)"
           >
             <div class="theme-preview" :style="{ backgroundColor: theme.preview }"></div>
@@ -36,7 +36,7 @@
               <div class="theme-name">{{ theme.displayName }}</div>
               <div class="theme-desc">{{ theme.description }}</div>
             </div>
-            <div v-if="currentTheme.name === theme.name" class="theme-check">✓</div>
+            <div v-if="currentTheme.value === theme.name" class="theme-check">✓</div>
           </div>
         </div>
 
@@ -60,14 +60,13 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useTheme, type ThemeType } from '@/utils/theme-switcher'
 
-const { getCurrentTheme, setTheme, getAllThemes, nextTheme: switchToNextTheme } = useTheme()
+const { currentTheme, setTheme, getAllThemes, nextTheme: switchToNextTheme } = useTheme()
 
 const showThemeSelector = ref(false)
 
 // 计算属性
-const currentTheme = computed(() => {
-  const themeName = getCurrentTheme()
-  return getAllThemes().find(t => t.name === themeName) || getAllThemes()[0]
+const currentThemeData = computed(() => {
+  return getAllThemes().find(t => t.name === currentTheme.value) || getAllThemes()[0]
 })
 
 const availableThemes = computed(() => getAllThemes())
@@ -118,7 +117,7 @@ onUnmounted(() => {
 
 .theme-switcher {
   position: relative;
-  z-index: theme.$stardew-z-dropdown;
+  z-index: theme.$z-dropdown;
 }
 
 .theme-toggle-btn {
@@ -137,7 +136,7 @@ onUnmounted(() => {
   right: 0;
   min-width: 320px;
   max-width: 400px;
-  z-index: theme.$stardew-z-modal;
+  z-index: theme.$z-modal;
 
   &__header {
     display: flex;
@@ -149,7 +148,7 @@ onUnmounted(() => {
     h3 {
       margin: 0;
       color: #{theme.theme-color('text-primary')};
-      font-weight: #{theme.$stardew-font-weight-semibold};
+      font-weight: #{theme.$font-weight-semibold};
       font-size: 1.1rem;
     }
   }
@@ -208,7 +207,7 @@ onUnmounted(() => {
   border-radius: 6px;
   border: 2px solid #{theme.theme-color('border-primary')};
   flex-shrink: 0;
-  box-shadow: 0 2px 6px #{theme.$stardew-shadow-dark};
+  box-shadow: 0 2px 6px #{theme.$shadow-dark};
 }
 
 .theme-info {
@@ -217,7 +216,7 @@ onUnmounted(() => {
 }
 
 .theme-name {
-  font-weight: #{theme.$stardew-font-weight-semibold};
+  font-weight: #{theme.$font-weight-semibold};
   color: #{theme.theme-color('text-primary')};
   margin-bottom: 2px;
 }
@@ -230,7 +229,7 @@ onUnmounted(() => {
 
 .theme-check {
   color: #{theme.theme-color('accent-green')};
-  font-weight: #{theme.$stardew-font-weight-bold};
+  font-weight: #{theme.$font-weight-bold};
   font-size: 1.2rem;
 }
 
@@ -241,13 +240,13 @@ onUnmounted(() => {
   right: 0;
   bottom: 0;
   background: #{theme.theme-bg('bg-overlay')};
-  z-index: calc(#{theme.$stardew-z-modal} - 1);
+  z-index: calc(#{theme.$z-modal} - 1);
 }
 
 // 过渡动画
 .theme-selector-enter-active,
 .theme-selector-leave-active {
-  transition: all #{theme.$stardew-transition-slow};
+  transition: all #{theme.$transition-slow};
 }
 
 .theme-selector-enter-from {

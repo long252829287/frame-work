@@ -1,0 +1,257 @@
+// ====================================
+// 现代简约主题配色方案 (灵感来源: Apple Human Interface, Material Design 3)
+// Modern Minimalist Theme Color Palette
+// ====================================
+
+// 基础色彩变量 - 现代蓝灰色系 (参考iOS/macOS设计)
+// Primary Colors - Modern Blue-Gray System
+$primary-darkest: #1C2936;        // 深海军蓝 - 重要文字
+$primary-dark: #2C3E50;           // 深蓝灰 - 标题
+$primary: #3498DB;                // 现代蓝 - 主色调 (接近iOS蓝)
+$primary-light: #5DADE2;          // 浅蓝 - 悬停状态
+$primary-lightest: #AED6F1;       // 极浅蓝 - 装饰元素
+
+// 次要色彩 - 中性灰色系 (参考Material Design 3)
+// Secondary Colors - Neutral Gray System
+$secondary-darkest: #212529;      // 近黑色背景
+$secondary-dark: #495057;         // 深灰 - 次要文字
+$secondary: #6C757D;              // 中灰 - 辅助信息
+$secondary-light: #E9ECEF;        // 浅灰 - 分割线
+$secondary-lightest: #F8F9FA;     // 背景灰 - 卡片背景
+
+// 强调色彩 - 现代语义色系
+// Accent Colors - Modern Semantic Colors
+$accent-green-dark: #155724;      // 深绿 - 成功状态深色
+$accent-green: #28A745;           // 现代绿 - 成功状态
+$accent-green-light: #D4EDDA;     // 浅绿背景
+$accent-green-bright: #40E0D0;    // 青绿 - 强调
+
+$accent-orange-dark: #E8590C;     // 深橙 - 警告深色
+$accent-orange: #FD7E14;          // 现代橙 - 警告状态
+$accent-orange-light: #FFE8D4;    // 浅橙背景
+$accent-orange-bright: #FF6B6B;   // 珊瑚色 - 活力
+
+// 功能性色彩 (Material Design 3 语义色)
+// Functional Colors
+$success: $accent-green;
+$warning: #FFC107;                // 金黄色 - 警告
+$error: #DC3545;                  // 红色 - 错误
+$info: $primary;                  // 使用主色作为信息色
+
+// 文字色彩 (满足WCAG AA对比度要求)
+// Text Colors - WCAG AA Compliant
+$text-primary: #212529;           // 主要文字 - 87%不透明度
+$text-secondary: #6C757D;         // 次要文字 - 60%不透明度
+$text-light: #ADB5BD;             // 浅色文字 - 38%不透明度
+$text-inverse: #FFFFFF;           // 反色文字
+$text-disabled: #CED4DA;          // 禁用文字
+
+// 背景色彩 - 层级系统
+// Background Colors - Elevation System
+$bg-primary: linear-gradient(135deg, #FFFFFF 0%, #F8F9FA 100%);
+$bg-secondary: linear-gradient(145deg, #F8F9FA 0%, #E9ECEF 100%);
+$bg-card: #FFFFFF;                // 纯白卡片背景
+$bg-overlay: rgba(33, 37, 41, 0.5); // 半透明遮罩
+
+// 边框色彩 - 细腻层次
+// Border Colors - Subtle Hierarchy
+$border-primary: #DEE2E6;
+$border-secondary: #E9ECEF;
+$border-light: #F1F3F4;
+$border-accent: $primary;
+
+// 阴影色彩 - 现代阴影系统
+// Shadow Colors - Modern Shadow System
+$shadow-light: rgba(255, 255, 255, 0.8);
+$shadow-dark: rgba(0, 0, 0, 0.1);   // 轻柔阴影
+$shadow-inset: rgba(0, 0, 0, 0.04); // 内阴影
+$shadow-card: rgba(0, 0, 0, 0.08);  // 卡片阴影
+
+// 按钮色彩 - 现代交互设计
+// Button Colors - Modern Interaction Design
+$btn-primary-bg: linear-gradient(145deg, #{$primary} 0%, #{$primary-light} 100%);
+$btn-primary-border: $primary;
+$btn-primary-hover: linear-gradient(145deg, #{$primary-dark} 0%, #{$primary} 100%);
+
+$btn-secondary-bg: linear-gradient(145deg, #{$accent-orange} 0%, #{$accent-orange-light} 100%);
+$btn-secondary-border: $accent-orange;
+$btn-secondary-hover: linear-gradient(145deg, #{$accent-orange-dark} 0%, #{$accent-orange} 100%);
+
+$btn-default-bg: #FFFFFF;
+$btn-default-border: $border-primary;
+$btn-default-hover: $bg-secondary;
+
+// 表单控件色彩
+// Form Control Colors
+$input-bg: #FFFFFF;
+$input-border: $border-primary;
+$input-focus: $primary;
+$input-disabled: $secondary-lightest;
+
+// 滑块色彩
+// Slider Colors
+$slider-track: $secondary-light;
+$slider-fill: linear-gradient(90deg, #{$primary} 0%, #{$primary-light} 100%);
+$slider-thumb: #FFFFFF;
+
+// 间距变量 - 8pt网格系统
+// Spacing Variables - 8pt Grid System
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-2xl: 48px;
+
+// 圆角变量 - 现代圆角系统
+// Border Radius Variables - Modern Radius System
+$radius-sm: 4px;
+$radius-md: 8px;
+$radius-lg: 12px;
+$radius-xl: 16px;
+
+// 字体变量 - 现代字体系统
+// Font Variables - Modern Typography
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// 过渡动画 - 流畅交互
+// Transition Variables - Fluid Interactions
+$transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-normal: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+$transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+
+// Z-index 层级
+// Z-index Layers
+$z-dropdown: 1000;
+$z-modal: 1050;
+$z-tooltip: 1070;
+$z-overlay: 10;
+
+// 现代设计图案 - 微妙纹理
+// Modern Design Patterns - Subtle Textures
+$subtle-pattern: linear-gradient(45deg,
+  rgba(52, 152, 219, 0.02) 25%,
+  transparent 25%,
+  transparent 50%,
+  rgba(52, 152, 219, 0.02) 50%,
+  rgba(52, 152, 219, 0.02) 75%,
+  transparent 75%);
+
+$grid-pattern: linear-gradient(rgba(52, 152, 219, 0.05) 1px, transparent 1px),
+               linear-gradient(90deg, rgba(52, 152, 219, 0.05) 1px, transparent 1px);
+
+// 混合效果 - 现代卡片设计
+@mixin card {
+  background: $bg-card;
+  border: 1px solid $border-primary;
+  border-radius: $radius-lg;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.08),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  position: relative;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  // 悬停效果
+  transition: all $transition-normal;
+  &:hover {
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.1),
+      0 2px 4px rgba(0, 0, 0, 0.06);
+    transform: translateY(-1px);
+  }
+}
+
+// 现代按钮设计
+@mixin button($type: 'default') {
+  @if $type == 'primary' {
+    background: $btn-primary-bg;
+    border: 1px solid $btn-primary-border;
+    color: $text-inverse;
+
+    &:hover {
+      background: $btn-primary-hover;
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+    }
+  } @else if $type == 'secondary' {
+    background: $btn-secondary-bg;
+    border: 1px solid $btn-secondary-border;
+    color: $text-inverse;
+
+    &:hover {
+      background: $btn-secondary-hover;
+      box-shadow: 0 4px 12px rgba(253, 126, 20, 0.3);
+      transform: translateY(-1px);
+    }
+  } @else {
+    background: $btn-default-bg;
+    border: 1px solid $btn-default-border;
+    color: $text-primary;
+
+    &:hover {
+      background: $btn-default-hover;
+      border-color: $primary;
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  font-weight: $font-weight-medium;
+  border-radius: $radius-md;
+  transition: all $transition-normal;
+  cursor: pointer;
+
+  // 焦点状态
+  &:focus-visible {
+    outline: 2px solid $primary;
+    outline-offset: 2px;
+  }
+}
+
+// 现代输入框设计
+@mixin input {
+  background: $input-bg;
+  border: 1px solid $input-border;
+  border-radius: $radius-md;
+  color: $text-primary;
+  font-weight: $font-weight-normal;
+  transition: all $transition-normal;
+
+  &:focus {
+    border-color: $input-focus;
+    box-shadow:
+      0 0 0 3px rgba(52, 152, 219, 0.1),
+      0 1px 3px rgba(0, 0, 0, 0.1);
+    outline: none;
+  }
+
+  &::placeholder {
+    color: $text-light;
+  }
+}
+
+// 现代纹理背景
+@mixin texture-bg {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: $grid-pattern;
+    background-size: 24px 24px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.3;
+  }
+}

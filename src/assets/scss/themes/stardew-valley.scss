@@ -5,134 +5,134 @@
 
 // 基础色彩变量 - 大地色系
 // Primary Colors - Earth Tones
-$stardew-primary-darkest: #5D4037;        // 深褐色 - 文字/边框
-$stardew-primary-dark: #8B4513;           // 马鞍褐 - 主色调
-$stardew-primary: #A0522D;                // 赭石色 - 主背景
-$stardew-primary-light: #CD853F;          // 秘鲁色 - 浅色变体
-$stardew-primary-lightest: #DEB887;       // 硬木色 - 最浅变体
+$primary-darkest: #5D4037;        // 深褐色 - 文字/边框
+$primary-dark: #8B4513;           // 马鞍褐 - 主色调
+$primary: #A0522D;                // 赭石色 - 主背景
+$primary-light: #CD853F;          // 秘鲁色 - 浅色变体
+$primary-lightest: #DEB887;       // 硬木色 - 最浅变体
 
 // 次要色彩 - 奶油/羊皮纸色系
 // Secondary Colors - Cream/Parchment Tones
-$stardew-secondary-darkest: #D2B48C;      // 棕褐色
-$stardew-secondary-dark: #E6D3A3;         // 深奶油色
-$stardew-secondary: #F4E4BC;              // 主奶油色
-$stardew-secondary-light: #F5F5DC;        // 米色
-$stardew-secondary-lightest: #FAFAFA;     // 几乎白色
+$secondary-darkest: #D2B48C;      // 棕褐色
+$secondary-dark: #E6D3A3;         // 深奶油色
+$secondary: #F4E4BC;              // 主奶油色
+$secondary-light: #F5F5DC;        // 米色
+$secondary-lightest: #FAFAFA;     // 几乎白色
 
 // 强调色彩 - 自然色系
 // Accent Colors - Nature Tones
-$stardew-accent-green-dark: #006400;      // 深绿色
-$stardew-accent-green: #228B22;           // 森林绿
-$stardew-accent-green-light: #32CD32;     // 酸橙绿
-$stardew-accent-green-bright: #90EE90;    // 亮绿色
+$accent-green-dark: #006400;      // 深绿色
+$accent-green: #228B22;           // 森林绿
+$accent-green-light: #32CD32;     // 酸橙绿
+$accent-green-bright: #90EE90;    // 亮绿色
 
-$stardew-accent-orange-dark: #CC5500;     // 深橙色
-$stardew-accent-orange: #FF6B35;          // 主橙色
-$stardew-accent-orange-light: #FF8C42;    // 浅橙色
-$stardew-accent-orange-bright: #FFA500;   // 明橙色
+$accent-orange-dark: #CC5500;     // 深橙色
+$accent-orange: #FF6B35;          // 主橙色
+$accent-orange-light: #FF8C42;    // 浅橙色
+$accent-orange-bright: #FFA500;   // 明橙色
 
 // 功能性色彩
 // Functional Colors
-$stardew-success: $stardew-accent-green;
-$stardew-warning: #FFD700;                // 金色
-$stardew-error: #DC143C;                  // 深红色
-$stardew-info: #4169E1;                   // 皇家蓝
+$success: $stardew-accent-green;
+$warning: #FFD700;                // 金色
+$error: #DC143C;                  // 深红色
+$info: #4169E1;                   // 皇家蓝
 
 // 文字色彩
 // Text Colors
-$stardew-text-primary: $stardew-primary-darkest;
-$stardew-text-secondary: #6D4C41;
-$stardew-text-light: #8D6E63;
-$stardew-text-inverse: #FFFFFF;
-$stardew-text-disabled: #BCAAA4;
+$text-primary: $stardew-primary-darkest;
+$text-secondary: #6D4C41;
+$text-light: #8D6E63;
+$text-inverse: #FFFFFF;
+$text-disabled: #BCAAA4;
 
 // 背景色彩
 // Background Colors
-$stardew-bg-primary: linear-gradient(135deg, #{$stardew-primary} 0%, #{$stardew-primary-light} 50%, #{$stardew-primary} 100%);
-$stardew-bg-secondary: linear-gradient(145deg, #{$stardew-secondary} 0%, #{$stardew-secondary-dark} 100%);
-$stardew-bg-card: linear-gradient(145deg, #{$stardew-secondary} 0%, #{$stardew-secondary-dark} 100%);
-$stardew-bg-overlay: rgba(139, 69, 19, 0.8);
+$bg-primary: linear-gradient(135deg, #{$stardew-primary} 0%, #{$stardew-primary-light} 50%, #{$stardew-primary} 100%);
+$bg-secondary: linear-gradient(145deg, #{$stardew-secondary} 0%, #{$stardew-secondary-dark} 100%);
+$bg-card: linear-gradient(145deg, #{$stardew-secondary} 0%, #{$stardew-secondary-dark} 100%);
+$bg-overlay: rgba(139, 69, 19, 0.8);
 
 // 边框色彩
 // Border Colors
-$stardew-border-primary: $stardew-primary-dark;
-$stardew-border-secondary: $stardew-secondary-dark;
-$stardew-border-light: $stardew-secondary;
-$stardew-border-accent: $stardew-accent-green;
+$border-primary: $stardew-primary-dark;
+$border-secondary: $stardew-secondary-dark;
+$border-light: $stardew-secondary;
+$border-accent: $stardew-accent-green;
 
 // 阴影色彩
 // Shadow Colors
-$stardew-shadow-light: rgba(255, 255, 255, 0.3);
-$stardew-shadow-dark: rgba(0, 0, 0, 0.3);
-$stardew-shadow-inset: rgba(139, 69, 19, 0.1);
-$stardew-shadow-card: rgba(0, 0, 0, 0.3);
+$shadow-light: rgba(255, 255, 255, 0.3);
+$shadow-dark: rgba(0, 0, 0, 0.3);
+$shadow-inset: rgba(139, 69, 19, 0.1);
+$shadow-card: rgba(0, 0, 0, 0.3);
 
 // 按钮色彩
 // Button Colors
-$stardew-btn-primary-bg: linear-gradient(145deg, #{$stardew-accent-green} 0%, #{$stardew-accent-green-light} 100%);
-$stardew-btn-primary-border: $stardew-accent-green-dark;
-$stardew-btn-primary-hover: linear-gradient(145deg, #{$stardew-accent-green-light} 0%, #{$stardew-accent-green} 100%);
+$btn-primary-bg: linear-gradient(145deg, #{$stardew-accent-green} 0%, #{$stardew-accent-green-light} 100%);
+$btn-primary-border: $stardew-accent-green-dark;
+$btn-primary-hover: linear-gradient(145deg, #{$stardew-accent-green-light} 0%, #{$stardew-accent-green} 100%);
 
-$stardew-btn-secondary-bg: linear-gradient(145deg, #{$stardew-accent-orange} 0%, #{$stardew-accent-orange-light} 100%);
-$stardew-btn-secondary-border: $stardew-accent-orange-dark;
-$stardew-btn-secondary-hover: linear-gradient(145deg, #{$stardew-accent-orange-light} 0%, #{$stardew-accent-orange} 100%);
+$btn-secondary-bg: linear-gradient(145deg, #{$stardew-accent-orange} 0%, #{$stardew-accent-orange-light} 100%);
+$btn-secondary-border: $stardew-accent-orange-dark;
+$btn-secondary-hover: linear-gradient(145deg, #{$stardew-accent-orange-light} 0%, #{$stardew-accent-orange} 100%);
 
-$stardew-btn-default-bg: $stardew-bg-secondary;
-$stardew-btn-default-border: $stardew-border-primary;
-$stardew-btn-default-hover: linear-gradient(145deg, #{$stardew-secondary-dark} 0%, #{$stardew-secondary} 100%);
+$btn-default-bg: $stardew-bg-secondary;
+$btn-default-border: $stardew-border-primary;
+$btn-default-hover: linear-gradient(145deg, #{$stardew-secondary-dark} 0%, #{$stardew-secondary} 100%);
 
 // 表单控件色彩
 // Form Control Colors
-$stardew-input-bg: $stardew-bg-secondary;
-$stardew-input-border: $stardew-border-primary;
-$stardew-input-focus: $stardew-accent-green;
-$stardew-input-disabled: $stardew-secondary-dark;
+$input-bg: $stardew-bg-secondary;
+$input-border: $stardew-border-primary;
+$input-focus: $stardew-accent-green;
+$input-disabled: $stardew-secondary-dark;
 
 // 滑块色彩
 // Slider Colors
-$stardew-slider-track: $stardew-primary-dark;
-$stardew-slider-fill: linear-gradient(90deg, #{$stardew-accent-green} 0%, #{$stardew-accent-green-light} 100%);
-$stardew-slider-thumb: $stardew-bg-secondary;
+$slider-track: $stardew-primary-dark;
+$slider-fill: linear-gradient(90deg, #{$stardew-accent-green} 0%, #{$stardew-accent-green-light} 100%);
+$slider-thumb: $stardew-bg-secondary;
 
 // 间距变量
 // Spacing Variables
-$stardew-spacing-xs: 4px;
-$stardew-spacing-sm: 8px;
-$stardew-spacing-md: 12px;
-$stardew-spacing-lg: 16px;
-$stardew-spacing-xl: 20px;
-$stardew-spacing-2xl: 24px;
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 20px;
+$spacing-2xl: 24px;
 
 // 圆角变量
 // Border Radius Variables
-$stardew-radius-sm: 4px;
-$stardew-radius-md: 6px;
-$stardew-radius-lg: 8px;
-$stardew-radius-xl: 12px;
+$radius-sm: 4px;
+$radius-md: 6px;
+$radius-lg: 8px;
+$radius-xl: 12px;
 
 // 字体变量
 // Font Variables
-$stardew-font-weight-normal: 400;
-$stardew-font-weight-medium: 500;
-$stardew-font-weight-semibold: 600;
-$stardew-font-weight-bold: 700;
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
 
 // 过渡动画
 // Transition Variables
-$stardew-transition-fast: 0.15s ease;
-$stardew-transition-normal: 0.2s ease;
-$stardew-transition-slow: 0.3s ease;
+$transition-fast: 0.15s ease;
+$transition-normal: 0.2s ease;
+$transition-slow: 0.3s ease;
 
 // Z-index 层级
 // Z-index Layers
-$stardew-z-dropdown: 1000;
-$stardew-z-modal: 1050;
-$stardew-z-tooltip: 1070;
-$stardew-z-overlay: 10;
+$z-dropdown: 1000;
+$z-modal: 1050;
+$z-tooltip: 1070;
+$z-overlay: 10;
 
 // 木质纹理图案
 // Wood Texture Patterns
-$stardew-wood-pattern: repeating-linear-gradient(
+$wood-pattern: repeating-linear-gradient(
   90deg,
   transparent,
   transparent 2px,
@@ -140,17 +140,17 @@ $stardew-wood-pattern: repeating-linear-gradient(
   rgba(139, 69, 19, 0.1) 4px
 );
 
-$stardew-dot-pattern: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
+$dot-pattern: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
                       radial-gradient(circle at 75% 75%, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
 
 // 混合效果 - Mixins
-@mixin stardew-card {
-  background: $stardew-bg-card;
-  border: 3px solid $stardew-border-primary;
-  border-radius: $stardew-radius-xl;
+@mixin card {
+  background: $bg-card;
+  border: 3px solid $border-primary;
+  border-radius: $radius-xl;
   box-shadow:
-    inset 0 2px 4px $stardew-shadow-light,
-    0 4px 12px $stardew-shadow-card;
+    inset 0 2px 4px $shadow-light,
+    0 4px 12px $shadow-card;
   position: relative;
 
   &::after {
@@ -160,68 +160,68 @@ $stardew-dot-pattern: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: $stardew-wood-pattern;
-    border-radius: $stardew-radius-xl;
+    background-image: $wood-pattern;
+    border-radius: $radius-xl;
     pointer-events: none;
   }
 }
 
-@mixin stardew-button($type: 'default') {
+@mixin button($type: 'default') {
   @if $type == 'primary' {
-    background: $stardew-btn-primary-bg;
-    border: 2px solid $stardew-btn-primary-border;
+    background: $btn-primary-bg;
+    border: 2px solid $btn-primary-border;
 
     &:hover {
-      background: $stardew-btn-primary-hover;
-      border-color: $stardew-accent-green;
+      background: $btn-primary-hover;
+      border-color: $accent-green;
     }
   } @else if $type == 'secondary' {
-    background: $stardew-btn-secondary-bg;
-    border: 2px solid $stardew-btn-secondary-border;
+    background: $btn-secondary-bg;
+    border: 2px solid $btn-secondary-border;
 
     &:hover {
-      background: $stardew-btn-secondary-hover;
-      border-color: $stardew-accent-orange;
+      background: $btn-secondary-hover;
+      border-color: $accent-orange;
     }
   } @else {
-    background: $stardew-btn-default-bg;
-    border: 2px solid $stardew-btn-default-border;
+    background: $btn-default-bg;
+    border: 2px solid $btn-default-border;
 
     &:hover {
-      background: $stardew-btn-default-hover;
-      border-color: $stardew-accent-green;
+      background: $btn-default-hover;
+      border-color: $accent-green;
     }
   }
 
-  color: $stardew-text-inverse;
-  font-weight: $stardew-font-weight-semibold;
+  color: $text-inverse;
+  font-weight: $font-weight-semibold;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-  border-radius: $stardew-radius-md;
-  transition: all $stardew-transition-normal;
+  border-radius: $radius-md;
+  transition: all $transition-normal;
 
   &:hover {
     transform: translateY(-1px);
-    box-shadow: 0 3px 8px $stardew-shadow-dark;
+    box-shadow: 0 3px 8px $shadow-dark;
   }
 }
 
-@mixin stardew-input {
-  background: $stardew-input-bg;
-  border: 2px solid $stardew-input-border;
-  border-radius: $stardew-radius-md;
-  box-shadow: inset 0 2px 4px $stardew-shadow-inset;
-  color: $stardew-text-primary;
-  font-weight: $stardew-font-weight-medium;
+@mixin input {
+  background: $input-bg;
+  border: 2px solid $input-border;
+  border-radius: $radius-md;
+  box-shadow: inset 0 2px 4px $shadow-inset;
+  color: $text-primary;
+  font-weight: $font-weight-medium;
 
   &:focus {
-    border-color: $stardew-input-focus;
+    border-color: $input-focus;
     box-shadow:
-      inset 0 2px 4px $stardew-shadow-inset,
+      inset 0 2px 4px $shadow-inset,
       0 0 0 2px rgba(34, 139, 34, 0.2);
   }
 }
 
-@mixin stardew-texture-bg {
+@mixin texture-bg {
   &::before {
     content: '';
     position: absolute;
@@ -229,7 +229,7 @@ $stardew-dot-pattern: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: $stardew-dot-pattern;
+    background-image: $dot-pattern;
     background-size: 40px 40px;
     pointer-events: none;
     z-index: 0;

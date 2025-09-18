@@ -2,251 +2,318 @@
 // 主题管理器 - Theme Manager
 // ====================================
 
-// 当前激活的主题
+// 当前激活的主题 - 这个值将由CSS变量动态控制
 $current-theme: 'stardew-valley' !default;
 
-// 导入主题文件
-@use './stardew-valley.scss' as stardew;
-@use 'sass:map';
+// 基于CSS变量的主题系统
+// 所有主题变量都通过CSS变量来动态切换
+:root {
+  // 默认主题变量（星露谷主题）- 这些会被JavaScript动态覆盖
+  --theme-primary-darkest: #5D4037;
+  --theme-primary-dark: #8B4513;
+  --theme-primary: #A0522D;
+  --theme-primary-light: #CD853F;
+  --theme-primary-lightest: #DEB887;
 
-// 主题变量映射 - 便于后续扩展其他主题
-// Theme Variable Mapping - Easy to extend for other themes
-$theme-colors: (
-  // 主色调
-  'primary-darkest': stardew.$stardew-primary-darkest,
-  'primary-dark': stardew.$stardew-primary-dark,
-  'primary': stardew.$stardew-primary,
-  'primary-light': stardew.$stardew-primary-light,
-  'primary-lightest': stardew.$stardew-primary-lightest,
+  --theme-secondary-darkest: #D2B48C;
+  --theme-secondary-dark: #E6D3A3;
+  --theme-secondary: #F4E4BC;
+  --theme-secondary-light: #F5F5DC;
+  --theme-secondary-lightest: #FAFAFA;
 
-  // 次要色调
-  'secondary-darkest': stardew.$stardew-secondary-darkest,
-  'secondary-dark': stardew.$stardew-secondary-dark,
-  'secondary': stardew.$stardew-secondary,
-  'secondary-light': stardew.$stardew-secondary-light,
-  'secondary-lightest': stardew.$stardew-secondary-lightest,
+  --theme-accent-green-dark: #006400;
+  --theme-accent-green: #228B22;
+  --theme-accent-green-light: #32CD32;
+  --theme-accent-green-bright: #90EE90;
 
-  // 强调色
-  'accent-green-dark': stardew.$stardew-accent-green-dark,
-  'accent-green': stardew.$stardew-accent-green,
-  'accent-green-light': stardew.$stardew-accent-green-light,
-  'accent-green-bright': stardew.$stardew-accent-green-bright,
+  --theme-accent-orange-dark: #CC5500;
+  --theme-accent-orange: #FF6B35;
+  --theme-accent-orange-light: #FF8C42;
+  --theme-accent-orange-bright: #FFA500;
 
-  'accent-orange-dark': stardew.$stardew-accent-orange-dark,
-  'accent-orange': stardew.$stardew-accent-orange,
-  'accent-orange-light': stardew.$stardew-accent-orange-light,
-  'accent-orange-bright': stardew.$stardew-accent-orange-bright,
+  --theme-success: #228B22;
+  --theme-warning: #FFD700;
+  --theme-error: #DC143C;
+  --theme-info: #4169E1;
 
-  // 功能色
-  'success': stardew.$stardew-success,
-  'warning': stardew.$stardew-warning,
-  'error': stardew.$stardew-error,
-  'info': stardew.$stardew-info,
+  --theme-text-primary: #5D4037;
+  --theme-text-secondary: #6D4C41;
+  --theme-text-light: #8D6E63;
+  --theme-text-inverse: #FFFFFF;
+  --theme-text-disabled: #BCAAA4;
 
-  // 文字色
-  'text-primary': stardew.$stardew-text-primary,
-  'text-secondary': stardew.$stardew-text-secondary,
-  'text-light': stardew.$stardew-text-light,
-  'text-inverse': stardew.$stardew-text-inverse,
-  'text-disabled': stardew.$stardew-text-disabled,
+  --theme-border-primary: #8B4513;
+  --theme-border-secondary: #E6D3A3;
+  --theme-border-light: #F4E4BC;
+  --theme-border-accent: #228B22;
 
-  // 边框色
-  'border-primary': stardew.$stardew-border-primary,
-  'border-secondary': stardew.$stardew-border-secondary,
-  'border-light': stardew.$stardew-border-light,
-  'border-accent': stardew.$stardew-border-accent,
-) !default;
+  --theme-bg-primary: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
+  --theme-bg-secondary: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+  --theme-bg-card: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+  --theme-bg-overlay: rgba(139, 69, 19, 0.8);
 
-$theme-backgrounds: (
-  'bg-primary': stardew.$stardew-bg-primary,
-  'bg-secondary': stardew.$stardew-bg-secondary,
-  'bg-card': stardew.$stardew-bg-card,
-  'bg-overlay': stardew.$stardew-bg-overlay,
-) !default;
+  // 间距变量（这些通常在不同主题间保持一致，但也可以自定义）
+  --theme-spacing-xs: 4px;
+  --theme-spacing-sm: 8px;
+  --theme-spacing-md: 12px;
+  --theme-spacing-lg: 16px;
+  --theme-spacing-xl: 20px;
+  --theme-spacing-2xl: 24px;
 
-$theme-buttons: (
-  'btn-primary-bg': stardew.$stardew-btn-primary-bg,
-  'btn-primary-border': stardew.$stardew-btn-primary-border,
-  'btn-primary-hover': stardew.$stardew-btn-primary-hover,
-  'btn-secondary-bg': stardew.$stardew-btn-secondary-bg,
-  'btn-secondary-border': stardew.$stardew-btn-secondary-border,
-  'btn-secondary-hover': stardew.$stardew-btn-secondary-hover,
-  'btn-default-bg': stardew.$stardew-btn-default-bg,
-  'btn-default-border': stardew.$stardew-btn-default-border,
-  'btn-default-hover': stardew.$stardew-btn-default-hover,
-) !default;
+  // 圆角变量
+  --theme-radius-sm: 4px;
+  --theme-radius-md: 6px;
+  --theme-radius-lg: 8px;
+  --theme-radius-xl: 12px;
 
-$theme-inputs: (
-  'input-bg': stardew.$stardew-input-bg,
-  'input-border': stardew.$stardew-input-border,
-  'input-focus': stardew.$stardew-input-focus,
-  'input-disabled': stardew.$stardew-input-disabled,
-) !default;
+  // 字体变量
+  --theme-font-weight-normal: 400;
+  --theme-font-weight-medium: 500;
+  --theme-font-weight-semibold: 600;
+  --theme-font-weight-bold: 700;
 
-$theme-spacing: (
-  'xs': stardew.$stardew-spacing-xs,
-  'sm': stardew.$stardew-spacing-sm,
-  'md': stardew.$stardew-spacing-md,
-  'lg': stardew.$stardew-spacing-lg,
-  'xl': stardew.$stardew-spacing-xl,
-  '2xl': stardew.$stardew-spacing-2xl,
-) !default;
+  // 过渡变量
+  --theme-transition-fast: 0.15s ease;
+  --theme-transition-normal: 0.2s ease;
+  --theme-transition-slow: 0.3s ease;
 
-$theme-radius: (
-  'sm': stardew.$stardew-radius-sm,
-  'md': stardew.$stardew-radius-md,
-  'lg': stardew.$stardew-radius-lg,
-  'xl': stardew.$stardew-radius-xl,
-) !default;
+  // Z-index变量
+  --theme-z-dropdown: 1000;
+  --theme-z-modal: 1050;
+  --theme-z-tooltip: 1070;
+  --theme-z-overlay: 10;
 
-// 工具函数 - 获取主题色彩
-// Utility Functions - Get theme colors
+  // 阴影变量
+  --theme-shadow-light: rgba(255, 255, 255, 0.3);
+  --theme-shadow-dark: rgba(0, 0, 0, 0.3);
+  --theme-shadow-inset: rgba(139, 69, 19, 0.1);
+  --theme-shadow-card: rgba(0, 0, 0, 0.3);
+}
+
+// 工具函数 - 获取主题变量
+// 这些函数现在直接返回CSS变量
 @function theme-color($key) {
-  @if map.has-key($theme-colors, $key) {
-    @return map.get($theme-colors, $key);
-  }
-  @warn "Unknown theme color: #{$key}";
-  @return null;
+  @return var(--theme-#{$key});
 }
 
 @function theme-bg($key) {
-  @if map.has-key($theme-backgrounds, $key) {
-    @return map.get($theme-backgrounds, $key);
-  }
-  @warn "Unknown theme background: #{$key}";
-  @return null;
+  @return var(--theme-#{$key});
 }
 
 @function theme-btn($key) {
-  @if map.has-key($theme-buttons, $key) {
-    @return map.get($theme-buttons, $key);
-  }
-  @warn "Unknown theme button: #{$key}";
-  @return null;
+  @return var(--theme-#{$key});
 }
 
 @function theme-input($key) {
-  @if map.has-key($theme-inputs, $key) {
-    @return map.get($theme-inputs, $key);
-  }
-  @warn "Unknown theme input: #{$key}";
-  @return null;
+  @return var(--theme-#{$key});
 }
 
 @function theme-spacing($key) {
-  @if map.has-key($theme-spacing, $key) {
-    @return map.get($theme-spacing, $key);
-  }
-  @warn "Unknown theme spacing: #{$key}";
-  @return null;
+  @return var(--theme-spacing-#{$key});
 }
 
 @function theme-radius($key) {
-  @if map.has-key($theme-radius, $key) {
-    @return map.get($theme-radius, $key);
-  }
-  @warn "Unknown theme radius: #{$key}";
-  @return null;
+  @return var(--theme-radius-#{$key});
 }
 
-// 主题混合器导出
-// Theme Mixins Export
+@function theme-font-weight($key) {
+  @return var(--theme-font-weight-#{$key});
+}
+
+@function theme-transition($key) {
+  @return var(--theme-transition-#{$key});
+}
+
+@function theme-z($key) {
+  @return var(--theme-z-#{$key});
+}
+
+@function theme-shadow($key) {
+  @return var(--theme-shadow-#{$key});
+}
+
+// 通用主题混合器
+// 这些混合器现在使用CSS变量，会自动跟随主题变化
 @mixin theme-card {
-  @include stardew.stardew-card;
+  background: theme-bg('bg-card');
+  border: 3px solid theme-color('border-primary');
+  border-radius: theme-radius('xl');
+  box-shadow:
+    inset 0 2px 4px theme-shadow('light'),
+    0 4px 12px theme-shadow('card');
+  position: relative;
+
+  // 纹理效果（仅在特定主题下显示）
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: theme-radius('xl');
+    pointer-events: none;
+
+    // 根据主题添加不同的纹理
+    .theme-stardew-valley & {
+      background-image: repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        rgba(139, 69, 19, 0.1) 2px,
+        rgba(139, 69, 19, 0.1) 4px
+      );
+    }
+
+    .theme-modern & {
+      background-image: linear-gradient(45deg,
+        transparent 25%,
+        rgba(0, 0, 0, 0.02) 25%,
+        rgba(0, 0, 0, 0.02) 50%,
+        transparent 50%,
+        transparent 75%,
+        rgba(0, 0, 0, 0.02) 75%);
+      background-size: 20px 20px;
+      opacity: 0.5;
+    }
+
+    .theme-dark & {
+      background-image: radial-gradient(circle at 50% 50%,
+        rgba(46, 160, 67, 0.1) 0%,
+        transparent 50%);
+    }
+
+    .theme-classic & {
+      background-image: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 102, 204, 0.05) 2px,
+        rgba(0, 102, 204, 0.05) 4px
+      );
+    }
+  }
 }
 
 @mixin theme-button($type: 'default') {
-  @include stardew.stardew-button($type);
+  // 基础按钮样式
+  color: theme-color('text-inverse');
+  font-weight: theme-font-weight('semibold');
+  border-radius: theme-radius('md');
+  transition: all theme-transition('normal');
+  border: 2px solid;
+
+  @if $type == 'primary' {
+    background: linear-gradient(145deg, theme-color('accent-green') 0%, theme-color('accent-green-light') 100%);
+    border-color: theme-color('accent-green-dark');
+
+    &:hover {
+      background: linear-gradient(145deg, theme-color('accent-green-light') 0%, theme-color('accent-green') 100%);
+      border-color: theme-color('accent-green');
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px theme-shadow('dark');
+    }
+  } @else if $type == 'secondary' {
+    background: linear-gradient(145deg, theme-color('accent-orange') 0%, theme-color('accent-orange-light') 100%);
+    border-color: theme-color('accent-orange-dark');
+
+    &:hover {
+      background: linear-gradient(145deg, theme-color('accent-orange-light') 0%, theme-color('accent-orange') 100%);
+      border-color: theme-color('accent-orange');
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px theme-shadow('dark');
+    }
+  } @else {
+    background: theme-bg('bg-secondary');
+    border-color: theme-color('border-primary');
+
+    &:hover {
+      background: linear-gradient(145deg, theme-color('secondary-dark') 0%, theme-color('secondary') 100%);
+      border-color: theme-color('accent-green');
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px theme-shadow('dark');
+    }
+  }
 }
 
 @mixin theme-input {
-  @include stardew.stardew-input;
+  background: theme-bg('bg-secondary');
+  border: 2px solid theme-color('border-primary');
+  border-radius: theme-radius('md');
+  box-shadow: inset 0 2px 4px theme-shadow('inset');
+  color: theme-color('text-primary');
+  font-weight: theme-font-weight('medium');
+
+  &:focus {
+    border-color: theme-color('accent-green');
+    box-shadow:
+      inset 0 2px 4px theme-shadow('inset'),
+      0 0 0 2px rgba(34, 139, 34, 0.2);
+  }
 }
 
 @mixin theme-texture-bg {
-  @include stardew.stardew-texture-bg;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+
+    // 根据主题应用不同的纹理
+    .theme-stardew-valley & {
+      background-image: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
+                        radial-gradient(circle at 75% 75%, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    .theme-modern & {
+      background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.5;
+    }
+
+    .theme-dark & {
+      background-image: linear-gradient(90deg, transparent 24px, rgba(46, 160, 67, 0.05) 25px, rgba(46, 160, 67, 0.05) 26px, transparent 27px, transparent 74px, rgba(46, 160, 67, 0.05) 75px, rgba(46, 160, 67, 0.05) 76px, transparent 77px),
+                        linear-gradient(transparent 24px, rgba(46, 160, 67, 0.05) 25px, rgba(46, 160, 67, 0.05) 26px, transparent 27px, transparent 74px, rgba(46, 160, 67, 0.05) 75px, rgba(46, 160, 67, 0.05) 76px, transparent 77px);
+      background-size: 100px 100px;
+      opacity: 0.3;
+    }
+
+    .theme-classic & {
+      background-image: linear-gradient(rgba(0, 102, 204, 0.1) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(0, 102, 204, 0.1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      opacity: 0.3;
+    }
+  }
 }
 
-// 导出变量供其他模块使用
-$stardew-font-weight-normal: stardew.$stardew-font-weight-normal;
-$stardew-font-weight-medium: stardew.$stardew-font-weight-medium;
-$stardew-font-weight-semibold: stardew.$stardew-font-weight-semibold;
-$stardew-font-weight-bold: stardew.$stardew-font-weight-bold;
+// 导出常用变量作为SCSS变量，以便在需要时使用
+$font-weight-normal: var(--theme-font-weight-normal);
+$font-weight-medium: var(--theme-font-weight-medium);
+$font-weight-semibold: var(--theme-font-weight-semibold);
+$font-weight-bold: var(--theme-font-weight-bold);
 
-$stardew-transition-fast: stardew.$stardew-transition-fast;
-$stardew-transition-normal: stardew.$stardew-transition-normal;
-$stardew-transition-slow: stardew.$stardew-transition-slow;
+$transition-fast: var(--theme-transition-fast);
+$transition-normal: var(--theme-transition-normal);
+$transition-slow: var(--theme-transition-slow);
 
-$stardew-z-dropdown: stardew.$stardew-z-dropdown;
-$stardew-z-modal: stardew.$stardew-z-modal;
-$stardew-z-tooltip: stardew.$stardew-z-tooltip;
-$stardew-z-overlay: stardew.$stardew-z-overlay;
+$z-dropdown: var(--theme-z-dropdown);
+$z-modal: var(--theme-z-modal);
+$z-tooltip: var(--theme-z-tooltip);
+$z-overlay: var(--theme-z-overlay);
 
-$stardew-shadow-light: stardew.$stardew-shadow-light;
-$stardew-shadow-dark: stardew.$stardew-shadow-dark;
-$stardew-shadow-inset: stardew.$stardew-shadow-inset;
-$stardew-shadow-card: stardew.$stardew-shadow-card;
+$shadow-light: var(--theme-shadow-light);
+$shadow-dark: var(--theme-shadow-dark);
+$shadow-inset: var(--theme-shadow-inset);
+$shadow-card: var(--theme-shadow-card);
 
-$stardew-wood-pattern: stardew.$stardew-wood-pattern;
-$stardew-dot-pattern: stardew.$stardew-dot-pattern;
-
-$stardew-slider-track: stardew.$stardew-slider-track;
-$stardew-slider-fill: stardew.$stardew-slider-fill;
-$stardew-slider-thumb: stardew.$stardew-slider-thumb;
-
-// CSS 自定义属性导出（用于运行时主题切换）
-// CSS Custom Properties Export (for runtime theme switching)
-:root {
-  // 颜色变量
-  --theme-primary-darkest: #{theme-color('primary-darkest')};
-  --theme-primary-dark: #{theme-color('primary-dark')};
-  --theme-primary: #{theme-color('primary')};
-  --theme-primary-light: #{theme-color('primary-light')};
-  --theme-primary-lightest: #{theme-color('primary-lightest')};
-
-  --theme-secondary-darkest: #{theme-color('secondary-darkest')};
-  --theme-secondary-dark: #{theme-color('secondary-dark')};
-  --theme-secondary: #{theme-color('secondary')};
-  --theme-secondary-light: #{theme-color('secondary-light')};
-  --theme-secondary-lightest: #{theme-color('secondary-lightest')};
-
-  --theme-accent-green-dark: #{theme-color('accent-green-dark')};
-  --theme-accent-green: #{theme-color('accent-green')};
-  --theme-accent-green-light: #{theme-color('accent-green-light')};
-  --theme-accent-green-bright: #{theme-color('accent-green-bright')};
-
-  --theme-accent-orange-dark: #{theme-color('accent-orange-dark')};
-  --theme-accent-orange: #{theme-color('accent-orange')};
-  --theme-accent-orange-light: #{theme-color('accent-orange-light')};
-  --theme-accent-orange-bright: #{theme-color('accent-orange-bright')};
-
-  --theme-success: #{theme-color('success')};
-  --theme-warning: #{theme-color('warning')};
-  --theme-error: #{theme-color('error')};
-  --theme-info: #{theme-color('info')};
-
-  --theme-text-primary: #{theme-color('text-primary')};
-  --theme-text-secondary: #{theme-color('text-secondary')};
-  --theme-text-light: #{theme-color('text-light')};
-  --theme-text-inverse: #{theme-color('text-inverse')};
-  --theme-text-disabled: #{theme-color('text-disabled')};
-
-  --theme-border-primary: #{theme-color('border-primary')};
-  --theme-border-secondary: #{theme-color('border-secondary')};
-  --theme-border-light: #{theme-color('border-light')};
-  --theme-border-accent: #{theme-color('border-accent')};
-
-  // 间距变量
-  --theme-spacing-xs: #{theme-spacing('xs')};
-  --theme-spacing-sm: #{theme-spacing('sm')};
-  --theme-spacing-md: #{theme-spacing('md')};
-  --theme-spacing-lg: #{theme-spacing('lg')};
-  --theme-spacing-xl: #{theme-spacing('xl')};
-  --theme-spacing-2xl: #{theme-spacing('2xl')};
-
-  // 圆角变量
-  --theme-radius-sm: #{theme-radius('sm')};
-  --theme-radius-md: #{theme-radius('md')};
-  --theme-radius-lg: #{theme-radius('lg')};
-  --theme-radius-xl: #{theme-radius('xl')};
-}
+// 滑块变量
+$slider-track: var(--theme-primary);
+$slider-fill: var(--theme-accent-green);
+$slider-thumb: var(--theme-secondary-lightest);

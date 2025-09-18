@@ -204,27 +204,12 @@ function handleTile(t: TileItem) {
   padding: #{theme.theme-spacing('lg')};
   color: #{theme.theme-color('text-primary')};
   transform: translateZ(0);
-  transition: transform #{theme.$stardew-transition-normal},
-  box-shadow #{theme.$stardew-transition-normal},
-  filter #{theme.$stardew-transition-normal};
+  transition: transform #{theme.$transition-normal},
+  box-shadow #{theme.$transition-normal},
+  filter #{theme.$transition-normal};
 
-  // 添加木质纹理效果
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image: #{theme.$stardew-wood-pattern};
-    opacity: 0.3;
-    z-index: 0;
-  }
-
-  >* {
-    position: relative;
-    z-index: 1;
-  }
+  // 添加主题纹理效果
+  @include theme.theme-texture-bg;
 }
 
 .tile:focus-visible {
@@ -235,8 +220,8 @@ function handleTile(t: TileItem) {
 .tile:hover {
   transform: translateY(-2px) scale(1.02);
   filter: brightness(1.05);
-  box-shadow: inset 0 2px 4px #{theme.$stardew-shadow-light},
-  0 8px 20px #{theme.$stardew-shadow-card};
+  box-shadow: inset 0 2px 4px #{theme.$shadow-light},
+  0 8px 20px #{theme.$shadow-card};
 }
 
 .tile:active {
@@ -249,7 +234,7 @@ function handleTile(t: TileItem) {
   position: absolute;
   top: #{theme.theme-spacing('md')};
   left: #{theme.theme-spacing('md')};
-  filter: drop-shadow(2px 2px 4px #{theme.$stardew-shadow-dark});
+  filter: drop-shadow(2px 2px 4px #{theme.$shadow-dark});
 }
 
 .tile__text {
@@ -257,10 +242,10 @@ function handleTile(t: TileItem) {
 }
 
 .tile__title {
-  font-weight: #{theme.$stardew-font-weight-bold};
+  font-weight: #{theme.$font-weight-bold};
   letter-spacing: 0.3px;
   color: #{theme.theme-color('text-secondary')};
-  text-shadow: 1px 1px 2px #{theme.$stardew-shadow-light};
+  text-shadow: 1px 1px 2px #{theme.$shadow-light};
 }
 
 .tile__sub {

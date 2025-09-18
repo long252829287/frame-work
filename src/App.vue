@@ -78,7 +78,7 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
 .main-content {
   position: relative;
   min-height: 100vh;
-  transition: all #{theme.$stardew-transition-slow};
+  transition: all #{theme.$transition-slow};
 }
 
 /* 带header的页面布局 */
@@ -138,7 +138,7 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
 /* 普通页面过渡动画（滑动效果） */
 .page-slide-enter-active,
 .page-slide-leave-active {
-  transition: all #{theme.$stardew-transition-slow};
+  transition: all #{theme.$transition-slow};
 }
 
 .page-slide-enter-from {

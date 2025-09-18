@@ -359,11 +359,11 @@ const downloadImage = () => {
   margin-bottom: #{theme.theme-spacing('lg')};
 
   .el-form-item__label {
-    font-weight: #{theme.$stardew-font-weight-semibold};
+    font-weight: #{theme.$font-weight-semibold};
     color: #{theme.theme-color('text-primary')};
     white-space: nowrap;
     font-size: 14px;
-    text-shadow: 1px 1px 2px #{theme.$stardew-shadow-light};
+    text-shadow: 1px 1px 2px #{theme.$shadow-light};
   }
 }
 
@@ -441,19 +441,19 @@ const downloadImage = () => {
 // 滑块样式
 .controls :deep(.el-slider) {
   .el-slider__runway {
-    background: #{theme.$stardew-slider-track};
+    background: #{theme.$slider-track};
     border-radius: #{theme.theme-radius('sm')};
   }
 
   .el-slider__bar {
-    background: #{theme.$stardew-slider-fill};
+    background: #{theme.$slider-fill};
     border-radius: #{theme.theme-radius('sm')};
   }
 
   .el-slider__button {
-    background: #{theme.$stardew-slider-thumb};
+    background: #{theme.$slider-thumb};
     border: 2px solid #{theme.theme-color('border-primary')};
-    box-shadow: 0 2px 6px #{theme.$stardew-shadow-dark};
+    box-shadow: 0 2px 6px #{theme.$shadow-dark};
   }
 }
 
@@ -465,7 +465,7 @@ const downloadImage = () => {
 
   .el-input__inner {
     color: #{theme.theme-color('text-primary')};
-    font-weight: #{theme.$stardew-font-weight-medium};
+    font-weight: #{theme.$font-weight-medium};
   }
 }
 
@@ -486,7 +486,7 @@ const downloadImage = () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: #{theme.$stardew-z-overlay};
+  z-index: #{theme.$z-overlay};
   border-radius: #{theme.theme-radius('xl')};
 }
 
@@ -500,8 +500,8 @@ canvas {
   max-width: 100%;
   border: 3px solid #{theme.theme-color('border-primary')};
   border-radius: #{theme.theme-radius('lg')};
-  box-shadow: inset 0 2px 4px #{theme.$stardew-shadow-inset},
-  0 4px 12px #{theme.$stardew-shadow-card};
+  box-shadow: inset 0 2px 4px #{theme.$shadow-inset},
+  0 4px 12px #{theme.$shadow-card};
   background: #{theme.theme-color('secondary-lightest')};
 }
 
@@ -510,7 +510,7 @@ canvas {
   @include theme.theme-card;
   text-align: center;
   color: #{theme.theme-color('text-primary')};
-  font-weight: #{theme.$stardew-font-weight-medium};
+  font-weight: #{theme.$font-weight-medium};
 }
 
 // 响应式调整

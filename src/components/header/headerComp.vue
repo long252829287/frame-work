@@ -38,7 +38,7 @@
 
     <!-- 右侧用户区域 -->
     <div class="header-right">
-      <!-- <ThemeSwitcher /> -->
+      <ThemeSwitcher />
 
       <div v-if="!auth.isAuthenticated" class="auth-buttons">
         <!-- 登录按钮 -->
@@ -99,7 +99,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '../../stores/auth'
 import { useRouter, useRoute } from 'vue-router'
-// import ThemeSwitcher from '../themeSwitcher/themeSwitcherComp.vue.vue'
+import ThemeSwitcher from '../themeSwitcher/themeSwitcherComp.vue'
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -193,23 +193,23 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   height: 70px;
-  z-index: theme.$stardew-z-dropdown;
+  z-index: theme.$z-dropdown;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 #{theme.theme-spacing('2xl')};
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px #{theme.$stardew-shadow-dark};
+  box-shadow: 0 4px 15px #{theme.$shadow-dark};
   overflow: visible;
   font-family: 'Comic Sans MS', cursive, sans-serif;
-  transition: all #{theme.$stardew-transition-slow};
+  transition: all #{theme.$transition-slow};
 
   /* 现代网站特性：滚动时样式变化 */
   &--scrolled {
     height: 60px;
     backdrop-filter: blur(20px);
-    box-shadow: 0 2px 20px #{theme.$stardew-shadow-card};
+    box-shadow: 0 2px 20px #{theme.$shadow-card};
 
     .header-bg {
       background: #{theme.theme-bg('bg-secondary')};
@@ -237,7 +237,7 @@ onUnmounted(() => {
     bottom: 0;
     background: #{theme.theme-bg('bg-secondary')};
     z-index: -1;
-    transition: all #{theme.$stardew-transition-slow};
+    transition: all #{theme.$transition-slow};
   }
 
   .nature-decorations {
@@ -253,7 +253,7 @@ onUnmounted(() => {
       position: absolute;
       font-size: 1.2rem;
       animation: float 4s ease-in-out infinite;
-      transition: all #{theme.$stardew-transition-slow};
+      transition: all #{theme.$transition-slow};
 
       &.leaf-1 {
         top: 20%;
@@ -322,24 +322,24 @@ onUnmounted(() => {
   border-radius: 20px;
   color: #{theme.theme-color('text-primary')};
   cursor: pointer;
-  transition: all #{theme.$stardew-transition-slow};
-  font-weight: #{theme.$stardew-font-weight-semibold};
+  transition: all #{theme.$transition-slow};
+  font-weight: #{theme.$font-weight-semibold};
 
   &:hover {
     background: rgba(139, 69, 19, 0.3);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px #{theme.$stardew-shadow-dark};
+    box-shadow: 0 4px 10px #{theme.$shadow-dark};
   }
 
   .back-icon {
     display: flex;
     align-items: center;
-    transition: transform #{theme.$stardew-transition-slow};
+    transition: transform #{theme.$transition-slow};
   }
 
   .back-text {
     font-size: 0.875rem;
-    font-weight: #{theme.$stardew-font-weight-semibold};
+    font-weight: #{theme.$font-weight-semibold};
   }
 
   &:hover .back-icon {
@@ -355,7 +355,7 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: #{theme.theme-spacing('md')};
-  transition: transform #{theme.$stardew-transition-slow};
+  transition: transform #{theme.$transition-slow};
 
   &:hover {
     transform: scale(1.05);
@@ -364,19 +364,19 @@ onUnmounted(() => {
   .logo-icon {
     font-size: 2rem;
     animation: bounce 2s ease-in-out infinite;
-    transition: all #{theme.$stardew-transition-slow};
+    transition: all #{theme.$transition-slow};
   }
 
   .logo-text {
     .logo-main {
       font-size: 1.75rem;
-      font-weight: #{theme.$stardew-font-weight-bold};
+      font-weight: #{theme.$font-weight-bold};
       background: linear-gradient(45deg, #{theme.theme-color('primary-dark')}, #{theme.theme-color('primary')}, #{theme.theme-color('primary-light')});
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 2px 2px 4px #{theme.$stardew-shadow-dark};
-      transition: all #{theme.$stardew-transition-slow};
+      text-shadow: 2px 2px 4px #{theme.$shadow-dark};
+      transition: all #{theme.$transition-slow};
     }
 
     .logo-subtitle {
@@ -420,7 +420,7 @@ onUnmounted(() => {
   border-radius: 25px;
   font-size: 0.875rem;
   cursor: pointer;
-  transition: all #{theme.$stardew-transition-slow};
+  transition: all #{theme.$transition-slow};
 
   &:hover {
     transform: translateY(-2px);
@@ -460,7 +460,7 @@ onUnmounted(() => {
   padding: #{theme.theme-spacing('sm')} #{theme.theme-spacing('lg')};
   border-radius: 25px;
   cursor: pointer;
-  transition: all #{theme.$stardew-transition-slow};
+  transition: all #{theme.$transition-slow};
   border: 2px solid #{theme.theme-color('border-primary')};
 
   &:hover {
@@ -514,7 +514,7 @@ onUnmounted(() => {
 
   .user-name {
     font-size: 0.875rem;
-    font-weight: #{theme.$stardew-font-weight-semibold};
+    font-weight: #{theme.$font-weight-semibold};
     color: #{theme.theme-color('text-primary')};
     line-height: 1;
   }
@@ -523,12 +523,12 @@ onUnmounted(() => {
     font-size: 0.75rem;
     color: #{theme.theme-color('accent-green')};
     line-height: 1;
-    font-weight: #{theme.$stardew-font-weight-semibold};
+    font-weight: #{theme.$font-weight-semibold};
   }
 }
 
 .dropdown-arrow {
-  transition: transform #{theme.$stardew-transition-slow};
+  transition: transform #{theme.$transition-slow};
 
   .arrow-icon {
     font-size: 0.8rem;
@@ -550,8 +550,8 @@ onUnmounted(() => {
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
-  transition: all #{theme.$stardew-transition-slow};
-  z-index: theme.$stardew-z-dropdown;
+  transition: all #{theme.$transition-slow};
+  z-index: theme.$z-dropdown;
 
   &.show {
     opacity: 1;
@@ -568,8 +568,8 @@ onUnmounted(() => {
   border-radius: #{theme.theme-radius('md')};
   color: #{theme.theme-color('text-primary')};
   cursor: pointer;
-  transition: all #{theme.$stardew-transition-normal};
-  font-weight: #{theme.$stardew-font-weight-semibold};
+  transition: all #{theme.$transition-normal};
+  font-weight: #{theme.$font-weight-semibold};
 
   &:hover {
     background: #{theme.theme-color('secondary-light')};
@@ -592,7 +592,7 @@ onUnmounted(() => {
 
   span:last-child {
     font-size: 0.875rem;
-    font-weight: #{theme.$stardew-font-weight-semibold};
+    font-weight: #{theme.$font-weight-semibold};
   }
 }
 

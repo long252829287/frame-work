@@ -55,10 +55,10 @@ html, body {
   --el-border-radius-circle: 50%;
 
   // 阴影覆盖
-  --el-box-shadow: 0 2px 12px 0 #{theme.$stardew-shadow-dark};
-  --el-box-shadow-light: 0 2px 4px #{theme.$stardew-shadow-inset};
-  --el-box-shadow-base: 0 2px 4px #{theme.$stardew-shadow-dark};
-  --el-box-shadow-dark: 0 4px 12px #{theme.$stardew-shadow-dark};
+  --el-box-shadow: 0 2px 12px 0 #{theme-shadow('dark')};
+  --el-box-shadow-light: 0 2px 4px #{theme-shadow('inset')};
+  --el-box-shadow-base: 0 2px 4px #{theme-shadow('dark')};
+  --el-box-shadow-dark: 0 4px 12px #{theme-shadow('dark')};
 }
 
 // 全局 Element Plus 组件样式覆盖
@@ -100,7 +100,7 @@ html, body {
 .el-form-item {
   .el-form-item__label {
     color: #{theme.theme-color('text-primary')};
-    font-weight: #{theme.$stardew-font-weight-medium};
+    font-weight: #{theme.$font-weight-medium};
   }
 }
 
@@ -111,7 +111,7 @@ html, body {
     background: #{theme.theme-bg('bg-secondary')};
     border-bottom: 2px solid #{theme.theme-color('border-primary')};
     color: #{theme.theme-color('text-primary')};
-    font-weight: #{theme.$stardew-font-weight-semibold};
+    font-weight: #{theme.$font-weight-semibold};
   }
 
   .el-card__body {
@@ -125,7 +125,7 @@ html, body {
   .el-dialog__header {
     background: #{theme.theme-bg('bg-secondary')};
     color: #{theme.theme-color('text-primary')};
-    font-weight: #{theme.$stardew-font-weight-semibold};
+    font-weight: #{theme.$font-weight-semibold};
     border-bottom: 2px solid #{theme.theme-color('border-primary')};
   }
 
@@ -140,7 +140,7 @@ html, body {
 
   .el-message-box__header {
     color: #{theme.theme-color('text-primary')};
-    font-weight: #{theme.$stardew-font-weight-semibold};
+    font-weight: #{theme.$font-weight-semibold};
   }
 
   .el-message-box__content {
@@ -153,7 +153,7 @@ html, body {
 
   .el-notification__title {
     color: #{theme.theme-color('text-primary')};
-    font-weight: #{theme.$stardew-font-weight-semibold};
+    font-weight: #{theme.$font-weight-semibold};
   }
 
   .el-notification__content {
@@ -172,7 +172,7 @@ html, body {
     th {
       background: #{theme.theme-bg('bg-secondary')};
       color: #{theme.theme-color('text-primary')};
-      font-weight: #{theme.$stardew-font-weight-semibold};
+      font-weight: #{theme.$font-weight-semibold};
       border-bottom: 2px solid #{theme.theme-color('border-primary')};
     }
   }
@@ -249,7 +249,7 @@ html, body {
 
     .el-loading-text {
       color: #{theme.theme-color('text-inverse')};
-      font-weight: #{theme.$stardew-font-weight-medium};
+      font-weight: #{theme.$font-weight-medium};
     }
   }
 }
@@ -296,7 +296,7 @@ html, body {
 a {
   color: #{theme.theme-color('accent-green')};
   text-decoration: none;
-  transition: color #{theme.$stardew-transition-normal};
+  transition: color #{theme.$transition-normal};
 
   &:hover {
     color: #{theme.theme-color('accent-green-light')};
