@@ -25,16 +25,17 @@
       </el-form-item>
       <el-form-item label="操作">
         <div class="button-group">
-          <el-button @click="resetScale" size="small">重置缩放</el-button>
-          <el-button @click="autoScale" size="small">自适应缩放</el-button>
-          <el-button @click="analyzeColors" type="primary" size="small">开始解析</el-button>
+          <el-button @click="resetScale">重置缩放</el-button>
+          <el-button @click="autoScale">自适应缩放</el-button>
+          <el-button @click="analyzeColors" type="primary">开始解析</el-button>
+          <el-button @click="downloadImage" type="primary">下载图片</el-button>
         </div>
       </el-form-item>
     </el-form>
 
     <div class="canvas-wrapper">
       <div v-if="isLoading" class="loading-overlay">
-        <span>正在处理中...</span>
+        <span>正在解析中... {{ progress }} % </span>
       </div>
 
       <canvas ref="canvasRef"></canvas>
@@ -73,11 +74,9 @@ for (const [name, hexArray] of colorMap.entries()) {
 }
 
 const colorMatchCache = new Map<string, string>()
-// 定义 props
 const props = defineProps<{
   imageUrl: string
 }>()
-
 const canvasRef = ref<HTMLCanvasElement | null>(null)
 const cellSize = ref(20)
 const scaleFactor = ref(1.0) // 新增缩放比例
@@ -158,10 +157,9 @@ const processImage = () => {
     worker.postMessage({ imageData, cellSize: cellSize.value })
 
     worker.onmessage = (event) => {
-      const { type, current, total, data } = event.data
+      const { type, percentage, data } = event.data
       if (type === 'progress') {
-        progress.value = Math.floor(current / total) * 100
-        console.log('导入进度：', `${progress.value}%`)
+        progress.value = percentage;
       } else if (type === 'complete') {
         pixelatedColorData = data
         drawPixelatedImage(pixelatedColorData)
@@ -318,6 +316,14 @@ watch(colorFormat, () => {
     drawPixelatedImage(pixelatedColorData, true)
   }
 })
+
+const downloadImage = () => {
+  if (!canvasRef.value) return
+  const link = document.createElement('a')
+  link.href = canvasRef.value.toDataURL('image/png')
+  link.download = 'pixelated_image.png'
+  link.click()
+}
 </script>
 
 <style lang="scss" scoped>
@@ -345,6 +351,7 @@ watch(colorFormat, () => {
   padding: #{theme.theme-spacing('xl')};
   max-width: 100%;
   width: 100%;
+  max-width: 800px;
   box-sizing: border-box;
 }
 

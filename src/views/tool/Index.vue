@@ -2,7 +2,8 @@
   <div class="tool-container">
     <h3>检查是否存在重复的id</h3>
     <el-input type="textarea" v-model="input" placeholder="请输入内容" />
-    <el-button type="primary" @click="checkIsOwnId" round size="small">开始</el-button>
+    <el-input v-model="key" placeholder="请输入key" style="width: 100px;" />
+    <el-button type="primary" @click="checkIsOwnId" round>开始</el-button>
   </div>
 </template>
 
@@ -10,10 +11,10 @@
 import { ref } from 'vue'
 import { findDuplicateIdsInTreeWithContext } from '@/utils/checkIsOwnId'
 const input = ref('')
+const key = ref('id')
 const checkIsOwnId = () => {
-  // 将input的值转换为json对象
   const jsonObj = JSON.parse(input.value)
-  findDuplicateIdsInTreeWithContext(jsonObj, 'id')
+  findDuplicateIdsInTreeWithContext(jsonObj, key.value);
 }
 </script>
 
@@ -23,7 +24,11 @@ const checkIsOwnId = () => {
   margin-top: 90px;
   width: 400px;
   display: flex;
-  flex-wrap: wrap;
   gap: 12px;
+  flex-wrap: wrap;
+
+  >h3 {
+    color: #fff;
+  }
 }
 </style>

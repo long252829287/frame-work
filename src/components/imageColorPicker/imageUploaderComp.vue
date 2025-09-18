@@ -1,6 +1,7 @@
 <template>
   <div class="image-uploader">
-    <el-button type="primary" for="file-upload" class="custom-file-upload">上传图片</el-button>
+    <el-button type="primary" for="file-upload" class="custom-file-upload"
+      onclick="this.nextElementSibling.click()">上传图片</el-button>
     <input id="file-upload" type="file" accept="image/png, image/jpeg, image/jpg" @change="handleImageUpload" />
     <p class="file-upload-tips" v-if="!imageUrl">请选择一张本地图片</p>
   </div>
@@ -21,7 +22,6 @@ const handleImageUpload = (event: Event) => {
   if (target.files && target.files[0]) {
     const file = target.files[0]
 
-    // 如果之前有 URL，先释放掉，防止内存泄漏
     if (imageUrl.value) {
       URL.revokeObjectURL(imageUrl.value)
     }
