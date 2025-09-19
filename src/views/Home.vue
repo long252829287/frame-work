@@ -152,15 +152,16 @@ function handleTile(t: TileItem) {
 }
 </script>
 
+
 <style scoped lang="scss">
-@use '@/assets/scss/themes/theme-manager.scss' as theme;
+@use '@/assets/scss/themes/stardew-valley.scss' as stardew;
 
 .desktop {
   min-height: 100vh;
-  padding: #{theme.theme-spacing('2xl')};
+  padding: 24px;
   padding-top: 90px;
-  background: #{theme.theme-bg('bg-primary')};
-  @include theme.theme-texture-bg;
+  background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
+  @include stardew.texture-bg;
   position: relative;
 
   // 添加星露谷风格的装饰效果
@@ -189,39 +190,39 @@ function handleTile(t: TileItem) {
   display: grid;
   grid-auto-flow: dense;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: #{theme.theme-spacing('md')};
+  gap: 12px;
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .tile {
-  @include theme.theme-card;
+  @include stardew.card;
   position: relative;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
   cursor: pointer;
-  padding: #{theme.theme-spacing('lg')};
-  color: #{theme.theme-color('text-primary')};
+  padding: 16px;
+  color: #5D4037;
   transform: translateZ(0);
-  transition: transform #{theme.$transition-normal},
-  box-shadow #{theme.$transition-normal},
-  filter #{theme.$transition-normal};
+  transition: transform 0.2s ease,
+  box-shadow 0.2s ease,
+  filter 0.2s ease;
 
   // 添加主题纹理效果
-  @include theme.theme-texture-bg;
+  @include stardew.texture-bg;
 }
 
 .tile:focus-visible {
-  outline: 2px solid #{theme.theme-color('accent-green')};
+  outline: 2px solid #228B22;
   outline-offset: 2px;
 }
 
 .tile:hover {
   transform: translateY(-2px) scale(1.02);
   filter: brightness(1.05);
-  box-shadow: inset 0 2px 4px #{theme.$shadow-light},
-  0 8px 20px #{theme.$shadow-card};
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3),
+  0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 .tile:active {
@@ -232,9 +233,9 @@ function handleTile(t: TileItem) {
 .tile__icon {
   font-size: 28px;
   position: absolute;
-  top: #{theme.theme-spacing('md')};
-  left: #{theme.theme-spacing('md')};
-  filter: drop-shadow(2px 2px 4px #{theme.$shadow-dark});
+  top: 12px;
+  left: 12px;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .tile__text {
@@ -242,17 +243,17 @@ function handleTile(t: TileItem) {
 }
 
 .tile__title {
-  font-weight: #{theme.$font-weight-bold};
+  font-weight: 700;
   letter-spacing: 0.3px;
-  color: #{theme.theme-color('text-secondary')};
-  text-shadow: 1px 1px 2px #{theme.$shadow-light};
+  color: #6D4C41;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
 }
 
 .tile__sub {
   font-size: 12px;
   opacity: 0.85;
   margin-top: 2px;
-  color: #{theme.theme-color('text-secondary')};
+  color: #6D4C41;
 }
 
 /* sizes (using grid spans) */
@@ -294,17 +295,17 @@ function handleTile(t: TileItem) {
 
 @media (max-width: 600px) {
   .desktop {
-    padding: #{theme.theme-spacing('lg')};
+    padding: 16px;
     padding-top: 80px;
   }
 
   .start-grid {
     grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: #{theme.theme-spacing('sm')};
+    gap: 8px;
   }
 
   .tile {
-    padding: #{theme.theme-spacing('sm')};
+    padding: 8px;
   }
 
   .tile--m,
@@ -332,21 +333,21 @@ function handleTile(t: TileItem) {
   background: linear-gradient(145deg,
       rgba(236, 188, 154, 0.7) 0%,
       rgba(157, 97, 70, 0.9) 100%);
-  border-color: #{theme.theme-color('primary-dark')};
+  border-color: #8B4513;
 }
 
 .tile--teal {
   background: linear-gradient(145deg,
       rgba(94, 234, 212, 0.45) 0%,
       rgba(45, 212, 191, 0.32) 100%);
-  border-color: #{theme.theme-color('secondary-dark')};
+  border-color: #E6D3A3;
 }
 
 .tile--orange {
   background: linear-gradient(145deg,
       rgba(253, 186, 116, 0.48) 0%,
-      rrgba(251, 146, 60, 0.35) 100%);
-  border-color: #{theme.theme-color('accent-orange-dark')};
+      rgba(251, 146, 60, 0.35) 100%);
+  border-color: #CC5500;
 }
 
 .tile--pink {
@@ -360,14 +361,14 @@ function handleTile(t: TileItem) {
   background: linear-gradient(145deg,
       rgba(203, 213, 225, 0.9) 0%,
       rgba(148, 163, 184, 1) 100%);
-  border-color: #{theme.theme-color('text-secondary')};
+  border-color: #6D4C41;
 }
 
 .tile--green {
   background: linear-gradient(145deg,
       rgba(110, 231, 183, 0.45) 0%,
       rgba(34, 197, 94, 0.35) 100%);
-  border-color: #{theme.theme-color('accent-green')};
+  border-color: #228B22;
 }
 
 /* 装饰性高光 - 更适合星露谷风格 */

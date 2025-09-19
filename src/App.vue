@@ -63,22 +63,22 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
 </template>
 
 <style lang="scss" scoped>
-@use '@/assets/scss/themes/theme-manager.scss' as theme;
+@use '@/assets/scss/themes/stardew-valley.scss' as stardew;
 
 .app-container {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  background: #{theme.theme-bg('bg-primary')};
-  color: #{theme.theme-color('text-primary')};
-  @include theme.theme-texture-bg;
+  background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
+  color: #5D4037;
+  @include stardew.texture-bg;
 }
 
 /* 主内容区域 */
 .main-content {
   position: relative;
   min-height: 100vh;
-  transition: all #{theme.$transition-slow};
+  transition: all 0.3s ease;
 }
 
 /* 带header的页面布局 */
@@ -99,8 +99,8 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
   max-width: none;
   margin: 0;
   min-height: 100vh;
-  background: #{theme.theme-bg('bg-primary')};
-  @include theme.theme-texture-bg;
+  background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
+  @include stardew.texture-bg;
 }
 
 /* Header过渡动画 */
@@ -138,7 +138,7 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
 /* 普通页面过渡动画（滑动效果） */
 .page-slide-enter-active,
 .page-slide-leave-active {
-  transition: all #{theme.$transition-slow};
+  transition: all 0.3s ease;
 }
 
 .page-slide-enter-from {
@@ -157,20 +157,20 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
   --glass-brd: rgba(244, 228, 188, 0.18);
   --header-height: 70px;
   --content-max-width: 1200px;
-  --content-padding: #{theme.theme-spacing('2xl')};
+  --content-padding: 24px;
 }
 
 /* 响应式设计 */
 @media (max-width: 1240px) {
   :root {
-    --content-padding: #{theme.theme-spacing('xl')};
+    --content-padding: 20px;
   }
 }
 
 @media (max-width: 768px) {
   :root {
     --header-height: 60px;
-    --content-padding: #{theme.theme-spacing('lg')};
+    --content-padding: 16px;
   }
 
   .main-content--with-header {
@@ -181,7 +181,7 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
 
 @media (max-width: 480px) {
   :root {
-    --content-padding: #{theme.theme-spacing('md')};
+    --content-padding: 12px;
   }
 }
 
@@ -192,9 +192,9 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
 
 /* 现代网站优化：焦点可见性 */
 *:focus-visible {
-  outline: 2px solid #{theme.theme-color('accent-green')};
+  outline: 2px solid #228B22;
   outline-offset: 2px;
-  border-radius: #{theme.theme-radius('sm')};
+  border-radius: 4px;
 }
 
 /* 现代网站优化：深色模式支持 */
@@ -221,7 +221,7 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
 /* 现代网站优化：高对比度模式支持 */
 @media (prefers-contrast: high) {
   .main-content--with-header {
-    border: 1px solid #{theme.theme-color('border-primary')};
+    border: 1px solid #8B4513;
   }
 }
 </style>

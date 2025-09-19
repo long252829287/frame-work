@@ -1,156 +1,16 @@
 // ====================================
-// 星露谷物语主题配色方案
-// Stardew Valley Theme Color Palette
+// 星露谷物语主题样式 - 直接数值版本
+// Stardew Valley Theme Styles - Direct Values
 // ====================================
 
-// 基础色彩变量 - 大地色系
-// Primary Colors - Earth Tones
-$primary-darkest: #5D4037;        // 深褐色 - 文字/边框
-$primary-dark: #8B4513;           // 马鞍褐 - 主色调
-$primary: #A0522D;                // 赭石色 - 主背景
-$primary-light: #CD853F;          // 秘鲁色 - 浅色变体
-$primary-lightest: #DEB887;       // 硬木色 - 最浅变体
-
-// 次要色彩 - 奶油/羊皮纸色系
-// Secondary Colors - Cream/Parchment Tones
-$secondary-darkest: #D2B48C;      // 棕褐色
-$secondary-dark: #E6D3A3;         // 深奶油色
-$secondary: #F4E4BC;              // 主奶油色
-$secondary-light: #F5F5DC;        // 米色
-$secondary-lightest: #FAFAFA;     // 几乎白色
-
-// 强调色彩 - 自然色系
-// Accent Colors - Nature Tones
-$accent-green-dark: #006400;      // 深绿色
-$accent-green: #228B22;           // 森林绿
-$accent-green-light: #32CD32;     // 酸橙绿
-$accent-green-bright: #90EE90;    // 亮绿色
-
-$accent-orange-dark: #CC5500;     // 深橙色
-$accent-orange: #FF6B35;          // 主橙色
-$accent-orange-light: #FF8C42;    // 浅橙色
-$accent-orange-bright: #FFA500;   // 明橙色
-
-// 功能性色彩
-// Functional Colors
-$success: $stardew-accent-green;
-$warning: #FFD700;                // 金色
-$error: #DC143C;                  // 深红色
-$info: #4169E1;                   // 皇家蓝
-
-// 文字色彩
-// Text Colors
-$text-primary: $stardew-primary-darkest;
-$text-secondary: #6D4C41;
-$text-light: #8D6E63;
-$text-inverse: #FFFFFF;
-$text-disabled: #BCAAA4;
-
-// 背景色彩
-// Background Colors
-$bg-primary: linear-gradient(135deg, #{$stardew-primary} 0%, #{$stardew-primary-light} 50%, #{$stardew-primary} 100%);
-$bg-secondary: linear-gradient(145deg, #{$stardew-secondary} 0%, #{$stardew-secondary-dark} 100%);
-$bg-card: linear-gradient(145deg, #{$stardew-secondary} 0%, #{$stardew-secondary-dark} 100%);
-$bg-overlay: rgba(139, 69, 19, 0.8);
-
-// 边框色彩
-// Border Colors
-$border-primary: $stardew-primary-dark;
-$border-secondary: $stardew-secondary-dark;
-$border-light: $stardew-secondary;
-$border-accent: $stardew-accent-green;
-
-// 阴影色彩
-// Shadow Colors
-$shadow-light: rgba(255, 255, 255, 0.3);
-$shadow-dark: rgba(0, 0, 0, 0.3);
-$shadow-inset: rgba(139, 69, 19, 0.1);
-$shadow-card: rgba(0, 0, 0, 0.3);
-
-// 按钮色彩
-// Button Colors
-$btn-primary-bg: linear-gradient(145deg, #{$stardew-accent-green} 0%, #{$stardew-accent-green-light} 100%);
-$btn-primary-border: $stardew-accent-green-dark;
-$btn-primary-hover: linear-gradient(145deg, #{$stardew-accent-green-light} 0%, #{$stardew-accent-green} 100%);
-
-$btn-secondary-bg: linear-gradient(145deg, #{$stardew-accent-orange} 0%, #{$stardew-accent-orange-light} 100%);
-$btn-secondary-border: $stardew-accent-orange-dark;
-$btn-secondary-hover: linear-gradient(145deg, #{$stardew-accent-orange-light} 0%, #{$stardew-accent-orange} 100%);
-
-$btn-default-bg: $stardew-bg-secondary;
-$btn-default-border: $stardew-border-primary;
-$btn-default-hover: linear-gradient(145deg, #{$stardew-secondary-dark} 0%, #{$stardew-secondary} 100%);
-
-// 表单控件色彩
-// Form Control Colors
-$input-bg: $stardew-bg-secondary;
-$input-border: $stardew-border-primary;
-$input-focus: $stardew-accent-green;
-$input-disabled: $stardew-secondary-dark;
-
-// 滑块色彩
-// Slider Colors
-$slider-track: $stardew-primary-dark;
-$slider-fill: linear-gradient(90deg, #{$stardew-accent-green} 0%, #{$stardew-accent-green-light} 100%);
-$slider-thumb: $stardew-bg-secondary;
-
-// 间距变量
-// Spacing Variables
-$spacing-xs: 4px;
-$spacing-sm: 8px;
-$spacing-md: 12px;
-$spacing-lg: 16px;
-$spacing-xl: 20px;
-$spacing-2xl: 24px;
-
-// 圆角变量
-// Border Radius Variables
-$radius-sm: 4px;
-$radius-md: 6px;
-$radius-lg: 8px;
-$radius-xl: 12px;
-
-// 字体变量
-// Font Variables
-$font-weight-normal: 400;
-$font-weight-medium: 500;
-$font-weight-semibold: 600;
-$font-weight-bold: 700;
-
-// 过渡动画
-// Transition Variables
-$transition-fast: 0.15s ease;
-$transition-normal: 0.2s ease;
-$transition-slow: 0.3s ease;
-
-// Z-index 层级
-// Z-index Layers
-$z-dropdown: 1000;
-$z-modal: 1050;
-$z-tooltip: 1070;
-$z-overlay: 10;
-
-// 木质纹理图案
-// Wood Texture Patterns
-$wood-pattern: repeating-linear-gradient(
-  90deg,
-  transparent,
-  transparent 2px,
-  rgba(139, 69, 19, 0.1) 2px,
-  rgba(139, 69, 19, 0.1) 4px
-);
-
-$dot-pattern: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
-                      radial-gradient(circle at 75% 75%, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
-
-// 混合效果 - Mixins
+// 混合效果 - Mixins (使用具体数值)
 @mixin card {
-  background: $bg-card;
-  border: 3px solid $border-primary;
-  border-radius: $radius-xl;
+  background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+  border: 3px solid #8B4513;
+  border-radius: 12px;
   box-shadow:
-    inset 0 2px 4px $shadow-light,
-    0 4px 12px $shadow-card;
+    inset 0 2px 4px rgba(255, 255, 255, 0.3),
+    0 4px 12px rgba(0, 0, 0, 0.3);
   position: relative;
 
   &::after {
@@ -160,63 +20,69 @@ $dot-pattern: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 2px, t
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: $wood-pattern;
-    border-radius: $radius-xl;
+    background-image: repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(139, 69, 19, 0.1) 2px,
+      rgba(139, 69, 19, 0.1) 4px
+    );
+    border-radius: 12px;
     pointer-events: none;
   }
 }
 
 @mixin button($type: 'default') {
   @if $type == 'primary' {
-    background: $btn-primary-bg;
-    border: 2px solid $btn-primary-border;
+    background: linear-gradient(145deg, #228B22 0%, #32CD32 100%);
+    border: 2px solid #006400;
 
     &:hover {
-      background: $btn-primary-hover;
-      border-color: $accent-green;
+      background: linear-gradient(145deg, #32CD32 0%, #228B22 100%);
+      border-color: #228B22;
     }
   } @else if $type == 'secondary' {
-    background: $btn-secondary-bg;
-    border: 2px solid $btn-secondary-border;
+    background: linear-gradient(145deg, #FF6B35 0%, #FF8C42 100%);
+    border: 2px solid #CC5500;
 
     &:hover {
-      background: $btn-secondary-hover;
-      border-color: $accent-orange;
+      background: linear-gradient(145deg, #FF8C42 0%, #FF6B35 100%);
+      border-color: #FF6B35;
     }
   } @else {
-    background: $btn-default-bg;
-    border: 2px solid $btn-default-border;
+    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+    border: 2px solid #8B4513;
 
     &:hover {
-      background: $btn-default-hover;
-      border-color: $accent-green;
+      background: linear-gradient(145deg, #E6D3A3 0%, #F4E4BC 100%);
+      border-color: #228B22;
     }
   }
 
-  color: $text-inverse;
-  font-weight: $font-weight-semibold;
+  color: #FFFFFF;
+  font-weight: 600;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-  border-radius: $radius-md;
-  transition: all $transition-normal;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 
   &:hover {
     transform: translateY(-1px);
-    box-shadow: 0 3px 8px $shadow-dark;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
   }
 }
 
 @mixin input {
-  background: $input-bg;
-  border: 2px solid $input-border;
-  border-radius: $radius-md;
-  box-shadow: inset 0 2px 4px $shadow-inset;
-  color: $text-primary;
-  font-weight: $font-weight-medium;
+  background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+  border: 2px solid #8B4513;
+  border-radius: 6px;
+  box-shadow: inset 0 2px 4px rgba(139, 69, 19, 0.1);
+  color: #5D4037;
+  font-weight: 500;
 
   &:focus {
-    border-color: $input-focus;
+    border-color: #228B22;
     box-shadow:
-      inset 0 2px 4px $shadow-inset,
+      inset 0 2px 4px rgba(139, 69, 19, 0.1),
       0 0 0 2px rgba(34, 139, 34, 0.2);
   }
 }
@@ -229,7 +95,8 @@ $dot-pattern: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 2px, t
     left: 0;
     right: 0;
     bottom: 0;
-    background-image: $dot-pattern;
+    background-image: radial-gradient(circle at 25% 25%, rgba(255, 255, 255, 0.1) 2px, transparent 2px),
+                      radial-gradient(circle at 75% 75%, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none;
     z-index: 0;

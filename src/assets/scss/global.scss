@@ -1,8 +1,9 @@
 // ====================================
-// 全局主题样式 - Global Theme Styles
+// 全局样式 - 星露谷主题版本
+// Global Styles - Stardew Valley Theme
 // ====================================
 
-@use './themes/theme-manager.scss' as theme;
+@use './themes/stardew-valley.scss' as stardew;
 
 // 全局根元素样式
 html, body {
@@ -10,246 +11,246 @@ html, body {
   padding: 0;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  background: #{theme.theme-bg('bg-primary')};
-  color: #{theme.theme-color('text-primary')};
-  @include theme.theme-texture-bg;
+  background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
+  color: #5D4037;
+  @include stardew.texture-bg;
 }
 
 *, *::before, *::after {
   box-sizing: inherit;
 }
 
-// 重写 Element Plus 组件的全局样式
+// Element Plus 组件的全局样式覆盖
 :root {
-  // Element Plus 主题变量覆盖
-  --el-color-primary: #{theme.theme-color('accent-green')};
-  --el-color-success: #{theme.theme-color('success')};
-  --el-color-warning: #{theme.theme-color('warning')};
-  --el-color-danger: #{theme.theme-color('error')};
-  --el-color-info: #{theme.theme-color('info')};
+  // Element Plus 主题变量覆盖 - 保持Element Plus的深度定制不变
+  --el-color-primary: #228B22;
+  --el-color-success: #228B22;
+  --el-color-warning: #FFD700;
+  --el-color-danger: #DC143C;
+  --el-color-info: #4169E1;
 
   // 背景色覆盖
-  --el-bg-color: #{theme.theme-color('secondary')};
-  --el-bg-color-page: #{theme.theme-color('secondary-light')};
-  --el-bg-color-overlay: #{theme.theme-color('secondary-dark')};
+  --el-bg-color: #F4E4BC;
+  --el-bg-color-page: #F5F5DC;
+  --el-bg-color-overlay: #E6D3A3;
 
   // 文字色覆盖
-  --el-text-color-primary: #{theme.theme-color('text-primary')};
-  --el-text-color-regular: #{theme.theme-color('text-secondary')};
-  --el-text-color-secondary: #{theme.theme-color('text-light')};
-  --el-text-color-placeholder: #{theme.theme-color('text-disabled')};
-  --el-text-color-disabled: #{theme.theme-color('text-disabled')};
+  --el-text-color-primary: #5D4037;
+  --el-text-color-regular: #6D4C41;
+  --el-text-color-secondary: #8D6E63;
+  --el-text-color-placeholder: #BCAAA4;
+  --el-text-color-disabled: #BCAAA4;
 
   // 边框色覆盖
-  --el-border-color: #{theme.theme-color('border-primary')};
-  --el-border-color-light: #{theme.theme-color('border-light')};
-  --el-border-color-lighter: #{theme.theme-color('border-secondary')};
-  --el-border-color-extra-light: #{theme.theme-color('border-light')};
-  --el-border-color-dark: #{theme.theme-color('border-primary')};
-  --el-border-color-darker: #{theme.theme-color('primary-dark')};
+  --el-border-color: #8B4513;
+  --el-border-color-light: #F4E4BC;
+  --el-border-color-lighter: #E6D3A3;
+  --el-border-color-extra-light: #F4E4BC;
+  --el-border-color-dark: #8B4513;
+  --el-border-color-darker: #8B4513;
 
   // 圆角覆盖
-  --el-border-radius-base: #{theme.theme-radius('md')};
-  --el-border-radius-small: #{theme.theme-radius('sm')};
-  --el-border-radius-round: #{theme.theme-radius('xl')};
+  --el-border-radius-base: 6px;
+  --el-border-radius-small: 4px;
+  --el-border-radius-round: 12px;
   --el-border-radius-circle: 50%;
 
   // 阴影覆盖
-  --el-box-shadow: 0 2px 12px 0 #{theme-shadow('dark')};
-  --el-box-shadow-light: 0 2px 4px #{theme-shadow('inset')};
-  --el-box-shadow-base: 0 2px 4px #{theme-shadow('dark')};
-  --el-box-shadow-dark: 0 4px 12px #{theme-shadow('dark')};
+  --el-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
+  --el-box-shadow-light: 0 2px 4px rgba(139, 69, 19, 0.1);
+  --el-box-shadow-base: 0 2px 4px rgba(0, 0, 0, 0.3);
+  --el-box-shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 // 全局 Element Plus 组件样式覆盖
 .el-button {
-  @include theme.theme-button('default');
+  @include stardew.button('default');
 
   &.el-button--primary {
-    @include theme.theme-button('secondary');
+    @include stardew.button('secondary');
   }
 
   &.el-button--success {
-    background: #{theme.theme-btn('btn-primary-bg')};
-    border-color: #{theme.theme-btn('btn-primary-border')};
+    background: linear-gradient(145deg, #228B22 0%, #32CD32 100%);
+    border-color: #006400;
 
     &:hover {
-      background: #{theme.theme-btn('btn-primary-hover')};
+      background: linear-gradient(145deg, #32CD32 0%, #228B22 100%);
     }
   }
 }
 
 .el-input {
   .el-input__wrapper {
-    @include theme.theme-input;
+    @include stardew.input;
   }
 }
 
 .el-textarea {
   .el-textarea__inner {
-    @include theme.theme-input;
+    @include stardew.input;
   }
 }
 
 .el-select {
   .el-select__wrapper {
-    @include theme.theme-input;
+    @include stardew.input;
   }
 }
 
 .el-form-item {
   .el-form-item__label {
-    color: #{theme.theme-color('text-primary')};
-    font-weight: #{theme.$font-weight-medium};
+    color: #5D4037;
+    font-weight: 500;
   }
 }
 
 .el-card {
-  @include theme.theme-card;
+  @include stardew.card;
 
   .el-card__header {
-    background: #{theme.theme-bg('bg-secondary')};
-    border-bottom: 2px solid #{theme.theme-color('border-primary')};
-    color: #{theme.theme-color('text-primary')};
-    font-weight: #{theme.$font-weight-semibold};
+    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+    border-bottom: 2px solid #8B4513;
+    color: #5D4037;
+    font-weight: 600;
   }
 
   .el-card__body {
-    color: #{theme.theme-color('text-primary')};
+    color: #5D4037;
   }
 }
 
 .el-dialog {
-  @include theme.theme-card;
+  @include stardew.card;
 
   .el-dialog__header {
-    background: #{theme.theme-bg('bg-secondary')};
-    color: #{theme.theme-color('text-primary')};
-    font-weight: #{theme.$font-weight-semibold};
-    border-bottom: 2px solid #{theme.theme-color('border-primary')};
+    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+    color: #5D4037;
+    font-weight: 600;
+    border-bottom: 2px solid #8B4513;
   }
 
   .el-dialog__body {
-    background: #{theme.theme-bg('bg-card')};
-    color: #{theme.theme-color('text-primary')};
+    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+    color: #5D4037;
   }
 }
 
 .el-message-box {
-  @include theme.theme-card;
+  @include stardew.card;
 
   .el-message-box__header {
-    color: #{theme.theme-color('text-primary')};
-    font-weight: #{theme.$font-weight-semibold};
+    color: #5D4037;
+    font-weight: 600;
   }
 
   .el-message-box__content {
-    color: #{theme.theme-color('text-secondary')};
+    color: #6D4C41;
   }
 }
 
 .el-notification {
-  @include theme.theme-card;
+  @include stardew.card;
 
   .el-notification__title {
-    color: #{theme.theme-color('text-primary')};
-    font-weight: #{theme.$font-weight-semibold};
+    color: #5D4037;
+    font-weight: 600;
   }
 
   .el-notification__content {
-    color: #{theme.theme-color('text-secondary')};
+    color: #6D4C41;
   }
 }
 
 .el-table {
-  background: #{theme.theme-bg('bg-card')};
-  border: 2px solid #{theme.theme-color('border-primary')};
-  border-radius: #{theme.theme-radius('lg')};
+  background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+  border: 2px solid #8B4513;
+  border-radius: 8px;
 
   .el-table__header {
-    background: #{theme.theme-bg('bg-secondary')};
+    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
 
     th {
-      background: #{theme.theme-bg('bg-secondary')};
-      color: #{theme.theme-color('text-primary')};
-      font-weight: #{theme.$font-weight-semibold};
-      border-bottom: 2px solid #{theme.theme-color('border-primary')};
+      background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+      color: #5D4037;
+      font-weight: 600;
+      border-bottom: 2px solid #8B4513;
     }
   }
 
   .el-table__body {
     tr {
-      background: #{theme.theme-bg('bg-card')};
+      background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
 
       &:hover {
-        background: #{theme.theme-color('secondary-light')};
+        background: #F5F5DC;
       }
 
       td {
-        color: #{theme.theme-color('text-primary')};
-        border-bottom: 1px solid #{theme.theme-color('border-light')};
+        color: #5D4037;
+        border-bottom: 1px solid #F4E4BC;
       }
     }
   }
 }
 
 .el-menu {
-  background: #{theme.theme-bg('bg-card')};
-  border-right: 2px solid #{theme.theme-color('border-primary')};
+  background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+  border-right: 2px solid #8B4513;
 
   .el-menu-item {
-    color: #{theme.theme-color('text-primary')};
+    color: #5D4037;
 
     &:hover {
-      background: #{theme.theme-color('secondary-light')};
-      color: #{theme.theme-color('accent-green')};
+      background: #F5F5DC;
+      color: #228B22;
     }
 
     &.is-active {
-      background: #{theme.theme-color('accent-green')};
-      color: #{theme.theme-color('text-inverse')};
+      background: #228B22;
+      color: #FFFFFF;
     }
   }
 }
 
 .el-pagination {
   .el-pager li {
-    background: #{theme.theme-bg('bg-card')};
-    border: 1px solid #{theme.theme-color('border-primary')};
-    color: #{theme.theme-color('text-primary')};
+    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+    border: 1px solid #8B4513;
+    color: #5D4037;
 
     &:hover {
-      background: #{theme.theme-color('secondary-light')};
+      background: #F5F5DC;
     }
 
     &.is-active {
-      background: #{theme.theme-color('accent-green')};
-      color: #{theme.theme-color('text-inverse')};
+      background: #228B22;
+      color: #FFFFFF;
     }
   }
 
   .btn-prev, .btn-next {
-    background: #{theme.theme-bg('bg-card')};
-    border: 1px solid #{theme.theme-color('border-primary')};
-    color: #{theme.theme-color('text-primary')};
+    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+    border: 1px solid #8B4513;
+    color: #5D4037;
 
     &:hover {
-      background: #{theme.theme-color('secondary-light')};
+      background: #F5F5DC;
     }
   }
 }
 
 .el-loading-mask {
-  background-color: #{theme.theme-bg('bg-overlay')};
+  background-color: rgba(139, 69, 19, 0.8);
 
   .el-loading-spinner {
     .circular {
-      color: #{theme.theme-color('accent-green')};
+      color: #228B22;
     }
 
     .el-loading-text {
-      color: #{theme.theme-color('text-inverse')};
-      font-weight: #{theme.$font-weight-medium};
+      color: #FFFFFF;
+      font-weight: 500;
     }
   }
 }
@@ -261,68 +262,68 @@ html, body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #{theme.theme-color('secondary-dark')};
-  border-radius: #{theme.theme-radius('sm')};
+  background: #E6D3A3;
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #{theme.theme-color('primary-dark')};
-  border-radius: #{theme.theme-radius('sm')};
+  background: #8B4513;
+  border-radius: 4px;
 
   &:hover {
-    background: #{theme.theme-color('primary')};
+    background: #A0522D;
   }
 }
 
 // 选中文字样式
 ::selection {
-  background: #{theme.theme-color('accent-green')};
-  color: #{theme.theme-color('text-inverse')};
+  background: #228B22;
+  color: #FFFFFF;
 }
 
 ::-moz-selection {
-  background: #{theme.theme-color('accent-green')};
-  color: #{theme.theme-color('text-inverse')};
+  background: #228B22;
+  color: #FFFFFF;
 }
 
 // 焦点样式
 :focus-visible {
-  outline: 2px solid #{theme.theme-color('accent-green')};
+  outline: 2px solid #228B22;
   outline-offset: 2px;
-  border-radius: #{theme.theme-radius('sm')};
+  border-radius: 4px;
 }
 
 // 链接样式
 a {
-  color: #{theme.theme-color('accent-green')};
+  color: #228B22;
   text-decoration: none;
-  transition: color #{theme.$transition-normal};
+  transition: color 0.2s ease;
 
   &:hover {
-    color: #{theme.theme-color('accent-green-light')};
+    color: #32CD32;
     text-decoration: underline;
   }
 
   &:visited {
-    color: #{theme.theme-color('accent-green-dark')};
+    color: #006400;
   }
 }
 
 // 代码块样式
 code {
-  background: #{theme.theme-color('secondary-dark')};
-  color: #{theme.theme-color('text-primary')};
+  background: #E6D3A3;
+  color: #5D4037;
   padding: 2px 4px;
-  border-radius: #{theme.theme-radius('sm')};
+  border-radius: 4px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
 }
 
 pre {
-  background: #{theme.theme-color('secondary-dark')};
-  color: #{theme.theme-color('text-primary')};
-  padding: #{theme.theme-spacing('md')};
-  border-radius: #{theme.theme-radius('md')};
-  border: 1px solid #{theme.theme-color('border-primary')};
+  background: #E6D3A3;
+  color: #5D4037;
+  padding: 12px;
+  border-radius: 6px;
+  border: 1px solid #8B4513;
   overflow-x: auto;
 
   code {
@@ -333,12 +334,12 @@ pre {
 
 // 引用块样式
 blockquote {
-  background: #{theme.theme-color('secondary-light')};
-  border-left: 4px solid #{theme.theme-color('accent-green')};
-  padding: #{theme.theme-spacing('md')};
-  margin: #{theme.theme-spacing('md')} 0;
-  border-radius: 0 #{theme.theme-radius('md')} #{theme.theme-radius('md')} 0;
-  color: #{theme.theme-color('text-secondary')};
+  background: #F5F5DC;
+  border-left: 4px solid #228B22;
+  padding: 12px;
+  margin: 12px 0;
+  border-radius: 0 6px 6px 0;
+  color: #6D4C41;
   font-style: italic;
 }
 
@@ -346,8 +347,8 @@ blockquote {
 hr {
   border: none;
   height: 2px;
-  background: linear-gradient(90deg, transparent, #{theme.theme-color('border-primary')}, transparent);
-  margin: #{theme.theme-spacing('xl')} 0;
+  background: linear-gradient(90deg, transparent, #8B4513, transparent);
+  margin: 20px 0;
 }
 
 // 响应式调整

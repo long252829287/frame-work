@@ -38,8 +38,6 @@
 
     <!-- 右侧用户区域 -->
     <div class="header-right">
-      <ThemeSwitcher />
-
       <div v-if="!auth.isAuthenticated" class="auth-buttons">
         <!-- 登录按钮 -->
         <button class="auth-btn login-btn" @click="router.push({ name: 'login' })">
@@ -66,9 +64,9 @@
             <div class="user-status">🌱 活跃中</div>
           </div>
 
-          <div class="dropdown-arrow" :class="{ open: showUserMenu }">
+          <!-- <div class="dropdown-arrow" :class="{ open: showUserMenu }">
             <span class="arrow-icon">🔽</span>
-          </div>
+          </div> -->
         </div>
 
         <!-- 下拉菜单 -->
@@ -99,7 +97,6 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '../../stores/auth'
 import { useRouter, useRoute } from 'vue-router'
-import ThemeSwitcher from '../themeSwitcher/themeSwitcherComp.vue'
 
 const auth = useAuthStore()
 const router = useRouter()
@@ -185,7 +182,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '@/assets/scss/themes/theme-manager.scss' as theme;
+@use '@/assets/scss/themes/stardew-valley.scss' as stardew;
 
 .stardew-header {
   position: fixed;
@@ -193,26 +190,26 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   height: 70px;
-  z-index: theme.$z-dropdown;
+  z-index: 1000;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 #{theme.theme-spacing('2xl')};
+  padding: 0 24px;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px #{theme.$shadow-dark};
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
   overflow: visible;
   font-family: 'Comic Sans MS', cursive, sans-serif;
-  transition: all #{theme.$transition-slow};
+  transition: all 0.3s ease;
 
   /* 现代网站特性：滚动时样式变化 */
   &--scrolled {
     height: 60px;
     backdrop-filter: blur(20px);
-    box-shadow: 0 2px 20px #{theme.$shadow-card};
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
 
     .header-bg {
-      background: #{theme.theme-bg('bg-secondary')};
+      background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
     }
 
     .logo-container .logo-icon {
@@ -235,9 +232,9 @@ onUnmounted(() => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: #{theme.theme-bg('bg-secondary')};
+    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
     z-index: -1;
-    transition: all #{theme.$transition-slow};
+    transition: all 0.3s ease;
   }
 
   .nature-decorations {
@@ -253,7 +250,7 @@ onUnmounted(() => {
       position: absolute;
       font-size: 1.2rem;
       animation: float 4s ease-in-out infinite;
-      transition: all #{theme.$transition-slow};
+      transition: all 0.3s ease;
 
       &.leaf-1 {
         top: 20%;
@@ -311,35 +308,35 @@ onUnmounted(() => {
 .header-left {
   display: flex;
   align-items: center;
-  gap: #{theme.theme-spacing('xl')};
+  gap: 20px;
 }
 
 .back-button {
   display: flex;
   align-items: center;
-  gap: #{theme.theme-spacing('sm')};
-  padding: #{theme.theme-spacing('sm')} #{theme.theme-spacing('lg')};
+  gap: 8px;
+  padding: 8px 16px;
   border-radius: 20px;
-  color: #{theme.theme-color('text-primary')};
+  color: #5D4037;
   cursor: pointer;
-  transition: all #{theme.$transition-slow};
-  font-weight: #{theme.$font-weight-semibold};
+  transition: all 0.3s ease;
+  font-weight: 600;
 
   &:hover {
     background: rgba(139, 69, 19, 0.3);
     transform: translateY(-2px);
-    box-shadow: 0 4px 10px #{theme.$shadow-dark};
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   }
 
   .back-icon {
     display: flex;
     align-items: center;
-    transition: transform #{theme.$transition-slow};
+    transition: transform 0.3s ease;
   }
 
   .back-text {
     font-size: 0.875rem;
-    font-weight: #{theme.$font-weight-semibold};
+    font-weight: 600;
   }
 
   &:hover .back-icon {
@@ -351,11 +348,11 @@ onUnmounted(() => {
   position: relative;
   cursor: pointer;
   user-select: none;
-  padding: #{theme.theme-spacing('sm')};
+  padding: 8px;
   display: flex;
   align-items: center;
-  gap: #{theme.theme-spacing('md')};
-  transition: transform #{theme.$transition-slow};
+  gap: 12px;
+  transition: transform 0.3s ease;
 
   &:hover {
     transform: scale(1.05);
@@ -364,24 +361,24 @@ onUnmounted(() => {
   .logo-icon {
     font-size: 2rem;
     animation: bounce 2s ease-in-out infinite;
-    transition: all #{theme.$transition-slow};
+    transition: all 0.3s ease;
   }
 
   .logo-text {
     .logo-main {
       font-size: 1.75rem;
-      font-weight: #{theme.$font-weight-bold};
-      background: linear-gradient(45deg, #{theme.theme-color('primary-dark')}, #{theme.theme-color('primary')}, #{theme.theme-color('primary-light')});
+      font-weight: 700;
+      background: linear-gradient(45deg, #8B4513, #A0522D, #CD853F);
       background-clip: text;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      text-shadow: 2px 2px 4px #{theme.$shadow-dark};
-      transition: all #{theme.$transition-slow};
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
     }
 
     .logo-subtitle {
       font-size: 0.7rem;
-      color: #{theme.theme-color('text-primary')};
+      color: #5D4037;
       text-transform: none;
       letter-spacing: 1px;
       margin-top: -2px;
@@ -405,29 +402,29 @@ onUnmounted(() => {
 .header-right {
   display: flex;
   align-items: center;
-  gap: #{theme.theme-spacing('md')};
+  gap: 12px;
 }
 
 .auth-buttons {
   display: flex;
-  gap: #{theme.theme-spacing('md')};
+  gap: 12px;
 }
 
 .auth-btn {
   position: relative;
-  padding: #{theme.theme-spacing('xs')} #{theme.theme-spacing('lg')};
-  @include theme.theme-button('default');
+  padding: 4px 16px;
+  @include stardew.button('default');
   border-radius: 25px;
   font-size: 0.875rem;
   cursor: pointer;
-  transition: all #{theme.$transition-slow};
+  transition: all 0.3s ease;
 
   &:hover {
     transform: translateY(-2px);
   }
 
   &.register-btn {
-    @include theme.theme-button('secondary');
+    @include stardew.button('secondary');
   }
 }
 
@@ -456,15 +453,13 @@ onUnmounted(() => {
 .user-dropdown {
   display: flex;
   align-items: center;
-  gap: #{theme.theme-spacing('md')};
-  // padding: #{theme.theme-spacing('xs')} #{theme.theme-spacing('lg')};
+  gap: 12px;
   border-radius: 25px;
   cursor: pointer;
-  transition: all #{theme.$transition-slow};
-  // border: 2px solid #{theme.theme-color('border-primary')};
+  transition: all 0.3s ease;
 
   &:hover {
-    background: #{theme.theme-bg('bg-secondary')};
+    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
     transform: translateY(-1px);
   }
 }
@@ -479,7 +474,7 @@ onUnmounted(() => {
     height: 40px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #{theme.theme-color('text-inverse')};
+    border: 2px solid #FFFFFF;
     position: relative;
     z-index: 2;
   }
@@ -514,25 +509,25 @@ onUnmounted(() => {
 
   .user-name {
     font-size: 0.875rem;
-    font-weight: #{theme.$font-weight-semibold};
-    color: #{theme.theme-color('text-primary')};
+    font-weight: 600;
+    color: #5D4037;
     line-height: 1;
   }
 
   .user-status {
     font-size: 0.75rem;
-    color: #{theme.theme-color('accent-green')};
+    color: #228B22;
     line-height: 1;
-    font-weight: #{theme.$font-weight-semibold};
+    font-weight: 600;
   }
 }
 
 .dropdown-arrow {
-  transition: transform #{theme.$transition-slow};
+  transition: transform 0.3s ease;
 
   .arrow-icon {
     font-size: 0.8rem;
-    color: #{theme.theme-color('text-primary')};
+    color: #5D4037;
   }
 
   &.open {
@@ -541,17 +536,17 @@ onUnmounted(() => {
 }
 
 .user-menu {
-  @include theme.theme-card;
+  @include stardew.card;
   position: absolute;
-  top: calc(100% + #{theme.theme-spacing('sm')});
+  top: calc(100% + 8px);
   right: 0;
   min-width: 200px;
-  padding: #{theme.theme-spacing('sm')};
+  padding: 8px;
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
-  transition: all #{theme.$transition-slow};
-  z-index: theme.$z-dropdown;
+  transition: all 0.3s ease;
+  z-index: 1000;
 
   &.show {
     opacity: 1;
@@ -563,25 +558,25 @@ onUnmounted(() => {
 .menu-item {
   display: flex;
   align-items: center;
-  gap: #{theme.theme-spacing('md')};
-  padding: #{theme.theme-spacing('md')};
-  border-radius: #{theme.theme-radius('md')};
-  color: #{theme.theme-color('text-primary')};
+  gap: 12px;
+  padding: 12px;
+  border-radius: 6px;
+  color: #5D4037;
   cursor: pointer;
-  transition: all #{theme.$transition-normal};
-  font-weight: #{theme.$font-weight-semibold};
+  transition: all 0.2s ease;
+  font-weight: 600;
 
   &:hover {
-    background: #{theme.theme-color('secondary-light')};
+    background: #F5F5DC;
     transform: translateX(5px);
   }
 
   &.logout {
-    color: #{theme.theme-color('error')};
+    color: #DC143C;
 
     &:hover {
       background: rgba(220, 20, 60, 0.1);
-      color: #{theme.theme-color('error')};
+      color: #DC143C;
     }
   }
 
@@ -592,21 +587,21 @@ onUnmounted(() => {
 
   span:last-child {
     font-size: 0.875rem;
-    font-weight: #{theme.$font-weight-semibold};
+    font-weight: 600;
   }
 }
 
 .menu-divider {
   height: 2px;
-  background: linear-gradient(90deg, transparent, #{theme.theme-color('border-primary')}, transparent);
-  margin: #{theme.theme-spacing('sm')} 0;
+  background: linear-gradient(90deg, transparent, #8B4513, transparent);
+  margin: 8px 0;
   border-radius: 1px;
 }
 
 // 响应式设计
 @media (max-width: 768px) {
   .stardew-header {
-    padding: 0 #{theme.theme-spacing('lg')};
+    padding: 0 16px;
     height: 60px;
 
     &--scrolled {
@@ -615,7 +610,7 @@ onUnmounted(() => {
   }
 
   .header-left {
-    gap: #{theme.theme-spacing('lg')};
+    gap: 16px;
   }
 
   .logo-container .logo-text {
@@ -629,16 +624,16 @@ onUnmounted(() => {
   }
 
   .auth-buttons {
-    gap: #{theme.theme-spacing('sm')};
+    gap: 8px;
   }
 
   .auth-btn {
-    padding: #{theme.theme-spacing('sm')} #{theme.theme-spacing('lg')};
+    padding: 8px 16px;
     font-size: 0.8rem;
   }
 
   .back-button {
-    padding: 0.375rem #{theme.theme-spacing('md')};
+    padding: 0.375rem 12px;
 
     .back-text {
       display: none;
