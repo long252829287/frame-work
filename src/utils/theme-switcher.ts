@@ -94,7 +94,7 @@ class ThemeManager {
    */
   nextTheme(): void {
     const themes = Object.keys(AVAILABLE_THEMES) as ThemeType[];
-    const currentIndex = themes.indexOf(this.currentTheme);
+    const currentIndex = themes.indexOf(this.getCurrentTheme());
     const nextIndex = (currentIndex + 1) % themes.length;
     this.setTheme(themes[nextIndex]);
   }
@@ -222,7 +222,7 @@ class ThemeManager {
           'text-primary': '#0D47A1',
           'text-secondary': '#424242',
           'text-light': '#757575',
-          'text-inverse': '#FFFFFF',
+          'text-inverse': '#0D47A1',
           'text-disabled': '#BDBDBD',
 
           'border-primary': '#9E9E9E',
@@ -270,7 +270,7 @@ class ThemeManager {
           'text-primary': '#F0F6FC',
           'text-secondary': '#8B949E',
           'text-light': '#6E7681',
-          'text-inverse': '#0D1117',
+          'text-inverse': '#FFFFFF',
           'text-disabled': '#484F58',
 
           'border-primary': '#30363D',
@@ -318,7 +318,7 @@ class ThemeManager {
           'text-primary': '#003366',
           'text-secondary': '#333366',
           'text-light': '#666699',
-          'text-inverse': '#FFFFFF',
+          'text-inverse': '#003366',
           'text-disabled': '#9999CC',
 
           'border-primary': '#0066CC',
@@ -422,7 +422,6 @@ export function getThemeClass(theme: ThemeType): string {
 
 // 主题颜色获取器（用于动态获取主题色彩）
 export function getThemeColor(colorName: string, theme?: ThemeType): string | null {
-  const targetTheme = theme || themeManager.getCurrentTheme();
   const element = document.documentElement;
 
   if (element) {

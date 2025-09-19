@@ -415,7 +415,7 @@ onUnmounted(() => {
 
 .auth-btn {
   position: relative;
-  padding: #{theme.theme-spacing('md')} #{theme.theme-spacing('xl')};
+  padding: #{theme.theme-spacing('xs')} #{theme.theme-spacing('lg')};
   @include theme.theme-button('default');
   border-radius: 25px;
   font-size: 0.875rem;
@@ -457,11 +457,11 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: #{theme.theme-spacing('md')};
-  padding: #{theme.theme-spacing('sm')} #{theme.theme-spacing('lg')};
+  // padding: #{theme.theme-spacing('xs')} #{theme.theme-spacing('lg')};
   border-radius: 25px;
   cursor: pointer;
   transition: all #{theme.$transition-slow};
-  border: 2px solid #{theme.theme-color('border-primary')};
+  // border: 2px solid #{theme.theme-color('border-primary')};
 
   &:hover {
     background: #{theme.theme-bg('bg-secondary')};

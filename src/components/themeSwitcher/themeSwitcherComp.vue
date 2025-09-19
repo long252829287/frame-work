@@ -28,7 +28,7 @@
             v-for="theme in availableThemes"
             :key="theme.name"
             class="theme-option"
-            :class="{ 'theme-option--active': currentTheme.value === theme.name }"
+            :class="{ 'theme-option--active': currentTheme === theme.name }"
             @click="selectTheme(theme.name as ThemeType)"
           >
             <div class="theme-preview" :style="{ backgroundColor: theme.preview }"></div>
@@ -36,7 +36,7 @@
               <div class="theme-name">{{ theme.displayName }}</div>
               <div class="theme-desc">{{ theme.description }}</div>
             </div>
-            <div v-if="currentTheme.value === theme.name" class="theme-check">✓</div>
+            <div v-if="currentTheme === theme.name" class="theme-check">✓</div>
           </div>
         </div>
 
