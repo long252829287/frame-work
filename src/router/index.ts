@@ -31,6 +31,18 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
   },
   {
+    path: '/shared-notes',
+    name: 'shared-notes',
+    component: () => import('@/views/sharedNotes/Index.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/shared-notes/:id',
+    name: 'shared-notes-detail',
+    component: () => import('@/views/sharedNotes/Detail.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
     path: '/credentials',
     name: 'credentials',
     component: () => import('@/views/credentials/Index.vue'),

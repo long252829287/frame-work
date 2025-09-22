@@ -1,7 +1,7 @@
 export interface PaginatedList<T> {
   data: {
     notes: T[]
-    count: number
+    count: number,
   }
 }
 

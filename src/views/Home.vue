@@ -47,6 +47,24 @@ const tiles: TileItem[] = [
     requiresAuth: true,
   },
   {
+    key: 'imageMagic',
+    title: '取色器',
+    subtitle: 'Image Color Picker',
+    icon: '🔄',
+    size: 's',
+    color: 'orange',
+    route: '/imageMagic',
+  },
+  {
+    key: 'shareNotes',
+    title: '分享笔记',
+    subtitle: 'Share Notes',
+    icon: '📤',
+    size: 's',
+    color: 'green',
+    route: '/shared-notes',
+  },
+  {
     key: 'cred',
     title: '凭据',
     subtitle: 'Credentials',
@@ -66,24 +84,6 @@ const tiles: TileItem[] = [
     route: '/study',
     requiresAuth: true,
   },
-  // {
-  //   key: 'login',
-  //   title: '登录',
-  //   subtitle: 'Sign in',
-  //   icon: '🔑',
-  //   size: 's',
-  //   color: 'blue',
-  //   route: '/login',
-  // },
-  // {
-  //   key: 'register',
-  //   title: '注册',
-  //   subtitle: 'Create',
-  //   icon: '🆕',
-  //   size: 's',
-  //   color: 'orange',
-  //   route: '/register',
-  // },
   { key: 'tasks', title: '任务', subtitle: 'Coming soon', icon: '✅', size: 'm', color: 'slate' },
   { key: 'media', title: '媒体', subtitle: 'Coming soon', icon: '🎬', size: 'm', color: 'pink' },
   {
@@ -118,24 +118,6 @@ const tiles: TileItem[] = [
     icon: '⚙️',
     size: 's',
     color: 'slate',
-  },
-  {
-    key: 'todo',
-    title: '备忘录',
-    subtitle: 'Todo List',
-    icon: '📝',
-    size: 'l',
-    color: 'purple',
-    route: '/todo',
-  },
-  {
-    key: 'imageMagic',
-    title: '取色器',
-    subtitle: 'Image Color Picker',
-    icon: '🔄',
-    size: 'l',
-    color: 'orange',
-    route: '/imageMagic',
   },
 ]
 
@@ -203,11 +185,11 @@ function handleTile(t: TileItem) {
   overflow: hidden;
   cursor: pointer;
   padding: 16px;
-  color: #5D4037;
+  color: #ffffff;
   transform: translateZ(0);
   transition: transform 0.2s ease,
-  box-shadow 0.2s ease,
-  filter 0.2s ease;
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
 
   // 添加主题纹理效果
   @include stardew.texture-bg;
@@ -222,7 +204,7 @@ function handleTile(t: TileItem) {
   transform: translateY(-2px) scale(1.02);
   filter: brightness(1.05);
   box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3),
-  0 8px 20px rgba(0, 0, 0, 0.3);
+    0 8px 20px rgba(0, 0, 0, 0.3);
 }
 
 .tile:active {
@@ -245,15 +227,14 @@ function handleTile(t: TileItem) {
 .tile__title {
   font-weight: 700;
   letter-spacing: 0.3px;
-  color: #6D4C41;
-  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+  color: #ffffff;
 }
 
 .tile__sub {
   font-size: 12px;
   opacity: 0.85;
   margin-top: 2px;
-  color: #6D4C41;
+  color: #ffffff;
 }
 
 /* sizes (using grid spans) */
@@ -400,10 +381,6 @@ function handleTile(t: TileItem) {
 @media (prefers-contrast: high) {
   .tile {
     border-width: 2px;
-  }
-
-  .tile__title {
-    text-shadow: none;
   }
 }
 </style>

@@ -1,6 +1,11 @@
 <template>
   <div ref="noteEl" class="note-item" :style="style" :title="props.note.content">
-    {{ getDisplayText(props.note) }}
+    <div v-if="props.note.createdBy" class="note-creator">
+      {{ props.note.createdBy }}
+    </div>
+    <div class="note-content">
+      {{ getDisplayText(props.note) }}
+    </div>
   </div>
 </template>
 
@@ -35,8 +40,18 @@ const { x, y, isDragging } = useDraggable(noteEl, {
 })
 
 const style = computed<StyleValue>(() => {
+  const baseStyle: any = {}
+
+  // 如果有创建者，应用用户颜色
+  if (props.note.createdBy && props.note.color) {
+    baseStyle.borderLeftColor = props.note.color
+    baseStyle.borderLeftWidth = '4px'
+    baseStyle.borderLeftStyle = 'solid'
+  }
+
   if (isDragging.value) {
     return {
+      ...baseStyle,
       position: 'fixed',
       top: `${y.value}px`,
       left: `${x.value}px`,
@@ -47,7 +62,7 @@ const style = computed<StyleValue>(() => {
       opacity: '0.9',
     }
   }
-  return {}
+  return baseStyle
 })
 
 function getDisplayText(note: QuadrantNote): string {
@@ -77,6 +92,17 @@ function getDisplayText(note: QuadrantNote): string {
   flex-shrink: 0;
   width: auto;
   max-width: 100%;
+}
+
+.note-creator {
+  font-size: 11px;
+  color: #909399;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.note-content {
+  color: #303133;
 }
 
 .note-item:not(.is-dragging):hover {

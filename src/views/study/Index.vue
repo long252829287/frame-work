@@ -175,7 +175,7 @@ onMounted(() => {
     margin: 0;
     font-size: 28px;
     font-weight: 600;
-    color: #1f2937;
+    color: #ffffff;
   }
 }
 
@@ -209,7 +209,7 @@ onMounted(() => {
       margin: 0;
       font-size: 18px;
       font-weight: 600;
-      color: #1f2937;
+      color: #ffffff;
     }
 
     .card-actions {

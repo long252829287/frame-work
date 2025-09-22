@@ -1,5 +1,5 @@
 <template>
-  <div class="quadrant-board">
+  <div class="shared-quadrant-board">
     <div v-if="isLoading" class="loading-container">
       <div class="loading-spinner"></div>
       <p>加载笔记中...</p>
@@ -10,8 +10,8 @@
     </div>
 
     <div v-else class="quadrant-layout">
-      <!-- 用户颜色图例 (仅共享模式) -->
-      <div v-if="isSharedMode" class="user-legend">
+      <!-- 用户颜色图例 -->
+      <div class="user-legend">
         <h4>参与者</h4>
         <div class="legend-items">
           <div v-for="user in userColors" :key="user.username" class="legend-item">
@@ -25,49 +25,29 @@
         <div class="quadrant q2" ref="q2Ref">
           <h3 class="quadrant-title">重要但不紧急</h3>
           <TransitionGroup name="note-list" tag="div" class="quadrant-content">
-            <NoteItem
-              v-for="note in importantNotUrgentNotes"
-              :key="note._id"
-              :note="note"
-              @drag-move="highlightDropZone"
-              @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)"
-            />
+            <NoteItem v-for="note in importantNotUrgentNotes" :key="note._id" :note="note"
+              @drag-move="highlightDropZone" @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
           </TransitionGroup>
         </div>
         <div class="quadrant q1" ref="q1Ref">
           <h3 class="quadrant-title">重要且紧急</h3>
           <TransitionGroup name="note-list" tag="div" class="quadrant-content">
-            <NoteItem
-              v-for="note in importantUrgentNotes"
-              :key="note._id"
-              :note="note"
-              @drag-move="highlightDropZone"
-              @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)"
-            />
+            <NoteItem v-for="note in importantUrgentNotes" :key="note._id" :note="note" @drag-move="highlightDropZone"
+              @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
           </TransitionGroup>
         </div>
         <div class="quadrant q3" ref="q3Ref">
           <h3 class="quadrant-title">不重要不紧急</h3>
           <TransitionGroup name="note-list" tag="div" class="quadrant-content">
-            <NoteItem
-              v-for="note in notImportantNotUrgentNotes"
-              :key="note._id"
-              :note="note"
-              @drag-move="highlightDropZone"
-              @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)"
-            />
+            <NoteItem v-for="note in notImportantNotUrgentNotes" :key="note._id" :note="note"
+              @drag-move="highlightDropZone" @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
           </TransitionGroup>
         </div>
         <div class="quadrant q4" ref="q4Ref">
           <h3 class="quadrant-title">不重要但紧急</h3>
           <TransitionGroup name="note-list" tag="div" class="quadrant-content">
-            <NoteItem
-              v-for="note in notImportantUrgentNotes"
-              :key="note._id"
-              :note="note"
-              @drag-move="highlightDropZone"
-              @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)"
-            />
+            <NoteItem v-for="note in notImportantUrgentNotes" :key="note._id" :note="note"
+              @drag-move="highlightDropZone" @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
           </TransitionGroup>
         </div>
       </div>
@@ -76,22 +56,17 @@
     <div class="uncategorized-area" ref="uncategorizedRef">
       <h3 class="uncategorized-title">待分类笔记 ({{ uncategorizedNotes.length }})</h3>
       <TransitionGroup name="note-list" tag="div" class="uncategorized-content">
-        <NoteItem
-          v-for="note in uncategorizedNotes"
-          :key="note._id"
-          :note="note"
-          @drag-move="highlightDropZone"
-          @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)"
-        />
+        <NoteItem v-for="note in uncategorizedNotes" :key="note._id" :note="note" @drag-move="highlightDropZone"
+          @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
       </TransitionGroup>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, defineProps, defineEmits, defineExpose } from 'vue'
+import { ref, onMounted, computed, defineProps } from 'vue'
 import { commonService } from '@/service'
-import type { PaginatedList, QuadrantNote, SharedQuadrantNote } from '@/types'
+import type { SharedQuadrantNote } from '@/types'
 import NoteItem from '@/components/noteItem/noteItemComp.vue'
 
 interface QuadrantCoords {
@@ -104,47 +79,40 @@ interface UserColor {
   color: string
 }
 
-// Props 定义
 const props = defineProps<{
-  sharedNoteId?: string // 传入此参数表示为共享模式
+  sharedNoteId: string
 }>()
 
-// Events 定义
 const emit = defineEmits<{
   (e: 'update-note', note: SharedQuadrantNote): void
 }>()
 
-// 判断是否为共享模式
-const isSharedMode = computed(() => !!props.sharedNoteId)
-
 // 响应式引用
 const boardRef = ref<HTMLElement | null>(null)
 const uncategorizedRef = ref<HTMLElement | null>(null)
-const notes = ref<(QuadrantNote | SharedQuadrantNote)[]>([])
+const notes = ref<SharedQuadrantNote[]>([])
 const isLoading = ref(true)
 
-// 用户颜色配置 (仅共享模式使用)
+// 拖拽相关
+const q1Ref = ref<HTMLElement | null>(null)
+const q2Ref = ref<HTMLElement | null>(null)
+const q3Ref = ref<HTMLElement | null>(null)
+const q4Ref = ref<HTMLElement | null>(null)
+
+// 用户颜色配置
 const USER_COLORS = [
   '#FF6B6B', '#4ECDC4', '#45B7D1', '#f3f3f3', '#FFEAA7',
   '#DDA0DD', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'
 ]
 
-// 计算用户颜色映射 (仅共享模式)
+// 计算用户颜色映射
 const userColors = computed<UserColor[]>(() => {
-  if (!isSharedMode.value) return []
-  const users = [...new Set(notes.value.map(note => (note as SharedQuadrantNote).createdBy).filter(Boolean))]
+  const users = [...new Set(notes.value.map(note => note.createdBy))]
   return users.map((username, index) => ({
     username,
     color: USER_COLORS[index % USER_COLORS.length]
   }))
 })
-
-// 拖拽相关
-
-const q1Ref = ref<HTMLElement | null>(null)
-const q2Ref = ref<HTMLElement | null>(null)
-const q3Ref = ref<HTMLElement | null>(null)
-const q4Ref = ref<HTMLElement | null>(null)
 
 // 组件挂载时获取笔记
 onMounted(async () => {
@@ -154,40 +122,25 @@ onMounted(async () => {
 async function fetchNotes(): Promise<void> {
   try {
     isLoading.value = true
+    const response = await commonService.apiGetSharedNoteContent(props.sharedNoteId)
+    let rawNotes: SharedQuadrantNote[] = response.data.data.notes || []
 
-    if (isSharedMode.value) {
-      // 共享模式：获取共享笔记内容
-      const response = await commonService.apiGetSharedNoteContent(props.sharedNoteId!)
-      let rawNotes: SharedQuadrantNote[] = response.data.data.notes || []
+    // 为每个笔记分配用户颜色
+    const processedNotes = rawNotes.map((note) => {
+      const userColorIndex = userColors.value.findIndex(uc => uc.username === note.createdBy)
+      const color = userColorIndex >= 0 ? userColors.value[userColorIndex].color : USER_COLORS[0]
 
-      // 为每个笔记分配用户颜色
-      const processedNotes = rawNotes.map((note) => {
-        const userColorIndex = userColors.value.findIndex(uc => uc.username === note.createdBy)
-        const color = userColorIndex >= 0 ? userColors.value[userColorIndex].color : USER_COLORS[0]
-
-        return {
-          ...note,
-          x_axis: note.x_axis ?? 0,
-          y_axis: note.y_axis ?? 0,
-          color
-        }
-      })
-
-      notes.value = processedNotes
-    } else {
-      // 普通模式：获取个人笔记
-      const response = await commonService.apiGetNotes()
-      const paginatedData = response.data as PaginatedList<QuadrantNote>
-      const rawNotes: QuadrantNote[] = paginatedData.data.notes || []
-
-      notes.value = rawNotes.map((note) => ({
+      return {
         ...note,
         x_axis: note.x_axis ?? 0,
         y_axis: note.y_axis ?? 0,
-      }))
-    }
+        color
+      }
+    })
+
+    notes.value = processedNotes
   } catch (error) {
-    console.error('获取笔记失败:', error)
+    console.error('获取共享笔记失败:', error)
   } finally {
     isLoading.value = false
   }
@@ -223,7 +176,7 @@ const uncategorizedNotes = computed(() =>
     .sort((a, b) => (a.order || 0) - (b.order || 0)),
 )
 
-async function handleDragEnd(note: QuadrantNote, clientX: number, clientY: number): Promise<void> {
+async function handleDragEnd(note: SharedQuadrantNote, clientX: number, clientY: number): Promise<void> {
   clearAllHighlights()
 
   const newCoords = getQuadrantFromPosition(clientX, clientY)
@@ -256,11 +209,13 @@ async function handleDragEnd(note: QuadrantNote, clientX: number, clientY: numbe
   noteToUpdate.order = newOrder
 
   try {
-    await commonService.apiUpdateNote(noteToUpdate._id, {
+    await commonService.apiUpdateSharedNoteItem(noteToUpdate._id, {
       x_axis: newCoords.x,
       y_axis: newCoords.y,
       order: newOrder,
     })
+
+    emit('update-note', noteToUpdate)
   } catch (error) {
     console.error('更新笔记位置失败，正在回滚:', error)
 
@@ -282,6 +237,7 @@ function highlightDropZone(position: { x: number; y: number }): void {
     lastHighlightedZone = currentZone
   }
 }
+
 function clearAllHighlights() {
   if (lastHighlightedZone) removeDropZoneHighlight(lastHighlightedZone)
   lastHighlightedZone = null
@@ -358,13 +314,55 @@ function removeDropZoneHighlight(zoneName: string) {
     element.classList.remove('drop-zone-active')
   }
 }
+
+// 暴露更新笔记的方法
+defineExpose({
+  fetchNotes
+})
 </script>
 
 <style scoped>
-.quadrant-board {
+.shared-quadrant-board {
   width: 100%;
   max-width: 1200px;
   padding: 20px;
+}
+
+/* 用户图例样式 */
+.user-legend {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e4e7ed;
+}
+
+.user-legend h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #606266;
+  font-weight: 600;
+}
+
+.legend-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #303133;
+}
+
+.color-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* 加载状态 */
@@ -486,13 +484,6 @@ function removeDropZoneHighlight(zoneName: string) {
   z-index: 1;
 }
 
-/* 坐标轴 */
-.axis {
-  background-color: #ddd;
-  position: absolute;
-  z-index: 1;
-}
-
 /* 待分类区域 */
 .uncategorized-area {
   margin-top: 20px;
@@ -561,7 +552,7 @@ function removeDropZoneHighlight(zoneName: string) {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-  .quadrant-board {
+  .shared-quadrant-board {
     padding: 10px;
   }
 
@@ -573,9 +564,12 @@ function removeDropZoneHighlight(zoneName: string) {
     padding: 10px;
   }
 
-  .note-item {
+  .legend-items {
+    gap: 12px;
+  }
+
+  .legend-item {
     font-size: 12px;
-    padding: 8px 10px;
   }
 }
 </style>
