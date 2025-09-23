@@ -2,7 +2,7 @@
   <div class="tool-container">
     <h3>检查是否存在重复的id</h3>
     <el-input type="textarea" v-model="input" placeholder="请输入内容" />
-    <el-input v-model="key" placeholder="请输入key" style="width: 100px;" />
+    <el-input v-model="key" placeholder="请输入key" class="key-input" />
     <el-button type="primary" @click="checkIsOwnId" round>开始</el-button>
   </div>
 </template>
@@ -30,5 +30,9 @@ const checkIsOwnId = () => {
   >h3 {
     color: #fff;
   }
+}
+
+.key-input {
+  width: 100px;
 }
 </style>

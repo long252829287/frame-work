@@ -61,11 +61,6 @@ const routes: RouteRecordRaw[] = [
     meta: { requiresAuth: true },
   },
   {
-    path: '/todo',
-    name: 'todo',
-    component: () => import('@/views/todo/Index.vue'),
-  },
-  {
     path: '/tool',
     name: 'tool',
     component: () => import('@/views/tool/Index.vue'),

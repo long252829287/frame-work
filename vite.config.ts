@@ -16,7 +16,7 @@ export default defineConfig({
     proxy: {
       '/api': {
         // target: 'https://www.osheeep.com',
-        target: 'http://localhost:611',
+        target: 'http://localhost:3000',
         changeOrigin: true,
       },
     },

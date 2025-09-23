@@ -64,17 +64,10 @@ onMounted(fetchNotes)
 </script>
 
 <template>
-  <div style="max-width: 960px; margin: 20px auto; padding-top: 60px">
-    <div
-      style="
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-      "
-    >
+  <div class="page-container">
+    <div class="page-header">
       <div>
-        <h2 style="margin: 0">我的笔记 ({{ total }})</h2>
+        <h2 class="page-title">我的笔记 ({{ total }})</h2>
       </div>
       <div>
         <el-button type="primary" @click="openCreate">新建笔记</el-button>
@@ -87,7 +80,7 @@ onMounted(fetchNotes)
       <el-table-column prop="title" label="标题" width="240" />
       <el-table-column prop="content" label="内容">
         <template #default="{ row }">
-          <div style="white-space: pre-wrap">{{ row.content }}</div>
+          <div class="content-cell">{{ row.content }}</div>
         </template>
       </el-table-column>
       <el-table-column label="标签" width="200">
@@ -124,7 +117,7 @@ onMounted(fetchNotes)
             filterable
             allow-create
             default-first-option
-            style="width: 100%"
+            class="full-width"
           >
             <el-option v-for="t in editor.tags || []" :key="t" :label="t" :value="t" />
           </el-select>
@@ -140,4 +133,29 @@ onMounted(fetchNotes)
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.page-container {
+  max-width: 960px;
+  margin: 20px auto;
+  padding-top: 60px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.page-title {
+  margin: 0;
+}
+
+.content-cell {
+  white-space: pre-wrap;
+}
+
+.full-width {
+  width: 100%;
+}
+</style>

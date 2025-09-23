@@ -1,13 +1,13 @@
 <template>
-  <div style="max-width: 960px; margin: 20px auto; padding-top: 60px">
-    <div v-if="loading" style="text-align: center; padding: 40px">
-      <el-icon class="is-loading" style="font-size: 32px; color: #409eff">
+  <div class="page-container">
+    <div v-if="loading" class="loading-state">
+      <el-icon class="is-loading loading-icon">
         <Loading />
       </el-icon>
-      <p style="margin-top: 16px; color: #ffffff">加载中...</p>
+      <p class="loading-text">加载中...</p>
     </div>
 
-    <div v-else-if="!sharedNote" style="text-align: center; padding: 60px">
+    <div v-else-if="!sharedNote" class="empty-state">
       <el-empty description="共享笔记不存在或无权访问">
         <el-button type="primary" @click="goBack">返回列表</el-button>
       </el-empty>
@@ -15,25 +15,20 @@
 
     <div v-else>
       <!-- 头部信息 -->
-      <div style="
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 20px;
-        ">
+      <div class="detail-header">
         <div>
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px">
-            <el-button circle size="small" @click="goBack" style="margin-right: 8px">
+          <div class="title-row">
+            <el-button circle size="small" @click="goBack" class="back-button">
               <el-icon>
                 <ArrowLeft />
               </el-icon>
             </el-button>
-            <h2 style="margin: 0">{{ sharedNote.title }}</h2>
+            <h2 class="detail-title">{{ sharedNote.title }}</h2>
           </div>
-          <div style="color: #ffffff; font-size: 14px">
+          <div class="meta-info">
             <span>创建者: {{ sharedNote.createdBy }}</span>
-            <span style="margin-left: 16px">参与者: {{ sharedNote.participants.join(', ') }}</span>
-            <span style="margin-left: 16px" v-if="sharedNote.createdAt">
+            <span class="meta-separator">参与者: {{ sharedNote.participants.join(', ') }}</span>
+            <span class="meta-separator" v-if="sharedNote.createdAt">
               创建时间: {{ formatDate(sharedNote.createdAt) }}
             </span>
           </div>
@@ -45,7 +40,7 @@
       </div>
 
       <!-- 四象限视图 -->
-      <SharedQuadrantView ref="quadrantViewRef" :shared-note-id="sharedNote._id" @update-note="handleNoteUpdate" />
+      <QuadrantViewComp ref="quadrantViewRef" :shared-note-id="sharedNote._id" @update-note="handleNoteUpdate" />
 
       <!-- 新建笔记对话框 -->
       <el-dialog v-model="noteDialogVisible" :title="editingNote ? '编辑笔记' : '新建笔记'" width="600px"
@@ -58,7 +53,7 @@
             <el-input v-model="noteForm.content" type="textarea" :autosize="{ minRows: 6 }" placeholder="请输入笔记内容" />
           </el-form-item>
           <el-form-item label="标签" prop="tags">
-            <el-select v-model="noteForm.tags" multiple filterable allow-create default-first-option style="width: 100%"
+            <el-select v-model="noteForm.tags" multiple filterable allow-create default-first-option class="full-width"
               placeholder="可选，输入后按回车添加标签">
               <el-option v-for="tag in noteForm.tags || []" :key="tag" :label="tag" :value="tag" />
             </el-select>
@@ -81,7 +76,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { Loading, ArrowLeft } from '@element-plus/icons-vue'
 import { commonService } from '@/service'
-import SharedQuadrantView from '@/components/sharedQuadrantView/sharedQuadrantViewComp.vue'
+import QuadrantViewComp from '@/components/quadrantView/quadrantViewComp.vue'
 import type { SharedNote, SharedQuadrantNote } from '@/types'
 
 const router = useRouter()
@@ -206,5 +201,64 @@ function formatDate(dateString: string) {
 </script>
 
 <style scoped>
-/* 页面整体样式继承现有项目风格 */
+.page-container {
+  max-width: 960px;
+  margin: 20px auto;
+  padding-top: 60px;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 40px;
+}
+
+.loading-icon {
+  font-size: 32px;
+  color: #409eff;
+}
+
+.loading-text {
+  margin-top: 16px;
+  color: #ffffff;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.back-button {
+  margin-right: 8px;
+}
+
+.detail-title {
+  margin: 0;
+}
+
+.meta-info {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.meta-separator {
+  margin-left: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
 </style>

@@ -1,8 +1,5 @@
 <template>
-  <div ref="noteEl" class="note-item" :style="style" :title="props.note.content">
-    <div v-if="props.note.createdBy" class="note-creator">
-      {{ props.note.createdBy }}
-    </div>
+  <div ref="noteEl" class="note-item" :style="style" :title="`${props.note.createdBy}:${props.note.content}`">
     <div class="note-content">
       {{ getDisplayText(props.note) }}
     </div>

@@ -85,14 +85,9 @@ onMounted(fetchList)
 </script>
 
 <template>
-  <div style="max-width: 1000px; margin: 20px auto; margin-top: 90px">
-    <div style="
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 12px;
-      ">
-      <h2 style="margin: 0">凭据管理</h2>
+  <div class="page-container">
+    <div class="page-header">
+      <h2 class="page-title">凭据管理</h2>
       <el-button type="primary" @click="openCreate">新增凭据</el-button>
     </div>
 
@@ -139,7 +134,7 @@ onMounted(fetchList)
     </el-drawer>
 
     <el-dialog v-model="revealVisible" title="明文密码" width="400px">
-      <div style="font-size: 18px; font-weight: 700; letter-spacing: 0.3px">
+      <div class="password-display">
         {{ revealPassword || '无' }}
       </div>
       <template #footer>
@@ -149,4 +144,27 @@ onMounted(fetchList)
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.page-container {
+  max-width: 1000px;
+  margin: 20px auto;
+  margin-top: 90px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.page-title {
+  margin: 0;
+}
+
+.password-display {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+</style>

@@ -57,7 +57,7 @@ const tiles: TileItem[] = [
   },
   {
     key: 'shareNotes',
-    title: '分享笔记',
+    title: '共享笔记',
     subtitle: 'Share Notes',
     icon: '📤',
     size: 's',

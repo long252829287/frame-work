@@ -1,28 +1,30 @@
 <template>
-  <div style="max-width: 960px; margin: 20px auto; padding-top: 60px">
-    <div style="
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      ">
+  <div class="page-container">
+    <div class="page-header">
       <div>
-        <h2 style="margin: 0">共享笔记 ({{ total }})</h2>
-        <p style="margin: 8px 0 0 0; color: #ffffff">与他人协作的笔记本</p>
+        <h1 class="page-title">
+          <el-button circle size="small" @click="goBack" class="back-button">
+            <el-icon>
+              <ArrowLeft />
+            </el-icon>
+          </el-button>
+          共享笔记 ({{ total }})
+        </h1>
+        <p class="page-subtitle">与他人协作的笔记本</p>
       </div>
       <div>
         <el-button type="primary" @click="openCreateDialog">新建共享笔记</el-button>
       </div>
     </div>
 
-    <div v-if="loading" style="text-align: center; padding: 40px">
-      <el-icon class="is-loading" style="font-size: 32px; color: #409eff">
+    <div v-if="loading" class="loading-state">
+      <el-icon class="is-loading loading-icon">
         <Loading />
       </el-icon>
-      <p style="margin-top: 16px; color: #ffffff">加载中...</p>
+      <p class="loading-text">加载中...</p>
     </div>
 
-    <div v-else-if="list.length === 0" style="text-align: center; padding: 60px">
+    <div v-else-if="list.length === 0" class="empty-state">
       <el-empty description="暂无共享笔记">
         <el-button type="primary" @click="openCreateDialog">创建第一个共享笔记</el-button>
       </el-empty>
@@ -68,7 +70,7 @@
           <el-input v-model="form.title" placeholder="请输入笔记标题" />
         </el-form-item>
         <el-form-item label="参与用户" prop="participants">
-          <el-select v-model="form.participants" multiple filterable placeholder="请选择参与用户" style="width: 100%"
+          <el-select v-model="form.participants" multiple filterable placeholder="请选择参与用户" class="full-width"
             :loading="usersLoading">
             <el-option v-for="user in availableUsers" :key="user._id" :label="user.nickname || user.username"
               :value="user.username" />
@@ -89,7 +91,7 @@
 import { ref, onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Loading, MoreFilled } from '@element-plus/icons-vue'
+import { Loading, MoreFilled, ArrowLeft } from '@element-plus/icons-vue'
 import { commonService } from '@/service'
 import type { SharedNote, User } from '@/types'
 
@@ -219,9 +221,63 @@ function goToDetail(noteId: string) {
 function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString('zh-CN')
 }
+
+function goBack() {
+  router.push('/')
+}
 </script>
 
 <style scoped>
+.page-container {
+  max-width: 960px;
+  margin: 20px auto;
+  padding-top: 60px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.back-button {
+  margin-right: 8px;
+}
+
+.page-title {
+  margin: 0;
+}
+
+.page-subtitle {
+  margin: 8px 0 0 0;
+  color: #ffffff;
+}
+
+.loading-state {
+  text-align: center;
+  padding: 40px;
+}
+
+.loading-icon {
+  font-size: 32px;
+  color: #409eff;
+}
+
+.loading-text {
+  margin-top: 16px;
+  color: #ffffff;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px;
+}
+
+.full-width {
+  width: 100%;
+}
+
 .shared-notes-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

@@ -15,18 +15,6 @@
 
     <!-- 左侧导航区域 -->
     <div class="header-left">
-      <!-- 返回按钮 -->
-      <div v-if="showBackButton" class="back-button" @click="goBack" :title="'返回'">
-        <div class="back-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-        </div>
-        <span class="back-text">返回</span>
-      </div>
-
-      <!-- Logo区域 -->
       <div class="logo-container" @click="router.push({ name: 'home' })">
         <div class="logo-icon">🏡</div>
         <div class="logo-text">
@@ -52,7 +40,6 @@
 
       <!-- 用户信息区域 -->
       <div v-else class="user-section">
-        <div class="avatar-frame">🌻</div>
         <div class="status-indicator">💚</div>
         <div class="user-dropdown" @click="toggleUserMenu">
           <div class="user-avatar">
@@ -63,10 +50,6 @@
             <div class="user-name">{{ displayName }}</div>
             <div class="user-status">🌱 活跃中</div>
           </div>
-
-          <!-- <div class="dropdown-arrow" :class="{ open: showUserMenu }">
-            <span class="arrow-icon">🔽</span>
-          </div> -->
         </div>
 
         <!-- 下拉菜单 -->
@@ -112,11 +95,6 @@ const userAvatar = computed(
   () => 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
 )
 
-const showBackButton = computed(() => {
-  return route.name !== 'home' && window.history.length > 1
-})
-
-// 现代网站特性：滚动时header样式变化
 const headerClasses = computed(() => {
   return {
     'stardew-header': true,
@@ -129,13 +107,7 @@ const toggleUserMenu = () => {
   showUserMenu.value = !showUserMenu.value
 }
 
-const goBack = () => {
-  if (window.history.length > 1) {
-    router.back()
-  } else {
-    router.push({ name: 'home' })
-  }
-}
+
 
 const viewProfile = () => {
   showUserMenu.value = false
@@ -327,21 +299,6 @@ onUnmounted(() => {
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   }
-
-  .back-icon {
-    display: flex;
-    align-items: center;
-    transition: transform 0.3s ease;
-  }
-
-  .back-text {
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-
-  &:hover .back-icon {
-    transform: translateX(-3px);
-  }
 }
 
 .logo-container {
@@ -430,15 +387,6 @@ onUnmounted(() => {
 
 .user-section {
   position: relative;
-
-  .avatar-frame {
-    position: absolute;
-    top: 0px;
-    left: -700px;
-    font-size: 2.5rem;
-    z-index: 1;
-    animation: rotate 6s linear infinite;
-  }
 
   .status-indicator {
     position: absolute;
@@ -655,7 +603,6 @@ onUnmounted(() => {
   .stardew-header,
   .decoration,
   .logo-icon,
-  .avatar-frame,
   .status-indicator {
     animation: none;
     transition: none;

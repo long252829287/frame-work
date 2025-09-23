@@ -25,49 +25,29 @@
         <div class="quadrant q2" ref="q2Ref">
           <h3 class="quadrant-title">重要但不紧急</h3>
           <TransitionGroup name="note-list" tag="div" class="quadrant-content">
-            <NoteItem
-              v-for="note in importantNotUrgentNotes"
-              :key="note._id"
-              :note="note"
-              @drag-move="highlightDropZone"
-              @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)"
-            />
+            <NoteItem v-for="note in importantNotUrgentNotes" :key="note._id" :note="note"
+              @drag-move="highlightDropZone" @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
           </TransitionGroup>
         </div>
         <div class="quadrant q1" ref="q1Ref">
           <h3 class="quadrant-title">重要且紧急</h3>
           <TransitionGroup name="note-list" tag="div" class="quadrant-content">
-            <NoteItem
-              v-for="note in importantUrgentNotes"
-              :key="note._id"
-              :note="note"
-              @drag-move="highlightDropZone"
-              @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)"
-            />
+            <NoteItem v-for="note in importantUrgentNotes" :key="note._id" :note="note" @drag-move="highlightDropZone"
+              @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
           </TransitionGroup>
         </div>
         <div class="quadrant q3" ref="q3Ref">
           <h3 class="quadrant-title">不重要不紧急</h3>
           <TransitionGroup name="note-list" tag="div" class="quadrant-content">
-            <NoteItem
-              v-for="note in notImportantNotUrgentNotes"
-              :key="note._id"
-              :note="note"
-              @drag-move="highlightDropZone"
-              @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)"
-            />
+            <NoteItem v-for="note in notImportantNotUrgentNotes" :key="note._id" :note="note"
+              @drag-move="highlightDropZone" @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
           </TransitionGroup>
         </div>
         <div class="quadrant q4" ref="q4Ref">
           <h3 class="quadrant-title">不重要但紧急</h3>
           <TransitionGroup name="note-list" tag="div" class="quadrant-content">
-            <NoteItem
-              v-for="note in notImportantUrgentNotes"
-              :key="note._id"
-              :note="note"
-              @drag-move="highlightDropZone"
-              @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)"
-            />
+            <NoteItem v-for="note in notImportantUrgentNotes" :key="note._id" :note="note"
+              @drag-move="highlightDropZone" @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
           </TransitionGroup>
         </div>
       </div>
@@ -76,13 +56,8 @@
     <div class="uncategorized-area" ref="uncategorizedRef">
       <h3 class="uncategorized-title">待分类笔记 ({{ uncategorizedNotes.length }})</h3>
       <TransitionGroup name="note-list" tag="div" class="uncategorized-content">
-        <NoteItem
-          v-for="note in uncategorizedNotes"
-          :key="note._id"
-          :note="note"
-          @drag-move="highlightDropZone"
-          @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)"
-        />
+        <NoteItem v-for="note in uncategorizedNotes" :key="note._id" :note="note" @drag-move="highlightDropZone"
+          @drag-end="(pos) => handleDragEnd(note, pos.x, pos.y)" />
       </TransitionGroup>
     </div>
   </div>
@@ -160,10 +135,16 @@ async function fetchNotes(): Promise<void> {
       const response = await commonService.apiGetSharedNoteContent(props.sharedNoteId!)
       let rawNotes: SharedQuadrantNote[] = response.data.data.notes || []
 
+      // 先收集所有用户并创建颜色映射
+      const users = [...new Set(rawNotes.map(note => note.createdBy).filter(Boolean))]
+      const userColorMap = new Map<string, string>()
+      users.forEach((username, index) => {
+        userColorMap.set(username, USER_COLORS[index % USER_COLORS.length])
+      })
+
       // 为每个笔记分配用户颜色
       const processedNotes = rawNotes.map((note) => {
-        const userColorIndex = userColors.value.findIndex(uc => uc.username === note.createdBy)
-        const color = userColorIndex >= 0 ? userColors.value[userColorIndex].color : USER_COLORS[0]
+        const color = userColorMap.get(note.createdBy) || USER_COLORS[0]
 
         return {
           ...note,
@@ -223,7 +204,7 @@ const uncategorizedNotes = computed(() =>
     .sort((a, b) => (a.order || 0) - (b.order || 0)),
 )
 
-async function handleDragEnd(note: QuadrantNote, clientX: number, clientY: number): Promise<void> {
+async function handleDragEnd(note: QuadrantNote | SharedQuadrantNote, clientX: number, clientY: number): Promise<void> {
   clearAllHighlights()
 
   const newCoords = getQuadrantFromPosition(clientX, clientY)
@@ -256,11 +237,20 @@ async function handleDragEnd(note: QuadrantNote, clientX: number, clientY: numbe
   noteToUpdate.order = newOrder
 
   try {
-    await commonService.apiUpdateNote(noteToUpdate._id, {
-      x_axis: newCoords.x,
-      y_axis: newCoords.y,
-      order: newOrder,
-    })
+    if (isSharedMode.value) {
+      await commonService.apiUpdateSharedNoteItem(noteToUpdate._id, {
+        x_axis: newCoords.x,
+        y_axis: newCoords.y,
+        order: newOrder,
+      })
+      emit('update-note', noteToUpdate as SharedQuadrantNote)
+    } else {
+      await commonService.apiUpdateNote(noteToUpdate._id, {
+        x_axis: newCoords.x,
+        y_axis: newCoords.y,
+        order: newOrder,
+      })
+    }
   } catch (error) {
     console.error('更新笔记位置失败，正在回滚:', error)
 
@@ -358,13 +348,54 @@ function removeDropZoneHighlight(zoneName: string) {
     element.classList.remove('drop-zone-active')
   }
 }
+
+defineExpose({
+  fetchNotes
+})
 </script>
 
 <style scoped>
-.quadrant-board {
+.quadrant-board,
+.shared-quadrant-board {
   width: 100%;
   max-width: 1200px;
   padding: 20px;
+}
+
+.user-legend {
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e4e7ed;
+}
+
+.user-legend h4 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #606266;
+  font-weight: 600;
+}
+
+.legend-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #303133;
+}
+
+.color-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 /* 加载状态 */
@@ -441,10 +472,9 @@ function removeDropZoneHighlight(zoneName: string) {
 
 .quadrant-title {
   text-align: center;
-  color: #ffffff;
+  color: #A0522D;
   font-weight: 600;
   user-select: none;
-  margin: 0 0 12px 0;
   font-size: 14px;
   padding-bottom: 8px;
   border-bottom: 1px solid #eee;
@@ -455,6 +485,7 @@ function removeDropZoneHighlight(zoneName: string) {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  padding-top: 8px;
 }
 
 /* 象限特殊颜色 */
@@ -561,7 +592,9 @@ function removeDropZoneHighlight(zoneName: string) {
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-  .quadrant-board {
+
+  .quadrant-board,
+  .shared-quadrant-board {
     padding: 10px;
   }
 
@@ -576,6 +609,14 @@ function removeDropZoneHighlight(zoneName: string) {
   .note-item {
     font-size: 12px;
     padding: 8px 10px;
+  }
+
+  .legend-items {
+    gap: 12px;
+  }
+
+  .legend-item {
+    font-size: 12px;
   }
 }
 </style>
