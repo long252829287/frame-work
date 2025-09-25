@@ -37,13 +37,17 @@ const handleImageUpload = (event: Event) => {
 </script>
 
 <style lang="scss" scoped>
+.image-uploader {
+  padding: 20px;
+}
+
 .image-uploader input[type='file'] {
   display: none;
 }
 
 .custom-file-upload {
   display: inline-block;
-  padding: 6px 12px;
+  // padding: 6px 12px;
   cursor: pointer;
   font-size: 12px;
 }
