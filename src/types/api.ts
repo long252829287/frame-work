@@ -1,7 +1,7 @@
 export interface PaginatedList<T> {
   data: {
     notes: T[]
-    count: number,
+    count: number
   }
 }
 
@@ -35,18 +35,4 @@ export interface CredentialItem {
 
 export interface RevealPasswordResult {
   password: string
-}
-
-export interface StudySubject {
-  id: string
-  name: string
-  description?: string
-  files: string[] // Array of markdown file names
-  createdAt?: string
-  updatedAt?: string
-}
-
-export interface MarkdownFile {
-  name: string
-  content: string
 }

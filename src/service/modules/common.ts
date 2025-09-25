@@ -5,8 +5,6 @@ import type {
   PaginatedList,
   CredentialItem,
   RevealPasswordResult,
-  StudySubject,
-  MarkdownFile,
 } from '@/types'
 import type { SharedNote, SharedQuadrantNote, User } from '@/types/notes'
 
@@ -87,46 +85,6 @@ export default {
     return fetch.delete<{ success?: boolean }>(`/api/credentials/${id}`)
   },
 
-  // Study APIs
-  async apiCreateStudySubject(payload: { name: string; description?: string }) {
-    return fetch.post<StudySubject>('/api/study/subjects', payload)
-  },
-
-  async apiListStudySubjects() {
-    return fetch.get<PaginatedList<StudySubject> | StudySubject[]>('/api/study/subjects')
-  },
-
-  async apiGetStudySubject(id: string) {
-    return fetch.get<StudySubject>(`/api/study/subjects/${id}`)
-  },
-
-  async apiUpdateStudySubject(
-    id: string,
-    payload: { name?: string; description?: string; files?: string[] },
-  ) {
-    return fetch.put<StudySubject>(`/api/study/subjects/${id}`, payload)
-  },
-
-  async apiDeleteStudySubject(id: string) {
-    return fetch.delete<{ success?: boolean }>(`/api/study/subjects/${id}`)
-  },
-
-  async apiGetMarkdownFile(subjectId: string, fileName: string) {
-    return fetch.get<MarkdownFile>(`/api/study/subjects/${subjectId}/files/${fileName}`)
-  },
-
-  async apiCreateMarkdownFile(subjectId: string, payload: { name: string; content: string }) {
-    return fetch.post<MarkdownFile>(`/api/study/subjects/${subjectId}/files`, payload)
-  },
-
-  async apiUpdateMarkdownFile(subjectId: string, fileName: string, payload: { content: string }) {
-    return fetch.put<MarkdownFile>(`/api/study/subjects/${subjectId}/files/${fileName}`, payload)
-  },
-
-  async apiDeleteMarkdownFile(subjectId: string, fileName: string) {
-    return fetch.delete<{ success?: boolean }>(`/api/study/subjects/${subjectId}/files/${fileName}`)
-  },
-
   // Shared Notes APIs
   async apiGetSharedNotes() {
     return fetch.get<{ data: { notes: SharedNote[] } }>('/api/shared-notes')
@@ -152,25 +110,31 @@ export default {
     return fetch.get<{ data: { notes: SharedQuadrantNote[] } }>(`/api/shared-notes/${id}/notes`)
   },
 
-  async apiCreateSharedNoteItem(sharedNoteId: string, payload: {
-    title?: string
-    content: string
-    tags?: string[]
-    x_axis: number
-    y_axis: number
-    order: number
-  }) {
+  async apiCreateSharedNoteItem(
+    sharedNoteId: string,
+    payload: {
+      title?: string
+      content: string
+      tags?: string[]
+      x_axis: number
+      y_axis: number
+      order: number
+    },
+  ) {
     return fetch.post<SharedQuadrantNote>(`/api/shared-notes/${sharedNoteId}/notes`, payload)
   },
 
-  async apiUpdateSharedNoteItem(noteId: string, payload: {
-    title?: string
-    content?: string
-    tags?: string[]
-    x_axis?: number
-    y_axis?: number
-    order?: number
-  }) {
+  async apiUpdateSharedNoteItem(
+    noteId: string,
+    payload: {
+      title?: string
+      content?: string
+      tags?: string[]
+      x_axis?: number
+      y_axis?: number
+      order?: number
+    },
+  ) {
     return fetch.put<SharedQuadrantNote>(`/api/shared-notes/notes/${noteId}`, payload)
   },
 

@@ -1,12 +1,9 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import ElementPlus from 'element-plus'
-
-// 导入全局样式
 import './assets/scss/global.scss'
 import './assets/css/tailwind.css'
 import 'element-plus/dist/index.css'
-
 import App from './App.vue'
 import router from './router'
 
