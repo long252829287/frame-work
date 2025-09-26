@@ -3,7 +3,11 @@
     "allow": [
       "Bash(npm install:*)",
       "Read(//e/Program Files/nodejs/node_cache/_logs/**)",
-      "Bash(npm cache clean:*)"
+      "Bash(npm cache clean:*)",
+      "Bash(find:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm run:*)",
+      "WebFetch(domain:www.osheeep.com)"
     ],
     "deny": [],
     "ask": []
