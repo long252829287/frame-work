@@ -11,7 +11,6 @@ export type { QuadrantNote } from './notes'
 export type {
   // Common types
   ApiResponse,
-  PaginationInfo,
   // Champion types
   Champion,
   ChampionImages,
@@ -27,13 +26,28 @@ export type {
   ItemMaps,
   ItemWithRelated,
   ItemListResponse,
+  ItemTagsResponse,
+  ItemSearchResponse,
+  ItemStatsResponse,
   ItemQueryParams,
+  // Rune types
+  Rune,
+  RuneSlot,
+  RuneTree,
+  RuneTreeListResponse,
+  RuneTreeNamesResponse,
+  RuneValidationPayload,
+  RuneValidationResponse,
+  RuneStatsResponse,
   // Strategy types
   Strategy,
+  StrategyRunes,
   StrategyItem,
   StrategyCreator,
   StrategyStats,
   StrategyListResponse,
+  StrategyByChampionResponse,
+  StrategyLikeResponse,
   CreateStrategyPayload,
   UpdateStrategyPayload,
   StrategyQueryParams,

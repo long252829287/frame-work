@@ -74,14 +74,14 @@ const tiles: TileItem[] = [
     route: '/credentials',
     requiresAuth: true,
   },
-  { key: 'media', title: '媒体', subtitle: 'Coming soon', icon: '🎬', size: 'm', color: 'pink' },
+  { key: 'lol', title: 'lol攻略', subtitle: '大乱斗攻略', icon: '🎬', size: 'm', color: 'pink', route: '/lol' },
   {
     key: 'tools',
     title: '工具',
     subtitle: 'Coming soon',
     icon: '🧰',
     size: 's',
-    color: 'teal',
+    color: 'blue',
     route: '/tool',
   },
   {

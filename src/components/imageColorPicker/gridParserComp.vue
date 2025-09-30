@@ -55,7 +55,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import Color from 'color'
-import colorData from '../../json/rgbTransformColor.json'
+import colorData from '../../json/color/rgbTransformColor.json'
 
 // 用户调整的偏移量
 const userOffset = ref({ x: 0, y: 0 });

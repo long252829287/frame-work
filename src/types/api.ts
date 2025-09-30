@@ -45,22 +45,14 @@ export interface ApiResponse<T> {
   message: string
   data: T
   error?: string
-}
-
-export interface PaginationInfo {
-  currentPage: number
-  totalPages: number
-  totalCount: number
-  limit: number
-  hasNext: boolean
-  hasPrev: boolean
+  timestamp?: string
 }
 
 // Champion Types
 export interface ChampionImages {
   square: string
-  splash: string
-  loading: string
+  splash?: string
+  loading?: string
   passive?: string
 }
 
@@ -79,13 +71,14 @@ export interface Champion {
   tags: string[]
   stats: ChampionStats
   version: string
+  isEnabled?: boolean
   createdAt?: string
   updatedAt?: string
 }
 
 export interface ChampionListResponse {
   champions: Champion[]
-  pagination: PaginationInfo
+  total: number
 }
 
 export interface ChampionTagsResponse {
@@ -154,17 +147,142 @@ export interface ItemWithRelated extends Item {
 
 export interface ItemListResponse {
   items: Item[]
-  pagination: PaginationInfo
-  filters: {
+  total: number
+  filters?: {
     search: string | null
     tags: string[] | null
     map: string | null
     priceRange: { min: number | null; max: number | null }
+    depth: number | null
     purchasable: boolean | null
+    mythic: boolean | null
+    legendary: boolean | null
+    boots: boolean | null
   }
 }
 
+export interface ItemTagsResponse {
+  tags: string[]
+  stats: Record<string, number>
+  total: number
+}
+
+export interface ItemSearchResponse {
+  keyword: string
+  items: Item[]
+  total: number
+}
+
+export interface ItemStatsResponse {
+  total: {
+    all: number
+    enabled: number
+    disabled: number
+    purchasable: number
+    mythic: number
+    legendary: number
+    boots: number
+  }
+  byTags: Record<string, number>
+  byDepth: Record<string, number>
+  priceStats: {
+    average: number
+    min: number
+    max: number
+  }
+  byMap: {
+    sr: number
+    ha: number
+    aram: number
+  }
+  byVersion: Record<string, number>
+  lastUpdated: string
+}
+
+// Rune Types
+export interface Rune {
+  id: string
+  name: string
+  icon: string
+  slotIndex?: number
+}
+
+export interface RuneSlot {
+  runes: Rune[]
+}
+
+export interface RuneTree {
+  _id: string
+  id: string
+  name: string
+  icon: string
+  slots: RuneSlot[]
+  version: string
+  isEnabled: boolean
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface RuneTreeListResponse {
+  runeTrees: RuneTree[]
+  total: number
+}
+
+export interface RuneTreeNamesResponse {
+  trees: Array<{ id: string; name: string }>
+  total: number
+}
+
+export interface RuneValidationPayload {
+  primaryTreeId: string
+  primaryRuneIds: string[]
+  secondaryTreeId: string
+  secondaryRuneIds: string[]
+}
+
+export interface RuneValidationResponse {
+  valid: boolean
+  primaryTree: {
+    id: string
+    name: string
+  }
+  secondaryTree: {
+    id: string
+    name: string
+  }
+}
+
+export interface RuneStatsResponse {
+  total: {
+    trees: number
+    runes: number
+  }
+  byTree: Record<string, number>
+  lastUpdated: string
+}
+
 // Strategy Types
+export interface StrategyRunes {
+  primaryTreeId: string
+  primaryTreeName: string
+  primaryTreeIcon: string
+  primaryRunes: Array<{
+    id: string
+    name: string
+    icon: string
+    slotIndex: number
+  }>
+  secondaryTreeId: string
+  secondaryTreeName: string
+  secondaryTreeIcon: string
+  secondaryRunes: Array<{
+    id: string
+    name: string
+    icon: string
+    slotIndex: number
+  }>
+}
+
 export interface StrategyItem {
   item: Item
   itemName: string
@@ -175,7 +293,7 @@ export interface StrategyItem {
 export interface StrategyCreator {
   _id: string
   username: string
-  profile: {
+  profile?: {
     displayName: string
     avatar?: string
   }
@@ -194,6 +312,7 @@ export interface Strategy {
   championKey: string
   championName: string
   items: StrategyItem[]
+  runes?: StrategyRunes
   mapType: 'sr' | 'aram' | 'both'
   description: string
   tags: string[]
@@ -209,16 +328,43 @@ export interface Strategy {
 
 export interface StrategyListResponse {
   strategies: Strategy[]
-  pagination: PaginationInfo
+  total: number
+}
+
+export interface StrategyByChampionResponse {
+  championKey: string
+  strategies: Strategy[]
+  total: number
+}
+
+export interface StrategyLikeResponse {
+  isLiked: boolean
+  likeCount: number
 }
 
 export interface CreateStrategyPayload {
   title: string
   championId: string
-  items: {
+  items: Array<{
     itemId: string
     position: number
-  }[]
+  }>
+  runes?: {
+    primaryTreeId: string
+    primaryRunes: Array<{
+      id: string
+      name: string
+      icon: string
+      slotIndex: number
+    }>
+    secondaryTreeId: string
+    secondaryRunes: Array<{
+      id: string
+      name: string
+      icon: string
+      slotIndex: number
+    }>
+  }
   mapType: 'sr' | 'aram' | 'both'
   description: string
   tags: string[]
@@ -227,22 +373,37 @@ export interface CreateStrategyPayload {
 export interface UpdateStrategyPayload {
   title?: string
   championId?: string
-  items?: {
+  items?: Array<{
     itemId: string
     position: number
-  }[]
+  }>
+  runes?: {
+    primaryTreeId: string
+    primaryRunes: Array<{
+      id: string
+      name: string
+      icon: string
+      slotIndex: number
+    }>
+    secondaryTreeId: string
+    secondaryRunes: Array<{
+      id: string
+      name: string
+      icon: string
+      slotIndex: number
+    }>
+  }
   mapType?: 'sr' | 'aram' | 'both'
   description?: string
   tags?: string[]
   isPublic?: boolean
+  status?: 'draft' | 'published' | 'archived'
 }
 
 // Query Parameter Types
 export interface ChampionQueryParams {
   search?: string
   tags?: string[]
-  page?: number
-  limit?: number
   sort?: 'name' | 'createdAt' | 'key'
   order?: 'asc' | 'desc'
 }
@@ -258,9 +419,7 @@ export interface ItemQueryParams {
   mythic?: boolean
   legendary?: boolean
   boots?: boolean
-  page?: number
-  limit?: number
-  sort?: string
+  sort?: 'name' | 'gold.total' | 'depth' | 'createdAt'
   order?: 'asc' | 'desc'
 }
 
@@ -270,9 +429,7 @@ export interface StrategyQueryParams {
   creatorId?: string
   search?: string
   isRecommended?: boolean
-  page?: number
-  limit?: number
-  sort?: string
+  sort?: 'createdAt' | 'updatedAt' | 'stats.viewCount' | 'stats.favoriteCount' | 'stats.likeCount'
   order?: 'asc' | 'desc'
   status?: 'draft' | 'published' | 'archived'
 }

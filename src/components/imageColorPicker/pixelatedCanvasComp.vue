@@ -46,7 +46,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, reactive } from 'vue'
 import Color from 'color'
-import colorData from '../../json/rgbTransformColor.json'
+import colorData from '../../json/color/rgbTransformColor.json'
 
 const formLabelAlign = reactive({
   name: '',

@@ -1,11 +1,5 @@
 import fetch from '../fetch'
 import type {
-  ApiLoginData,
-  NoteItem,
-  PaginatedList,
-  CredentialItem,
-  RevealPasswordResult,
-  // LOL Strategy System Types
   ApiResponse,
   Champion,
   ChampionListResponse,
@@ -16,162 +10,31 @@ import type {
   Item,
   ItemWithRelated,
   ItemListResponse,
+  ItemTagsResponse,
+  ItemSearchResponse,
+  ItemStatsResponse,
   ItemQueryParams,
+  RuneTree,
+  RuneTreeListResponse,
+  RuneTreeNamesResponse,
+  RuneValidationPayload,
+  RuneValidationResponse,
+  RuneStatsResponse,
   Strategy,
   StrategyListResponse,
+  StrategyByChampionResponse,
+  StrategyLikeResponse,
   CreateStrategyPayload,
   UpdateStrategyPayload,
   StrategyQueryParams,
 } from '@/types'
-import type { SharedNote, SharedQuadrantNote, User } from '@/types/notes'
 
 export default {
-  async apiRegister(payload: { username: string; password: string; nickname?: string }) {
-    return fetch.post<{ message?: string } | Record<string, unknown>>('/api/auth/register', payload)
-  },
-
-  async apiLogin(payload: { username: string; password: string }) {
-    return fetch.post<ApiLoginData>('/api/auth/login', payload)
-  },
-
-  async apiLogout() {
-    return fetch.post<{ message?: string } | Record<string, unknown>>('/api/auth/logout')
-  },
-
-  // Notes APIs
-  async apiGetNotes() {
-    return fetch.get<PaginatedList<NoteItem> | NoteItem[]>('/api/notes/notes')
-  },
-
-  async apiGetNote(id: string) {
-    return fetch.get<NoteItem>(`/api/notes/notes/${id}`)
-  },
-
-  async apiCreateNote(payload: { content: string; title?: string; tags?: string[] }) {
-    return fetch.post<NoteItem>('/api/notes/notes', payload)
-  },
-
-  async apiUpdateNote(
-    id: string,
-    payload: {
-      content?: string
-      title?: string
-      tags?: string[]
-      x_axis?: number
-      y_axis?: number
-      order?: number
-    },
-  ) {
-    return fetch.put<NoteItem>(`/api/notes/notes/${id}`, payload)
-  },
-
-  async apiDeleteNote(id: string) {
-    return fetch.delete<{ success?: boolean }>(`/api/notes/notes/${id}`)
-  },
-
-  // Credentials APIs
-  async apiCreateCredential(payload: {
-    account: string
-    password: string
-    website: string
-    notes?: string
-  }) {
-    return fetch.post<CredentialItem>('/api/credentials', payload)
-  },
-
-  async apiListCredentials() {
-    return fetch.get<PaginatedList<CredentialItem> | CredentialItem[]>('/api/credentials')
-  },
-
-  async apiGetCredential(id: string) {
-    return fetch.get<CredentialItem>(`/api/credentials/${id}`)
-  },
-
-  async apiRevealCredentialPassword(id: string) {
-    return fetch.post<RevealPasswordResult>(`/api/credentials/${id}/reveal`)
-  },
-
-  async apiUpdateCredential(
-    id: string,
-    payload: { account?: string; password?: string; website?: string; notes?: string },
-  ) {
-    return fetch.put<CredentialItem>(`/api/credentials/${id}`, payload)
-  },
-
-  async apiDeleteCredential(id: string) {
-    return fetch.delete<{ success?: boolean }>(`/api/credentials/${id}`)
-  },
-
-  // Shared Notes APIs
-  async apiGetSharedNotes() {
-    return fetch.get<{ data: { notes: SharedNote[] } }>('/api/shared-notes')
-  },
-
-  async apiGetSharedNote(id: string) {
-    return fetch.get<{ data: SharedNote }>(`/api/shared-notes/${id}`)
-  },
-
-  async apiCreateSharedNote(payload: { title: string; participants: string[] }) {
-    return fetch.post<SharedNote>('/api/shared-notes', payload)
-  },
-
-  async apiUpdateSharedNote(id: string, payload: { title?: string; participants?: string[] }) {
-    return fetch.put<SharedNote>(`/api/shared-notes/${id}`, payload)
-  },
-
-  async apiDeleteSharedNote(id: string) {
-    return fetch.delete<{ success?: boolean }>(`/api/shared-notes/${id}`)
-  },
-
-  async apiGetSharedNoteContent(id: string) {
-    return fetch.get<{ data: { notes: SharedQuadrantNote[] } }>(`/api/shared-notes/${id}/notes`)
-  },
-
-  async apiCreateSharedNoteItem(
-    sharedNoteId: string,
-    payload: {
-      title?: string
-      content: string
-      tags?: string[]
-      x_axis: number
-      y_axis: number
-      order: number
-    },
-  ) {
-    return fetch.post<SharedQuadrantNote>(`/api/shared-notes/${sharedNoteId}/notes`, payload)
-  },
-
-  async apiUpdateSharedNoteItem(
-    noteId: string,
-    payload: {
-      title?: string
-      content?: string
-      tags?: string[]
-      x_axis?: number
-      y_axis?: number
-      order?: number
-    },
-  ) {
-    return fetch.put<SharedQuadrantNote>(`/api/shared-notes/notes/${noteId}`, payload)
-  },
-
-  async apiDeleteSharedNoteItem(noteId: string) {
-    return fetch.delete<{ success?: boolean }>(`/api/shared-notes/notes/${noteId}`)
-  },
-
-  async apiGetAllUsers() {
-    return fetch.get<{ data: User[] }>('/api/users')
-  },
-
-  // LOL Strategy System APIs
-
   // Champions APIs
   async apiGetChampions(params?: ChampionQueryParams) {
     const queryParams = new URLSearchParams()
     if (params?.search) queryParams.append('search', params.search)
     if (params?.tags) queryParams.append('tags', params.tags.join(','))
-    if (params?.page) queryParams.append('page', params.page.toString())
-    if (params?.limit) queryParams.append('limit', params.limit.toString())
     if (params?.sort) queryParams.append('sort', params.sort)
     if (params?.order) queryParams.append('order', params.order)
 
@@ -212,8 +75,6 @@ export default {
     if (params?.mythic !== undefined) queryParams.append('mythic', params.mythic.toString())
     if (params?.legendary !== undefined) queryParams.append('legendary', params.legendary.toString())
     if (params?.boots !== undefined) queryParams.append('boots', params.boots.toString())
-    if (params?.page) queryParams.append('page', params.page.toString())
-    if (params?.limit) queryParams.append('limit', params.limit.toString())
     if (params?.sort) queryParams.append('sort', params.sort)
     if (params?.order) queryParams.append('order', params.order)
 
@@ -226,7 +87,7 @@ export default {
   },
 
   async apiGetItemTags() {
-    return fetch.get<ApiResponse<{ tags: string[]; stats: Record<string, number>; total: number }>>('/api/items/tags/list')
+    return fetch.get<ApiResponse<ItemTagsResponse>>('/api/items/tags/list')
   },
 
   async apiGetItemsByMap(mapType: 'sr' | 'ha' | 'aram') {
@@ -234,7 +95,7 @@ export default {
   },
 
   async apiSearchItems(keyword: string) {
-    return fetch.get<ApiResponse<{ keyword: string; items: Item[]; total: number }>>(`/api/items/search/${keyword}`)
+    return fetch.get<ApiResponse<ItemSearchResponse>>(`/api/items/search/${keyword}`)
   },
 
   async apiGetItemsByTags(tags: string) {
@@ -250,7 +111,32 @@ export default {
   },
 
   async apiGetItemStats() {
-    return fetch.get<ApiResponse<{ total: number; byTags: Record<string, number>; byMaps: Record<string, number>; lastUpdated: string }>>('/api/items/stats/summary')
+    return fetch.get<ApiResponse<ItemStatsResponse>>('/api/items/stats/summary')
+  },
+
+  // Runes APIs
+  async apiGetRunes() {
+    return fetch.get<ApiResponse<RuneTreeListResponse>>('/api/runes')
+  },
+
+  async apiGetRuneTree(treeId: string) {
+    return fetch.get<ApiResponse<RuneTree>>(`/api/runes/${treeId}`)
+  },
+
+  async apiGetRune(runeId: string) {
+    return fetch.get<ApiResponse<{ id: string; name: string; icon: string; description: string }>>(`/api/runes/rune/${runeId}`)
+  },
+
+  async apiValidateRunes(payload: RuneValidationPayload) {
+    return fetch.post<ApiResponse<RuneValidationResponse>>('/api/runes/validate', payload)
+  },
+
+  async apiGetRuneTreeNames() {
+    return fetch.get<ApiResponse<RuneTreeNamesResponse>>('/api/runes/trees/names')
+  },
+
+  async apiGetRuneStats() {
+    return fetch.get<ApiResponse<RuneStatsResponse>>('/api/runes/stats/summary')
   },
 
   // Strategies APIs
@@ -261,8 +147,6 @@ export default {
     if (params?.creatorId) queryParams.append('creatorId', params.creatorId)
     if (params?.search) queryParams.append('search', params.search)
     if (params?.isRecommended !== undefined) queryParams.append('isRecommended', params.isRecommended.toString())
-    if (params?.page) queryParams.append('page', params.page.toString())
-    if (params?.limit) queryParams.append('limit', params.limit.toString())
     if (params?.sort) queryParams.append('sort', params.sort)
     if (params?.order) queryParams.append('order', params.order)
     if (params?.status) queryParams.append('status', params.status)
@@ -287,14 +171,12 @@ export default {
     return fetch.delete<ApiResponse<{ success: boolean }>>(`/api/strategies/${id}`)
   },
 
-  async apiGetStrategiesByChampion(championKey: string, params?: { mapType?: 'sr' | 'aram' | 'both'; page?: number; limit?: number }) {
+  async apiGetStrategiesByChampion(championKey: string, params?: { mapType?: 'sr' | 'aram' | 'both' }) {
     const queryParams = new URLSearchParams()
     if (params?.mapType) queryParams.append('mapType', params.mapType)
-    if (params?.page) queryParams.append('page', params.page.toString())
-    if (params?.limit) queryParams.append('limit', params.limit.toString())
 
     const query = queryParams.toString()
-    return fetch.get<ApiResponse<StrategyListResponse>>(`/api/strategies/champion/${championKey}${query ? `?${query}` : ''}`)
+    return fetch.get<ApiResponse<StrategyByChampionResponse>>(`/api/strategies/champion/${championKey}${query ? `?${query}` : ''}`)
   },
 
   async apiGetPopularStrategies(limit?: number) {
@@ -311,17 +193,15 @@ export default {
     return fetch.get<ApiResponse<StrategyListResponse>>(`/api/strategies/user/${userId}`)
   },
 
-  async apiGetMyStrategies(params?: { status?: 'draft' | 'published' | 'archived'; page?: number; limit?: number }) {
+  async apiGetMyStrategies(params?: { status?: 'draft' | 'published' | 'archived' }) {
     const queryParams = new URLSearchParams()
     if (params?.status) queryParams.append('status', params.status)
-    if (params?.page) queryParams.append('page', params.page.toString())
-    if (params?.limit) queryParams.append('limit', params.limit.toString())
 
     const query = queryParams.toString()
     return fetch.get<ApiResponse<StrategyListResponse>>(`/api/strategies/my${query ? `?${query}` : ''}`)
   },
 
   async apiLikeStrategy(id: string) {
-    return fetch.post<ApiResponse<{ liked: boolean; likeCount: number }>>(`/api/strategies/${id}/like`)
+    return fetch.post<ApiResponse<StrategyLikeResponse>>(`/api/strategies/${id}/like`)
   },
 }
