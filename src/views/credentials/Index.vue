@@ -144,27 +144,126 @@ onMounted(fetchList)
   </div>
 </template>
 
-<style scoped>
+<style lang="scss" scoped>
+@use '@/assets/scss/themes/modern-minimal.scss' as theme;
+
 .page-container {
-  max-width: 1000px;
-  margin: 20px auto;
-  margin-top: 90px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  padding-top: calc(64px + var(--spacing-2xl));
+  min-height: calc(100vh - 64px);
+  background: var(--color-bg-secondary);
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
+  margin-bottom: var(--spacing-xl);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--color-border-primary);
 }
 
 .page-title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .password-display {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent-primary);
+  letter-spacing: 0.05em;
+  padding: var(--spacing-lg);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--color-border-primary);
+  word-break: break-all;
+  user-select: all;
+}
+
+// Table styling
+:deep(.el-table) {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+
+  th {
+    background: var(--color-bg-secondary);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  td {
+    color: var(--color-text-secondary);
+  }
+}
+
+// Drawer styling
+:deep(.el-drawer) {
+  background: var(--color-bg-primary);
+
+  .el-drawer__header {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+    border-bottom: 1px solid var(--color-border-primary);
+    padding: var(--spacing-lg);
+    margin-bottom: 0;
+  }
+
+  .el-drawer__body {
+    padding: var(--spacing-lg);
+  }
+}
+
+// Dialog styling
+:deep(.el-dialog) {
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-2xl);
+
+  .el-dialog__header {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+    border-bottom: 1px solid var(--color-border-primary);
+    padding: var(--spacing-lg);
+  }
+
+  .el-dialog__body {
+    padding: var(--spacing-lg);
+  }
+
+  .el-dialog__footer {
+    border-top: 1px solid var(--color-border-primary);
+    padding: var(--spacing-lg);
+  }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .page-container {
+    padding: var(--spacing-xl) var(--spacing-md);
+    padding-top: calc(56px + var(--spacing-xl));
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-md);
+  }
+
+  .page-title {
+    font-size: var(--font-size-2xl);
+  }
+
+  .password-display {
+    font-size: var(--font-size-base);
+    padding: var(--spacing-md);
+  }
 }
 </style>

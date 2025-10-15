@@ -179,20 +179,25 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+@use '@/assets/scss/themes/modern-minimal.scss' as theme;
+
 .lol-index {
-  padding: 20px;
-  margin-top: 90px;
   max-width: 1400px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  padding-top: calc(64px + var(--spacing-2xl));
+  min-height: calc(100vh - 64px);
+  background: var(--color-bg-secondary);
 }
 
 .strategy-tabs {
+  margin-bottom: var(--spacing-2xl);
+
   :deep(.el-tabs__header) {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 20px;
+    background: var(--color-bg-primary);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-sm);
+    border: 1px solid var(--color-border-primary);
   }
 
   :deep(.el-tabs__nav-wrap) {
@@ -202,21 +207,22 @@ onMounted(() => {
   }
 
   :deep(.el-tabs__item) {
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 16px;
-    font-weight: 500;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    transition: color var(--transition-fast);
 
     &.is-active {
-      color: #c8aa6e;
+      color: var(--color-accent-primary);
     }
 
     &:hover {
-      color: #fff;
+      color: var(--color-text-primary);
     }
   }
 
   :deep(.el-tabs__active-bar) {
-    background-color: #c8aa6e;
+    background-color: var(--color-accent-primary);
   }
 }
 
@@ -228,46 +234,72 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 60px 20px;
+  padding: var(--spacing-3xl) var(--spacing-lg);
 
   :deep(.el-empty__description) {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--color-text-secondary);
   }
 }
 
 .strategies-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
+  gap: var(--spacing-lg);
 }
 
 .strategy-card {
-  background: linear-gradient(135deg, rgba(26, 26, 46, 0.9) 0%, rgba(22, 33, 62, 0.9) 100%);
-  border: 2px solid rgba(200, 170, 110, 0.2);
-  border-radius: 12px;
-  padding: 20px;
+  @include theme.card;
+  padding: var(--spacing-xl);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    background: var(--color-accent-primary);
+    border-radius: 50%;
+    opacity: 0;
+    transition: all var(--transition-base);
+  }
 
   &:hover {
-    border-color: #c8aa6e;
     transform: translateY(-4px);
-    box-shadow: 0 8px 24px rgba(200, 170, 110, 0.2);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-accent-primary);
+
+    &::before {
+      opacity: 0.05;
+      width: 150px;
+      height: 150px;
+    }
+  }
+
+  &:active {
+    transform: translateY(-2px);
   }
 }
 
 .card-header {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 15px;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  z-index: 1;
 
   .champion-icon {
     width: 56px;
     height: 56px;
-    border-radius: 8px;
-    border: 2px solid #c8aa6e;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-radius: var(--radius-md);
+    border: 2px solid var(--color-border-secondary);
+    box-shadow: var(--shadow-sm);
+    transition: transform var(--transition-fast);
   }
 
   .header-info {
@@ -275,30 +307,37 @@ onMounted(() => {
     min-width: 0;
 
     h3 {
-      color: #fff;
-      font-size: 18px;
-      font-weight: bold;
-      margin: 0 0 4px 0;
+      color: var(--color-text-primary);
+      font-size: var(--font-size-lg);
+      font-weight: var(--font-weight-semibold);
+      margin: 0 0 var(--spacing-xs) 0;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      letter-spacing: -0.01em;
     }
 
     .champion-name {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 14px;
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-sm);
     }
+  }
+
+  .strategy-card:hover & .champion-icon {
+    transform: scale(1.05);
   }
 }
 
 .card-body {
-  margin-bottom: 15px;
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  z-index: 1;
 
   .description {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 14px;
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-sm);
     line-height: 1.6;
-    margin: 0 0 10px 0;
+    margin: 0 0 var(--spacing-md) 0;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -308,13 +347,14 @@ onMounted(() => {
 
   .tags {
     display: flex;
-    gap: 6px;
+    gap: var(--spacing-xs);
     flex-wrap: wrap;
 
     :deep(.el-tag) {
-      background: rgba(200, 170, 110, 0.1);
-      border-color: rgba(200, 170, 110, 0.3);
-      color: #c8aa6e;
+      background: var(--color-bg-secondary);
+      border-color: var(--color-border-secondary);
+      color: var(--color-text-secondary);
+      font-size: var(--font-size-xs);
     }
   }
 }
@@ -323,44 +363,54 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 15px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border-primary);
+  position: relative;
+  z-index: 1;
 
   .stats {
     display: flex;
-    gap: 15px;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 14px;
+    gap: var(--spacing-md);
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-sm);
 
     span {
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: var(--spacing-xs);
+      transition: color var(--transition-fast);
+
+      &:hover {
+        color: var(--color-text-secondary);
+      }
     }
   }
 
   .creator,
   .date {
-    color: rgba(255, 255, 255, 0.5);
-    font-size: 12px;
+    color: var(--color-text-tertiary);
+    font-size: var(--font-size-xs);
   }
 }
 
 // Floating Action Button
 .fab {
+  @include theme.button-primary;
   position: fixed;
-  right: 40px;
-  bottom: 40px;
+  right: var(--spacing-2xl);
+  bottom: var(--spacing-2xl);
   width: 64px;
   height: 64px;
   font-size: 24px;
-  box-shadow: 0 4px 12px rgba(200, 170, 110, 0.4);
-  z-index: 1000;
-  transition: all 0.3s ease;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-fixed);
+  transition: all var(--transition-base);
+  border: none;
 
   &:hover {
     transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(200, 170, 110, 0.6);
+    box-shadow: var(--shadow-2xl);
   }
 
   &:active {
@@ -368,14 +418,21 @@ onMounted(() => {
   }
 }
 
+// Responsive Design
 @media (max-width: 768px) {
+  .lol-index {
+    padding: var(--spacing-xl) var(--spacing-md);
+    padding-top: calc(56px + var(--spacing-xl));
+  }
+
   .strategies-grid {
     grid-template-columns: 1fr;
+    gap: var(--spacing-md);
   }
 
   .fab {
-    right: 20px;
-    bottom: 20px;
+    right: var(--spacing-lg);
+    bottom: var(--spacing-lg);
     width: 56px;
     height: 56px;
     font-size: 20px;
