@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div v-if="loading" class="loading-state">
       <el-icon class="is-loading loading-icon">
         <Loading />
@@ -200,13 +200,7 @@ function formatDate(dateString: string) {
 }
 </script>
 
-<style scoped>
-.page-container {
-  max-width: 960px;
-  margin: 20px auto;
-  padding-top: 60px;
-}
-
+<style lang="scss" scoped>
 .loading-state {
   text-align: center;
   padding: 40px;
@@ -214,12 +208,12 @@ function formatDate(dateString: string) {
 
 .loading-icon {
   font-size: 32px;
-  color: #409eff;
+  color: var(--color-accent-primary);
 }
 
 .loading-text {
-  margin-top: 16px;
-  color: #ffffff;
+  margin-top: var(--spacing-md);
+  color: var(--color-text-secondary);
 }
 
 .empty-state {
@@ -250,8 +244,8 @@ function formatDate(dateString: string) {
 }
 
 .meta-info {
-  color: #ffffff;
-  font-size: 14px;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
 }
 
 .meta-separator {

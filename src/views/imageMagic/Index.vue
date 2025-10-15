@@ -1,5 +1,5 @@
 <template>
-  <div class="transform-container">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <ImageColorPicker />
   </div>
 </template>
@@ -9,8 +9,5 @@ import ImageColorPicker from '@/components/imageColorPicker/index.vue'
 </script>
 
 <style lang="scss" scoped>
-.transform-container {
-  margin-top: 80px;
-  padding: 20px;
-}
+// No custom styles needed - using Tailwind container
 </style>

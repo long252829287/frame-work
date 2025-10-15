@@ -1,6 +1,5 @@
 <template>
-  <div class="home-page">
-    <div class="page-container">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="page-header">
         <h1 class="page-title">功能模块</h1>
         <p class="page-subtitle">选择你需要的功能</p>
@@ -22,7 +21,6 @@
           </div>
         </button>
       </div>
-    </div>
   </div>
 </template>
 
@@ -120,17 +118,6 @@ function handleTile(t: TileItem) {
 </script>
 
 <style scoped lang="scss">
-.home-page {
-  min-height: calc(100vh - var(--header-height));
-  padding: var(--spacing-2xl) var(--spacing-lg);
-  background: var(--color-bg-secondary);
-}
-
-.page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
 .page-header {
   margin-bottom: var(--spacing-2xl);
   text-align: center;
@@ -327,10 +314,6 @@ function handleTile(t: TileItem) {
 }
 
 @media (max-width: 600px) {
-  .home-page {
-    padding: var(--spacing-xl) var(--spacing-md);
-  }
-
   .page-header {
     margin-bottom: var(--spacing-xl);
 

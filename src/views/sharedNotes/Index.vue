@@ -1,5 +1,5 @@
 <template>
-  <div class="page-container">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="page-header">
       <div>
         <h1 class="page-title">
@@ -227,13 +227,7 @@ function goBack() {
 }
 </script>
 
-<style scoped>
-.page-container {
-  max-width: 960px;
-  margin: 20px auto;
-  padding-top: 60px;
-}
-
+<style lang="scss" scoped>
 .page-header {
   display: flex;
   justify-content: space-between;
@@ -250,8 +244,8 @@ function goBack() {
 }
 
 .page-subtitle {
-  margin: 8px 0 0 0;
-  color: #ffffff;
+  margin: var(--spacing-sm) 0 0 0;
+  color: var(--color-text-secondary);
 }
 
 .loading-state {
@@ -261,12 +255,12 @@ function goBack() {
 
 .loading-icon {
   font-size: 32px;
-  color: #409eff;
+  color: var(--color-accent-primary);
 }
 
 .loading-text {
-  margin-top: 16px;
-  color: #ffffff;
+  margin-top: var(--spacing-md);
+  color: var(--color-text-secondary);
 }
 
 .empty-state {
@@ -285,18 +279,19 @@ function goBack() {
 }
 
 .shared-note-card {
-  border: 1px solid #e4e7ed;
-  border-radius: 8px;
-  padding: 20px;
-  background: #fff;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  background: var(--color-bg-primary);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-base);
   position: relative;
+  box-shadow: var(--shadow-sm);
 }
 
 .shared-note-card:hover {
-  border-color: #409eff;
-  box-shadow: 0 4px 12px rgba(64, 158, 255, 0.15);
+  border-color: var(--color-accent-primary);
+  box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
 }
 
@@ -309,23 +304,23 @@ function goBack() {
 
 .card-header h3 {
   margin: 0;
-  color: #303133;
-  font-size: 16px;
-  font-weight: 600;
+  color: var(--color-text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
   line-height: 1.4;
   flex: 1;
-  margin-right: 8px;
+  margin-right: var(--spacing-sm);
 }
 
 .card-header .el-dropdown {
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-sm);
+  transition: background-color var(--transition-fast);
 }
 
 .card-header .el-dropdown:hover {
-  background-color: #f5f7fa;
+  background-color: var(--color-bg-secondary);
 }
 
 .card-content .participants {
@@ -333,16 +328,16 @@ function goBack() {
 }
 
 .card-content .label {
-  font-size: 14px;
-  color: #606266;
-  margin-right: 8px;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  margin-right: var(--spacing-sm);
 }
 
 .meta-info {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
-  color: #909399;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
 }
 
 /* 响应式设计 */
