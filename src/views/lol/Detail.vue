@@ -1,5 +1,5 @@
 <template>
-  <div class="strategy-detail">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div v-if="loading" class="loading">
       <el-icon class="is-loading"><Loading /></el-icon>
       <span>加载中...</span>
@@ -241,8 +241,6 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .strategy-detail {
-  padding: 20px;
-  margin-top: 90px;
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;

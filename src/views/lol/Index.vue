@@ -1,5 +1,5 @@
 <template>
-  <div class="lol-index">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <el-tabs v-model="activeTab" class="strategy-tabs" @tab-change="handleTabChange">
       <el-tab-pane label="全部攻略" name="all">
         <div v-loading="loading" class="strategies-container">
@@ -181,14 +181,6 @@ onMounted(() => {
 <style lang="scss" scoped>
 @use '@/assets/scss/themes/modern-minimal.scss' as theme;
 
-.lol-index {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: var(--spacing-2xl) var(--spacing-lg);
-  padding-top: calc(64px + var(--spacing-2xl));
-  min-height: calc(100vh - 64px);
-  background: var(--color-bg-secondary);
-}
 
 .strategy-tabs {
   margin-bottom: var(--spacing-2xl);

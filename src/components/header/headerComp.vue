@@ -1,63 +1,93 @@
 <template>
-  <header :class="headerClasses">
-    <!-- 左侧导航区域 -->
-    <div class="header-left">
-      <div class="logo-container" @click="router.push({ name: 'home' })">
-        <div class="logo-icon">🏡</div>
-        <div class="logo-text">
-          <span class="logo-main">Osheeep</span>
-          <div class="logo-subtitle">diy everyThing</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 右侧用户区域 -->
-    <div class="header-right">
-      <!-- 主题切换器 -->
-      <ThemeSwitcher />
-
-      <div v-if="!auth.isAuthenticated" class="auth-buttons">
-        <!-- 登录按钮 -->
-        <button class="auth-btn login-btn" @click="router.push({ name: 'login' })">
-          <span>登录</span>
-        </button>
-
-        <!-- 注册按钮 -->
-        <button class="auth-btn register-btn" @click="router.push({ name: 'register' })">
-          <span>注册</span>
-        </button>
-      </div>
-
-      <!-- 用户信息区域 -->
-      <div v-else class="user-section">
-        <div class="user-dropdown" @click="toggleUserMenu">
-          <div class="user-avatar">
-            <img :src="userAvatar" :alt="displayName" class="avatar-img" />
-          </div>
-
-          <div class="user-info">
-            <div class="user-name">{{ displayName }}</div>
-            <div class="user-status">在线</div>
-          </div>
+  <header class="fixed top-0 left-0 right-0 z-50 bg-primary border-b border-primary transition-all duration-300" :class="{ 'h-14 shadow-sm': isScrolled, 'h-16': !isScrolled }">
+    <!-- 内容容器 - 使用 Tailwind container -->
+    <div class="container mx-auto h-full px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-full">
+        <!-- 左侧Logo区域 -->
+        <div class="flex items-center gap-6">
+          <button
+            @click="router.push({ name: 'home' })"
+            class="flex items-center gap-3 p-2 rounded-lg transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 group"
+          >
+            <div class="text-3xl transition-transform duration-200 group-hover:scale-110">🏡</div>
+            <div class="flex flex-col">
+              <span class="text-2xl font-bold text-primary tracking-tight">Osheeep</span>
+              <div class="text-xs text-tertiary uppercase tracking-wider -mt-0.5">diy everyThing</div>
+            </div>
+          </button>
         </div>
 
-        <!-- 下拉菜单 -->
-        <div class="user-menu" :class="{ show: showUserMenu }">
-          <div class="menu-item" @click="viewProfile">
-            <span class="menu-icon">👤</span>
-            <span>个人资料</span>
+        <!-- 右侧操作区域 -->
+        <div class="flex items-center gap-3">
+          <!-- 主题切换器 -->
+          <ThemeSwitcher />
+
+          <!-- 未登录状态 - 显示登录/注册按钮 -->
+          <div v-if="!auth.isAuthenticated" class="flex gap-2">
+            <button
+              @click="router.push({ name: 'login' })"
+              class="btn-secondary px-4 py-2 text-sm rounded-lg font-medium transition-all duration-200"
+            >
+              登录
+            </button>
+            <button
+              @click="router.push({ name: 'register' })"
+              class="btn-primary px-4 py-2 text-sm rounded-lg font-medium transition-all duration-200"
+            >
+              注册
+            </button>
           </div>
 
-          <div class="menu-item" @click="viewSettings">
-            <span class="menu-icon">⚙️</span>
-            <span>设置</span>
-          </div>
+          <!-- 已登录状态 - 显示用户菜单 -->
+          <div v-else class="relative">
+            <button
+              @click="toggleUserMenu"
+              class="flex items-center gap-3 px-3 py-2 rounded-full transition-colors duration-200 hover:bg-secondary"
+            >
+              <img
+                :src="userAvatar"
+                :alt="displayName"
+                class="w-9 h-9 rounded-full object-cover border-2 border-primary"
+              />
+              <div class="hidden sm:flex flex-col gap-0.5">
+                <div class="text-sm font-medium text-primary leading-none">{{ displayName }}</div>
+                <div class="text-xs text-success leading-none">在线</div>
+              </div>
+            </button>
 
-          <div class="menu-divider"></div>
+            <!-- 下拉菜单 -->
+            <Transition name="menu">
+              <div
+                v-if="showUserMenu"
+                class="absolute top-full right-0 mt-2 min-w-[200px] bg-primary border border-primary rounded-xl shadow-2xl p-2 z-50"
+              >
+                <button
+                  @click="viewProfile"
+                  class="menu-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-primary transition-all duration-200 hover:bg-secondary hover:text-accent"
+                >
+                  <span class="text-base flex-shrink-0">👤</span>
+                  <span>个人资料</span>
+                </button>
 
-          <div class="menu-item logout" @click="handleLogout">
-            <span class="menu-icon">🚪</span>
-            <span>退出登录</span>
+                <button
+                  @click="viewSettings"
+                  class="menu-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-primary transition-all duration-200 hover:bg-secondary hover:text-accent"
+                >
+                  <span class="text-base flex-shrink-0">⚙️</span>
+                  <span>设置</span>
+                </button>
+
+                <div class="h-px bg-border my-2"></div>
+
+                <button
+                  @click="handleLogout"
+                  class="menu-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-error transition-all duration-200 hover:bg-error-light"
+                >
+                  <span class="text-base flex-shrink-0">🚪</span>
+                  <span>退出登录</span>
+                </button>
+              </div>
+            </Transition>
           </div>
         </div>
       </div>
@@ -141,239 +171,92 @@ onUnmounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
-@use '@/assets/scss/themes/modern-minimal.scss' as theme;
+<style scoped>
+/* Menu transition animations */
+.menu-enter-active,
+.menu-leave-active {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-.modern-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 64px;
-  z-index: var(--z-fixed);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 var(--spacing-lg);
+.menu-enter-from,
+.menu-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* Custom Tailwind-like utility classes for theme variables */
+.bg-primary {
   background: var(--color-bg-primary);
-  border-bottom: 1px solid var(--color-border-primary);
-  transition: all var(--transition-base);
-
-  /* Backdrop blur for modern glass effect */
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-
-  /* Scrolled state */
-  &--scrolled {
-    height: 56px;
-    box-shadow: var(--shadow-sm);
-    border-bottom-color: var(--color-border-secondary);
-  }
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-lg);
+.bg-secondary {
+  background: var(--color-bg-secondary);
 }
 
-.logo-container {
-  cursor: pointer;
-  user-select: none;
-  padding: var(--spacing-sm);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  transition: transform var(--transition-fast);
-  border-radius: var(--radius-md);
-
-  &:hover {
-    transform: translateY(-1px);
-  }
-
-  &:active {
-    transform: translateY(0);
-  }
-
-  .logo-icon {
-    font-size: 1.75rem;
-    transition: transform var(--transition-fast);
-  }
-
-  &:hover .logo-icon {
-    transform: scale(1.1);
-  }
-
-  .logo-text {
-    .logo-main {
-      font-size: 1.5rem;
-      font-weight: var(--font-weight-bold);
-      color: var(--color-text-primary);
-      letter-spacing: -0.02em;
-    }
-
-    .logo-subtitle {
-      font-size: var(--font-size-xs);
-      color: var(--color-text-tertiary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-top: -2px;
-    }
-  }
+.bg-border {
+  background: var(--color-border-primary);
 }
 
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
+.border-primary {
+  border-color: var(--color-border-primary);
 }
 
-.auth-buttons {
-  display: flex;
-  gap: var(--spacing-sm);
-}
-
-.auth-btn {
-  @include theme.button-base;
-  padding: 8px 16px;
-  font-size: var(--font-size-sm);
-
-  &.login-btn {
-    @include theme.button-secondary;
-  }
-
-  &.register-btn {
-    @include theme.button-primary;
-  }
-}
-
-.user-section {
-  position: relative;
-}
-
-.user-dropdown {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--radius-full);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-
-  &:hover {
-    background: var(--color-bg-secondary);
-  }
-}
-
-.user-avatar {
-  .avatar-img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid var(--color-border-primary);
-  }
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-
-  .user-name {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    color: var(--color-text-primary);
-    line-height: 1;
-  }
-
-  .user-status {
-    font-size: var(--font-size-xs);
-    color: var(--color-success);
-    line-height: 1;
-  }
-}
-
-.user-menu {
-  @include theme.card;
-  position: absolute;
-  top: calc(100% + var(--spacing-sm));
-  right: 0;
-  min-width: 200px;
-  padding: var(--spacing-sm);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: all var(--transition-fast);
-  z-index: var(--z-dropdown);
-
-  &.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-  }
-}
-
-.menu-item {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
-  border-radius: var(--radius-md);
+.text-primary {
   color: var(--color-text-primary);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  font-size: var(--font-size-sm);
+}
 
-  &:hover {
+.text-tertiary {
+  color: var(--color-text-tertiary);
+}
+
+.text-success {
+  color: var(--color-success);
+}
+
+.text-error {
+  color: var(--color-error);
+}
+
+.text-accent {
+  color: var(--color-accent-primary);
+}
+
+.bg-error-light {
+  background: var(--color-error-light);
+}
+
+/* Button styles using theme mixins */
+.btn-primary {
+  background: var(--color-accent-primary);
+  color: var(--color-text-inverse);
+  border: none;
+
+  &:hover:not(:disabled) {
+    background: var(--color-accent-primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-secondary);
+
+  &:hover:not(:disabled) {
     background: var(--color-bg-secondary);
+    border-color: var(--color-accent-primary);
     color: var(--color-accent-primary);
   }
 
-  &.logout {
-    color: var(--color-error);
-
-    &:hover {
-      background: var(--color-error-light);
-      color: var(--color-error);
-    }
-  }
-
-  .menu-icon {
-    font-size: 1rem;
-    flex-shrink: 0;
-  }
-}
-
-.menu-divider {
-  height: 1px;
-  background: var(--color-border-primary);
-  margin: var(--spacing-sm) 0;
-}
-
-// Responsive Design
-@media (max-width: 768px) {
-  .modern-header {
-    padding: 0 var(--spacing-md);
-    height: 56px;
-
-    &--scrolled {
-      height: 48px;
-    }
-  }
-
-  .logo-container .logo-text {
-    .logo-main {
-      font-size: 1.25rem;
-    }
-
-    .logo-subtitle {
-      font-size: 0.625rem;
-    }
-  }
-
-  .user-info {
-    display: none;
+  &:active:not(:disabled) {
+    transform: translateY(0);
   }
 }
 </style>

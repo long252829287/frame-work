@@ -64,7 +64,7 @@ onMounted(fetchNotes)
 </script>
 
 <template>
-  <div class="page-container">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="page-header">
       <div>
         <h2 class="page-title">我的笔记 ({{ total }})</h2>
@@ -136,14 +136,6 @@ onMounted(fetchNotes)
 <style lang="scss" scoped>
 @use '@/assets/scss/themes/modern-minimal.scss' as theme;
 
-.page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: var(--spacing-2xl) var(--spacing-lg);
-  padding-top: calc(64px + var(--spacing-2xl));
-  min-height: calc(100vh - 64px);
-  background: var(--color-bg-secondary);
-}
 
 .page-header {
   display: flex;

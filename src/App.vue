@@ -10,9 +10,6 @@ const route = useRoute()
 // 定义不需要显示header的页面
 const hideHeaderPages = ['login', 'register']
 
-// 定义需要全屏显示的页面（无header无边距）
-const fullScreenPages = ['login', 'register']
-
 // 计算是否显示header
 const showHeader = computed(() => {
   return !hideHeaderPages.includes(route.name as string)
@@ -20,16 +17,7 @@ const showHeader = computed(() => {
 
 // 计算是否为全屏页面
 const isFullScreen = computed(() => {
-  return fullScreenPages.includes(route.name as string)
-})
-
-// 计算主内容的类名
-const mainClasses = computed(() => {
-  return {
-    'main-content': true,
-    'main-content--with-header': showHeader.value,
-    'main-content--full-screen': isFullScreen.value
-  }
+  return hideHeaderPages.includes(route.name as string)
 })
 
 // 获取页面过渡动画名称
@@ -44,14 +32,14 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
 </script>
 
 <template>
-  <div class="app-container">
+  <div class="min-h-screen flex flex-col bg-secondary">
     <!-- Header组件 - 条件渲染 -->
     <Transition name="header" appear>
-      <headerComp v-if="showHeader" />
+      <headerComp v-if="showHeader" class="flex-shrink-0" />
     </Transition>
 
     <!-- 主内容区域 -->
-    <main :class="mainClasses">
+    <main class="flex-1" :class="{ 'pt-16': showHeader, 'bg-primary': isFullScreen }">
       <RouterView v-slot="{ Component, route: currentRoute }">
         <!-- 页面过渡动画 -->
         <Transition :name="getTransitionName(currentRoute)" mode="out-in" appear>
@@ -63,42 +51,6 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
 </template>
 
 <style lang="scss" scoped>
-.app-container {
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-  background: var(--color-bg-secondary);
-  color: var(--color-text-primary);
-}
-
-/* 主内容区域 */
-.main-content {
-  position: relative;
-  min-height: 100vh;
-  transition: all 0.3s ease;
-}
-
-/* 带header的页面布局 */
-.main-content--with-header {
-  padding-top: var(--header-height);
-  max-width: var(--content-max-width);
-  margin: 0 auto;
-  padding-left: var(--content-padding);
-  padding-right: var(--content-padding);
-  min-height: calc(100vh - var(--header-height));
-  position: relative;
-  z-index: 1;
-}
-
-/* 全屏页面（登录注册）布局 */
-.main-content--full-screen {
-  padding: 0;
-  max-width: none;
-  margin: 0;
-  min-height: 100vh;
-  background: var(--color-bg-primary);
-}
-
 /* Header过渡动画 */
 .header-enter-active,
 .header-leave-active {
@@ -147,40 +99,13 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
   transform: translateX(-20px);
 }
 
-/* CSS变量定义 - Layout */
-:root {
-  --header-height: 64px;
-  --content-max-width: 1200px;
-  --content-padding: 24px;
+/* Tailwind utility classes mapping */
+.bg-secondary {
+  background: var(--color-bg-secondary);
 }
 
-/* 响应式设计 */
-@media (max-width: 1240px) {
-  :root {
-    --content-padding: 20px;
-  }
-}
-
-@media (max-width: 768px) {
-  :root {
-    --header-height: 56px;
-    --content-padding: 16px;
-  }
-
-  .main-content--with-header {
-    padding-top: var(--header-height);
-    min-height: calc(100vh - var(--header-height));
-  }
-}
-
-@media (max-width: 480px) {
-  :root {
-    --content-padding: 12px;
-  }
-}
-
-/* Smooth scrolling */
-.main-content {
-  scroll-behavior: smooth;
+.bg-primary {
+  background: var(--color-bg-primary);
 }
 </style>
+

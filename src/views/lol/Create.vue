@@ -1,5 +1,5 @@
 <template>
-  <div class="strategy-create">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="header">
       <h1>创建攻略</h1>
       <el-button @click="handleCancel">取消</el-button>
@@ -545,8 +545,6 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .strategy-create {
-  padding: 20px;
-  margin-top: 90px;
   max-width: 1400px;
   margin-left: auto;
   margin-right: auto;
