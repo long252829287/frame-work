@@ -10,7 +10,8 @@
       "WebFetch(domain:www.osheeep.com)",
       "Bash(npm run build)",
       "Bash(git checkout:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nrefactor: migrate from Stardew Valley theme to modern minimal design\n\nThis commit implements a complete UI theme refactor to replace the Stardew\nValley inspired theme with a modern, minimal white-based design system.\n\nMajor Changes:\n- Created new CSS variables-based theme system (modern-minimal.scss)\n- Replaced all color gradients and textures with clean, flat design\n- Updated global styles to use CSS custom properties for easy theming\n- Refactored App.vue to remove decorative backgrounds\n- Modernized Header component with simplified design\n- Redesigned Home page with card-based module grid\n- Integrated Tailwind CSS for utility-first styling\n- Full Element Plus component theme customization\n\nDesign System:\n- Color palette: Indigo (#6366F1) & Purple (#8B5CF6) accents\n- Clean white backgrounds with subtle gray tones\n- Consistent spacing, shadows, and border radius scales\n- Modern typography with system fonts\n- Responsive and accessible design patterns\n\nBenefits:\n- Easier theme switching via CSS variables\n- Better performance (removed heavy gradients/textures)\n- More professional and modern appearance\n- Improved accessibility and contrast\n- Better maintainability with design tokens\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")"
     ],
     "deny": [],
     "ask": []

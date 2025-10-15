@@ -327,16 +327,14 @@ const downloadImage = () => {
 </script>
 
 <style lang="scss" scoped>
-@use '@/assets/scss/themes/stardew-valley.scss' as stardew;
+@use '@/assets/scss/themes/modern-minimal.scss' as theme;
 
 .pixelated-canvas-container {
   margin-top: 20px;
-  background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
+  background: var(--color-bg-secondary);
   min-height: 100vh;
   padding: 20px;
   position: relative;
-
-  @include stardew.texture-bg;
 
   >* {
     position: relative;
@@ -345,7 +343,7 @@ const downloadImage = () => {
 }
 
 .controls {
-  @include stardew.card;
+  @include theme.card;
   margin-bottom: 20px;
   gap: 8px;
   padding: 20px;
@@ -359,11 +357,10 @@ const downloadImage = () => {
   margin-bottom: 16px;
 
   .el-form-item__label {
-    font-weight: 600;
-    color: #5D4037;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
     white-space: nowrap;
-    font-size: 14px;
-    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3);
+    font-size: var(--font-size-sm);
   }
 }
 
@@ -430,55 +427,51 @@ const downloadImage = () => {
 
 // 按钮样式 - 使用主题系统
 .controls :deep(.el-button) {
-  @include stardew.button('default');
-
-  &.el-button--primary {
-    @include stardew.button('secondary');
-  }
+  // Element Plus buttons will use global theme
 }
 
 // 下拉选择框样式
 .controls :deep(.el-select) {
   .el-select__wrapper {
-    @include stardew.input;
+    @include theme.input;
   }
 }
 
 // 滑块样式
 .controls :deep(.el-slider) {
   .el-slider__runway {
-    background: #A0522D;
-    border-radius: 4px;
+    background: var(--color-bg-tertiary);
+    border-radius: var(--radius-sm);
   }
 
   .el-slider__bar {
-    background: linear-gradient(90deg, #228B22 0%, #32CD32 100%);
-    border-radius: 4px;
+    background: var(--color-accent-primary);
+    border-radius: var(--radius-sm);
   }
 
   .el-slider__button {
-    background: #FAFAFA;
-    border: 2px solid #8B4513;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    background: var(--color-bg-primary);
+    border: 2px solid var(--color-accent-primary);
+    box-shadow: var(--shadow-sm);
   }
 }
 
 // 数字输入框样式
 .controls :deep(.el-input-number) {
   .el-input__wrapper {
-    @include stardew.input;
+    @include theme.input;
   }
 
   .el-input__inner {
-    color: #5D4037;
-    font-weight: 500;
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
   }
 }
 
 .canvas-wrapper {
   position: relative;
   display: inline-block;
-  @include stardew.card;
+  @include theme.card;
   padding: 16px;
 }
 
@@ -488,35 +481,37 @@ const downloadImage = () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(139, 69, 19, 0.8);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
 }
 
 .loading-overlay span {
-  @include stardew.button('secondary');
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-weight: var(--font-weight-medium);
 }
 
 canvas {
   max-width: 100%;
-  border: 3px solid #8B4513;
-  border-radius: 8px;
-  box-shadow: inset 0 2px 4px rgba(139, 69, 19, 0.1),
-    0 4px 12px rgba(0, 0, 0, 0.3);
-  background: #FAFAFA;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  background: var(--color-bg-primary);
 }
 
 .loading-indicator {
   padding: 20px;
-  @include stardew.card;
+  @include theme.card;
   text-align: center;
-  color: #5D4037;
-  font-weight: 500;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
 }
 
 // 响应式调整

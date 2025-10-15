@@ -13,6 +13,9 @@
 
     <!-- 右侧用户区域 -->
     <div class="header-right">
+      <!-- 主题切换器 -->
+      <ThemeSwitcher />
+
       <div v-if="!auth.isAuthenticated" class="auth-buttons">
         <!-- 登录按钮 -->
         <button class="auth-btn login-btn" @click="router.push({ name: 'login' })">
@@ -66,6 +69,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '../../stores/auth'
 import { useRouter, useRoute } from 'vue-router'
+import ThemeSwitcher from '../ThemeSwitcher.vue'
 
 const auth = useAuthStore()
 const router = useRouter()
