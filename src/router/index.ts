@@ -63,6 +63,17 @@ const routes: RouteRecordRaw[] = [
     name: 'lol',
     component: () => import('@/views/lol/Index.vue'),
   },
+  {
+    path: '/lol/create',
+    name: 'lol-create',
+    component: () => import('@/views/lol/Create.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/lol/strategy/:id',
+    name: 'lol-strategy-detail',
+    component: () => import('@/views/lol/Detail.vue'),
+  },
 ]
 
 const router = createRouter({
@@ -76,21 +87,16 @@ router.beforeEach((to, from, next) => {
   // 检查是否有有效的登录状态
   const isAuthenticated = authStore.checkAuth()
 
-  // 记录最后访问的路由（排除登录和注册页面）
-  if (from.name && from.name !== 'login' && from.name !== 'register' && isAuthenticated) {
-    authStore.setLastRoute(from.fullPath)
-  }
-
   if (to.meta?.requiresAuth && !isAuthenticated) {
-    // 需要登录但未登录，重定向到登录页
+    // 需要登录但未登录，保存目标路由并重定向到登录页
+    authStore.setLastRoute(to.fullPath)
     next({ name: 'login', query: { redirect: to.fullPath } })
     return
   }
 
   if ((to.name === 'login' || to.name === 'register') && isAuthenticated) {
-    // 已登录用户访问登录/注册页，重定向到最后访问的页面或首页
-    const redirectTo = authStore.lastRoute || '/home'
-    next(redirectTo)
+    // 已登录用户访问登录/注册页，重定向到首页
+    next('/home')
     return
   }
 

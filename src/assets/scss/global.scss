@@ -1,362 +1,484 @@
 // ====================================
-// 全局样式 - 星露谷主题版本
-// Global Styles - Stardew Valley Theme
+// Global Styles - Modern Minimal Theme
 // ====================================
 
-@use './themes/stardew-valley.scss' as stardew;
+@use './themes/modern-minimal.scss' as theme;
 
-// 全局根元素样式
+// Global reset and base styles
 html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
-  color: #5D4037;
-  @include stardew.texture-bg;
-}
-
-// 标题样式
-h1, h2, h3, h4, h5, h6 {
-  color: #ffffff;
+  font-family: var(--font-family-base);
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 *, *::before, *::after {
   box-sizing: inherit;
 }
 
-// Element Plus 组件的全局样式覆盖
-:root {
-  // Element Plus 主题变量覆盖 - 保持Element Plus的深度定制不变
-  --el-color-primary: #228B22;
-  --el-color-success: #228B22;
-  --el-color-warning: #FFD700;
-  --el-color-danger: #DC143C;
-  --el-color-info: #4169E1;
-
-  // 背景色覆盖
-  --el-bg-color: #F4E4BC;
-  --el-bg-color-page: #F5F5DC;
-  --el-bg-color-overlay: #E6D3A3;
-
-  // 文字色覆盖
-  --el-text-color-primary: #5D4037;
-  --el-text-color-regular: #6D4C41;
-  --el-text-color-secondary: #8D6E63;
-  --el-text-color-placeholder: #BCAAA4;
-  --el-text-color-disabled: #BCAAA4;
-
-  // 边框色覆盖
-  --el-border-color: #8B4513;
-  --el-border-color-light: #F4E4BC;
-  --el-border-color-lighter: #E6D3A3;
-  --el-border-color-extra-light: #F4E4BC;
-  --el-border-color-dark: #8B4513;
-  --el-border-color-darker: #8B4513;
-
-  // 圆角覆盖
-  --el-border-radius-base: 6px;
-  --el-border-radius-small: 4px;
-  --el-border-radius-round: 12px;
-  --el-border-radius-circle: 50%;
-
-  // 阴影覆盖
-  --el-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.3);
-  --el-box-shadow-light: 0 2px 4px rgba(139, 69, 19, 0.1);
-  --el-box-shadow-base: 0 2px 4px rgba(0, 0, 0, 0.3);
-  --el-box-shadow-dark: 0 4px 12px rgba(0, 0, 0, 0.3);
+// Typography
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin: 0;
 }
 
-// 全局 Element Plus 组件样式覆盖
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+h5 { font-size: var(--font-size-lg); }
+h6 { font-size: var(--font-size-base); }
+
+p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+// ====================================
+// Element Plus Theme Customization
+// ====================================
+
+:root {
+  // Primary Colors
+  --el-color-primary: var(--color-accent-primary);
+  --el-color-primary-light-3: var(--color-accent-primary-light);
+  --el-color-primary-light-5: var(--color-accent-primary-light);
+  --el-color-primary-light-7: var(--color-accent-primary-light);
+  --el-color-primary-light-8: var(--color-accent-primary-light);
+  --el-color-primary-light-9: var(--color-accent-primary-light);
+  --el-color-primary-dark-2: var(--color-accent-primary-hover);
+
+  // Semantic Colors
+  --el-color-success: var(--color-success);
+  --el-color-warning: var(--color-warning);
+  --el-color-danger: var(--color-error);
+  --el-color-error: var(--color-error);
+  --el-color-info: var(--color-info);
+
+  // Background Colors
+  --el-bg-color: var(--color-bg-primary);
+  --el-bg-color-page: var(--color-bg-secondary);
+  --el-bg-color-overlay: var(--color-bg-elevated);
+  --el-fill-color-blank: var(--color-bg-primary);
+
+  // Text Colors
+  --el-text-color-primary: var(--color-text-primary);
+  --el-text-color-regular: var(--color-text-secondary);
+  --el-text-color-secondary: var(--color-text-tertiary);
+  --el-text-color-placeholder: var(--color-text-tertiary);
+  --el-text-color-disabled: var(--color-text-disabled);
+
+  // Border Colors
+  --el-border-color: var(--color-border-primary);
+  --el-border-color-light: var(--color-border-secondary);
+  --el-border-color-lighter: var(--color-border-secondary);
+  --el-border-color-extra-light: var(--color-border-secondary);
+  --el-border-color-dark: var(--color-border-primary);
+  --el-border-color-darker: var(--color-border-primary);
+
+  // Border Radius
+  --el-border-radius-base: var(--radius-md);
+  --el-border-radius-small: var(--radius-sm);
+  --el-border-radius-round: var(--radius-full);
+  --el-border-radius-circle: 50%;
+
+  // Shadows
+  --el-box-shadow: var(--shadow-md);
+  --el-box-shadow-light: var(--shadow-sm);
+  --el-box-shadow-lighter: var(--shadow-xs);
+  --el-box-shadow-dark: var(--shadow-lg);
+
+  // Typography
+  --el-font-size-base: var(--font-size-base);
+  --el-font-size-small: var(--font-size-sm);
+  --el-font-size-large: var(--font-size-lg);
+  --el-font-size-extra-small: var(--font-size-xs);
+}
+
+// ====================================
+// Element Plus Component Overrides
+// ====================================
+
+// Buttons
 .el-button {
-  @include stardew.button('default');
+  @include theme.button-base;
+  font-weight: var(--font-weight-medium);
 
   &.el-button--primary {
-    @include stardew.button('secondary');
+    @include theme.button-primary;
+  }
+
+  &.el-button--default {
+    @include theme.button-secondary;
   }
 
   &.el-button--success {
-    background: linear-gradient(145deg, #228B22 0%, #32CD32 100%);
-    border-color: #006400;
+    background: var(--color-success);
+    color: white;
+    border: none;
 
-    &:hover {
-      background: linear-gradient(145deg, #32CD32 0%, #228B22 100%);
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--color-success) 85%, black);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+  }
+
+  &.el-button--warning {
+    background: var(--color-warning);
+    color: white;
+    border: none;
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--color-warning) 85%, black);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+  }
+
+  &.el-button--danger {
+    background: var(--color-error);
+    color: white;
+    border: none;
+
+    &:hover:not(:disabled) {
+      background: color-mix(in srgb, var(--color-error) 85%, black);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
     }
   }
 }
 
+// Inputs
 .el-input {
   .el-input__wrapper {
-    @include stardew.input;
+    @include theme.input;
+    box-shadow: none;
   }
 }
 
 .el-textarea {
   .el-textarea__inner {
-    @include stardew.input;
+    @include theme.input;
   }
 }
 
 .el-select {
   .el-select__wrapper {
-    @include stardew.input;
+    @include theme.input;
+    box-shadow: none;
   }
 }
 
+// Form Items
 .el-form-item {
   .el-form-item__label {
-    color: #5D4037;
-    font-weight: 500;
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
   }
 }
 
+// Cards
 .el-card {
-  @include stardew.card;
+  @include theme.card;
 
   .el-card__header {
-    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
-    border-bottom: 2px solid #8B4513;
-    color: #5D4037;
-    font-weight: 600;
+    background: var(--color-bg-primary);
+    border-bottom: 1px solid var(--color-border-primary);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+    padding: var(--spacing-lg);
   }
 
   .el-card__body {
-    color: #5D4037;
+    color: var(--color-text-primary);
+    padding: var(--spacing-lg);
   }
 }
 
+// Dialogs
 .el-dialog {
-  @include stardew.card;
+  @include theme.card;
+  border: none;
 
   .el-dialog__header {
-    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
-    color: #5D4037;
-    font-weight: 600;
-    border-bottom: 2px solid #8B4513;
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+    border-bottom: 1px solid var(--color-border-primary);
+    padding: var(--spacing-lg);
   }
 
   .el-dialog__body {
-    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
-    color: #5D4037;
+    background: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    padding: var(--spacing-lg);
+  }
+
+  .el-dialog__footer {
+    padding: var(--spacing-lg);
+    border-top: 1px solid var(--color-border-primary);
   }
 }
 
+// Message Box
 .el-message-box {
-  @include stardew.card;
+  @include theme.card;
 
   .el-message-box__header {
-    color: #5D4037;
-    font-weight: 600;
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
   }
 
   .el-message-box__content {
-    color: #6D4C41;
+    color: var(--color-text-secondary);
   }
 }
 
+// Notifications
 .el-notification {
-  @include stardew.card;
+  @include theme.card;
 
   .el-notification__title {
-    color: #5D4037;
-    font-weight: 600;
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
   }
 
   .el-notification__content {
-    color: #6D4C41;
+    color: var(--color-text-secondary);
   }
 }
 
+// Tables
 .el-table {
-  background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
-  border: 2px solid #8B4513;
-  border-radius: 8px;
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-lg);
 
   .el-table__header {
-    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
-
     th {
-      background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
-      color: #5D4037;
-      font-weight: 600;
-      border-bottom: 2px solid #8B4513;
+      background: var(--color-bg-secondary);
+      color: var(--color-text-primary);
+      font-weight: var(--font-weight-semibold);
+      border-bottom: 1px solid var(--color-border-primary);
     }
   }
 
   .el-table__body {
     tr {
-      background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
+      background: var(--color-bg-primary);
 
       &:hover {
-        background: #F5F5DC;
+        background: var(--color-bg-secondary);
       }
 
       td {
-        color: #5D4037;
-        border-bottom: 1px solid #F4E4BC;
+        color: var(--color-text-primary);
+        border-bottom: 1px solid var(--color-border-secondary);
       }
     }
   }
 }
 
+// Menus
 .el-menu {
-  background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
-  border-right: 2px solid #8B4513;
+  background: var(--color-bg-primary);
+  border-right: 1px solid var(--color-border-primary);
 
   .el-menu-item {
-    color: #5D4037;
+    color: var(--color-text-primary);
 
     &:hover {
-      background: #F5F5DC;
-      color: #228B22;
+      background: var(--color-bg-secondary);
+      color: var(--color-accent-primary);
     }
 
     &.is-active {
-      background: #228B22;
-      color: #FFFFFF;
+      background: var(--color-accent-primary-light);
+      color: var(--color-accent-primary);
+      font-weight: var(--font-weight-medium);
     }
   }
 }
 
+// Pagination
 .el-pagination {
   .el-pager li {
-    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
-    border: 1px solid #8B4513;
-    color: #5D4037;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-primary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-sm);
 
     &:hover {
-      background: #F5F5DC;
+      background: var(--color-bg-secondary);
+      color: var(--color-accent-primary);
     }
 
     &.is-active {
-      background: #228B22;
-      color: #FFFFFF;
+      background: var(--color-accent-primary);
+      color: white;
+      border-color: var(--color-accent-primary);
     }
   }
 
   .btn-prev, .btn-next {
-    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
-    border: 1px solid #8B4513;
-    color: #5D4037;
+    background: var(--color-bg-primary);
+    border: 1px solid var(--color-border-primary);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-sm);
 
     &:hover {
-      background: #F5F5DC;
+      background: var(--color-bg-secondary);
+      color: var(--color-accent-primary);
     }
   }
 }
 
+// Loading
 .el-loading-mask {
-  background-color: rgba(139, 69, 19, 0.8);
+  background-color: rgba(255, 255, 255, 0.9);
 
   .el-loading-spinner {
     .circular {
-      color: #228B22;
+      color: var(--color-accent-primary);
     }
 
     .el-loading-text {
-      color: #FFFFFF;
-      font-weight: 500;
+      color: var(--color-text-primary);
+      font-weight: var(--font-weight-medium);
     }
   }
 }
 
-// 滚动条样式
+// ====================================
+// Scrollbar Styles
+// ====================================
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #E6D3A3;
-  border-radius: 4px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #8B4513;
-  border-radius: 4px;
+  background: var(--color-border-primary);
+  border-radius: var(--radius-sm);
 
   &:hover {
-    background: #A0522D;
+    background: var(--color-text-tertiary);
   }
 }
 
-// 选中文字样式
+// ====================================
+// Selection Styles
+// ====================================
+
 ::selection {
-  background: #228B22;
-  color: #FFFFFF;
+  background: var(--color-accent-primary-light);
+  color: var(--color-accent-primary);
 }
 
 ::-moz-selection {
-  background: #228B22;
-  color: #FFFFFF;
+  background: var(--color-accent-primary-light);
+  color: var(--color-accent-primary);
 }
 
-// 焦点样式
+// ====================================
+// Focus Styles
+// ====================================
+
 :focus-visible {
-  outline: 2px solid #228B22;
-  outline-offset: 2px;
-  border-radius: 4px;
+  @include theme.focus-ring;
 }
 
-// 链接样式
+// ====================================
+// Link Styles
+// ====================================
+
 a {
-  color: #228B22;
+  color: var(--color-accent-primary);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast);
 
   &:hover {
-    color: #32CD32;
+    color: var(--color-accent-primary-hover);
     text-decoration: underline;
   }
 
   &:visited {
-    color: #006400;
+    color: var(--color-accent-secondary);
   }
 }
 
-// 代码块样式
+// ====================================
+// Code Block Styles
+// ====================================
+
 code {
-  background: #E6D3A3;
-  color: #5D4037;
-  padding: 2px 4px;
-  border-radius: 4px;
-  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  background: var(--color-bg-tertiary);
+  color: var(--color-accent-secondary);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-mono);
+  font-size: 0.9em;
 }
 
 pre {
-  background: #E6D3A3;
-  color: #5D4037;
-  padding: 12px;
-  border-radius: 6px;
-  border: 1px solid #8B4513;
+  background: var(--color-bg-tertiary);
+  color: var(--color-text-primary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-primary);
   overflow-x: auto;
+  line-height: var(--line-height-relaxed);
 
   code {
     background: none;
     padding: 0;
+    color: inherit;
   }
 }
 
-// 引用块样式
+// ====================================
+// Blockquote Styles
+// ====================================
+
 blockquote {
-  background: #F5F5DC;
-  border-left: 4px solid #228B22;
-  padding: 12px;
-  margin: 12px 0;
-  border-radius: 0 6px 6px 0;
-  color: #6D4C41;
+  background: var(--color-bg-secondary);
+  border-left: 4px solid var(--color-accent-primary);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  color: var(--color-text-secondary);
   font-style: italic;
 }
 
-// 分割线样式
+// ====================================
+// HR Styles
+// ====================================
+
 hr {
   border: none;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #8B4513, transparent);
-  margin: 20px 0;
+  height: 1px;
+  background: var(--color-border-primary);
+  margin: var(--spacing-lg) 0;
 }
 
-// 响应式调整
+// ====================================
+// Responsive Adjustments
+// ====================================
+
 @media (max-width: 768px) {
   .el-dialog {
     width: 90% !important;
@@ -368,15 +490,32 @@ hr {
   }
 
   .el-table {
-    font-size: 14px;
+    font-size: var(--font-size-sm);
   }
 }
 
-// 打印样式
+// ====================================
+// Print Styles
+// ====================================
+
 @media print {
   * {
     background: white !important;
     color: black !important;
     box-shadow: none !important;
+  }
+}
+
+// ====================================
+// Accessibility - Reduced Motion
+// ====================================
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

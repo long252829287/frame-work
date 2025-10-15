@@ -7,7 +7,10 @@
       "Bash(find:*)",
       "Bash(pnpm install:*)",
       "Bash(pnpm run:*)",
-      "WebFetch(domain:www.osheeep.com)"
+      "WebFetch(domain:www.osheeep.com)",
+      "Bash(npm run build)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

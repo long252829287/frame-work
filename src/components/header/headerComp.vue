@@ -1,18 +1,5 @@
 <template>
   <header :class="headerClasses">
-    <!-- 温暖的乡村背景 -->
-    <div class="header-bg"></div>
-
-    <!-- 装饰性点点 -->
-    <div class="nature-decorations">
-      <div class="decoration leaf leaf-1">🍃</div>
-      <div class="decoration leaf leaf-2">🌿</div>
-      <div class="decoration flower flower-1">🌸</div>
-      <div class="decoration flower flower-2">🌼</div>
-      <div class="decoration star star-1">✨</div>
-      <div class="decoration star star-2">⭐</div>
-    </div>
-
     <!-- 左侧导航区域 -->
     <div class="header-left">
       <div class="logo-container" @click="router.push({ name: 'home' })">
@@ -29,18 +16,17 @@
       <div v-if="!auth.isAuthenticated" class="auth-buttons">
         <!-- 登录按钮 -->
         <button class="auth-btn login-btn" @click="router.push({ name: 'login' })">
-          <span>🚪 登录</span>
+          <span>登录</span>
         </button>
 
         <!-- 注册按钮 -->
         <button class="auth-btn register-btn" @click="router.push({ name: 'register' })">
-          <span>📝 注册</span>
+          <span>注册</span>
         </button>
       </div>
 
       <!-- 用户信息区域 -->
       <div v-else class="user-section">
-        <div class="status-indicator">💚</div>
         <div class="user-dropdown" @click="toggleUserMenu">
           <div class="user-avatar">
             <img :src="userAvatar" :alt="displayName" class="avatar-img" />
@@ -48,7 +34,7 @@
 
           <div class="user-info">
             <div class="user-name">{{ displayName }}</div>
-            <div class="user-status">🌱 活跃中</div>
+            <div class="user-status">在线</div>
           </div>
         </div>
 
@@ -97,8 +83,8 @@ const userAvatar = computed(
 
 const headerClasses = computed(() => {
   return {
-    'stardew-header': true,
-    'stardew-header--scrolled': isScrolled.value
+    'modern-header': true,
+    'modern-header--scrolled': isScrolled.value
   }
 })
 
@@ -106,8 +92,6 @@ const headerClasses = computed(() => {
 const toggleUserMenu = () => {
   showUserMenu.value = !showUserMenu.value
 }
-
-
 
 const viewProfile = () => {
   showUserMenu.value = false
@@ -129,9 +113,9 @@ const handleLogout = async () => {
   }
 }
 
-// 现代网站特性：监听滚动
+// 监听滚动
 const handleScroll = () => {
-  isScrolled.value = window.scrollY > 20
+  isScrolled.value = window.scrollY > 10
 }
 
 // 监听点击外部关闭菜单
@@ -154,347 +138,170 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-@use '@/assets/scss/themes/stardew-valley.scss' as stardew;
+@use '@/assets/scss/themes/modern-minimal.scss' as theme;
 
-.stardew-header {
+.modern-header {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  height: 70px;
-  z-index: 1000;
+  height: 64px;
+  z-index: var(--z-fixed);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  overflow: visible;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
-  transition: all 0.3s ease;
+  padding: 0 var(--spacing-lg);
+  background: var(--color-bg-primary);
+  border-bottom: 1px solid var(--color-border-primary);
+  transition: all var(--transition-base);
 
-  /* 现代网站特性：滚动时样式变化 */
+  /* Backdrop blur for modern glass effect */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  /* Scrolled state */
   &--scrolled {
-    height: 60px;
-    backdrop-filter: blur(20px);
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
-
-    .header-bg {
-      background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
-    }
-
-    .logo-container .logo-icon {
-      font-size: 1.8rem;
-    }
-
-    .logo-container .logo-text .logo-main {
-      font-size: 1.5rem;
-    }
-
-    .nature-decorations .decoration {
-      opacity: 0.6;
-      transform: scale(0.8);
-    }
-  }
-
-  .header-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
-    z-index: -1;
-    transition: all 0.3s ease;
-  }
-
-  .nature-decorations {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    pointer-events: none;
-    z-index: -1;
-
-    .decoration {
-      position: absolute;
-      font-size: 1.2rem;
-      animation: float 4s ease-in-out infinite;
-      transition: all 0.3s ease;
-
-      &.leaf-1 {
-        top: 20%;
-        left: 10%;
-        animation-delay: 0s;
-      }
-
-      &.leaf-2 {
-        top: 60%;
-        right: 15%;
-        animation-delay: 1s;
-      }
-
-      &.flower-1 {
-        top: 15%;
-        right: 58%;
-        animation-delay: 2s;
-      }
-
-      &.flower-2 {
-        top: 60%;
-        left: 25%;
-        animation-delay: 3s;
-      }
-
-      &.star-1 {
-        top: 30%;
-        left: 70%;
-        animation-delay: 0.5s;
-      }
-
-      &.star-2 {
-        top: 50%;
-        right: 40%;
-        animation-delay: 2.5s;
-      }
-    }
-  }
-}
-
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0px) scale(1);
-    opacity: 0.7;
-  }
-
-  50% {
-    transform: translateY(-10px) scale(1.1);
-    opacity: 1;
+    height: 56px;
+    box-shadow: var(--shadow-sm);
+    border-bottom-color: var(--color-border-secondary);
   }
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 20px;
-}
-
-.back-button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  border-radius: 20px;
-  color: #5D4037;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: 600;
-
-  &:hover {
-    background: rgba(139, 69, 19, 0.3);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
+  gap: var(--spacing-lg);
 }
 
 .logo-container {
-  position: relative;
   cursor: pointer;
   user-select: none;
-  padding: 8px;
+  padding: var(--spacing-sm);
   display: flex;
   align-items: center;
-  gap: 12px;
-  transition: transform 0.3s ease;
+  gap: var(--spacing-md);
+  transition: transform var(--transition-fast);
+  border-radius: var(--radius-md);
 
   &:hover {
-    transform: scale(1.05);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
   }
 
   .logo-icon {
-    font-size: 2rem;
-    animation: bounce 2s ease-in-out infinite;
-    transition: all 0.3s ease;
+    font-size: 1.75rem;
+    transition: transform var(--transition-fast);
+  }
+
+  &:hover .logo-icon {
+    transform: scale(1.1);
   }
 
   .logo-text {
     .logo-main {
-      font-size: 1.75rem;
-      font-weight: 700;
-      background: linear-gradient(45deg, #8B4513, #A0522D, #CD853F);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-      transition: all 0.3s ease;
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-bold);
+      color: var(--color-text-primary);
+      letter-spacing: -0.02em;
     }
 
     .logo-subtitle {
-      font-size: 0.7rem;
-      color: #5D4037;
-      text-transform: none;
-      letter-spacing: 1px;
+      font-size: var(--font-size-xs);
+      color: var(--color-text-tertiary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       margin-top: -2px;
-      opacity: 0.8;
     }
-  }
-}
-
-@keyframes bounce {
-
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-5px);
   }
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--spacing-md);
 }
 
 .auth-buttons {
   display: flex;
-  gap: 12px;
+  gap: var(--spacing-sm);
 }
 
 .auth-btn {
-  position: relative;
-  padding: 4px 16px;
-  @include stardew.button('default');
-  border-radius: 25px;
-  font-size: 0.875rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  @include theme.button-base;
+  padding: 8px 16px;
+  font-size: var(--font-size-sm);
 
-  &:hover {
-    transform: translateY(-2px);
+  &.login-btn {
+    @include theme.button-secondary;
   }
 
   &.register-btn {
-    @include stardew.button('secondary');
+    @include theme.button-primary;
   }
 }
 
 .user-section {
   position: relative;
-
-  .status-indicator {
-    position: absolute;
-    top: 0px;
-    left: -250px;
-    font-size: 1rem;
-    z-index: 3;
-    animation: heartbeat 2s ease-in-out infinite;
-  }
 }
 
 .user-dropdown {
   display: flex;
   align-items: center;
-  gap: 12px;
-  border-radius: 25px;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-full);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-fast);
 
   &:hover {
-    background: linear-gradient(145deg, #F4E4BC 0%, #E6D3A3 100%);
-    transform: translateY(-1px);
+    background: var(--color-bg-secondary);
   }
 }
 
 .user-avatar {
-  position: relative;
-  width: 40px;
-  height: 40px;
-
   .avatar-img {
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid #FFFFFF;
-    position: relative;
-    z-index: 2;
-  }
-}
-
-@keyframes rotate {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes heartbeat {
-
-  0%,
-  100% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.2);
+    border: 2px solid var(--color-border-primary);
   }
 }
 
 .user-info {
   display: flex;
   flex-direction: column;
-  gap: 0.125rem;
+  gap: 2px;
 
   .user-name {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #5D4037;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
     line-height: 1;
   }
 
   .user-status {
-    font-size: 0.75rem;
-    color: #228B22;
+    font-size: var(--font-size-xs);
+    color: var(--color-success);
     line-height: 1;
-    font-weight: 600;
-  }
-}
-
-.dropdown-arrow {
-  transition: transform 0.3s ease;
-
-  .arrow-icon {
-    font-size: 0.8rem;
-    color: #5D4037;
-  }
-
-  &.open {
-    transform: rotate(180deg);
   }
 }
 
 .user-menu {
-  @include stardew.card;
+  @include theme.card;
   position: absolute;
-  top: calc(100% + 8px);
+  top: calc(100% + var(--spacing-sm));
   right: 0;
   min-width: 200px;
-  padding: 8px;
+  padding: var(--spacing-sm);
   opacity: 0;
   visibility: hidden;
   transform: translateY(-10px);
-  transition: all 0.3s ease;
-  z-index: 1000;
+  transition: all var(--transition-fast);
+  z-index: var(--z-dropdown);
 
   &.show {
     opacity: 1;
@@ -506,25 +313,25 @@ onUnmounted(() => {
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 6px;
-  color: #5D4037;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 600;
+  transition: all var(--transition-fast);
+  font-size: var(--font-size-sm);
 
   &:hover {
-    background: #F5F5DC;
-    transform: translateX(5px);
+    background: var(--color-bg-secondary);
+    color: var(--color-accent-primary);
   }
 
   &.logout {
-    color: #DC143C;
+    color: var(--color-error);
 
     &:hover {
-      background: rgba(220, 20, 60, 0.1);
-      color: #DC143C;
+      background: var(--color-error-light);
+      color: var(--color-error);
     }
   }
 
@@ -532,92 +339,37 @@ onUnmounted(() => {
     font-size: 1rem;
     flex-shrink: 0;
   }
-
-  span:last-child {
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
 }
 
 .menu-divider {
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #8B4513, transparent);
-  margin: 8px 0;
-  border-radius: 1px;
+  height: 1px;
+  background: var(--color-border-primary);
+  margin: var(--spacing-sm) 0;
 }
 
-// 响应式设计
+// Responsive Design
 @media (max-width: 768px) {
-  .stardew-header {
-    padding: 0 16px;
-    height: 60px;
+  .modern-header {
+    padding: 0 var(--spacing-md);
+    height: 56px;
 
     &--scrolled {
-      height: 50px;
+      height: 48px;
     }
-  }
-
-  .header-left {
-    gap: 16px;
   }
 
   .logo-container .logo-text {
     .logo-main {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
     }
 
     .logo-subtitle {
-      font-size: 0.6rem;
-    }
-  }
-
-  .auth-buttons {
-    gap: 8px;
-  }
-
-  .auth-btn {
-    padding: 8px 16px;
-    font-size: 0.8rem;
-  }
-
-  .back-button {
-    padding: 0.375rem 12px;
-
-    .back-text {
-      display: none;
+      font-size: 0.625rem;
     }
   }
 
   .user-info {
     display: none;
-  }
-
-  .nature-decorations .decoration {
-    font-size: 1rem;
-  }
-}
-
-/* 现代网站优化：减少动画偏好 */
-@media (prefers-reduced-motion: reduce) {
-
-  .stardew-header,
-  .decoration,
-  .logo-icon,
-  .status-indicator {
-    animation: none;
-    transition: none;
-  }
-}
-
-/* 现代网站优化：高对比度模式 */
-@media (prefers-contrast: high) {
-  .stardew-header {
-    border-bottom: 2px solid currentColor;
-  }
-
-  .user-dropdown,
-  .auth-btn {
-    border-width: 2px;
   }
 }
 </style>

@@ -20,8 +20,10 @@ async function onSubmit() {
     loading.value = true
     await auth.login(form)
 
-    // 优先使用URL参数中的redirect，其次使用lastRoute，最后默认到首页
-    const redirect = (route.query.redirect as string) || auth.lastRoute || '/home'
+    // 优先使用URL参数中的redirect，最后默认到首页
+    // 清除 lastRoute 避免意外重定向
+    const redirect = (route.query.redirect as string) || '/home'
+    auth.setLastRoute('/home') // 重置为首页
     await router.replace(redirect)
   } catch (e: any) {
     console.error('登录错误:', e)

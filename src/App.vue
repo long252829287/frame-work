@@ -63,15 +63,12 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
 </template>
 
 <style lang="scss" scoped>
-@use '@/assets/scss/themes/stardew-valley.scss' as stardew;
-
 .app-container {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
-  background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
-  color: #5D4037;
-  @include stardew.texture-bg;
+  background: var(--color-bg-secondary);
+  color: var(--color-text-primary);
 }
 
 /* 主内容区域 */
@@ -99,8 +96,7 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
   max-width: none;
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
-  @include stardew.texture-bg;
+  background: var(--color-bg-primary);
 }
 
 /* Header过渡动画 */
@@ -151,11 +147,9 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
   transform: translateX(-20px);
 }
 
-/* CSS变量定义 - 使用主题变量 */
+/* CSS变量定义 - Layout */
 :root {
-  --glass-bg: rgba(244, 228, 188, 0.08);
-  --glass-brd: rgba(244, 228, 188, 0.18);
-  --header-height: 70px;
+  --header-height: 64px;
   --content-max-width: 1200px;
   --content-padding: 24px;
 }
@@ -169,7 +163,7 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
 
 @media (max-width: 768px) {
   :root {
-    --header-height: 60px;
+    --header-height: 56px;
     --content-padding: 16px;
   }
 
@@ -185,43 +179,8 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
   }
 }
 
-/* 现代网站优化：滚动行为 */
+/* Smooth scrolling */
 .main-content {
   scroll-behavior: smooth;
-}
-
-/* 现代网站优化：焦点可见性 */
-*:focus-visible {
-  outline: 2px solid #228B22;
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-/* 现代网站优化：深色模式支持 */
-@media (prefers-color-scheme: dark) {
-  .main-content--with-header {
-    background-color: rgba(139, 69, 19, 0.05);
-  }
-}
-
-/* 现代网站优化：减少动画偏好 */
-@media (prefers-reduced-motion: reduce) {
-  .header-enter-active,
-  .header-leave-active,
-  .auth-page-enter-active,
-  .auth-page-leave-active,
-  .page-slide-enter-active,
-  .page-slide-leave-active,
-  .main-content {
-    transition: none;
-    animation: none;
-  }
-}
-
-/* 现代网站优化：高对比度模式支持 */
-@media (prefers-contrast: high) {
-  .main-content--with-header {
-    border: 1px solid #8B4513;
-  }
 }
 </style>

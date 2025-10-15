@@ -28,8 +28,8 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://www.osheeep.com',
-        // target: 'http://localhost:3000',
+        // target: 'https://www.osheeep.com',
+        target: 'http://localhost:3000',
         changeOrigin: true,
       },
     },

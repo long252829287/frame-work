@@ -1,14 +1,27 @@
 <template>
-  <div class="desktop">
-    <div class="start-grid" role="grid" aria-label="start modules">
-      <button v-for="t in tiles" :key="t.key" class="tile" :class="['tile--' + t.size, 'tile--' + t.color]"
-        type="button" role="button" tabindex="0" @click="handleTile(t)">
-        <div class="tile__icon" aria-hidden="true">{{ t.icon }}</div>
-        <div class="tile__text">
-          <div class="tile__title">{{ t.title }}</div>
-          <div v-if="t.subtitle" class="tile__sub">{{ t.subtitle }}</div>
-        </div>
-      </button>
+  <div class="home-page">
+    <div class="page-container">
+      <div class="page-header">
+        <h1 class="page-title">功能模块</h1>
+        <p class="page-subtitle">选择你需要的功能</p>
+      </div>
+
+      <div class="modules-grid">
+        <button
+          v-for="t in tiles"
+          :key="t.key"
+          class="module-card"
+          :class="['module-card--' + t.color]"
+          type="button"
+          @click="handleTile(t)"
+        >
+          <div class="module-icon" aria-hidden="true">{{ t.icon }}</div>
+          <div class="module-content">
+            <div class="module-title">{{ t.title }}</div>
+            <div v-if="t.subtitle" class="module-subtitle">{{ t.subtitle }}</div>
+          </div>
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -22,14 +35,12 @@ const router = useRouter()
 const auth = useAuthStore()
 const isAuthed = computed(() => auth.checkAuth())
 
-type TileSize = 's' | 'm' | 'w' | 't' | 'l'
 type TileColor = 'blue' | 'purple' | 'teal' | 'orange' | 'pink' | 'slate' | 'green'
 interface TileItem {
   key: string
   title: string
   subtitle?: string
   icon: string
-  size: TileSize
   color: TileColor
   route?: string
   requiresAuth?: boolean
@@ -41,7 +52,6 @@ const tiles: TileItem[] = [
     title: '笔记',
     subtitle: 'Notes',
     icon: '📝',
-    size: 'm',
     color: 'purple',
     route: '/notes',
     requiresAuth: true,
@@ -50,8 +60,7 @@ const tiles: TileItem[] = [
     key: 'imageMagic',
     title: '取色器',
     subtitle: 'Image Color Picker',
-    icon: '🔄',
-    size: 's',
+    icon: '🎨',
     color: 'orange',
     route: '/imageMagic',
   },
@@ -60,7 +69,6 @@ const tiles: TileItem[] = [
     title: '共享笔记',
     subtitle: 'Share Notes',
     icon: '📤',
-    size: 's',
     color: 'green',
     route: '/shared-notes',
   },
@@ -69,18 +77,23 @@ const tiles: TileItem[] = [
     title: '凭据',
     subtitle: 'Credentials',
     icon: '🔐',
-    size: 'm',
     color: 'teal',
     route: '/credentials',
     requiresAuth: true,
   },
-  { key: 'lol', title: 'lol攻略', subtitle: '大乱斗攻略', icon: '🎬', size: 'm', color: 'pink', route: '/lol' },
+  {
+    key: 'lol',
+    title: 'lol攻略',
+    subtitle: '大乱斗攻略',
+    icon: '🎮',
+    color: 'pink',
+    route: '/lol'
+  },
   {
     key: 'tools',
     title: '工具',
     subtitle: 'Coming soon',
     icon: '🧰',
-    size: 's',
     color: 'blue',
     route: '/tool',
   },
@@ -89,7 +102,6 @@ const tiles: TileItem[] = [
     title: '设置',
     subtitle: 'Preferences',
     icon: '⚙️',
-    size: 's',
     color: 'slate',
   },
 ]
@@ -107,253 +119,246 @@ function handleTile(t: TileItem) {
 }
 </script>
 
-
 <style scoped lang="scss">
-@use '@/assets/scss/themes/stardew-valley.scss' as stardew;
-
-.desktop {
-  min-height: 100vh;
-  padding: 24px;
-  padding-top: 90px;
-  background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
-  @include stardew.texture-bg;
-  position: relative;
-
-  // 添加星露谷风格的装饰效果
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-image:
-      radial-gradient(circle at 20% 30%, rgba(34, 139, 34, 0.1) 0%, transparent 40%),
-      radial-gradient(circle at 80% 20%, rgba(255, 107, 53, 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 50% 80%, rgba(244, 228, 188, 0.15) 0%, transparent 60%);
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  >* {
-    position: relative;
-    z-index: 1;
-  }
+.home-page {
+  min-height: calc(100vh - var(--header-height));
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  background: var(--color-bg-secondary);
 }
 
-.start-grid {
-  display: grid;
-  grid-auto-flow: dense;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 12px;
+.page-container {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.tile {
-  @include stardew.card;
+.page-header {
+  margin-bottom: var(--spacing-2xl);
+  text-align: center;
+
+  .page-title {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-sm);
+    letter-spacing: -0.02em;
+  }
+
+  .page-subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-normal);
+  }
+}
+
+.modules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+.module-card {
   position: relative;
   display: flex;
-  align-items: flex-end;
-  overflow: hidden;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: var(--spacing-xl);
+  background: var(--color-bg-primary);
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-xl);
   cursor: pointer;
-  padding: 16px;
-  color: #ffffff;
-  transform: translateZ(0);
-  transition: transform 0.2s ease,
-    box-shadow 0.2s ease,
-    filter 0.2s ease;
+  transition: all var(--transition-base);
+  min-height: 160px;
+  text-align: left;
+  overflow: hidden;
 
-  // 添加主题纹理效果
-  @include stardew.texture-bg;
+  /* Remove default button styles */
+  font-family: inherit;
+  color: inherit;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    opacity: 0.1;
+    transition: all var(--transition-base);
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: transparent;
+
+    &::before {
+      width: 150px;
+      height: 150px;
+      opacity: 0.15;
+    }
+
+    .module-icon {
+      transform: scale(1.1);
+    }
+  }
+
+  &:active {
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-accent-primary);
+    outline-offset: 2px;
+  }
 }
 
-.tile:focus-visible {
-  outline: 2px solid #228B22;
-  outline-offset: 2px;
-}
-
-.tile:hover {
-  transform: translateY(-2px) scale(1.02);
-  filter: brightness(1.05);
-  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.3),
-    0 8px 20px rgba(0, 0, 0, 0.3);
-}
-
-.tile:active {
-  transform: translateY(0) scale(0.98);
-  filter: brightness(0.95);
-}
-
-.tile__icon {
-  font-size: 28px;
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
-}
-
-.tile__text {
+.module-icon {
+  font-size: 3rem;
+  margin-bottom: var(--spacing-md);
+  transition: transform var(--transition-base);
+  position: relative;
   z-index: 1;
 }
 
-.tile__title {
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  color: #ffffff;
+.module-content {
+  position: relative;
+  z-index: 1;
 }
 
-.tile__sub {
-  font-size: 12px;
-  opacity: 0.85;
-  margin-top: 2px;
-  color: #ffffff;
+.module-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+  letter-spacing: -0.01em;
 }
 
-/* sizes (using grid spans) */
-.tile--s {
-  grid-column: span 1;
-  grid-row: span 1;
-  min-height: 120px;
+.module-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  font-weight: var(--font-weight-normal);
 }
 
-.tile--m {
-  grid-column: span 2;
-  grid-row: span 1;
-  min-height: 120px;
+/* Color variants */
+.module-card--blue {
+  &::before {
+    background: #3B82F6;
+  }
+
+  &:hover {
+    border-color: #3B82F6;
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, var(--color-bg-primary) 100%);
+  }
 }
 
-.tile--w {
-  grid-column: span 3;
-  grid-row: span 1;
-  min-height: 120px;
+.module-card--purple {
+  &::before {
+    background: #8B5CF6;
+  }
+
+  &:hover {
+    border-color: #8B5CF6;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, var(--color-bg-primary) 100%);
+  }
 }
 
-.tile--t {
-  grid-column: span 1;
-  grid-row: span 2;
-  min-height: 252px;
+.module-card--teal {
+  &::before {
+    background: #14B8A6;
+  }
+
+  &:hover {
+    border-color: #14B8A6;
+    background: linear-gradient(135deg, rgba(20, 184, 166, 0.03) 0%, var(--color-bg-primary) 100%);
+  }
 }
 
-.tile--l {
-  grid-column: span 2;
-  grid-row: span 2;
-  min-height: 252px;
+.module-card--orange {
+  &::before {
+    background: #F59E0B;
+  }
+
+  &:hover {
+    border-color: #F59E0B;
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.03) 0%, var(--color-bg-primary) 100%);
+  }
 }
 
+.module-card--pink {
+  &::before {
+    background: #EC4899;
+  }
+
+  &:hover {
+    border-color: #EC4899;
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.03) 0%, var(--color-bg-primary) 100%);
+  }
+}
+
+.module-card--slate {
+  &::before {
+    background: #64748B;
+  }
+
+  &:hover {
+    border-color: #64748B;
+    background: linear-gradient(135deg, rgba(100, 116, 139, 0.03) 0%, var(--color-bg-primary) 100%);
+  }
+}
+
+.module-card--green {
+  &::before {
+    background: #10B981;
+  }
+
+  &:hover {
+    border-color: #10B981;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.03) 0%, var(--color-bg-primary) 100%);
+  }
+}
+
+/* Responsive Design */
 @media (max-width: 900px) {
-  .tile--w {
-    grid-column: span 2;
+  .modules-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--spacing-md);
   }
 }
 
 @media (max-width: 600px) {
-  .desktop {
-    padding: 16px;
-    padding-top: 80px;
+  .home-page {
+    padding: var(--spacing-xl) var(--spacing-md);
   }
 
-  .start-grid {
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 8px;
+  .page-header {
+    margin-bottom: var(--spacing-xl);
+
+    .page-title {
+      font-size: var(--font-size-3xl);
+    }
+
+    .page-subtitle {
+      font-size: var(--font-size-base);
+    }
   }
 
-  .tile {
-    padding: 8px;
+  .modules-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
   }
 
-  .tile--m,
-  .tile--w {
-    grid-column: span 1;
-  }
-
-  .tile--t,
-  .tile--l {
-    grid-column: span 1;
-    grid-row: span 1;
+  .module-card {
+    padding: var(--spacing-lg);
     min-height: 140px;
   }
-}
 
-/* color variants — 星露谷风格配色 */
-.tile--blue {
-  background: linear-gradient(145deg,
-      rgba(56, 168, 237, 0.5) 0%,
-      rgba(19, 145, 224, 0.7) 100%);
-  border-color: #0e1ab9f7;
-}
-
-.tile--purple {
-  background: linear-gradient(145deg,
-      rgba(236, 188, 154, 0.7) 0%,
-      rgba(157, 97, 70, 0.9) 100%);
-  border-color: #8B4513;
-}
-
-.tile--teal {
-  background: linear-gradient(145deg,
-      rgba(94, 234, 212, 0.45) 0%,
-      rgba(45, 212, 191, 0.32) 100%);
-  border-color: #E6D3A3;
-}
-
-.tile--orange {
-  background: linear-gradient(145deg,
-      rgba(253, 186, 116, 0.48) 0%,
-      rgba(251, 146, 60, 0.35) 100%);
-  border-color: #CC5500;
-}
-
-.tile--pink {
-  background: linear-gradient(145deg,
-      rgba(244, 114, 182, 0.48) 0%,
-      rgba(236, 72, 153, 0.34) 100%);
-  border-color: #e874ae;
-}
-
-.tile--slate {
-  background: linear-gradient(145deg,
-      rgba(203, 213, 225, 0.9) 0%,
-      rgba(148, 163, 184, 1) 100%);
-  border-color: #6D4C41;
-}
-
-.tile--green {
-  background: linear-gradient(145deg,
-      rgba(110, 231, 183, 0.45) 0%,
-      rgba(34, 197, 94, 0.35) 100%);
-  border-color: #228B22;
-}
-
-/* 装饰性高光 - 更适合星露谷风格 */
-.tile::after {
-  content: '';
-  position: absolute;
-  inset: -20% -20% auto auto;
-  height: 140px;
-  width: 140px;
-  background: radial-gradient(80px 80px at 50% 50%, rgba(244, 228, 188, 0.4), transparent 70%);
-  filter: blur(14px);
-  transform: rotate(25deg);
-  z-index: 0;
-}
-
-/* 现代网站优化：减少动画偏好 */
-@media (prefers-reduced-motion: reduce) {
-  .tile {
-    transition: none;
+  .module-icon {
+    font-size: 2.5rem;
   }
 
-  .tile:hover {
-    transform: none;
-    filter: none;
-  }
-}
-
-/* 现代网站优化：高对比度模式 */
-@media (prefers-contrast: high) {
-  .tile {
-    border-width: 2px;
+  .module-title {
+    font-size: var(--font-size-lg);
   }
 }
 </style>

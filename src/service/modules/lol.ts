@@ -30,7 +30,7 @@ import type {
 } from '@/types'
 
 export default {
-  // Champions APIs
+  // 获取全部英雄列表
   async apiGetChampions(params?: ChampionQueryParams) {
     const queryParams = new URLSearchParams()
     if (params?.search) queryParams.append('search', params.search)
@@ -41,28 +41,28 @@ export default {
     const query = queryParams.toString()
     return fetch.get<ApiResponse<ChampionListResponse>>(`/api/champions${query ? `?${query}` : ''}`)
   },
-
+  // 获取指定英雄详情
   async apiGetChampion(identifier: string) {
     return fetch.get<ApiResponse<Champion>>(`/api/champions/${identifier}`)
   },
-
+  // 获取英雄标签列表
   async apiGetChampionTags() {
     return fetch.get<ApiResponse<ChampionTagsResponse>>('/api/champions/tags/list')
   },
-
+  // 搜索英雄
   async apiSearchChampions(keyword: string) {
     return fetch.get<ApiResponse<ChampionSearchResponse>>(`/api/champions/search/${keyword}`)
   },
-
+  // 根据标签获取英雄列表
   async apiGetChampionsByTags(tags: string) {
     return fetch.get<ApiResponse<ChampionListResponse>>(`/api/champions/by-tags/${tags}`)
   },
-
+  // 获取英雄统计信息
   async apiGetChampionStats() {
     return fetch.get<ApiResponse<ChampionStatsResponse>>('/api/champions/stats/summary')
   },
 
-  // Items APIs
+  // 获取装备列表
   async apiGetItems(params?: ItemQueryParams) {
     const queryParams = new URLSearchParams()
     if (params?.search) queryParams.append('search', params.search)
@@ -81,65 +81,65 @@ export default {
     const query = queryParams.toString()
     return fetch.get<ApiResponse<ItemListResponse>>(`/api/items${query ? `?${query}` : ''}`)
   },
-
+  // 获取指定装备详情
   async apiGetItem(identifier: string) {
     return fetch.get<ApiResponse<ItemWithRelated>>(`/api/items/${identifier}`)
   },
-
+  // 获取装备标签列表
   async apiGetItemTags() {
     return fetch.get<ApiResponse<ItemTagsResponse>>('/api/items/tags/list')
   },
-
+  // 根据地图类型获取装备列表
   async apiGetItemsByMap(mapType: 'sr' | 'ha' | 'aram') {
     return fetch.get<ApiResponse<ItemListResponse>>(`/api/items/map/${mapType}`)
   },
-
+  // 搜索装备
   async apiSearchItems(keyword: string) {
     return fetch.get<ApiResponse<ItemSearchResponse>>(`/api/items/search/${keyword}`)
   },
-
+  // 根据标签获取装备列表
   async apiGetItemsByTags(tags: string) {
     return fetch.get<ApiResponse<ItemListResponse>>(`/api/items/by-tags/${tags}`)
   },
-
+  // 根据价格区间获取装备列表
   async apiGetItemsByPriceRange(minPrice: number, maxPrice: number) {
     return fetch.get<ApiResponse<ItemListResponse>>(`/api/items/price-range/${minPrice}/${maxPrice}`)
   },
-
+  // 获取可购买装备列表
   async apiGetPurchasableItems() {
     return fetch.get<ApiResponse<ItemListResponse>>('/api/items/purchasable')
   },
-
+  // 获取装备统计信息
   async apiGetItemStats() {
     return fetch.get<ApiResponse<ItemStatsResponse>>('/api/items/stats/summary')
   },
 
-  // Runes APIs
+  // 获取天赋列表
   async apiGetRunes() {
     return fetch.get<ApiResponse<RuneTreeListResponse>>('/api/runes')
   },
-
+  // 获取指定天赋树详情
   async apiGetRuneTree(treeId: string) {
     return fetch.get<ApiResponse<RuneTree>>(`/api/runes/${treeId}`)
   },
-
+  // 获取指定天赋详情
   async apiGetRune(runeId: string) {
     return fetch.get<ApiResponse<{ id: string; name: string; icon: string; description: string }>>(`/api/runes/rune/${runeId}`)
   },
-
+  // 验证天赋页是否合法
   async apiValidateRunes(payload: RuneValidationPayload) {
     return fetch.post<ApiResponse<RuneValidationResponse>>('/api/runes/validate', payload)
   },
-
+  // 获取天赋树名称列表
   async apiGetRuneTreeNames() {
     return fetch.get<ApiResponse<RuneTreeNamesResponse>>('/api/runes/trees/names')
   },
-
+  // 获取天赋统计信息
   async apiGetRuneStats() {
     return fetch.get<ApiResponse<RuneStatsResponse>>('/api/runes/stats/summary')
   },
 
-  // Strategies APIs
+  // 获取攻略列表
   async apiGetStrategies(params?: StrategyQueryParams) {
     const queryParams = new URLSearchParams()
     if (params?.championKey) queryParams.append('championKey', params.championKey)
@@ -154,23 +154,23 @@ export default {
     const query = queryParams.toString()
     return fetch.get<ApiResponse<StrategyListResponse>>(`/api/strategies${query ? `?${query}` : ''}`)
   },
-
+  // 创建新攻略
   async apiCreateStrategy(payload: CreateStrategyPayload) {
     return fetch.post<ApiResponse<Strategy>>('/api/strategies', payload)
   },
-
+  // 获取指定攻略详情
   async apiGetStrategy(id: string) {
     return fetch.get<ApiResponse<Strategy>>(`/api/strategies/${id}`)
   },
-
+  // 更新指定攻略
   async apiUpdateStrategy(id: string, payload: UpdateStrategyPayload) {
     return fetch.put<ApiResponse<Strategy>>(`/api/strategies/${id}`, payload)
   },
-
+  // 删除指定攻略
   async apiDeleteStrategy(id: string) {
     return fetch.delete<ApiResponse<{ success: boolean }>>(`/api/strategies/${id}`)
   },
-
+  // 根据英雄获取对应的攻略列表
   async apiGetStrategiesByChampion(championKey: string, params?: { mapType?: 'sr' | 'aram' | 'both' }) {
     const queryParams = new URLSearchParams()
     if (params?.mapType) queryParams.append('mapType', params.mapType)
@@ -178,21 +178,21 @@ export default {
     const query = queryParams.toString()
     return fetch.get<ApiResponse<StrategyByChampionResponse>>(`/api/strategies/champion/${championKey}${query ? `?${query}` : ''}`)
   },
-
+  // 获取热门攻略
   async apiGetPopularStrategies(limit?: number) {
     const query = limit ? `?limit=${limit}` : ''
     return fetch.get<ApiResponse<StrategyListResponse>>(`/api/strategies/popular${query}`)
   },
-
+  // 获取推荐攻略
   async apiGetRecommendedStrategies(limit?: number) {
     const query = limit ? `?limit=${limit}` : ''
     return fetch.get<ApiResponse<StrategyListResponse>>(`/api/strategies/recommended${query}`)
   },
-
+  // 获取用户的攻略列表
   async apiGetUserStrategies(userId: string) {
     return fetch.get<ApiResponse<StrategyListResponse>>(`/api/strategies/user/${userId}`)
   },
-
+  // 获取当前登录用户的攻略列表
   async apiGetMyStrategies(params?: { status?: 'draft' | 'published' | 'archived' }) {
     const queryParams = new URLSearchParams()
     if (params?.status) queryParams.append('status', params.status)
@@ -200,8 +200,8 @@ export default {
     const query = queryParams.toString()
     return fetch.get<ApiResponse<StrategyListResponse>>(`/api/strategies/my${query ? `?${query}` : ''}`)
   },
-
-  async apiLikeStrategy(id: string) {
-    return fetch.post<ApiResponse<StrategyLikeResponse>>(`/api/strategies/${id}/like`)
+  // 点赞指定攻略
+  async apiLikeStrategy(id: string, action: 'like' | 'unlike' = 'like') {
+    return fetch.post<ApiResponse<StrategyLikeResponse>>(`/api/strategies/${id}/like`, { action })
   },
 }
