@@ -30,15 +30,6 @@ export type {
   ItemSearchResponse,
   ItemStatsResponse,
   ItemQueryParams,
-  // Rune types
-  Rune,
-  RuneSlot,
-  RuneTree,
-  RuneTreeListResponse,
-  RuneTreeNamesResponse,
-  RuneValidationPayload,
-  RuneValidationResponse,
-  RuneStatsResponse,
   // Strategy types
   Strategy,
   StrategyRunes,
@@ -51,4 +42,6 @@ export type {
   CreateStrategyPayload,
   UpdateStrategyPayload,
   StrategyQueryParams,
+  // Hex types
+  Hex,
 } from './api'

@@ -7,288 +7,212 @@
 
     <!-- Loading State -->
     <div v-if="isLoading" class="loading-container">
-      <el-icon class="is-loading" :size="48"><Loading /></el-icon>
+      <el-icon class="is-loading" :size="48">
+        <Loading />
+      </el-icon>
       <p>正在加载数据...</p>
     </div>
 
     <template v-else-if="isInitialized">
-      <el-steps :active="currentStep" finish-status="success" align-center class="steps">
-      <el-step title="选择英雄" />
-      <el-step title="选择符文" />
-      <el-step title="选择装备" />
-      <el-step title="完成创建" />
-    </el-steps>
-
-    <div class="step-content">
-      <!-- Step 1: Champion Selection -->
-      <div v-if="currentStep === 0" class="step-champion">
-        <h2>选择英雄</h2>
-        <div class="search-bar">
-          <el-input
-            v-model="championSearch"
-            placeholder="搜索英雄名称..."
-            clearable
-            size="large"
-          >
-            <template #prefix>
-              <el-icon><Search /></el-icon>
-            </template>
-          </el-input>
-        </div>
-
-        <div class="tags-filter">
-          <el-tag
-            v-for="tag in championTags"
-            :key="tag"
-            :type="selectedTags.includes(tag) ? 'warning' : 'info'"
-            class="tag-item"
-            @click="toggleTag(tag)"
-          >
-            {{ tag }}
-          </el-tag>
-        </div>
-
-        <div class="champions-grid">
-          <div
-            v-for="champion in filteredChampions"
-            :key="champion._id"
-            class="champion-card"
-            :class="{ selected: selectedChampion?._id === champion._id }"
-            @click="selectChampion(champion)"
-          >
-            <img :src="champion.images.square" :alt="champion.name" />
-            <div class="champion-info">
-              <span class="champion-name">{{ champion.name }}</span>
-              <span class="champion-title">{{ champion.title }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="step-actions">
-          <el-button type="primary" size="large" :disabled="!selectedChampion" @click="nextStep">
-            下一步
-          </el-button>
-        </div>
-      </div>
-
-      <!-- Step 2: Rune Selection -->
-      <div v-if="currentStep === 1" class="step-rune">
-        <h2>选择符文</h2>
-        <RuneSelector v-model="selectedRunes" :rune-trees="lolStore.runeTrees" />
-
-        <div class="step-actions">
-          <el-button size="large" @click="prevStep">上一步</el-button>
-          <el-button type="primary" size="large" :disabled="!isRunesValid" @click="nextStep">
-            下一步
-          </el-button>
-        </div>
-      </div>
-
-      <!-- Step 3: Item Selection -->
-      <div v-if="currentStep === 2" class="step-items">
-        <h2>选择装备</h2>
-
-        <div class="items-section">
-          <h3>核心装备 (6件)</h3>
-          <div class="items-slots core-items">
-            <div
-              v-for="i in 6"
-              :key="'core-' + i"
-              class="item-slot"
-              @click="selectItemSlot('core', i - 1)"
-            >
-              <div v-if="coreItems[i - 1]" class="item-selected">
-                <img :src="coreItems[i - 1]!.image" :alt="coreItems[i - 1]!.name" />
-                <el-icon class="remove-icon" @click.stop="removeItem('core', i - 1)">
-                  <Close />
+      <div class="step-content">
+        <!-- Step 1: Champion Selection -->
+        <div v-if="currentStep === 0" class="step-champion">
+          <div class="search-bar">
+            <el-input v-model="championSearch" placeholder="搜索英雄名称..." clearable size="large">
+              <template #prefix>
+                <el-icon>
+                  <Search />
                 </el-icon>
-              </div>
-              <div v-else class="item-empty">
-                <el-icon><Plus /></el-icon>
-              </div>
-            </div>
+              </template>
+            </el-input>
           </div>
 
-          <h3>备选装备 (可选,最多6件)</h3>
-          <div class="items-slots alternative-items">
-            <div
-              v-for="i in 6"
-              :key="'alt-' + i"
-              class="item-slot"
-              @click="selectItemSlot('alternative', i - 1)"
-            >
-              <div v-if="alternativeItems[i - 1]" class="item-selected">
-                <img :src="alternativeItems[i - 1]!.image" :alt="alternativeItems[i - 1]!.name" />
-                <el-icon class="remove-icon" @click.stop="removeItem('alternative', i - 1)">
-                  <Close />
-                </el-icon>
-              </div>
-              <div v-else class="item-empty">
-                <el-icon><Plus /></el-icon>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Item Selection Dialog -->
-        <el-dialog v-model="itemDialogVisible" title="选择装备" width="80%" :close-on-click-modal="false">
-          <el-input
-            v-model="itemSearch"
-            placeholder="搜索装备..."
-            clearable
-            class="item-search"
-          >
-            <template #prefix>
-              <el-icon><Search /></el-icon>
-            </template>
-          </el-input>
-
-          <div class="items-list">
-            <div
-              v-for="item in filteredItems"
-              :key="item._id"
-              class="item-card"
-              @click="selectItem(item)"
-            >
-              <img :src="item.image" :alt="item.name" />
-              <div class="item-info">
-                <span class="item-name">{{ item.name }}</span>
-                <span class="item-price">{{ item.gold.total }}金币</span>
-              </div>
-            </div>
-          </div>
-        </el-dialog>
-
-        <div class="step-actions">
-          <el-button size="large" @click="prevStep">上一步</el-button>
-          <el-button type="primary" size="large" :disabled="coreItems.filter(Boolean).length !== 6" @click="nextStep">
-            下一步
-          </el-button>
-        </div>
-      </div>
-
-      <!-- Step 4: Final Confirmation -->
-      <div v-if="currentStep === 3" class="step-confirm">
-        <h2>完成创建</h2>
-
-        <el-form :model="strategyForm" label-width="100px" class="strategy-form">
-          <el-form-item label="攻略标题" required>
-            <el-input v-model="strategyForm.title" placeholder="请输入攻略标题" />
-          </el-form-item>
-
-          <el-form-item label="地图类型" required>
-            <el-radio-group v-model="strategyForm.mapType">
-              <el-radio value="sr">召唤师峡谷</el-radio>
-              <el-radio value="aram">极地大乱斗</el-radio>
-              <el-radio value="both">通用</el-radio>
-            </el-radio-group>
-          </el-form-item>
-
-          <el-form-item label="攻略描述" required>
-            <el-input
-              v-model="strategyForm.description"
-              type="textarea"
-              :rows="4"
-              placeholder="请输入攻略描述..."
-            />
-          </el-form-item>
-
-          <el-form-item label="标签">
-            <el-tag
-              v-for="tag in strategyForm.tags"
-              :key="tag"
-              closable
-              @close="removeTag(tag)"
-            >
+          <div class="tags-filter">
+            <el-tag v-for="tag in championTags" :key="tag" :type="selectedTags.includes(tag) ? 'warning' : 'info'"
+              class="tag-item" @click="toggleTag(tag)">
               {{ tag }}
             </el-tag>
-            <el-input
-              v-if="tagInputVisible"
-              ref="tagInputRef"
-              v-model="tagInput"
-              size="small"
-              style="width: 100px"
-              @keyup.enter="addTag"
-              @blur="addTag"
-            />
-            <el-button v-else size="small" @click="showTagInput">+ 添加标签</el-button>
-          </el-form-item>
-        </el-form>
+          </div>
 
-        <div class="preview">
-          <h3>预览</h3>
-          <div class="preview-content">
-            <div class="preview-champion">
-              <img :src="selectedChampion?.images.square" :alt="selectedChampion?.name" />
-              <span>{{ selectedChampion?.name }}</span>
-            </div>
-
-            <div class="preview-runes">
-              <h4>符文配置</h4>
-              <div class="runes-display">
-                <div v-if="selectedRunes.primaryRunes?.length" class="primary-runes">
-                  <span>主系:</span>
-                  <img
-                    v-for="rune in selectedRunes.primaryRunes"
-                    :key="rune.id"
-                    :src="rune.icon"
-                    :alt="rune.name"
-                    :title="rune.name"
-                  />
-                </div>
-                <div v-if="selectedRunes.secondaryRunes?.length" class="secondary-runes">
-                  <span>副系:</span>
-                  <img
-                    v-for="rune in selectedRunes.secondaryRunes"
-                    :key="rune.id"
-                    :src="rune.icon"
-                    :alt="rune.name"
-                    :title="rune.name"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="preview-items">
-              <h4>核心装备</h4>
-              <div class="items-display">
-                <img
-                  v-for="(item, idx) in coreItems.filter(Boolean)"
-                  :key="idx"
-                  :src="item!.image"
-                  :alt="item!.name"
-                  :title="item!.name"
-                />
-              </div>
-
-              <h4 v-if="alternativeItems.some(Boolean)">备选装备</h4>
-              <div v-if="alternativeItems.some(Boolean)" class="items-display">
-                <img
-                  v-for="(item, idx) in alternativeItems.filter(Boolean)"
-                  :key="idx"
-                  :src="item!.image"
-                  :alt="item!.name"
-                  :title="item!.name"
-                />
+          <div class="champions-grid">
+            <div v-for="champion in filteredChampions" :key="champion._id" class="champion-card"
+              :class="{ selected: selectedChampion?._id === champion._id }" @click="selectChampion(champion)">
+              <img :src="champion.images.square" :alt="champion.name" />
+              <div class="champion-info">
+                <span class="champion-name">{{ champion.name }}</span>
+                <span class="champion-title">{{ champion.title }}</span>
               </div>
             </div>
           </div>
+
+          <div class="step-actions">
+            <el-button type="primary" size="large" :disabled="!selectedChampion" @click="nextStep">
+              下一步
+            </el-button>
+          </div>
         </div>
 
-        <div class="step-actions">
-          <el-button size="large" @click="prevStep">上一步</el-button>
-          <el-button
-            type="primary"
-            size="large"
-            :loading="submitting"
-            :disabled="!isFormValid"
-            @click="submitStrategy"
-          >
-            {{ submitting ? '创建中...' : '创建攻略' }}
-          </el-button>
+        <!-- Step 2: Rune Selection -->
+        <div v-if="currentStep === 1" class="step-rune">
+          <h2>选择符文</h2>
+
+          <div class="step-actions">
+            <el-button size="large" @click="prevStep">上一步</el-button>
+            <el-button type="primary" size="large" :disabled="!isRunesValid" @click="nextStep">
+              下一步
+            </el-button>
+          </div>
+        </div>
+
+        <!-- Step 3: Item Selection -->
+        <div v-if="currentStep === 2" class="step-items">
+          <h2>选择装备</h2>
+
+          <div class="items-section">
+            <h3>核心装备 (6件)</h3>
+            <div class="items-slots core-items">
+              <div v-for="i in 6" :key="'core-' + i" class="item-slot" @click="selectItemSlot('core', i - 1)">
+                <div v-if="coreItems[i - 1]" class="item-selected">
+                  <img :src="coreItems[i - 1]!.image" :alt="coreItems[i - 1]!.name" />
+                  <el-icon class="remove-icon" @click.stop="removeItem('core', i - 1)">
+                    <Close />
+                  </el-icon>
+                </div>
+                <div v-else class="item-empty">
+                  <el-icon>
+                    <Plus />
+                  </el-icon>
+                </div>
+              </div>
+            </div>
+
+            <h3>备选装备 (可选,最多6件)</h3>
+            <div class="items-slots alternative-items">
+              <div v-for="i in 6" :key="'alt-' + i" class="item-slot" @click="selectItemSlot('alternative', i - 1)">
+                <div v-if="alternativeItems[i - 1]" class="item-selected">
+                  <img :src="alternativeItems[i - 1]!.image" :alt="alternativeItems[i - 1]!.name" />
+                  <el-icon class="remove-icon" @click.stop="removeItem('alternative', i - 1)">
+                    <Close />
+                  </el-icon>
+                </div>
+                <div v-else class="item-empty">
+                  <el-icon>
+                    <Plus />
+                  </el-icon>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Item Selection Dialog -->
+          <el-dialog v-model="itemDialogVisible" title="选择装备" width="80%" :close-on-click-modal="false">
+            <el-input v-model="itemSearch" placeholder="搜索装备..." clearable class="item-search">
+              <template #prefix>
+                <el-icon>
+                  <Search />
+                </el-icon>
+              </template>
+            </el-input>
+
+            <div class="items-list">
+              <div v-for="item in filteredItems" :key="item._id" class="item-card" @click="selectItem(item)">
+                <img :src="item.image" :alt="item.name" />
+                <div class="item-info">
+                  <span class="item-name">{{ item.name }}</span>
+                  <span class="item-price">{{ item.gold.total }}金币</span>
+                </div>
+              </div>
+            </div>
+          </el-dialog>
+
+          <div class="step-actions">
+            <el-button size="large" @click="prevStep">上一步</el-button>
+            <el-button type="primary" size="large" :disabled="coreItems.filter(Boolean).length !== 6" @click="nextStep">
+              下一步
+            </el-button>
+          </div>
+        </div>
+
+        <!-- Step 4: Final Confirmation -->
+        <div v-if="currentStep === 3" class="step-confirm">
+          <h2>完成创建</h2>
+
+          <el-form :model="strategyForm" label-width="100px" class="strategy-form">
+            <el-form-item label="攻略标题" required>
+              <el-input v-model="strategyForm.title" placeholder="请输入攻略标题" />
+            </el-form-item>
+
+            <el-form-item label="地图类型" required>
+              <el-radio-group v-model="strategyForm.mapType">
+                <el-radio value="sr">召唤师峡谷</el-radio>
+                <el-radio value="aram">极地大乱斗</el-radio>
+                <el-radio value="both">通用</el-radio>
+              </el-radio-group>
+            </el-form-item>
+
+            <el-form-item label="攻略描述" required>
+              <el-input v-model="strategyForm.description" type="textarea" :rows="4" placeholder="请输入攻略描述..." />
+            </el-form-item>
+
+            <el-form-item label="标签">
+              <el-tag v-for="tag in strategyForm.tags" :key="tag" closable @close="removeTag(tag)">
+                {{ tag }}
+              </el-tag>
+              <el-input v-if="tagInputVisible" ref="tagInputRef" v-model="tagInput" size="small" style="width: 100px"
+                @keyup.enter="addTag" @blur="addTag" />
+              <el-button v-else size="small" @click="showTagInput">+ 添加标签</el-button>
+            </el-form-item>
+          </el-form>
+
+          <div class="preview">
+            <h3>预览</h3>
+            <div class="preview-content">
+              <div class="preview-champion">
+                <img :src="selectedChampion?.images.square" :alt="selectedChampion?.name" />
+                <span>{{ selectedChampion?.name }}</span>
+              </div>
+
+              <div class="preview-runes">
+                <h4>符文配置</h4>
+                <div class="runes-display">
+                  <div v-if="selectedRunes.primaryRunes?.length" class="primary-runes">
+                    <span>主系:</span>
+                    <img v-for="rune in selectedRunes.primaryRunes" :key="rune.id" :src="rune.icon" :alt="rune.name"
+                      :title="rune.name" />
+                  </div>
+                  <div v-if="selectedRunes.secondaryRunes?.length" class="secondary-runes">
+                    <span>副系:</span>
+                    <img v-for="rune in selectedRunes.secondaryRunes" :key="rune.id" :src="rune.icon" :alt="rune.name"
+                      :title="rune.name" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="preview-items">
+                <h4>核心装备</h4>
+                <div class="items-display">
+                  <img v-for="(item, idx) in coreItems.filter(Boolean)" :key="idx" :src="item!.image" :alt="item!.name"
+                    :title="item!.name" />
+                </div>
+
+                <h4 v-if="alternativeItems.some(Boolean)">备选装备</h4>
+                <div v-if="alternativeItems.some(Boolean)" class="items-display">
+                  <img v-for="(item, idx) in alternativeItems.filter(Boolean)" :key="idx" :src="item!.image"
+                    :alt="item!.name" :title="item!.name" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="step-actions">
+            <el-button size="large" @click="prevStep">上一步</el-button>
+            <el-button type="primary" size="large" :loading="submitting" :disabled="!isFormValid"
+              @click="submitStrategy">
+              {{ submitting ? '创建中...' : '创建攻略' }}
+            </el-button>
+          </div>
         </div>
       </div>
-    </div>
     </template>
   </div>
 </template>
@@ -300,7 +224,6 @@ import { ElMessage } from 'element-plus'
 import { Search, Plus, Close, Loading } from '@element-plus/icons-vue'
 import { commonService } from '@/service'
 import { useLolStore } from '@/stores/lol'
-import RuneSelector from '@/components/lol/RuneSelector.vue'
 import type { Champion, Item } from '@/types'
 
 const router = useRouter()
@@ -374,12 +297,12 @@ const filteredItems = computed(() => {
 
 const isRunesValid = computed(() => {
   return selectedRunes.value.primaryRunes?.length === 4 &&
-         selectedRunes.value.secondaryRunes?.length === 2
+    selectedRunes.value.secondaryRunes?.length === 2
 })
 
 const isFormValid = computed(() => {
   return strategyForm.value.title.trim() !== '' &&
-         strategyForm.value.description.trim() !== ''
+    strategyForm.value.description.trim() !== ''
 })
 
 function toggleTag(tag: string) {
@@ -516,16 +439,8 @@ async function initializeData() {
     if (lolStore.items.length === 0) {
       throw new Error('装备数据加载失败，请刷新页面重试')
     }
-    if (lolStore.runeTrees.length === 0) {
-      throw new Error('符文数据加载失败，请刷新页面重试')
-    }
 
     isInitialized.value = true
-    console.log('LoL data initialized:', {
-      champions: lolStore.champions.length,
-      items: lolStore.items.length,
-      runeTrees: lolStore.runeTrees.length
-    })
   } catch (error: any) {
     console.error('Failed to initialize data:', error)
     ElMessage.error(error.message || '数据加载失败')
@@ -568,11 +483,10 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 30px;
 
   h1 {
     color: #fff;
-    font-size: 32px;
+    font-size: 20px;
     font-weight: bold;
     margin: 0;
     background: linear-gradient(135deg, #c8aa6e 0%, #f0e6d2 100%);
@@ -582,38 +496,10 @@ onMounted(() => {
   }
 }
 
-.steps {
-  margin-bottom: 40px;
-
-  :deep(.el-step__title) {
-    color: rgba(255, 255, 255, 0.7);
-
-    &.is-finish,
-    &.is-process {
-      color: #c8aa6e;
-    }
-  }
-
-  :deep(.el-step__icon.is-text) {
-    border-color: rgba(255, 255, 255, 0.3);
-    color: rgba(255, 255, 255, 0.7);
-  }
-
-  :deep(.el-step__icon.is-finish),
-  :deep(.el-step__icon.is-process) {
-    border-color: #c8aa6e;
-    color: #c8aa6e;
-  }
-
-  :deep(.el-step__line) {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-}
-
 .step-content {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
-  padding: 30px;
+  padding: 20px;
   min-height: 500px;
 
   h2 {
@@ -660,11 +546,9 @@ onMounted(() => {
 .champions-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 15px;
-  margin-bottom: 30px;
   max-height: 500px;
   overflow-y: auto;
-  padding: 10px;
+  background-color: rgba(40, 42, 44, 0.5);
 }
 
 .champion-card {
@@ -672,9 +556,6 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   padding: 10px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 2px solid transparent;
-  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
 

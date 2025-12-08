@@ -14,12 +14,6 @@ import type {
   ItemSearchResponse,
   ItemStatsResponse,
   ItemQueryParams,
-  RuneTree,
-  RuneTreeListResponse,
-  RuneTreeNamesResponse,
-  RuneValidationPayload,
-  RuneValidationResponse,
-  RuneStatsResponse,
   Strategy,
   StrategyListResponse,
   StrategyByChampionResponse,
@@ -27,6 +21,7 @@ import type {
   CreateStrategyPayload,
   UpdateStrategyPayload,
   StrategyQueryParams,
+  Hex
 } from '@/types'
 
 export default {
@@ -113,32 +108,6 @@ export default {
   async apiGetItemStats() {
     return fetch.get<ApiResponse<ItemStatsResponse>>('/api/items/stats/summary')
   },
-
-  // 获取天赋列表
-  async apiGetRunes() {
-    return fetch.get<ApiResponse<RuneTreeListResponse>>('/api/runes')
-  },
-  // 获取指定天赋树详情
-  async apiGetRuneTree(treeId: string) {
-    return fetch.get<ApiResponse<RuneTree>>(`/api/runes/${treeId}`)
-  },
-  // 获取指定天赋详情
-  async apiGetRune(runeId: string) {
-    return fetch.get<ApiResponse<{ id: string; name: string; icon: string; description: string }>>(`/api/runes/rune/${runeId}`)
-  },
-  // 验证天赋页是否合法
-  async apiValidateRunes(payload: RuneValidationPayload) {
-    return fetch.post<ApiResponse<RuneValidationResponse>>('/api/runes/validate', payload)
-  },
-  // 获取天赋树名称列表
-  async apiGetRuneTreeNames() {
-    return fetch.get<ApiResponse<RuneTreeNamesResponse>>('/api/runes/trees/names')
-  },
-  // 获取天赋统计信息
-  async apiGetRuneStats() {
-    return fetch.get<ApiResponse<RuneStatsResponse>>('/api/runes/stats/summary')
-  },
-
   // 获取攻略列表
   async apiGetStrategies(params?: StrategyQueryParams) {
     const queryParams = new URLSearchParams()
@@ -204,4 +173,7 @@ export default {
   async apiLikeStrategy(id: string, action: 'like' | 'unlike' = 'like') {
     return fetch.post<ApiResponse<StrategyLikeResponse>>(`/api/strategies/${id}/like`, { action })
   },
+  async apiGetHexList() {
+    return fetch.get<ApiResponse<Hex[]>>('/api/hex')
+  }
 }

@@ -186,9 +186,9 @@ onUnmounted(() => {
 
 /* Custom Tailwind-like utility classes for theme variables */
 .bg-primary {
-  background: var(--color-bg-primary);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .bg-secondary {

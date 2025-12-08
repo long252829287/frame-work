@@ -199,68 +199,6 @@ export interface ItemStatsResponse {
   lastUpdated: string
 }
 
-// Rune Types
-export interface Rune {
-  id: string
-  name: string
-  icon: string
-  slotIndex?: number
-}
-
-export interface RuneSlot {
-  runes: Rune[]
-}
-
-export interface RuneTree {
-  _id: string
-  id: string
-  name: string
-  icon: string
-  slots: RuneSlot[]
-  version: string
-  isEnabled: boolean
-  createdAt?: string
-  updatedAt?: string
-}
-
-export interface RuneTreeListResponse {
-  runeTrees: RuneTree[]
-  total: number
-}
-
-export interface RuneTreeNamesResponse {
-  trees: Array<{ id: string; name: string }>
-  total: number
-}
-
-export interface RuneValidationPayload {
-  primaryTreeId: string
-  primaryRuneIds: string[]
-  secondaryTreeId: string
-  secondaryRuneIds: string[]
-}
-
-export interface RuneValidationResponse {
-  valid: boolean
-  primaryTree: {
-    id: string
-    name: string
-  }
-  secondaryTree: {
-    id: string
-    name: string
-  }
-}
-
-export interface RuneStatsResponse {
-  total: {
-    trees: number
-    runes: number
-  }
-  byTree: Record<string, number>
-  lastUpdated: string
-}
-
 // Strategy Types
 export interface StrategyRunes {
   primaryTreeId: string
@@ -432,4 +370,8 @@ export interface StrategyQueryParams {
   sort?: 'createdAt' | 'updatedAt' | 'stats.viewCount' | 'stats.favoriteCount' | 'stats.likeCount'
   order?: 'asc' | 'desc'
   status?: 'draft' | 'published' | 'archived'
+}
+// Hex Types
+export interface Hex {
+  
 }

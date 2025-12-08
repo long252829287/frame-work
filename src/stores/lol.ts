@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { commonService } from '@/service'
-import type { Champion, Item, RuneTree } from '@/types'
+import type { Champion, Item, Hex } from '@/types'
 
 export const useLolStore = defineStore('lol', () => {
   const champions = ref<Champion[]>([])
   const items = ref<Item[]>([])
-  const runeTrees = ref<RuneTree[]>([])
+  const hexList = ref<Hex[]>([])
   const isLoading = ref(false)
   const isInitialized = ref(false)
 
@@ -20,25 +20,20 @@ export const useLolStore = defineStore('lol', () => {
     console.log('Starting LoL data initialization...')
 
     try {
-      const [championsRes, itemsRes, runesRes] = await Promise.all([
+      const [championsRes, itemsRes, hexListRes] = await Promise.all([
         commonService.apiGetChampions(),
         commonService.apiGetItems(),
-        commonService.apiGetRunes()
+        commonService.apiGetHexList(),
       ])
-
       champions.value = championsRes?.data?.data?.champions || []
       items.value = itemsRes?.data?.data?.items || []
-      runeTrees.value = runesRes?.data?.data?.runeTrees || []
+      hexList.value = hexListRes?.data?.data || []
 
       console.log('LoL data loaded:', {
         champions: champions.value.length,
         items: items.value.length,
-        runeTrees: runeTrees.value.length
+        hexList: hexList.value.length,
       })
-
-      if (runeTrees.value.length > 0) {
-        console.log('First rune tree:', runeTrees.value[0])
-      }
 
       isInitialized.value = true
     } catch (error) {
@@ -57,19 +52,14 @@ export const useLolStore = defineStore('lol', () => {
     return items.value.find(i => i._id === id || i.riotId === id)
   }
 
-  function getRuneTreeById(id: string) {
-    return runeTrees.value.find(r => r.id === id)
-  }
-
   return {
     champions,
     items,
-    runeTrees,
     isLoading,
     isInitialized,
+    hexList,
     initializeData,
     getChampionByKey,
     getItemById,
-    getRuneTreeById,
   }
 })

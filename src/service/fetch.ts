@@ -3,7 +3,7 @@ import router from '@/router'
 import { useAuthStore } from '@/stores/auth'
 
 const http = axios.create({
-  timeout: 10000,
+  timeout: 200000,
 })
 
 http.interceptors.request.use((config) => {
