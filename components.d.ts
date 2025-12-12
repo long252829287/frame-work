@@ -27,12 +27,8 @@ declare module 'vue' {
     ElSelect: typeof import('element-plus/es')['ElSelect']
     ElSlider: typeof import('element-plus/es')['ElSlider']
     ElSpace: typeof import('element-plus/es')['ElSpace']
-    ElStep: typeof import('element-plus/es')['ElStep']
-    ElSteps: typeof import('element-plus/es')['ElSteps']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
-    ElTabPane: typeof import('element-plus/es')['ElTabPane']
-    ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTag: typeof import('element-plus/es')['ElTag']
     GridParserComp: typeof import('./src/components/imageColorPicker/gridParserComp.vue')['default']
     HeaderComp: typeof import('./src/components/header/headerComp.vue')['default']
@@ -43,7 +39,6 @@ declare module 'vue' {
     QuadrantViewComp: typeof import('./src/components/quadrantView/quadrantViewComp.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    RuneSelector: typeof import('./src/components/lol/RuneSelector.vue')['default']
     ThemeSwitcher: typeof import('./src/components/ThemeSwitcher.vue')['default']
   }
   export interface ComponentCustomProperties {
