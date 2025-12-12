@@ -1,10 +1,14 @@
 <template>
-  <div class="h-[calc(100vh-1rem)] w-full flex overflow-hidden bg-slate-50 rounded-3xl border-slate-200 my-2">
+  <div
+    class="h-[calc(100vh-1rem)] w-full flex overflow-hidden bg-slate-50 rounded-3xl border-slate-200 my-2 lol-page-bg"
+    :style="pageBackgroundStyle">
     <aside
-      class="w-24 flex-shrink-0 flex flex-col items-center py-6 gap-4 bg-white border-r border-slate-200 overflow-y-auto z-10 scrollbar-hide">
+      class="w-24 flex-shrink-0 flex flex-col items-center py-6 gap-4 lol-aside backdrop-blur-2xl border-r border-slate-200/40 overflow-y-auto z-10 scrollbar-hide">
       <div v-for="champ in lolStore.champions" :key="champ._id"
         class="w-16 h-16 flex-shrink-0 rounded-2xl flex items-center justify-center cursor-pointer transition-all duration-300 relative group"
-        :class="selectedChampion?._id === champ._id ? 'bg-indigo-50 text-indigo-600 ring-2 ring-indigo-500 ring-offset-2' : 'hover:bg-slate-100 text-slate-400'"
+        :class="selectedChampion?._id === champ._id
+          ? 'bg-white/70 text-indigo-700 ring-2 ring-indigo-400/70 shadow-md shadow-indigo-100'
+          : 'hover:bg-white/35 text-slate-500 hover:text-slate-700'"
         @click="selectChampion(champ)">
         <img :src="champ.images.square"
           class="w-12 h-12 rounded-xl object-cover transition-transform group-hover:scale-110" :alt="champ.name" />
@@ -212,6 +216,64 @@ const championSplash = computed(() => {
   return selectedChampion.value.images.loading || selectedChampion.value.images.square
 })
 
+const backgroundPalettes = [
+  {
+    light: '#e7ebf0',
+    mid: '#d8d2db',
+    deep: '#c8d6e6',
+    glow: '#ffffff',
+  },
+  {
+    light: '#e6f2f4',
+    mid: '#d3e6ee',
+    deep: '#c9dff2',
+    glow: '#ffffff',
+  },
+  {
+    light: '#efe7f5',
+    mid: '#e1d7ee',
+    deep: '#d6dcf4',
+    glow: '#ffffff',
+  },
+  {
+    light: '#f2eee6',
+    mid: '#e9dfd2',
+    deep: '#e6d8c5',
+    glow: '#ffffff',
+  },
+  {
+    light: '#e8f3ea',
+    mid: '#d8ecd9',
+    deep: '#d0e8e4',
+    glow: '#ffffff',
+  },
+  {
+    light: '#e9eef9',
+    mid: '#d9e1f3',
+    deep: '#d2d8ee',
+    glow: '#ffffff',
+  },
+]
+
+const pickPaletteIndex = (seed: string) => {
+  let hash = 0
+  for (let i = 0; i < seed.length; i++) {
+    hash = (hash * 31 + seed.charCodeAt(i)) | 0
+  }
+  return Math.abs(hash) % backgroundPalettes.length
+}
+
+const pageBackgroundStyle = computed(() => {
+  const seed = selectedChampion.value?.key?.toString() || selectedChampion.value?._id?.toString() || 'default'
+  const palette = backgroundPalettes[pickPaletteIndex(seed)]
+  const background = [
+    `radial-gradient(900px circle at 70% 10%, ${palette.glow} 0%, transparent 60%)`,
+    `radial-gradient(700px circle at 15% 85%, ${palette.glow} 0%, transparent 65%)`,
+    `linear-gradient(135deg, ${palette.light} 0%, ${palette.mid} 48%, ${palette.deep} 100%)`,
+  ].join(', ')
+  return { background }
+})
+
 const coreItems = computed(() => {
   if (!currentStrategy.value) return []
   return currentStrategy.value.items.filter(i => i.position < 6)
@@ -300,5 +362,21 @@ onMounted(() => {
 .mask-gradient {
   mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
   -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+}
+
+.lol-page-bg {
+  transition: background 600ms ease;
+}
+
+.lol-aside {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.38) 0%,
+    rgba(255, 255, 255, 0.22) 55%,
+    rgba(255, 255, 255, 0.16) 100%
+  );
+  box-shadow:
+    inset -1px 0 0 rgba(255, 255, 255, 0.7),
+    8px 0 24px rgba(15, 23, 42, 0.06);
 }
 </style>
