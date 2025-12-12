@@ -20,6 +20,9 @@ importers:
       color:
         specifier: ^5.0.2
         version: 5.0.2
+      dom-to-image:
+        specifier: ^2.6.0
+        version: 2.6.0
       element-plus:
         specifier: ^2.10.7
         version: 2.10.7(vue@3.5.18(typescript@5.8.3))
@@ -45,6 +48,9 @@ importers:
       '@types/color':
         specifier: ^4.2.0
         version: 4.2.0
+      '@types/dom-to-image':
+        specifier: ^2.6.7
+        version: 2.6.7
       '@types/node':
         specifier: ^22.16.5
         version: 22.17.2
@@ -760,6 +766,9 @@ packages:
   '@types/color@4.2.0':
     resolution: {integrity: sha512-6+xrIRImMtGAL2X3qYkd02Mgs+gFGs+WsK0b7VVMaO4mYRISwyTjcqNrO0mNSmYEoq++rSLDB2F5HDNmqfOe+A==}
 
+  '@types/dom-to-image@2.6.7':
+    resolution: {integrity: sha512-me5VbCv+fcXozblWwG13krNBvuEOm6kA5xoa4RrjDJCNFOZSWR3/QLtOXimBHk1Fisq69Gx3JtOoXtg1N1tijg==}
+
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
@@ -1072,6 +1081,9 @@ packages:
   detect-libc@2.0.4:
     resolution: {integrity: sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==}
     engines: {node: '>=8'}
+
+  dom-to-image@2.6.0:
+    resolution: {integrity: sha512-Dt0QdaHmLpjURjU7Tnu3AgYSF2LuOmksSGsUcE6ItvJoCWTBEmiMXcqBdNSAm9+QbbwD7JMoVsuuKX6ZVQv1qA==}
 
   dunder-proto@1.0.1:
     resolution: {integrity: sha512-KIN/nDJBQRcXw0MLVhZE9iQHmG68qAVIBg9CqmUYjmQIhgij9U5MFvrqkUL5FbtyyzZuOeOt0zdeRe4UY7ct+A==}
@@ -2582,6 +2594,8 @@ snapshots:
     dependencies:
       '@types/color-convert': 2.0.4
 
+  '@types/dom-to-image@2.6.7': {}
+
   '@types/estree@1.0.8': {}
 
   '@types/lodash-es@4.17.12':
@@ -2950,6 +2964,8 @@ snapshots:
     optional: true
 
   detect-libc@2.0.4: {}
+
+  dom-to-image@2.6.0: {}
 
   dunder-proto@1.0.1:
     dependencies:

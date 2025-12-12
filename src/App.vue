@@ -8,7 +8,7 @@ import type { RouteLocationNormalized } from 'vue-router'
 const route = useRoute()
 
 // 定义不需要显示header的页面
-const hideHeaderPages = ['login', 'register']
+const hideHeaderPages = ['login', 'register', 'lol', 'lol-create', 'lol-strategy-detail']
 
 // 计算是否显示header
 const showHeader = computed(() => {
@@ -108,4 +108,3 @@ const getTransitionName = (currentRoute: RouteLocationNormalized) => {
   background: var(--color-bg-primary);
 }
 </style>
-
