@@ -4,14 +4,22 @@
     :style="pageBackgroundStyle">
     <aside
       class="w-24 flex-shrink-0 flex flex-col items-center py-6 gap-4 lol-aside backdrop-blur-2xl border-r border-slate-200/40 overflow-y-auto z-10 scrollbar-hide">
-      <div v-for="champ in lolStore.champions" :key="champ._id"
-        class="w-16 h-16 flex-shrink-0 rounded-2xl flex items-center justify-center cursor-pointer transition-all duration-300 relative group"
-        :class="selectedChampion?._id === champ._id
-          ? 'bg-white/70 text-indigo-700 ring-2 ring-indigo-400/70 shadow-md shadow-indigo-100'
-          : 'hover:bg-white/35 text-slate-500 hover:text-slate-700'"
+      <template v-if="lolStore.isLoading && lolStore.champions.length === 0">
+        <div v-for="n in 8" :key="n" class="w-16 h-16 rounded-2xl lol-champ-skeleton">
+          <div class="w-12 h-12 rounded-xl lol-champ-skeleton__inner" />
+        </div>
+      </template>
+      <div
+        v-for="champ in lolStore.champions"
+        v-else
+        :key="champ._id"
+        class="lol-champ-item w-16 h-16 flex-shrink-0 rounded-2xl flex items-center justify-center cursor-pointer transition-all duration-300 relative group"
+        :class="selectedChampion?._id === champ._id ? 'lol-champ-item--active' : ''"
         @click="selectChampion(champ)">
-        <img :src="champ.images.square"
-          class="w-12 h-12 rounded-xl object-cover transition-transform group-hover:scale-110" :alt="champ.name" />
+        <img
+          :src="champ.images.square"
+          class="w-12 h-12 rounded-xl object-cover transition-transform group-hover:scale-110"
+          :alt="champ.name" />
         <span
           class="absolute left-full ml-4 px-3 py-1 bg-slate-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 shadow-lg">
           {{ champ.name }}
@@ -378,5 +386,131 @@ onMounted(() => {
   box-shadow:
     inset -1px 0 0 rgba(255, 255, 255, 0.7),
     8px 0 24px rgba(15, 23, 42, 0.06);
+}
+
+.lol-champ-item {
+  position: relative;
+  z-index: 0;
+  color: rgb(71 85 105);
+  background-color: rgba(255, 255, 255, 0.18);
+  background-image:
+    radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
+    radial-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px);
+  background-size: 6px 6px, 9px 9px;
+  background-position: 0 0, 3px 3px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow:
+    0 6px 16px rgba(15, 23, 42, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transform: translateZ(0);
+}
+
+.lol-champ-item::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 1rem;
+  background: conic-gradient(
+    from var(--angle, 0deg),
+    rgba(99, 102, 241, 0.95),
+    rgba(236, 72, 153, 0.9),
+    rgba(14, 165, 233, 0.95),
+    rgba(99, 102, 241, 0.95)
+  );
+  filter: blur(10px);
+  opacity: 0;
+  transition: opacity 320ms ease;
+  z-index: -1;
+}
+
+.lol-champ-item:hover {
+  color: rgb(15 23 42);
+  background-color: rgba(255, 255, 255, 0.28);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px) scale(1.05) rotateZ(-1deg);
+  box-shadow:
+    0 10px 24px rgba(99, 102, 241, 0.18),
+    0 0 0 1px rgba(99, 102, 241, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.lol-champ-item:hover::before {
+  opacity: 0.9;
+  animation: champGlowSpin 2.2s linear infinite;
+}
+
+.lol-champ-item--active {
+  color: rgb(67 56 202);
+  background-color: rgba(255, 255, 255, 0.5);
+  border-color: rgba(99, 102, 241, 0.55);
+  transform: translateY(-1px) scale(1.06);
+  box-shadow:
+    0 12px 30px rgba(99, 102, 241, 0.24),
+    0 0 0 2px rgba(99, 102, 241, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+.lol-champ-item--active::before {
+  opacity: 1;
+  animation: champGlowSpin 1.8s linear infinite;
+}
+
+@keyframes champGlowSpin {
+  to {
+    --angle: 360deg;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lol-champ-item,
+  .lol-champ-item:hover,
+  .lol-champ-item--active {
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+  .lol-champ-item::before {
+    animation: none;
+  }
+}
+
+.lol-champ-skeleton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    0 6px 16px rgba(15, 23, 42, 0.05);
+  overflow: hidden;
+}
+
+.lol-champ-skeleton__inner {
+  background: rgba(148, 163, 184, 0.25);
+}
+
+.lol-champ-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.7) 45%,
+    transparent 90%
+  );
+  transform: translateX(-140%);
+  animation: champSkeletonShimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes champSkeletonShimmer {
+  0% {
+    transform: translateX(-140%);
+  }
+  100% {
+    transform: translateX(140%);
+  }
 }
 </style>
