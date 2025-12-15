@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { commonService } from '@/service'
-import type { Champion, Item, Hex } from '@/types'
+import type { Champion, Item, Augment } from '@/types'
 
 export const useLolStore = defineStore('lol', () => {
   const champions = ref<Champion[]>([])
   const items = ref<Item[]>([])
-  const hexList = ref<Hex[]>([])
+  const augmentList = ref<Augment[]>([])
   const isLoading = ref(false)
   const isInitialized = ref(false)
   let initPromise: Promise<void> | null = null
@@ -19,7 +19,7 @@ export const useLolStore = defineStore('lol', () => {
     try {
       const raw = window.localStorage.getItem(CACHE_KEY)
       if (!raw) return null
-      const parsed = JSON.parse(raw) as { ts: number; champions?: Champion[]; hexList?: Hex[] }
+      const parsed = JSON.parse(raw) as { ts: number; champions?: Champion[]; augmentList?: Augment[] }
       if (!parsed?.ts || Date.now() - parsed.ts > CACHE_TTL_MS) return null
       return parsed
     } catch {
@@ -27,14 +27,14 @@ export const useLolStore = defineStore('lol', () => {
     }
   }
 
-  function writeCache(payload: { champions?: Champion[]; hexList?: Hex[] }) {
+  function writeCache(payload: { champions?: Champion[]; augmentList?: Augment[] }) {
     if (typeof window === 'undefined') return
     try {
       const existing = readCache() || { ts: Date.now() }
       const next = {
         ts: Date.now(),
         champions: payload.champions ?? existing.champions ?? [],
-        hexList: payload.hexList ?? existing.hexList ?? [],
+        augmentList: payload.augmentList ?? existing.augmentList ?? [],
       }
       window.localStorage.setItem(CACHE_KEY, JSON.stringify(next))
     } catch {
@@ -42,11 +42,11 @@ export const useLolStore = defineStore('lol', () => {
     }
   }
 
-  // Hydrate cached champions/hexList immediately for faster first paint
+  // Hydrate cached champions/augmentList immediately for faster first paint
   const cached = readCache()
   if (cached) {
     if (cached.champions?.length) champions.value = cached.champions
-    if (cached.hexList?.length) hexList.value = cached.hexList
+    if (cached.augmentList?.length) augmentList.value = cached.augmentList
   }
 
   async function initializeData() {
@@ -64,27 +64,27 @@ export const useLolStore = defineStore('lol', () => {
     initPromise = (async () => {
       const championsPromise = commonService.apiGetChampions()
       const itemsPromise = commonService.apiGetItems()
-      const hexListPromise = commonService.apiGetHexList()
+      const augmentListPromise = commonService.apiGetAugmentList()
 
       try {
         const championsRes = await championsPromise
         champions.value = championsRes?.data?.data?.champions || []
         writeCache({ champions: champions.value })
 
-        const [itemsRes, hexListRes] = await Promise.all([itemsPromise, hexListPromise])
+        const [itemsRes, augmentListRes] = await Promise.all([itemsPromise, augmentListPromise])
         items.value = itemsRes?.data?.data?.items || []
-        hexList.value = hexListRes?.data?.data || []
-        writeCache({ champions: champions.value, hexList: hexList.value })
+        augmentList.value = augmentListRes?.data?.data || []
+        writeCache({ champions: champions.value, augmentList: augmentList.value })
 
         console.log('LoL data loaded:', {
           champions: champions.value.length,
           items: items.value.length,
-          hexList: hexList.value.length,
+          augmentList: augmentList.value.length,
         })
 
         isInitialized.value = true
       } catch (error) {
-        await Promise.allSettled([itemsPromise, hexListPromise])
+        await Promise.allSettled([itemsPromise, augmentListPromise])
         console.error('Failed to initialize LOL data:', error)
         throw error // 重新抛出错误以便上层处理
       } finally {
@@ -109,7 +109,7 @@ export const useLolStore = defineStore('lol', () => {
     items,
     isLoading,
     isInitialized,
-    hexList,
+    augmentList,
     initializeData,
     getChampionByKey,
     getItemById,

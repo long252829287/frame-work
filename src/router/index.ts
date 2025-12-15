@@ -69,11 +69,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/lol/Create.vue'),
     meta: { requiresAuth: true },
   },
-  {
-    path: '/lol/strategy/:id',
-    name: 'lol-strategy-detail',
-    component: () => import('@/views/lol/Detail.vue'),
-  },
 ]
 
 const router = createRouter({

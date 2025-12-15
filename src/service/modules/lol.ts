@@ -21,7 +21,7 @@ import type {
   CreateStrategyPayload,
   UpdateStrategyPayload,
   StrategyQueryParams,
-  Hex
+  Augment
 } from '@/types'
 
 export default {
@@ -173,7 +173,7 @@ export default {
   async apiLikeStrategy(id: string, action: 'like' | 'unlike' = 'like') {
     return fetch.post<ApiResponse<StrategyLikeResponse>>(`/api/strategies/${id}/like`, { action })
   },
-  async apiGetHexList() {
-    return fetch.get<ApiResponse<Hex[]>>('/api/hex')
+  async apiGetAugmentList() {
+    return fetch.get<ApiResponse<Augment[]>>('/api/augments')
   }
 }

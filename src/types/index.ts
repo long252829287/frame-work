@@ -42,6 +42,6 @@ export type {
   CreateStrategyPayload,
   UpdateStrategyPayload,
   StrategyQueryParams,
-  // Hex types
-  Hex,
+  // augmentList types
+  Augment,
 } from './api'

@@ -371,7 +371,7 @@ export interface StrategyQueryParams {
   order?: 'asc' | 'desc'
   status?: 'draft' | 'published' | 'archived'
 }
-// Hex Types
-export interface Hex {
+// augmentList Types
+export interface Augment {
   
 }
