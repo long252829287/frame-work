@@ -35,7 +35,7 @@ Augment 需要字段：
 - `name`
 - `description`
 - `icon`（图片URL）
-- `tier`（建议统一为 `silver | gold | prismatic`；或用 `1/2/3` 也可，但需明确映射）
+- `tier`（后端已统一为 `silver | gold | prismatic`，前端按该枚举分栏展示）
 - `tags: string[]`
 - `modes: string[]`（至少包含 `hex_brawl`）
 - `isActive`（可选）
@@ -68,4 +68,3 @@ payload 在现有字段基础上新增：
 - `/api/augments` 是否已支持 query（`mode/search/tags/tier/isActive/limit/offset`）
 - `Strategy` 模型/接口是否已支持 `mode`、`augmentIds`
 - `tier` 的取值与前端“银/金/彩”三行映射（建议直接返回字符串枚举，前端最稳）
-

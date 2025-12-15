@@ -29,6 +29,7 @@ declare module 'vue' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTag: typeof import('element-plus/es')['ElTag']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     GridParserComp: typeof import('./src/components/imageColorPicker/gridParserComp.vue')['default']
     HeaderComp: typeof import('./src/components/header/headerComp.vue')['default']
     ImageColorPicker: typeof import('./src/components/imageColorPicker/index.vue')['default']

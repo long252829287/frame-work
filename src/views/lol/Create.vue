@@ -3,7 +3,7 @@
     class="h-[calc(100vh-1rem)] w-full overflow-hidden rounded-3xl border border-slate-200 my-2 lol-page-bg"
     :style="pageBackgroundStyle">
     <div class="h-full w-full overflow-y-auto scrollbar-hide">
-      <div class="mx-auto max-w-6xl px-6 py-8">
+      <div class="mx-auto max-w-[1480px] px-4 sm:px-5 py-6">
         <!-- Header -->
         <div class="flex flex-col gap-4 mb-6">
           <div class="flex items-start justify-between gap-4">
@@ -12,13 +12,13 @@
                 <img
                   v-if="selectedChampion"
                   :src="selectedChampion.images.square"
-                  class="w-14 h-14 rounded-2xl object-cover border border-white/60 shadow-lg"
+                  class="w-12 h-12 rounded-xl object-cover border border-white/60 shadow"
                   :alt="selectedChampion.name" />
-                <div v-else class="w-14 h-14 rounded-2xl bg-white/40 border border-white/60 animate-pulse" />
+                <div v-else class="w-12 h-12 rounded-xl bg-white/40 border border-white/60 animate-pulse" />
               </div>
               <div class="min-w-0">
                 <div class="flex items-center gap-2">
-                  <h1 class="text-2xl font-bold text-slate-900 tracking-tight truncate">
+                  <h1 class="text-xl font-bold text-slate-900 tracking-tight truncate">
                     {{ selectedChampion?.name || 'Create Guide' }}
                   </h1>
                   <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/60 border border-white/70 text-slate-600">
@@ -41,11 +41,11 @@
 
           <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div class="md:col-span-4">
-              <div class="lol-glass p-4">
+              <div class="lol-glass p-3.5">
                 <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">攻略名称</div>
                 <input
                   v-model="strategyTitle"
-                  class="w-full h-11 px-4 rounded-2xl bg-white/70 border border-white/70 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
+                  class="w-full h-10 px-3.5 rounded-xl bg-white/70 border border-white/70 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
                   placeholder="例如：爆发流 / 生存流 / 控制流…" />
                 <div class="mt-2 text-[11px] text-slate-400">
                   留空会自动使用英雄名生成标题
@@ -53,14 +53,14 @@
               </div>
             </div>
             <div class="md:col-span-8">
-              <div class="lol-glass p-4">
+              <div class="lol-glass p-3.5">
                 <div class="flex items-center justify-between mb-2">
                   <div class="text-xs font-bold uppercase tracking-wider text-slate-500">备注</div>
                   <div class="text-[11px] text-slate-400">建议写打法、节奏、关键选择理由</div>
                 </div>
                 <textarea
                   v-model="strategyRemark"
-                  class="w-full min-h-24 px-4 py-3 rounded-2xl bg-white/70 border border-white/70 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition resize-none"
+                  class="w-full min-h-24 px-3.5 py-2.5 rounded-xl bg-white/70 border border-white/70 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition resize-none"
                   placeholder="补充说明：对局思路、强势期、克制关系、强化选择理由…" />
               </div>
             </div>
@@ -68,14 +68,13 @@
         </div>
 
         <!-- Main Layout -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
           <!-- Left: Items -->
-          <section class="lg:col-span-7">
-            <div class="lol-glass p-6">
+          <section class="lg:col-span-8 min-w-0">
+            <div class="lol-glass p-4">
               <div class="flex items-center justify-between mb-4">
                 <div>
-                  <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                    <span class="lol-dot lol-dot--indigo" />
+                  <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
                     出装推荐
                   </h2>
                   <div class="text-sm text-slate-500 mt-1">先选中行，再从下方装备池添加</div>
@@ -105,7 +104,15 @@
                       :class="activeItemRow === 'core' && activeItemSlot === i - 1 ? 'lol-slot--active' : ''"
                       @click.stop="selectItemSlot('core', i - 1)">
                       <template v-if="coreItems[i - 1]">
-                        <img :src="coreItems[i - 1]!.image" class="w-full h-full rounded-2xl object-cover" />
+                        <el-tooltip
+                          effect="light"
+                          placement="top"
+                          :show-after="160"
+                          :hide-after="80"
+                          popper-class="lol-tooltip"
+                          :content="formatItemTooltip(coreItems[i - 1]!)">
+                          <img :src="coreItems[i - 1]!.image" class="w-full h-full rounded-lg object-cover" />
+                        </el-tooltip>
                         <span class="lol-slot__shine" />
                         <button class="lol-slot__remove" title="移除" @click.stop="removeItem('core', i - 1)">
                           <el-icon><Close /></el-icon>
@@ -139,7 +146,15 @@
                       :class="activeItemRow === 'extra' && activeItemSlot === i - 1 ? 'lol-slot--active' : ''"
                       @click.stop="selectItemSlot('extra', i - 1)">
                       <template v-if="extraItems[i - 1]">
-                        <img :src="extraItems[i - 1]!.image" class="w-full h-full rounded-2xl object-cover" />
+                        <el-tooltip
+                          effect="light"
+                          placement="top"
+                          :show-after="160"
+                          :hide-after="80"
+                          popper-class="lol-tooltip"
+                          :content="formatItemTooltip(extraItems[i - 1]!)">
+                          <img :src="extraItems[i - 1]!.image" class="w-full h-full rounded-lg object-cover" />
+                        </el-tooltip>
                         <span class="lol-slot__shine" />
                         <button class="lol-slot__remove" title="移除" @click.stop="removeItem('extra', i - 1)">
                           <el-icon><Close /></el-icon>
@@ -172,35 +187,42 @@
                   </div>
                 </div>
 
-                <div v-if="itemsLoading" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-3">
+                <div v-if="itemsLoading" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2.5">
                   <div v-for="n in 10" :key="'item-skel-' + n" class="lol-card-skeleton" />
                 </div>
-                <div v-else class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-3">
-                  <button
+                <div v-else class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2.5">
+                  <el-tooltip
                     v-for="item in filteredItems"
-                    :key="item._id"
-                    class="lol-card"
-                    :class="isItemSelected(item) ? 'lol-card--selected' : ''"
-                    @click="addItem(item)">
-                    <img :src="item.image" class="w-12 h-12 rounded-xl object-cover shadow-sm" />
-                    <div class="min-w-0">
-                      <div class="text-xs font-semibold text-slate-800 truncate">{{ item.name }}</div>
-                      <div class="text-[11px] text-slate-500 mt-0.5 truncate">{{ item.gold.total }}g</div>
-                    </div>
-                    <div v-if="isItemSelected(item)" class="lol-check">已选</div>
-                  </button>
+                    :key="itemKey(item)"
+                    effect="light"
+                    placement="top"
+                    :show-after="160"
+                    :hide-after="80"
+                    popper-class="lol-tooltip"
+                    :content="formatItemTooltip(item)">
+                    <button
+                      class="lol-card"
+                      :class="isItemSelected(item) ? 'lol-card--selected' : ''"
+                      @click="addItem(item)">
+                      <img :src="item.image" class="w-11 h-11 rounded-lg object-cover shadow-sm" />
+                      <div class="min-w-0">
+                        <div class="text-xs font-semibold text-slate-800 truncate">{{ item.name }}</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5 truncate">{{ item.gold.total }}g</div>
+                      </div>
+                      <div v-if="isItemSelected(item)" class="lol-check">已选</div>
+                    </button>
+                  </el-tooltip>
                 </div>
               </div>
             </div>
           </section>
 
           <!-- Right: Augments -->
-          <section class="lg:col-span-5">
-            <div class="lol-glass p-6">
+          <section class="lg:col-span-4 min-w-0">
+            <div class="lol-glass p-4">
               <div class="flex items-center justify-between mb-4">
                 <div>
-                  <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                    <span class="lol-dot lol-dot--pink" />
+                  <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
                     海克斯推荐
                   </h2>
                   <div class="text-sm text-slate-500 mt-1">先选中行，再从下方强化池添加</div>
@@ -229,7 +251,15 @@
                       :class="activeAugmentTier === 'silver' && activeAugmentSlot === i - 1 ? 'lol-slot--active' : ''"
                       @click.stop="selectAugmentSlot('silver', i - 1)">
                       <template v-if="selectedAugments.silver[i - 1]">
-                        <img :src="selectedAugments.silver[i - 1]!.icon" class="w-full h-full rounded-2xl object-cover" />
+                        <el-tooltip
+                          effect="light"
+                          placement="top"
+                          :show-after="160"
+                          :hide-after="80"
+                          popper-class="lol-tooltip"
+                          :content="formatAugmentTooltip(selectedAugments.silver[i - 1]!)">
+                          <img :src="selectedAugments.silver[i - 1]!.icon" class="w-full h-full rounded-lg object-cover" />
+                        </el-tooltip>
                         <span class="lol-slot__shine" />
                         <button class="lol-slot__remove" title="移除" @click.stop="removeAugment('silver', i - 1)">
                           <el-icon><Close /></el-icon>
@@ -262,7 +292,15 @@
                       :class="activeAugmentTier === 'gold' && activeAugmentSlot === i - 1 ? 'lol-slot--active' : ''"
                       @click.stop="selectAugmentSlot('gold', i - 1)">
                       <template v-if="selectedAugments.gold[i - 1]">
-                        <img :src="selectedAugments.gold[i - 1]!.icon" class="w-full h-full rounded-2xl object-cover" />
+                        <el-tooltip
+                          effect="light"
+                          placement="top"
+                          :show-after="160"
+                          :hide-after="80"
+                          popper-class="lol-tooltip"
+                          :content="formatAugmentTooltip(selectedAugments.gold[i - 1]!)">
+                          <img :src="selectedAugments.gold[i - 1]!.icon" class="w-full h-full rounded-lg object-cover" />
+                        </el-tooltip>
                         <span class="lol-slot__shine" />
                         <button class="lol-slot__remove" title="移除" @click.stop="removeAugment('gold', i - 1)">
                           <el-icon><Close /></el-icon>
@@ -295,9 +333,15 @@
                       :class="activeAugmentTier === 'prismatic' && activeAugmentSlot === i - 1 ? 'lol-slot--active' : ''"
                       @click.stop="selectAugmentSlot('prismatic', i - 1)">
                       <template v-if="selectedAugments.prismatic[i - 1]">
-                        <img
-                          :src="selectedAugments.prismatic[i - 1]!.icon"
-                          class="w-full h-full rounded-2xl object-cover" />
+                        <el-tooltip
+                          effect="light"
+                          placement="top"
+                          :show-after="160"
+                          :hide-after="80"
+                          popper-class="lol-tooltip"
+                          :content="formatAugmentTooltip(selectedAugments.prismatic[i - 1]!)">
+                          <img :src="selectedAugments.prismatic[i - 1]!.icon" class="w-full h-full rounded-lg object-cover" />
+                        </el-tooltip>
                         <span class="lol-slot__shine" />
                         <button class="lol-slot__remove" title="移除" @click.stop="removeAugment('prismatic', i - 1)">
                           <el-icon><Close /></el-icon>
@@ -345,23 +389,31 @@
                   </button>
                 </div>
 
-                <div v-if="augmentsLoading" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div v-if="augmentsLoading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
                   <div v-for="n in 9" :key="'aug-skel-' + n" class="lol-card-skeleton" />
                 </div>
-                <div v-else class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  <button
+                <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
+                  <el-tooltip
                     v-for="aug in filteredAugments"
                     :key="aug.augmentId"
-                    class="lol-card"
-                    :class="isAugmentSelected(aug) ? 'lol-card--selected' : ''"
-                    @click="addAugment(aug)">
-                    <img :src="aug.icon" class="w-12 h-12 rounded-xl object-cover shadow-sm" />
-                    <div class="min-w-0">
-                      <div class="text-xs font-semibold text-slate-800 truncate">{{ aug.name }}</div>
-                      <div class="text-[11px] text-slate-500 mt-0.5 truncate">{{ tierLabel(getAugmentTier(aug)) }}</div>
-                    </div>
-                    <div v-if="isAugmentSelected(aug)" class="lol-check">已选</div>
-                  </button>
+                    effect="light"
+                    placement="top"
+                    :show-after="160"
+                    :hide-after="80"
+                    popper-class="lol-tooltip"
+                    :content="formatAugmentTooltip(aug)">
+                    <button
+                      class="lol-card"
+                      :class="isAugmentSelected(aug) ? 'lol-card--selected' : ''"
+                      @click="addAugment(aug)">
+                      <img :src="aug.icon" class="w-11 h-11 rounded-lg object-cover shadow-sm" />
+                      <div class="min-w-0">
+                        <div class="text-xs font-semibold text-slate-800 truncate">{{ aug.name }}</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5 truncate">{{ tierLabel(getAugmentTier(aug)) }}</div>
+                      </div>
+                      <div v-if="isAugmentSelected(aug)" class="lol-check">已选</div>
+                    </button>
+                  </el-tooltip>
                 </div>
               </div>
 
@@ -425,12 +477,21 @@ const selectedAugments = ref<Record<AugTier, (Augment | null)[]>>({
 })
 
 const backgroundPalettes = [
+  // cool neutral (screenshot-like)
   { light: '#e7ebf0', mid: '#d8d2db', deep: '#c8d6e6', glow: '#ffffff' },
-  { light: '#e6f2f4', mid: '#d3e6ee', deep: '#c9dff2', glow: '#ffffff' },
-  { light: '#efe7f5', mid: '#e1d7ee', deep: '#d6dcf4', glow: '#ffffff' },
-  { light: '#f2eee6', mid: '#e9dfd2', deep: '#e6d8c5', glow: '#ffffff' },
-  { light: '#e8f3ea', mid: '#d8ecd9', deep: '#d0e8e4', glow: '#ffffff' },
   { light: '#e9eef9', mid: '#d9e1f3', deep: '#d2d8ee', glow: '#ffffff' },
+  // blue/cyan (Mage/Support)
+  { light: '#e6f2f4', mid: '#d3e6ee', deep: '#c9dff2', glow: '#ffffff' },
+  { light: '#e6f0ff', mid: '#d7e4ff', deep: '#c9d7ff', glow: '#ffffff' },
+  // purple/pink (Assassin)
+  { light: '#efe7f5', mid: '#e1d7ee', deep: '#d6dcf4', glow: '#ffffff' },
+  { light: '#f4e7f0', mid: '#ead7e6', deep: '#dfd5f2', glow: '#ffffff' },
+  // green/teal (Tank)
+  { light: '#e8f3ea', mid: '#d8ecd9', deep: '#d0e8e4', glow: '#ffffff' },
+  { light: '#e6f5f1', mid: '#d5efe6', deep: '#cde6f2', glow: '#ffffff' },
+  // warm/amber (Fighter)
+  { light: '#f2eee6', mid: '#e9dfd2', deep: '#e6d8c5', glow: '#ffffff' },
+  { light: '#f7efe3', mid: '#f1e1c8', deep: '#ead2bf', glow: '#ffffff' },
 ]
 
 const pickPaletteIndex = (seed: string) => {
@@ -441,7 +502,18 @@ const pickPaletteIndex = (seed: string) => {
 
 const pageBackgroundStyle = computed(() => {
   const seed = selectedChampion.value?.key?.toString() || selectedChampion.value?._id?.toString() || 'default'
-  const palette = backgroundPalettes[pickPaletteIndex(seed)]
+  const firstTag = selectedChampion.value?.tags?.[0]
+  const tagPaletteGroups: Record<string, number[]> = {
+    Assassin: [4, 5],
+    Mage: [2, 3],
+    Support: [2, 3, 7],
+    Tank: [6, 7],
+    Fighter: [8, 9],
+    Marksman: [1, 3],
+  }
+  const group = firstTag ? tagPaletteGroups[firstTag] : undefined
+  const paletteIndex = group?.length ? group[pickPaletteIndex(seed) % group.length] : pickPaletteIndex(seed)
+  const palette = backgroundPalettes[paletteIndex]
   const background = [
     `radial-gradient(900px circle at 70% 10%, ${palette.glow} 0%, transparent 60%)`,
     `radial-gradient(700px circle at 15% 85%, ${palette.glow} 0%, transparent 65%)`,
@@ -449,6 +521,10 @@ const pageBackgroundStyle = computed(() => {
   ].join(', ')
   return { background }
 })
+
+const stripHtml = (input: string) => input.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
+
+const itemKey = (item: Item) => String((item as any)?._id ?? (item as any)?.riotId ?? (item as any)?.name ?? '')
 
 const filteredItems = computed(() => {
   const q = itemSearch.value.trim().toLowerCase()
@@ -459,9 +535,9 @@ const filteredItems = computed(() => {
 
 const getAugmentTier = (aug: Augment): AugTier => {
   const raw = String(aug.tier ?? '').toLowerCase()
-  if (raw.includes('prismatic') || raw.includes('彩') || raw === '3') return 'prismatic'
-  if (raw.includes('gold') || raw.includes('金') || raw === '2') return 'gold'
-  return 'silver'
+  if (raw === 'prismatic' || raw.includes('kprismatic') || raw === '2' || raw === '3') return 'prismatic'
+  if (raw === 'gold' || raw.includes('kgold') || raw === '1') return 'gold'
+  return 'silver' // 'silver' | '0' | 'ksilver'
 }
 
 const tierLabel = (tier: 'all' | AugTier) => {
@@ -484,6 +560,16 @@ const filteredAugments = computed(() => {
 const handleCancel = () => router.push({ name: 'lol' })
 const handleGoHome = () => router.push({ name: 'home' })
 
+const formatItemTooltip = (item: Item) => {
+  const parts = [
+    item.name,
+    item.plaintext ? `- ${stripHtml(item.plaintext)}` : '',
+    item.gold?.total !== undefined ? `价格：${item.gold.total}g` : '',
+    item.tags?.length ? `标签：${item.tags.join(' / ')}` : '',
+  ].filter(Boolean)
+  return parts.join('\n')
+}
+
 const selectItemRow = (row: ItemRow) => {
   activeItemRow.value = row
   activeItemSlot.value = null
@@ -495,7 +581,11 @@ const selectItemSlot = (row: ItemRow, idx: number) => {
 }
 
 const isItemSelected = (item: Item) => {
-  return coreItems.value.some(i => i?._id === item._id) || extraItems.value.some(i => i?._id === item._id)
+  const key = itemKey(item)
+  return (
+    coreItems.value.some(i => (i ? itemKey(i) : '') === key) ||
+    extraItems.value.some(i => (i ? itemKey(i) : '') === key)
+  )
 }
 
 const removeItem = (row: ItemRow, idx: number) => {
@@ -549,9 +639,16 @@ const removeAugment = (tier: AugTier, idx: number) => {
 }
 
 const addAugment = (aug: Augment) => {
-  const tier = activeAugmentTier.value
-  const target = selectedAugments.value[tier]
+  const tier = getAugmentTier(aug)
 
+  // Enforce tier-only rows (silver->silver, gold->gold, prismatic->prismatic)
+  if (activeAugmentTier.value !== tier) {
+    activeAugmentTier.value = tier
+    activeAugmentSlot.value = null
+    augmentTierFilter.value = tier
+  }
+
+  const target = selectedAugments.value[tier]
   if (activeAugmentSlot.value !== null) {
     target[activeAugmentSlot.value] = aug
     return
@@ -559,10 +656,20 @@ const addAugment = (aug: Augment) => {
 
   const empty = target.findIndex(a => !a)
   if (empty === -1) {
-    ElMessage.warning('当前行已满，先移除一个再添加')
+    ElMessage.warning(`${tierLabel(tier)}栏已满，先移除一个再添加`)
     return
   }
   target[empty] = aug
+}
+
+const formatAugmentTooltip = (aug: Augment) => {
+  const parts = [
+    aug.name,
+    aug.description ? `- ${stripHtml(aug.description)}` : '',
+    `稀有度：${tierLabel(getAugmentTier(aug))}`,
+    aug.tags?.length ? `标签：${aug.tags.join(' / ')}` : '',
+  ].filter(Boolean)
+  return parts.join('\n')
 }
 
 const clearAugments = () => {
@@ -602,12 +709,27 @@ const submitStrategy = async () => {
 
     const itemPayload = [
       ...coreItems.value
-        .map((it, idx) => (it ? { itemId: it._id, position: idx } : null))
+        .map((it, idx) => {
+          const itemId = it?._id
+          if (!it) return null
+          if (!itemId) return { itemId: '', position: idx }
+          return { itemId, position: idx }
+        })
         .filter(Boolean),
       ...extraItems.value
-        .map((it, idx) => (it ? { itemId: it._id, position: idx + 6 } : null))
+        .map((it, idx) => {
+          const itemId = it?._id
+          if (!it) return null
+          if (!itemId) return { itemId: '', position: idx + 6 }
+          return { itemId, position: idx + 6 }
+        })
         .filter(Boolean),
     ] as Array<{ itemId: string; position: number }>
+
+    if (itemPayload.some(i => !i.itemId)) {
+      ElMessage.error('装备数据缺少 _id，无法提交，请刷新页面重试')
+      return
+    }
 
     const augmentIds = ([
       ...selectedAugments.value.silver,
@@ -715,26 +837,13 @@ onMounted(() => {
 }
 
 .lol-glass {
-  border-radius: 1.75rem;
+  border-radius: 1.25rem;
   background: rgba(255, 255, 255, 0.55);
   border: 1px solid rgba(255, 255, 255, 0.65);
   box-shadow:
     0 18px 40px rgba(15, 23, 42, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(20px);
-}
-
-.lol-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 9999px;
-  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.55);
-}
-.lol-dot--indigo {
-  background: rgb(99 102 241);
-}
-.lol-dot--pink {
-  background: rgb(236 72 153);
 }
 
 .lol-pill {
@@ -779,8 +888,8 @@ onMounted(() => {
 }
 
 .lol-row {
-  padding: 14px;
-  border-radius: 1.5rem;
+  padding: 12px;
+  border-radius: 1.125rem;
   border: 1px solid rgba(255, 255, 255, 0.6);
   background: rgba(255, 255, 255, 0.38);
   transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
@@ -799,7 +908,7 @@ onMounted(() => {
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
-  border-radius: 1rem;
+  border-radius: 0.75rem;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.6);
   background: rgba(255, 255, 255, 0.25);
@@ -843,9 +952,9 @@ onMounted(() => {
   position: absolute;
   top: 6px;
   right: 6px;
-  width: 26px;
-  height: 26px;
-  border-radius: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
   background: rgba(15, 23, 42, 0.55);
   color: white;
   display: inline-flex;
@@ -875,7 +984,7 @@ onMounted(() => {
   gap: 10px;
   text-align: left;
   padding: 10px 10px;
-  border-radius: 1.25rem;
+  border-radius: 0.95rem;
   border: 1px solid rgba(255, 255, 255, 0.65);
   background: rgba(255, 255, 255, 0.45);
   box-shadow:
@@ -909,6 +1018,15 @@ onMounted(() => {
   color: rgb(67 56 202);
   background: rgba(255, 255, 255, 0.75);
   border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+:global(.lol-tooltip) {
+  max-width: 340px;
+  white-space: pre-line;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+  backdrop-filter: blur(14px);
 }
 
 .lol-card-skeleton {
