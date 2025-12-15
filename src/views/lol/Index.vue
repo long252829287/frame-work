@@ -351,7 +351,14 @@ const selectChampion = async (champ: Champion) => {
 }
 
 const handleCreateStrategy = () => {
-  router.push('/lol/create')
+  const championKey = selectedChampion.value?.key
+  router.push(
+    ({
+      name: 'lol-create',
+      query: championKey ? { championKey } : undefined,
+      ...(selectedChampion.value ? { state: { champion: selectedChampion.value } } : {}),
+    }) as any,
+  )
 }
 
 const handleBack = () => {

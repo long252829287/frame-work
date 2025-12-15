@@ -21,7 +21,9 @@ import type {
   CreateStrategyPayload,
   UpdateStrategyPayload,
   StrategyQueryParams,
-  Augment
+  Augment,
+  AugmentListResponse,
+  AugmentQueryParams
 } from '@/types'
 
 export default {
@@ -60,6 +62,7 @@ export default {
   // 获取装备列表
   async apiGetItems(params?: ItemQueryParams) {
     const queryParams = new URLSearchParams()
+    if (params?.mode) queryParams.append('mode', params.mode)
     if (params?.search) queryParams.append('search', params.search)
     if (params?.tags) queryParams.append('tags', params.tags.join(','))
     if (params?.map) queryParams.append('map', params.map)
@@ -173,7 +176,20 @@ export default {
   async apiLikeStrategy(id: string, action: 'like' | 'unlike' = 'like') {
     return fetch.post<ApiResponse<StrategyLikeResponse>>(`/api/strategies/${id}/like`, { action })
   },
+  async apiGetAugments(params?: AugmentQueryParams) {
+    const queryParams = new URLSearchParams()
+    if (params?.mode) queryParams.append('mode', params.mode)
+    if (params?.search) queryParams.append('search', params.search)
+    if (params?.tags?.length) queryParams.append('tags', params.tags.join(','))
+    if (params?.tier !== undefined) queryParams.append('tier', String(params.tier))
+    if (params?.isActive !== undefined) queryParams.append('isActive', String(params.isActive))
+    if (params?.limit !== undefined) queryParams.append('limit', String(params.limit))
+    if (params?.offset !== undefined) queryParams.append('offset', String(params.offset))
+
+    const query = queryParams.toString()
+    return fetch.get<ApiResponse<AugmentListResponse | Augment[]>>(`/api/augments${query ? `?${query}` : ''}`)
+  },
   async apiGetAugmentList() {
-    return fetch.get<ApiResponse<Augment[]>>('/api/augments')
+    return fetch.get<ApiResponse<AugmentListResponse | Augment[]>>('/api/augments')
   }
 }

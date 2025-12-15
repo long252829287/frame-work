@@ -73,7 +73,8 @@ export const useLolStore = defineStore('lol', () => {
 
         const [itemsRes, augmentListRes] = await Promise.all([itemsPromise, augmentListPromise])
         items.value = itemsRes?.data?.data?.items || []
-        augmentList.value = augmentListRes?.data?.data || []
+        const augmentRaw = augmentListRes?.data?.data as any
+        augmentList.value = Array.isArray(augmentRaw) ? augmentRaw : augmentRaw?.augments || []
         writeCache({ champions: champions.value, augmentList: augmentList.value })
 
         console.log('LoL data loaded:', {

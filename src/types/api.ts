@@ -252,6 +252,8 @@ export interface Strategy {
   items: StrategyItem[]
   runes?: StrategyRunes
   mapType: 'sr' | 'aram' | 'both'
+  mode?: 'sr' | 'aram' | 'hex_brawl' | 'both'
+  augmentIds?: string[]
   description: string
   tags: string[]
   creator: StrategyCreator
@@ -304,6 +306,8 @@ export interface CreateStrategyPayload {
     }>
   }
   mapType: 'sr' | 'aram' | 'both'
+  mode?: 'sr' | 'aram' | 'hex_brawl' | 'both'
+  augmentIds?: string[]
   description: string
   tags: string[]
 }
@@ -332,6 +336,8 @@ export interface UpdateStrategyPayload {
     }>
   }
   mapType?: 'sr' | 'aram' | 'both'
+  mode?: 'sr' | 'aram' | 'hex_brawl' | 'both'
+  augmentIds?: string[]
   description?: string
   tags?: string[]
   isPublic?: boolean
@@ -347,6 +353,7 @@ export interface ChampionQueryParams {
 }
 
 export interface ItemQueryParams {
+  mode?: 'standard' | 'hex_brawl'
   search?: string
   tags?: string[]
   map?: 'sr' | 'ha' | 'aram'
@@ -364,6 +371,7 @@ export interface ItemQueryParams {
 export interface StrategyQueryParams {
   championKey?: string
   mapType?: 'sr' | 'aram' | 'both'
+  mode?: 'sr' | 'aram' | 'hex_brawl' | 'both'
   creatorId?: string
   search?: string
   isRecommended?: boolean
@@ -373,5 +381,31 @@ export interface StrategyQueryParams {
 }
 // augmentList Types
 export interface Augment {
-  
+  _id?: string
+  augmentId: string
+  name: string
+  description: string
+  icon: string
+  tier: string | number
+  tags: string[]
+  modes: string[]
+  patchVersion?: string
+  isActive?: boolean
+  createdAt?: string
+  updatedAt?: string
+}
+
+export interface AugmentListResponse {
+  augments: Augment[]
+  total: number
+}
+
+export interface AugmentQueryParams {
+  mode?: string
+  search?: string
+  tags?: string[]
+  tier?: string | number
+  isActive?: boolean
+  limit?: number
+  offset?: number
 }

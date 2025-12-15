@@ -1,800 +1,1041 @@
 <template>
-  <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <div class="header">
-      <h1>创建攻略</h1>
-      <el-button @click="handleCancel">取消</el-button>
-    </div>
-
-    <!-- Loading State -->
-    <div v-if="isLoading" class="loading-container">
-      <el-icon class="is-loading" :size="48">
-        <Loading />
-      </el-icon>
-      <p>正在加载数据...</p>
-    </div>
-
-    <template v-else-if="isInitialized">
-      <div class="step-content">
-        <!-- Step 1: Champion Selection -->
-        <div v-if="currentStep === 0" class="step-champion">
-          <div class="search-bar">
-            <el-input v-model="championSearch" placeholder="搜索英雄名称..." clearable size="large">
-              <template #prefix>
-                <el-icon>
-                  <Search />
-                </el-icon>
-              </template>
-            </el-input>
-          </div>
-
-          <div class="tags-filter">
-            <el-tag v-for="tag in championTags" :key="tag" :type="selectedTags.includes(tag) ? 'warning' : 'info'"
-              class="tag-item" @click="toggleTag(tag)">
-              {{ tag }}
-            </el-tag>
-          </div>
-
-          <div class="champions-grid">
-            <div v-for="champion in filteredChampions" :key="champion._id" class="champion-card"
-              :class="{ selected: selectedChampion?._id === champion._id }" @click="selectChampion(champion)">
-              <img :src="champion.images.square" :alt="champion.name" />
-              <div class="champion-info">
-                <span class="champion-name">{{ champion.name }}</span>
-                <span class="champion-title">{{ champion.title }}</span>
+  <div
+    class="h-[calc(100vh-1rem)] w-full overflow-hidden rounded-3xl border border-slate-200 my-2 lol-page-bg"
+    :style="pageBackgroundStyle">
+    <div class="h-full w-full overflow-y-auto scrollbar-hide">
+      <div class="mx-auto max-w-6xl px-6 py-8">
+        <!-- Header -->
+        <div class="flex flex-col gap-4 mb-6">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-center gap-4 min-w-0">
+              <div class="relative">
+                <img
+                  v-if="selectedChampion"
+                  :src="selectedChampion.images.square"
+                  class="w-14 h-14 rounded-2xl object-cover border border-white/60 shadow-lg"
+                  :alt="selectedChampion.name" />
+                <div v-else class="w-14 h-14 rounded-2xl bg-white/40 border border-white/60 animate-pulse" />
               </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <h1 class="text-2xl font-bold text-slate-900 tracking-tight truncate">
+                    {{ selectedChampion?.name || 'Create Guide' }}
+                  </h1>
+                  <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/60 border border-white/70 text-slate-600">
+                    海克斯大乱斗
+                  </span>
+                </div>
+                <div class="text-slate-500 text-sm truncate">{{ selectedChampion?.title || 'Loading champion…' }}</div>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-2 flex-shrink-0">
+              <button class="lol-fab" @click="handleCancel" title="返回">
+                <el-icon><ArrowLeft /></el-icon>
+              </button>
+              <button class="lol-fab" @click="handleGoHome" title="主页">
+                <el-icon><HomeFilled /></el-icon>
+              </button>
             </div>
           </div>
 
-          <div class="step-actions">
-            <el-button type="primary" size="large" :disabled="!selectedChampion" @click="nextStep">
-              下一步
-            </el-button>
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
+            <div class="md:col-span-4">
+              <div class="lol-glass p-4">
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">攻略名称</div>
+                <input
+                  v-model="strategyTitle"
+                  class="w-full h-11 px-4 rounded-2xl bg-white/70 border border-white/70 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
+                  placeholder="例如：爆发流 / 生存流 / 控制流…" />
+                <div class="mt-2 text-[11px] text-slate-400">
+                  留空会自动使用英雄名生成标题
+                </div>
+              </div>
+            </div>
+            <div class="md:col-span-8">
+              <div class="lol-glass p-4">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="text-xs font-bold uppercase tracking-wider text-slate-500">备注</div>
+                  <div class="text-[11px] text-slate-400">建议写打法、节奏、关键选择理由</div>
+                </div>
+                <textarea
+                  v-model="strategyRemark"
+                  class="w-full min-h-24 px-4 py-3 rounded-2xl bg-white/70 border border-white/70 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition resize-none"
+                  placeholder="补充说明：对局思路、强势期、克制关系、强化选择理由…" />
+              </div>
+            </div>
           </div>
         </div>
 
-        <!-- Step 2: Rune Selection -->
-        <div v-if="currentStep === 1" class="step-rune">
-          <h2>选择符文</h2>
-
-          <div class="step-actions">
-            <el-button size="large" @click="prevStep">上一步</el-button>
-            <el-button type="primary" size="large" :disabled="!isRunesValid" @click="nextStep">
-              下一步
-            </el-button>
-          </div>
-        </div>
-
-        <!-- Step 3: Item Selection -->
-        <div v-if="currentStep === 2" class="step-items">
-          <h2>选择装备</h2>
-
-          <div class="items-section">
-            <h3>核心装备 (6件)</h3>
-            <div class="items-slots core-items">
-              <div v-for="i in 6" :key="'core-' + i" class="item-slot" @click="selectItemSlot('core', i - 1)">
-                <div v-if="coreItems[i - 1]" class="item-selected">
-                  <img :src="coreItems[i - 1]!.image" :alt="coreItems[i - 1]!.name" />
-                  <el-icon class="remove-icon" @click.stop="removeItem('core', i - 1)">
-                    <Close />
-                  </el-icon>
+        <!-- Main Layout -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Left: Items -->
+          <section class="lg:col-span-7">
+            <div class="lol-glass p-6">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span class="lol-dot lol-dot--indigo" />
+                    出装推荐
+                  </h2>
+                  <div class="text-sm text-slate-500 mt-1">先选中行，再从下方装备池添加</div>
                 </div>
-                <div v-else class="item-empty">
-                  <el-icon>
-                    <Plus />
-                  </el-icon>
-                </div>
-              </div>
-            </div>
-
-            <h3>备选装备 (可选,最多6件)</h3>
-            <div class="items-slots alternative-items">
-              <div v-for="i in 6" :key="'alt-' + i" class="item-slot" @click="selectItemSlot('alternative', i - 1)">
-                <div v-if="alternativeItems[i - 1]" class="item-selected">
-                  <img :src="alternativeItems[i - 1]!.image" :alt="alternativeItems[i - 1]!.name" />
-                  <el-icon class="remove-icon" @click.stop="removeItem('alternative', i - 1)">
-                    <Close />
-                  </el-icon>
-                </div>
-                <div v-else class="item-empty">
-                  <el-icon>
-                    <Plus />
-                  </el-icon>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Item Selection Dialog -->
-          <el-dialog v-model="itemDialogVisible" title="选择装备" width="80%" :close-on-click-modal="false">
-            <el-input v-model="itemSearch" placeholder="搜索装备..." clearable class="item-search">
-              <template #prefix>
-                <el-icon>
-                  <Search />
-                </el-icon>
-              </template>
-            </el-input>
-
-            <div class="items-list">
-              <div v-for="item in filteredItems" :key="item._id" class="item-card" @click="selectItem(item)">
-                <img :src="item.image" :alt="item.name" />
-                <div class="item-info">
-                  <span class="item-name">{{ item.name }}</span>
-                  <span class="item-price">{{ item.gold.total }}金币</span>
-                </div>
-              </div>
-            </div>
-          </el-dialog>
-
-          <div class="step-actions">
-            <el-button size="large" @click="prevStep">上一步</el-button>
-            <el-button type="primary" size="large" :disabled="coreItems.filter(Boolean).length !== 6" @click="nextStep">
-              下一步
-            </el-button>
-          </div>
-        </div>
-
-        <!-- Step 4: Final Confirmation -->
-        <div v-if="currentStep === 3" class="step-confirm">
-          <h2>完成创建</h2>
-
-          <el-form :model="strategyForm" label-width="100px" class="strategy-form">
-            <el-form-item label="攻略标题" required>
-              <el-input v-model="strategyForm.title" placeholder="请输入攻略标题" />
-            </el-form-item>
-
-            <el-form-item label="地图类型" required>
-              <el-radio-group v-model="strategyForm.mapType">
-                <el-radio value="sr">召唤师峡谷</el-radio>
-                <el-radio value="aram">极地大乱斗</el-radio>
-                <el-radio value="both">通用</el-radio>
-              </el-radio-group>
-            </el-form-item>
-
-            <el-form-item label="攻略描述" required>
-              <el-input v-model="strategyForm.description" type="textarea" :rows="4" placeholder="请输入攻略描述..." />
-            </el-form-item>
-
-            <el-form-item label="标签">
-              <el-tag v-for="tag in strategyForm.tags" :key="tag" closable @close="removeTag(tag)">
-                {{ tag }}
-              </el-tag>
-              <el-input v-if="tagInputVisible" ref="tagInputRef" v-model="tagInput" size="small" style="width: 100px"
-                @keyup.enter="addTag" @blur="addTag" />
-              <el-button v-else size="small" @click="showTagInput">+ 添加标签</el-button>
-            </el-form-item>
-          </el-form>
-
-          <div class="preview">
-            <h3>预览</h3>
-            <div class="preview-content">
-              <div class="preview-champion">
-                <img :src="selectedChampion?.images.square" :alt="selectedChampion?.name" />
-                <span>{{ selectedChampion?.name }}</span>
+                <button class="lol-pill" @click="clearItems" :disabled="isSubmitting" title="清空出装">
+                  清空
+                </button>
               </div>
 
-              <div class="preview-runes">
-                <h4>符文配置</h4>
-                <div class="runes-display">
-                  <div v-if="selectedRunes.primaryRunes?.length" class="primary-runes">
-                    <span>主系:</span>
-                    <img v-for="rune in selectedRunes.primaryRunes" :key="rune.id" :src="rune.icon" :alt="rune.name"
-                      :title="rune.name" />
+              <div class="grid grid-cols-1 gap-4">
+                <div
+                  class="lol-row"
+                  :class="activeItemRow === 'core' ? 'lol-row--active' : ''"
+                  @click="selectItemRow('core')">
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                      <div class="text-sm font-semibold text-slate-700">常规出装</div>
+                      <span class="lol-badge">6 slots</span>
+                    </div>
+                    <div class="text-xs text-slate-400">点击格子可定点替换</div>
                   </div>
-                  <div v-if="selectedRunes.secondaryRunes?.length" class="secondary-runes">
-                    <span>副系:</span>
-                    <img v-for="rune in selectedRunes.secondaryRunes" :key="rune.id" :src="rune.icon" :alt="rune.name"
-                      :title="rune.name" />
+                  <div class="grid grid-cols-6 gap-2">
+                    <button
+                      v-for="i in 6"
+                      :key="'core-' + i"
+                      class="lol-slot"
+                      :class="activeItemRow === 'core' && activeItemSlot === i - 1 ? 'lol-slot--active' : ''"
+                      @click.stop="selectItemSlot('core', i - 1)">
+                      <template v-if="coreItems[i - 1]">
+                        <img :src="coreItems[i - 1]!.image" class="w-full h-full rounded-2xl object-cover" />
+                        <span class="lol-slot__shine" />
+                        <button class="lol-slot__remove" title="移除" @click.stop="removeItem('core', i - 1)">
+                          <el-icon><Close /></el-icon>
+                        </button>
+                      </template>
+                      <template v-else>
+                        <div class="lol-slot__empty">
+                          <el-icon><Plus /></el-icon>
+                        </div>
+                      </template>
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  class="lol-row"
+                  :class="activeItemRow === 'extra' ? 'lol-row--active' : ''"
+                  @click="selectItemRow('extra')">
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                      <div class="text-sm font-semibold text-slate-700">补充出装</div>
+                      <span class="lol-badge">6 slots</span>
+                    </div>
+                    <div class="text-xs text-slate-400">根据对局切换</div>
+                  </div>
+                  <div class="grid grid-cols-6 gap-2">
+                    <button
+                      v-for="i in 6"
+                      :key="'extra-' + i"
+                      class="lol-slot"
+                      :class="activeItemRow === 'extra' && activeItemSlot === i - 1 ? 'lol-slot--active' : ''"
+                      @click.stop="selectItemSlot('extra', i - 1)">
+                      <template v-if="extraItems[i - 1]">
+                        <img :src="extraItems[i - 1]!.image" class="w-full h-full rounded-2xl object-cover" />
+                        <span class="lol-slot__shine" />
+                        <button class="lol-slot__remove" title="移除" @click.stop="removeItem('extra', i - 1)">
+                          <el-icon><Close /></el-icon>
+                        </button>
+                      </template>
+                      <template v-else>
+                        <div class="lol-slot__empty">
+                          <el-icon><Plus /></el-icon>
+                        </div>
+                      </template>
+                    </button>
                   </div>
                 </div>
               </div>
 
-              <div class="preview-items">
-                <h4>核心装备</h4>
-                <div class="items-display">
-                  <img v-for="(item, idx) in coreItems.filter(Boolean)" :key="idx" :src="item!.image" :alt="item!.name"
-                    :title="item!.name" />
+              <div class="mt-6">
+                <div class="flex items-center justify-between gap-3 mb-3">
+                  <div class="flex items-center gap-2">
+                    <div class="text-sm font-semibold text-slate-700">装备池</div>
+                    <span class="lol-badge">默认：海克斯模式</span>
+                  </div>
+                  <div class="relative w-[min(320px,60vw)]">
+                    <el-icon class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                      <Search />
+                    </el-icon>
+                    <input
+                      v-model="itemSearch"
+                      class="w-full h-10 pl-10 pr-3 rounded-2xl bg-white/60 border border-white/70 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
+                      placeholder="搜索装备…" />
+                  </div>
                 </div>
 
-                <h4 v-if="alternativeItems.some(Boolean)">备选装备</h4>
-                <div v-if="alternativeItems.some(Boolean)" class="items-display">
-                  <img v-for="(item, idx) in alternativeItems.filter(Boolean)" :key="idx" :src="item!.image"
-                    :alt="item!.name" :title="item!.name" />
+                <div v-if="itemsLoading" class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-3">
+                  <div v-for="n in 10" :key="'item-skel-' + n" class="lol-card-skeleton" />
+                </div>
+                <div v-else class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-3">
+                  <button
+                    v-for="item in filteredItems"
+                    :key="item._id"
+                    class="lol-card"
+                    :class="isItemSelected(item) ? 'lol-card--selected' : ''"
+                    @click="addItem(item)">
+                    <img :src="item.image" class="w-12 h-12 rounded-xl object-cover shadow-sm" />
+                    <div class="min-w-0">
+                      <div class="text-xs font-semibold text-slate-800 truncate">{{ item.name }}</div>
+                      <div class="text-[11px] text-slate-500 mt-0.5 truncate">{{ item.gold.total }}g</div>
+                    </div>
+                    <div v-if="isItemSelected(item)" class="lol-check">已选</div>
+                  </button>
                 </div>
               </div>
             </div>
-          </div>
+          </section>
 
-          <div class="step-actions">
-            <el-button size="large" @click="prevStep">上一步</el-button>
-            <el-button type="primary" size="large" :loading="submitting" :disabled="!isFormValid"
-              @click="submitStrategy">
-              {{ submitting ? '创建中...' : '创建攻略' }}
-            </el-button>
-          </div>
+          <!-- Right: Augments -->
+          <section class="lg:col-span-5">
+            <div class="lol-glass p-6">
+              <div class="flex items-center justify-between mb-4">
+                <div>
+                  <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span class="lol-dot lol-dot--pink" />
+                    海克斯推荐
+                  </h2>
+                  <div class="text-sm text-slate-500 mt-1">先选中行，再从下方强化池添加</div>
+                </div>
+                <button class="lol-pill" @click="clearAugments" :disabled="isSubmitting" title="清空海克斯">
+                  清空
+                </button>
+              </div>
+
+              <div class="grid grid-cols-1 gap-4">
+                <div
+                  class="lol-row"
+                  :class="activeAugmentTier === 'silver' ? 'lol-row--active' : ''"
+                  @click="selectAugmentTier('silver')">
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                      <div class="text-sm font-semibold text-slate-700">银色</div>
+                      <span class="lol-badge lol-badge--silver">6 slots</span>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-6 gap-2">
+                    <button
+                      v-for="i in 6"
+                      :key="'silver-' + i"
+                      class="lol-slot lol-slot--augment"
+                      :class="activeAugmentTier === 'silver' && activeAugmentSlot === i - 1 ? 'lol-slot--active' : ''"
+                      @click.stop="selectAugmentSlot('silver', i - 1)">
+                      <template v-if="selectedAugments.silver[i - 1]">
+                        <img :src="selectedAugments.silver[i - 1]!.icon" class="w-full h-full rounded-2xl object-cover" />
+                        <span class="lol-slot__shine" />
+                        <button class="lol-slot__remove" title="移除" @click.stop="removeAugment('silver', i - 1)">
+                          <el-icon><Close /></el-icon>
+                        </button>
+                      </template>
+                      <template v-else>
+                        <div class="lol-slot__empty">
+                          <el-icon><Plus /></el-icon>
+                        </div>
+                      </template>
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  class="lol-row"
+                  :class="activeAugmentTier === 'gold' ? 'lol-row--active' : ''"
+                  @click="selectAugmentTier('gold')">
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                      <div class="text-sm font-semibold text-slate-700">金色</div>
+                      <span class="lol-badge lol-badge--gold">6 slots</span>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-6 gap-2">
+                    <button
+                      v-for="i in 6"
+                      :key="'gold-' + i"
+                      class="lol-slot lol-slot--augment"
+                      :class="activeAugmentTier === 'gold' && activeAugmentSlot === i - 1 ? 'lol-slot--active' : ''"
+                      @click.stop="selectAugmentSlot('gold', i - 1)">
+                      <template v-if="selectedAugments.gold[i - 1]">
+                        <img :src="selectedAugments.gold[i - 1]!.icon" class="w-full h-full rounded-2xl object-cover" />
+                        <span class="lol-slot__shine" />
+                        <button class="lol-slot__remove" title="移除" @click.stop="removeAugment('gold', i - 1)">
+                          <el-icon><Close /></el-icon>
+                        </button>
+                      </template>
+                      <template v-else>
+                        <div class="lol-slot__empty">
+                          <el-icon><Plus /></el-icon>
+                        </div>
+                      </template>
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  class="lol-row"
+                  :class="activeAugmentTier === 'prismatic' ? 'lol-row--active' : ''"
+                  @click="selectAugmentTier('prismatic')">
+                  <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                      <div class="text-sm font-semibold text-slate-700">彩色</div>
+                      <span class="lol-badge lol-badge--prismatic">6 slots</span>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-6 gap-2">
+                    <button
+                      v-for="i in 6"
+                      :key="'prismatic-' + i"
+                      class="lol-slot lol-slot--augment"
+                      :class="activeAugmentTier === 'prismatic' && activeAugmentSlot === i - 1 ? 'lol-slot--active' : ''"
+                      @click.stop="selectAugmentSlot('prismatic', i - 1)">
+                      <template v-if="selectedAugments.prismatic[i - 1]">
+                        <img
+                          :src="selectedAugments.prismatic[i - 1]!.icon"
+                          class="w-full h-full rounded-2xl object-cover" />
+                        <span class="lol-slot__shine" />
+                        <button class="lol-slot__remove" title="移除" @click.stop="removeAugment('prismatic', i - 1)">
+                          <el-icon><Close /></el-icon>
+                        </button>
+                      </template>
+                      <template v-else>
+                        <div class="lol-slot__empty">
+                          <el-icon><Plus /></el-icon>
+                        </div>
+                      </template>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6">
+                <div class="flex items-center justify-between gap-3 mb-3">
+                  <div class="flex items-center gap-2">
+                    <div class="text-sm font-semibold text-slate-700">强化池</div>
+                    <span class="lol-badge">筛选：{{ tierLabel(activeAugmentTier) }}</span>
+                  </div>
+                  <div class="relative w-[min(280px,60vw)]">
+                    <el-icon class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
+                      <Search />
+                    </el-icon>
+                    <input
+                      v-model="augmentSearch"
+                      class="w-full h-10 pl-10 pr-3 rounded-2xl bg-white/60 border border-white/70 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
+                      placeholder="搜索强化…" />
+                  </div>
+                </div>
+
+                <div class="flex gap-2 mb-3">
+                  <button class="lol-tab" :class="augmentTierFilter === 'all' ? 'lol-tab--active' : ''" @click="augmentTierFilter = 'all'">
+                    全部
+                  </button>
+                  <button class="lol-tab" :class="augmentTierFilter === 'silver' ? 'lol-tab--active' : ''" @click="augmentTierFilter = 'silver'">
+                    银色
+                  </button>
+                  <button class="lol-tab" :class="augmentTierFilter === 'gold' ? 'lol-tab--active' : ''" @click="augmentTierFilter = 'gold'">
+                    金色
+                  </button>
+                  <button class="lol-tab" :class="augmentTierFilter === 'prismatic' ? 'lol-tab--active' : ''" @click="augmentTierFilter = 'prismatic'">
+                    彩色
+                  </button>
+                </div>
+
+                <div v-if="augmentsLoading" class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <div v-for="n in 9" :key="'aug-skel-' + n" class="lol-card-skeleton" />
+                </div>
+                <div v-else class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  <button
+                    v-for="aug in filteredAugments"
+                    :key="aug.augmentId"
+                    class="lol-card"
+                    :class="isAugmentSelected(aug) ? 'lol-card--selected' : ''"
+                    @click="addAugment(aug)">
+                    <img :src="aug.icon" class="w-12 h-12 rounded-xl object-cover shadow-sm" />
+                    <div class="min-w-0">
+                      <div class="text-xs font-semibold text-slate-800 truncate">{{ aug.name }}</div>
+                      <div class="text-[11px] text-slate-500 mt-0.5 truncate">{{ tierLabel(getAugmentTier(aug)) }}</div>
+                    </div>
+                    <div v-if="isAugmentSelected(aug)" class="lol-check">已选</div>
+                  </button>
+                </div>
+              </div>
+
+              <div class="mt-6 flex items-center justify-between gap-3">
+                <div class="text-xs text-slate-400">
+                  提示：至少选择 1 个装备 + 1 个强化才可完成
+                </div>
+                <button class="lol-primary" :disabled="isSubmitting" @click="submitStrategy">
+                  <span v-if="isSubmitting" class="lol-spinner" />
+                  {{ isSubmitting ? '提交中…' : '完成' }}
+                </button>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
-    </template>
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, nextTick, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Search, Plus, Close, Loading } from '@element-plus/icons-vue'
+import { ArrowLeft, Close, HomeFilled, Plus, Search } from '@element-plus/icons-vue'
 import { commonService } from '@/service'
 import { useLolStore } from '@/stores/lol'
-import type { Champion, Item } from '@/types'
+import type { Augment, Champion, CreateStrategyPayload, Item } from '@/types'
+
+type ItemRow = 'core' | 'extra'
+type AugTier = 'silver' | 'gold' | 'prismatic'
 
 const router = useRouter()
+const route = useRoute()
 const lolStore = useLolStore()
 
-// 初始化标志
-const isInitialized = ref(false)
-const isLoading = ref(false)
-
-const currentStep = ref(0)
-const championSearch = ref('')
-const selectedTags = ref<string[]>([])
 const selectedChampion = ref<Champion | null>(null)
-const selectedRunes = ref<any>({})
-const coreItems = ref<(Item | null)[]>(Array(6).fill(null))
-const alternativeItems = ref<(Item | null)[]>(Array(6).fill(null))
-const itemDialogVisible = ref(false)
+
+const strategyTitle = ref('')
+const strategyRemark = ref('')
+const isSubmitting = ref(false)
+
+const itemsLoading = ref(false)
+const allItems = ref<Item[]>([])
 const itemSearch = ref('')
-const currentItemSlot = ref<{ type: 'core' | 'alternative'; index: number } | null>(null)
-const tagInputVisible = ref(false)
-const tagInput = ref('')
-const tagInputRef = ref()
-const submitting = ref(false)
+const activeItemRow = ref<ItemRow>('core')
+const activeItemSlot = ref<number | null>(null)
+const coreItems = ref<(Item | null)[]>(Array(6).fill(null))
+const extraItems = ref<(Item | null)[]>(Array(6).fill(null))
 
-const strategyForm = ref({
-  title: '',
-  mapType: 'sr' as 'sr' | 'aram' | 'both',
-  description: '',
-  tags: [] as string[]
+const augmentsLoading = ref(false)
+const allAugments = ref<Augment[]>([])
+const augmentSearch = ref('')
+const augmentTierFilter = ref<'all' | AugTier>('all')
+const activeAugmentTier = ref<AugTier>('gold')
+const activeAugmentSlot = ref<number | null>(null)
+const selectedAugments = ref<Record<AugTier, (Augment | null)[]>>({
+  silver: Array(6).fill(null),
+  gold: Array(6).fill(null),
+  prismatic: Array(6).fill(null),
 })
 
-const championTags = computed(() => {
-  const tags = new Set<string>()
-  lolStore.champions.forEach(c => c.tags.forEach(t => tags.add(t)))
-  return Array.from(tags)
-})
+const backgroundPalettes = [
+  { light: '#e7ebf0', mid: '#d8d2db', deep: '#c8d6e6', glow: '#ffffff' },
+  { light: '#e6f2f4', mid: '#d3e6ee', deep: '#c9dff2', glow: '#ffffff' },
+  { light: '#efe7f5', mid: '#e1d7ee', deep: '#d6dcf4', glow: '#ffffff' },
+  { light: '#f2eee6', mid: '#e9dfd2', deep: '#e6d8c5', glow: '#ffffff' },
+  { light: '#e8f3ea', mid: '#d8ecd9', deep: '#d0e8e4', glow: '#ffffff' },
+  { light: '#e9eef9', mid: '#d9e1f3', deep: '#d2d8ee', glow: '#ffffff' },
+]
 
-const filteredChampions = computed(() => {
-  let champions = lolStore.champions
+const pickPaletteIndex = (seed: string) => {
+  let hash = 0
+  for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) | 0
+  return Math.abs(hash) % backgroundPalettes.length
+}
 
-  if (championSearch.value) {
-    const search = championSearch.value.toLowerCase()
-    champions = champions.filter(c =>
-      c.name.toLowerCase().includes(search) ||
-      c.title.toLowerCase().includes(search)
-    )
-  }
-
-  if (selectedTags.value.length > 0) {
-    champions = champions.filter(c =>
-      selectedTags.value.some(tag => c.tags.includes(tag))
-    )
-  }
-
-  return champions
+const pageBackgroundStyle = computed(() => {
+  const seed = selectedChampion.value?.key?.toString() || selectedChampion.value?._id?.toString() || 'default'
+  const palette = backgroundPalettes[pickPaletteIndex(seed)]
+  const background = [
+    `radial-gradient(900px circle at 70% 10%, ${palette.glow} 0%, transparent 60%)`,
+    `radial-gradient(700px circle at 15% 85%, ${palette.glow} 0%, transparent 65%)`,
+    `linear-gradient(135deg, ${palette.light} 0%, ${palette.mid} 48%, ${palette.deep} 100%)`,
+  ].join(', ')
+  return { background }
 })
 
 const filteredItems = computed(() => {
-  let items = lolStore.items.filter(item => item.gold.purchasable)
-
-  if (itemSearch.value) {
-    const search = itemSearch.value.toLowerCase()
-    items = items.filter(i =>
-      i.name.toLowerCase().includes(search) ||
-      i.plaintext.toLowerCase().includes(search)
-    )
-  }
-
-  return items
+  const q = itemSearch.value.trim().toLowerCase()
+  const items = allItems.value.filter(i => i.gold?.purchasable !== false)
+  if (!q) return items
+  return items.filter(i => (i.name || '').toLowerCase().includes(q) || (i.plaintext || '').toLowerCase().includes(q))
 })
 
-const isRunesValid = computed(() => {
-  return selectedRunes.value.primaryRunes?.length === 4 &&
-    selectedRunes.value.secondaryRunes?.length === 2
+const getAugmentTier = (aug: Augment): AugTier => {
+  const raw = String(aug.tier ?? '').toLowerCase()
+  if (raw.includes('prismatic') || raw.includes('彩') || raw === '3') return 'prismatic'
+  if (raw.includes('gold') || raw.includes('金') || raw === '2') return 'gold'
+  return 'silver'
+}
+
+const tierLabel = (tier: 'all' | AugTier) => {
+  if (tier === 'silver') return '银色'
+  if (tier === 'gold') return '金色'
+  if (tier === 'prismatic') return '彩色'
+  return '全部'
+}
+
+const filteredAugments = computed(() => {
+  const q = augmentSearch.value.trim().toLowerCase()
+  let list = allAugments.value
+  if (augmentTierFilter.value !== 'all') {
+    list = list.filter(a => getAugmentTier(a) === augmentTierFilter.value)
+  }
+  if (!q) return list
+  return list.filter(a => (a.name || '').toLowerCase().includes(q) || (a.description || '').toLowerCase().includes(q))
 })
 
-const isFormValid = computed(() => {
-  return strategyForm.value.title.trim() !== '' &&
-    strategyForm.value.description.trim() !== ''
-})
+const handleCancel = () => router.push({ name: 'lol' })
+const handleGoHome = () => router.push({ name: 'home' })
 
-function toggleTag(tag: string) {
-  const index = selectedTags.value.indexOf(tag)
-  if (index > -1) {
-    selectedTags.value.splice(index, 1)
-  } else {
-    selectedTags.value.push(tag)
-  }
+const selectItemRow = (row: ItemRow) => {
+  activeItemRow.value = row
+  activeItemSlot.value = null
 }
 
-function selectChampion(champion: Champion) {
-  selectedChampion.value = champion
+const selectItemSlot = (row: ItemRow, idx: number) => {
+  activeItemRow.value = row
+  activeItemSlot.value = idx
 }
 
-function selectItemSlot(type: 'core' | 'alternative', index: number) {
-  currentItemSlot.value = { type, index }
-  itemDialogVisible.value = true
+const isItemSelected = (item: Item) => {
+  return coreItems.value.some(i => i?._id === item._id) || extraItems.value.some(i => i?._id === item._id)
 }
 
-function selectItem(item: Item) {
-  if (!currentItemSlot.value) return
-
-  const { type, index } = currentItemSlot.value
-  if (type === 'core') {
-    coreItems.value[index] = item
-  } else {
-    alternativeItems.value[index] = item
-  }
-
-  itemDialogVisible.value = false
-  currentItemSlot.value = null
-  itemSearch.value = ''
+const removeItem = (row: ItemRow, idx: number) => {
+  if (row === 'core') coreItems.value[idx] = null
+  else extraItems.value[idx] = null
 }
 
-function removeItem(type: 'core' | 'alternative', index: number) {
-  if (type === 'core') {
-    coreItems.value[index] = null
-  } else {
-    alternativeItems.value[index] = null
-  }
-}
+const addItem = (item: Item) => {
+  const target = activeItemRow.value === 'core' ? coreItems.value : extraItems.value
 
-function showTagInput() {
-  tagInputVisible.value = true
-  nextTick(() => {
-    tagInputRef.value?.focus()
-  })
-}
-
-function addTag() {
-  const tag = tagInput.value.trim()
-  if (tag && !strategyForm.value.tags.includes(tag)) {
-    strategyForm.value.tags.push(tag)
-  }
-  tagInput.value = ''
-  tagInputVisible.value = false
-}
-
-function removeTag(tag: string) {
-  const index = strategyForm.value.tags.indexOf(tag)
-  if (index > -1) {
-    strategyForm.value.tags.splice(index, 1)
-  }
-}
-
-function nextStep() {
-  if (currentStep.value < 3) {
-    currentStep.value++
-  }
-}
-
-function prevStep() {
-  if (currentStep.value > 0) {
-    currentStep.value--
-  }
-}
-
-function handleCancel() {
-  router.push('/lol')
-}
-
-async function submitStrategy() {
-  if (!selectedChampion.value) {
-    ElMessage.error('请选择英雄')
+  if (activeItemSlot.value !== null) {
+    target[activeItemSlot.value] = item
     return
   }
 
-  submitting.value = true
+  const empty = target.findIndex(i => !i)
+  if (empty === -1) {
+    ElMessage.warning('当前行已满，先移除一个再添加')
+    return
+  }
+  target[empty] = item
+}
 
+const clearItems = () => {
+  coreItems.value = Array(6).fill(null)
+  extraItems.value = Array(6).fill(null)
+  activeItemSlot.value = null
+}
+
+const selectAugmentTier = (tier: AugTier) => {
+  activeAugmentTier.value = tier
+  activeAugmentSlot.value = null
+  augmentTierFilter.value = tier
+}
+
+const selectAugmentSlot = (tier: AugTier, idx: number) => {
+  activeAugmentTier.value = tier
+  activeAugmentSlot.value = idx
+}
+
+const isAugmentSelected = (aug: Augment) => {
+  return (
+    selectedAugments.value.silver.some(a => a?.augmentId === aug.augmentId) ||
+    selectedAugments.value.gold.some(a => a?.augmentId === aug.augmentId) ||
+    selectedAugments.value.prismatic.some(a => a?.augmentId === aug.augmentId)
+  )
+}
+
+const removeAugment = (tier: AugTier, idx: number) => {
+  selectedAugments.value[tier][idx] = null
+}
+
+const addAugment = (aug: Augment) => {
+  const tier = activeAugmentTier.value
+  const target = selectedAugments.value[tier]
+
+  if (activeAugmentSlot.value !== null) {
+    target[activeAugmentSlot.value] = aug
+    return
+  }
+
+  const empty = target.findIndex(a => !a)
+  if (empty === -1) {
+    ElMessage.warning('当前行已满，先移除一个再添加')
+    return
+  }
+  target[empty] = aug
+}
+
+const clearAugments = () => {
+  selectedAugments.value = {
+    silver: Array(6).fill(null),
+    gold: Array(6).fill(null),
+    prismatic: Array(6).fill(null),
+  }
+  activeAugmentSlot.value = null
+}
+
+const submitStrategy = async () => {
+  if (!selectedChampion.value) {
+    ElMessage.error('英雄信息缺失，请返回重试')
+    return
+  }
+
+  const hasAnyItems = coreItems.value.some(Boolean) || extraItems.value.some(Boolean)
+  if (!hasAnyItems) {
+    ElMessage.warning('请至少选择 1 个装备')
+    return
+  }
+
+  const hasAnyAugments =
+    selectedAugments.value.silver.some(Boolean) ||
+    selectedAugments.value.gold.some(Boolean) ||
+    selectedAugments.value.prismatic.some(Boolean)
+  if (!hasAnyAugments) {
+    ElMessage.warning('请至少选择 1 个强化')
+    return
+  }
+
+  isSubmitting.value = true
   try {
-    // 构建装备列表 - 核心装备位置 0-5，备选装备位置 6-11
-    const coreItemsList = coreItems.value
-      .map((item, idx) => item ? { itemId: item._id, position: idx } : null)
-      .filter(Boolean) as Array<{ itemId: string; position: number }>;
+    const title = strategyTitle.value.trim() || `${selectedChampion.value.name} · 海克斯大乱斗`
+    const description = strategyRemark.value.trim() || `Hex Brawl guide for ${selectedChampion.value.name}`
 
-    const alternativeItemsList = alternativeItems.value
-      .map((item, idx) => item ? { itemId: item._id, position: idx + 6 } : null)
-      .filter(Boolean) as Array<{ itemId: string; position: number }>;
+    const itemPayload = [
+      ...coreItems.value
+        .map((it, idx) => (it ? { itemId: it._id, position: idx } : null))
+        .filter(Boolean),
+      ...extraItems.value
+        .map((it, idx) => (it ? { itemId: it._id, position: idx + 6 } : null))
+        .filter(Boolean),
+    ] as Array<{ itemId: string; position: number }>
 
-    const payload = {
-      title: strategyForm.value.title,
+    const augmentIds = ([
+      ...selectedAugments.value.silver,
+      ...selectedAugments.value.gold,
+      ...selectedAugments.value.prismatic,
+    ]
+      .filter(Boolean)
+      .map(a => (a as Augment).augmentId) as string[]).filter((v, i, arr) => arr.indexOf(v) === i)
+
+    const payload: CreateStrategyPayload = {
+      title,
       championId: selectedChampion.value._id,
-      items: [...coreItemsList, ...alternativeItemsList],
-      runes: selectedRunes.value,
-      mapType: strategyForm.value.mapType,
-      description: strategyForm.value.description,
-      tags: strategyForm.value.tags
+      items: itemPayload,
+      mapType: 'aram',
+      mode: 'hex_brawl',
+      augmentIds,
+      description,
+      tags: ['hex_brawl'],
     }
 
     await commonService.apiCreateStrategy(payload)
     ElMessage.success('攻略创建成功')
-    router.push('/lol')
+    router.push({ name: 'lol', query: { championKey: selectedChampion.value.key } })
   } catch (error: any) {
     console.error('Failed to create strategy:', error)
     ElMessage.error(error?.response?.data?.message || '创建攻略失败')
   } finally {
-    submitting.value = false
+    isSubmitting.value = false
   }
 }
 
-// 初始化数据
-async function initializeData() {
-  if (isInitialized.value) return
-
-  isLoading.value = true
+const init = async () => {
   try {
-    await lolStore.initializeData()
+    const championFromState =
+      (typeof window !== 'undefined' ? ((window.history.state as any) || {}).champion : undefined) as
+        | Champion
+        | undefined
+    if (championFromState?._id) {
+      selectedChampion.value = championFromState
+      strategyTitle.value = `${championFromState.name} · 海克斯大乱斗`
+    }
 
-    // 验证数据是否加载成功
     if (lolStore.champions.length === 0) {
-      throw new Error('英雄数据加载失败，请刷新页面重试')
-    }
-    if (lolStore.items.length === 0) {
-      throw new Error('装备数据加载失败，请刷新页面重试')
+      await lolStore.initializeData()
     }
 
-    isInitialized.value = true
+    if (!selectedChampion.value) {
+      const key = String(route.query.championKey || '')
+      if (key) {
+        selectedChampion.value = lolStore.getChampionByKey(key) || null
+        if (selectedChampion.value) strategyTitle.value = `${selectedChampion.value.name} · 海克斯大乱斗`
+      }
+    }
+
+    if (!selectedChampion.value && lolStore.champions.length) {
+      selectedChampion.value = lolStore.champions[0]
+      strategyTitle.value = `${selectedChampion.value.name} · 海克斯大乱斗`
+    }
+
+    // Load hex-brawl item pool
+    itemsLoading.value = true
+    try {
+      const itemsRes = await commonService.apiGetItems({ mode: 'hex_brawl' })
+      allItems.value = itemsRes?.data?.data?.items || []
+    } finally {
+      itemsLoading.value = false
+    }
+
+    // Load augments (prefer filtered API, fallback to store list)
+    augmentsLoading.value = true
+    try {
+      const augRes = await commonService.apiGetAugments({ mode: 'hex_brawl', isActive: true, limit: 200 })
+      const raw = augRes?.data?.data as any
+      const list = Array.isArray(raw) ? raw : raw?.augments
+      allAugments.value = (list || []).filter(Boolean)
+    } catch {
+      allAugments.value = lolStore.augmentList || []
+    } finally {
+      augmentsLoading.value = false
+    }
   } catch (error: any) {
-    console.error('Failed to initialize data:', error)
-    ElMessage.error(error.message || '数据加载失败')
-    // 3秒后返回列表页
-    setTimeout(() => {
-      router.push('/lol')
-    }, 3000)
-  } finally {
-    isLoading.value = false
+    console.error('Failed to init create page:', error)
+    ElMessage.error(error?.message || '初始化失败')
+    router.push({ name: 'lol' })
   }
 }
 
 onMounted(() => {
-  initializeData()
+  init()
 })
 </script>
 
 <style lang="scss" scoped>
-.strategy-create {
-  max-width: 1400px;
-  margin-left: auto;
-  margin-right: auto;
-
-  .loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 400px;
-    gap: 20px;
-
-    p {
-      color: rgba(255, 255, 255, 0.7);
-      font-size: 16px;
-    }
-  }
+/* Keep this page self-contained (Index has its own). */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  h1 {
-    color: #fff;
-    font-size: 20px;
-    font-weight: bold;
-    margin: 0;
-    background: linear-gradient(135deg, #c8aa6e 0%, #f0e6d2 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+.lol-page-bg {
+  transition: background 600ms ease;
 }
 
-.step-content {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 20px;
-  min-height: 500px;
-
-  h2 {
-    color: #fff;
-    font-size: 24px;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-
-  h3 {
-    color: #c8aa6e;
-    font-size: 18px;
-    margin: 20px 0 15px 0;
-  }
-
-  h4 {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 16px;
-    margin: 15px 0 10px 0;
-  }
+.lol-glass {
+  border-radius: 1.75rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 18px 40px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(20px);
 }
 
-// Step 1: Champion Selection
-.search-bar {
-  margin-bottom: 20px;
+.lol-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.55);
+}
+.lol-dot--indigo {
+  background: rgb(99 102 241);
+}
+.lol-dot--pink {
+  background: rgb(236 72 153);
 }
 
-.tags-filter {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-
-  .tag-item {
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: scale(1.05);
-    }
-  }
+.lol-pill {
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: rgb(71 85 105);
+  font-weight: 600;
+  font-size: 12px;
+  transition: transform 180ms ease, background 180ms ease;
+}
+.lol-pill:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.75);
+}
+.lol-pill:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.champions-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  max-height: 500px;
-  overflow-y: auto;
-  background-color: rgba(40, 42, 44, 0.5);
+.lol-badge {
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: rgb(100 116 139);
+  font-size: 11px;
+  font-weight: 700;
+}
+.lol-badge--silver {
+  background: rgba(226, 232, 240, 0.65);
+}
+.lol-badge--gold {
+  background: rgba(254, 240, 138, 0.45);
+  border-color: rgba(250, 204, 21, 0.35);
+}
+.lol-badge--prismatic {
+  background: rgba(224, 231, 255, 0.55);
+  border-color: rgba(99, 102, 241, 0.35);
 }
 
-.champion-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    border-color: rgba(200, 170, 110, 0.5);
-    transform: translateY(-2px);
-  }
-
-  &.selected {
-    border-color: #c8aa6e;
-    background: rgba(200, 170, 110, 0.2);
-    box-shadow: 0 0 20px rgba(200, 170, 110, 0.3);
-  }
-
-  img {
-    width: 80px;
-    height: 80px;
-    border-radius: 8px;
-    margin-bottom: 8px;
-  }
-
-  .champion-info {
-    text-align: center;
-
-    .champion-name {
-      display: block;
-      color: #fff;
-      font-size: 14px;
-      font-weight: bold;
-      margin-bottom: 2px;
-    }
-
-    .champion-title {
-      display: block;
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 11px;
-    }
-  }
+.lol-row {
+  padding: 14px;
+  border-radius: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.38);
+  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+}
+.lol-row:hover {
+  transform: translateY(-1px);
+}
+.lol-row--active {
+  border-color: rgba(99, 102, 241, 0.45);
+  box-shadow:
+    0 14px 30px rgba(99, 102, 241, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-// Step 3: Item Selection
-.items-section {
-  margin-bottom: 30px;
-}
-
-.items-slots {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 15px;
-  margin-bottom: 20px;
-}
-
-.item-slot {
-  aspect-ratio: 1;
-  background: rgba(0, 0, 0, 0.3);
-  border: 2px solid rgba(200, 170, 110, 0.3);
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.lol-slot {
   position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 1rem;
   overflow: hidden;
-
-  &:hover {
-    border-color: #c8aa6e;
-    transform: scale(1.05);
-  }
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow:
+    0 10px 20px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.lol-slot:hover {
+  transform: translateY(-2px) scale(1.03);
+}
+.lol-slot--active {
+  border-color: rgba(99, 102, 241, 0.6);
+  box-shadow:
+    0 14px 26px rgba(99, 102, 241, 0.22),
+    0 0 0 2px rgba(99, 102, 241, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+.lol-slot--augment.lol-slot--active {
+  border-color: rgba(236, 72, 153, 0.55);
+  box-shadow:
+    0 14px 26px rgba(236, 72, 153, 0.18),
+    0 0 0 2px rgba(236, 72, 153, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
-.item-empty {
-  width: 100%;
-  height: 100%;
+.lol-slot__empty {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 32px;
-}
-
-.item-selected {
   width: 100%;
   height: 100%;
+  color: rgba(100, 116, 139, 0.9);
+  background:
+    radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+    rgba(255, 255, 255, 0.18);
+  background-size: 7px 7px;
+}
+
+.lol-slot__remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 26px;
+  height: 26px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.55);
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+.lol-slot:hover .lol-slot__remove {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.lol-slot__shine {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(400px circle at 10% 0%, rgba(255, 255, 255, 0.55) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.lol-card {
   position: relative;
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .remove-icon {
-    position: absolute;
-    top: 4px;
-    right: 4px;
-    background: rgba(0, 0, 0, 0.7);
-    border-radius: 50%;
-    padding: 4px;
-    color: #fff;
-    cursor: pointer;
-
-    &:hover {
-      background: rgba(255, 0, 0, 0.7);
-    }
-  }
-}
-
-.item-search {
-  margin-bottom: 20px;
-}
-
-.items-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 10px;
-  max-height: 500px;
-  overflow-y: auto;
-}
-
-.item-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 10px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 2px solid transparent;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-
-  &:hover {
-    border-color: #c8aa6e;
-    transform: scale(1.05);
-  }
-
-  img {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 8px;
-  }
-
-  .item-info {
-    text-align: center;
-
-    .item-name {
-      display: block;
-      color: #fff;
-      font-size: 12px;
-      margin-bottom: 4px;
-    }
-
-    .item-price {
-      display: block;
-      color: #c8aa6e;
-      font-size: 11px;
-    }
-  }
-}
-
-// Step 4: Confirmation
-.strategy-form {
-  margin-bottom: 30px;
-
-  :deep(.el-form-item__label) {
-    color: rgba(255, 255, 255, 0.8);
-  }
-}
-
-.preview {
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 30px;
-
-  h3 {
-    color: #c8aa6e;
-    font-size: 20px;
-    margin: 0 0 20px 0;
-  }
-}
-
-.preview-content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.preview-champion {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-
-  img {
-    width: 64px;
-    height: 64px;
-    border-radius: 8px;
-    border: 2px solid #c8aa6e;
-  }
-
-  span {
-    color: #fff;
-    font-size: 20px;
-    font-weight: bold;
-  }
-}
-
-.runes-display,
-.items-display {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-wrap: wrap;
+  text-align: left;
+  padding: 10px 10px;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow:
+    0 10px 22px rgba(15, 23, 42, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+  overflow: hidden;
+}
+.lol-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 14px 28px rgba(99, 102, 241, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
+.lol-card--selected {
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow:
+    0 14px 28px rgba(99, 102, 241, 0.18),
+    0 0 0 1px rgba(99, 102, 241, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+}
 
-  span {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 14px;
-    min-width: 50px;
+.lol-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 800;
+  color: rgb(67 56 202);
+  background: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.lol-card-skeleton {
+  height: 64px;
+  border-radius: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+  position: relative;
+}
+.lol-card-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.75) 45%, transparent 90%);
+  transform: translateX(-140%);
+  animation: skShimmer 1.2s ease-in-out infinite;
+}
+@keyframes skShimmer {
+  0% {
+    transform: translateX(-140%);
   }
-
-  img {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    border: 2px solid #c8aa6e;
+  100% {
+    transform: translateX(140%);
   }
 }
 
-.step-actions {
-  display: flex;
+.lol-tab {
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: rgb(100, 116, 139);
+  font-size: 12px;
+  font-weight: 800;
+  transition: transform 160ms ease, background 160ms ease;
+}
+.lol-tab:hover {
+  transform: translateY(-1px);
+}
+.lol-tab--active {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: rgb(67 56 202);
+}
+
+.lol-primary {
+  height: 44px;
+  padding: 0 18px;
+  border-radius: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  font-weight: 800;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.95) 0%, rgba(236, 72, 153, 0.9) 100%);
+  box-shadow:
+    0 14px 30px rgba(99, 102, 241, 0.28),
+    0 0 0 1px rgba(255, 255, 255, 0.35);
+  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+}
+.lol-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  filter: saturate(1.05);
+  box-shadow:
+    0 18px 38px rgba(99, 102, 241, 0.34),
+    0 0 0 1px rgba(255, 255, 255, 0.5);
+}
+.lol-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.lol-spinner {
+  width: 14px;
+  height: 14px;
+  border-radius: 9999px;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: rgba(255, 255, 255, 1);
+  animation: spin 900ms linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.lol-fab {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
-  gap: 20px;
-  margin-top: 30px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: rgb(71 85 105);
+  box-shadow:
+    0 8px 20px rgba(15, 23, 42, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: transform 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+  backdrop-filter: blur(14px);
+}
+.lol-fab:hover {
+  transform: translateY(-2px) scale(1.05);
+  background: rgba(255, 255, 255, 0.8);
+  color: rgb(67 56 202);
+  box-shadow:
+    0 12px 28px rgba(99, 102, 241, 0.22),
+    0 0 0 1px rgba(99, 102, 241, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 1);
+}
+.lol-fab:active {
+  transform: translateY(0) scale(0.98);
 }
 
-@media (max-width: 768px) {
-  .champions-grid {
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  }
-
-  .items-slots {
-    grid-template-columns: repeat(3, 1fr);
+@media (prefers-reduced-motion: reduce) {
+  .lol-page-bg,
+  .lol-row,
+  .lol-slot,
+  .lol-card,
+  .lol-primary,
+  .lol-card-skeleton::after,
+  .lol-spinner {
+    transition: none !important;
+    animation: none !important;
   }
 }
 </style>
