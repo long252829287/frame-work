@@ -1,638 +1,1371 @@
 <template>
-  <div
-    class="h-[calc(100vh-1rem)] w-full flex overflow-hidden bg-slate-50 rounded-3xl border-slate-200 my-2 lol-page-bg"
-    :style="pageBackgroundStyle">
-    <aside
-      class="w-24 flex-shrink-0 flex flex-col items-center py-6 gap-4 lol-aside backdrop-blur-2xl border-r border-slate-200/40 overflow-y-auto z-10 scrollbar-hide">
-      <template v-if="lolStore.isLoading && lolStore.champions.length === 0">
-        <div v-for="n in 8" :key="n" class="w-16 h-16 rounded-2xl lol-champ-skeleton">
-          <div class="w-12 h-12 rounded-xl lol-champ-skeleton__inner" />
-        </div>
-      </template>
-      <div v-for="champ in lolStore.champions" v-else :key="champ._id" :ref="(el) => setChampionRef(el, champ)"
-        class="lol-champ-item w-16 h-16 flex-shrink-0 rounded-2xl flex items-center justify-center cursor-pointer transition-all duration-300 relative group"
-        :class="selectedChampion?._id === champ._id ? 'lol-champ-item--active' : ''" @click="selectChampion(champ)">
-        <img :src="champ.images.square"
-          class="w-12 h-12 rounded-xl object-cover transition-transform group-hover:scale-110" :alt="champ.name" />
-        <span
-          class="absolute left-full ml-4 px-3 py-1 bg-slate-800 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 shadow-lg">
-          {{ champ.name }}
-        </span>
+  <div class="lol-shell">
+    <header class="lol-topbar">
+      <div class="lol-brand" role="button" tabindex="0" @click="goHome">
+        <span class="lol-logo" aria-hidden="true" />
+        <span class="lol-brand-text">海克斯大乱斗</span>
       </div>
-    </aside>
-
-    <main class="flex-1 relative flex overflow-hidden bg-slate-50/50">
-      <!-- Floating Actions -->
-      <div class="absolute top-6 right-8 flex items-center gap-2 z-20">
-        <button class="lol-fab" @click="handleBack" title="返回上一页">
+      <nav class="lol-nav" aria-label="Primary">
+        <button class="lol-nav-item lol-nav-item--active" type="button">英雄</button>
+        <button class="lol-nav-item" type="button" disabled>社区建设</button>
+        <button class="lol-nav-item" type="button" disabled>排行榜</button>
+      </nav>
+      <div class="lol-actions">
+        <button class="lol-icon-btn" type="button" title="返回上一页" @click="goBack">
           <el-icon>
             <ArrowLeft />
           </el-icon>
         </button>
-        <button class="lol-fab" @click="handleGoHome" title="返回主页">
+        <button class="lol-icon-btn" type="button" title="返回主页" @click="goHome">
           <el-icon>
             <HomeFilled />
           </el-icon>
         </button>
-        <button class="lol-fab" @click="openSearch" title="搜索英雄">
-          <el-icon>
-            <Search />
-          </el-icon>
+        <button class="lol-avatar" type="button" title="Account">
+          <span>U</span>
         </button>
       </div>
-
-      <!-- Search Overlay -->
-      <div v-if="isSearchOpen"
-        class="absolute inset-0 z-30 flex items-start justify-center pt-24 bg-slate-900/20 backdrop-blur-sm"
-        @click.self="closeSearch">
-        <div
-          class="w-[min(520px,92vw)] rounded-3xl bg-white/75 backdrop-blur-2xl border border-white/60 shadow-2xl p-5">
-          <div class="flex items-center gap-2">
-            <div class="flex-1 relative">
-              <input ref="searchInputRef" v-model="searchQuery"
-                class="w-full h-12 pl-10 pr-4 rounded-2xl bg-white/70 border border-white/70 focus:border-blue-300 focus:ring-2 focus:ring-blue-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
-                placeholder="请输入英雄名称" @keydown.esc.prevent="closeSearch" />
-            </div>
+    </header>
+    <main class="lol-main">
+      <section class="lol-left">
+        <div class="lol-hero">
+          <div class="lol-hero-text">
+            <h3>选择英雄</h3>
+            <p>探索海克斯大乱斗的统计数据、配置和策略。</p>
           </div>
 
-          <div v-if="searchQuery.trim().length" class="mt-3 max-h-80 overflow-y-auto scrollbar-hide">
-            <div v-if="filteredChampions.length === 0" class="text-center text-sm text-slate-400 py-6">
-              未查找到对应英雄
-            </div>
-            <button v-for="champ in filteredChampions" :key="champ._id"
-              class="w-full flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/60 transition text-left"
-              @click="jumpToChampion(champ)">
-              <img :src="champ.images.square" class="w-9 h-9 rounded-lg object-cover" />
-              <div class="flex-1 min-w-0">
-                <div class="font-medium text-slate-800 truncate">{{ champ.name }}</div>
-                <div class="text-xs text-slate-500 truncate">{{ champ.title }}</div>
-              </div>
-              <span class="text-xs text-slate-400">{{ champ.tags?.[0] }}</span>
-            </button>
+          <div class="lol-search">
+            <el-icon class="lol-search-icon">
+              <Search />
+            </el-icon>
+            <input v-model="championQuery" class="lol-search-input" placeholder="请输入英雄名称" />
           </div>
         </div>
-      </div>
-      <div v-if="selectedChampion" class="flex-1 flex gap-8 p-8 h-full w-full">
-        <div class="flex-1 flex flex-col h-full overflow-y-auto pr-2 scrollbar-hide">
-          <h1 class="text-5xl font-bold text-slate-900 mb-3 tracking-tight">{{ selectedChampion.name }}</h1>
-          <div class="mb-8 flex gap-2 overflow-x-auto pb-2">
-            <button v-for="strat in strategies" :key="strat._id"
-              class="px-5 py-2 rounded-xl text-sm font-medium transition-all shadow-sm border" :class="currentStrategy?._id === strat._id
-                ? 'bg-blue-600 text-white border-blue-600 shadow-blue-200'
-                : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-blue-600'"
-              @click="currentStrategy = strat">
-              {{ strat.title }}
-            </button>
-          </div>
 
-          <!-- Active Strategy Content -->
-          <template v-if="currentStrategy">
-            <!-- Win/Ban Rates -->
-            <div class="grid grid-cols-2 gap-4 mb-8">
-              <div
-                class="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm group hover:shadow-md transition-shadow">
-                <div class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Win Rate</div>
-                <div class="flex items-baseline gap-2">
-                  <div class="text-3xl font-bold text-slate-800">52.4%</div>
-                  <div class="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">▲ 2.1%</div>
-                </div>
-              </div>
-              <div
-                class="p-6 rounded-2xl bg-white border border-slate-100 shadow-sm group hover:shadow-md transition-shadow">
-                <div class="text-slate-400 text-xs font-bold uppercase tracking-wider mb-1">Ban Rate</div>
-                <div class="flex items-baseline gap-2">
-                  <div class="text-3xl font-bold text-slate-800">12.8%</div>
-                  <div class="text-xs font-medium text-rose-600 bg-rose-50 px-2 py-0.5 rounded-full">▼ 0.5%</div>
-                </div>
+        <div class="lol-filters">
+          <button v-for="r in roles" :key="r.key" type="button" class="lol-chip"
+            :class="{ 'lol-chip--active': roleFilter === r.key }" @click="roleFilter = r.key">
+            <span class="lol-chip-dot" aria-hidden="true" />
+            {{ r.label }}
+          </button>
+        </div>
+
+        <div class="lol-grid" aria-label="Champion grid">
+          <template v-if="championsLoading && !champions.length">
+            <div v-for="n in 10" :key="`sk-${n}`" class="lol-card lol-card--skeleton" />
+          </template>
+
+          <button v-for="c in filteredChampions" :key="c._id" type="button" class="lol-card"
+            :class="{ 'lol-card--active': selectedChampion?._id === c._id }" @click="selectChampion(c)">
+            <img class="lol-card-bg" :src="championCardImage(c)" :alt="c.name" loading="lazy" />
+            <span class="lol-card-overlay" aria-hidden="true" />
+            <div class="lol-card-meta">
+              <div class="lol-card-name">{{ c.name }}</div>
+              <div class="lol-card-role">{{ primaryRole(c) }}</div>
+            </div>
+          </button>
+
+          <div v-if="!championsLoading && filteredChampions.length === 0" class="lol-empty">
+            <div class="lol-empty-title">没找到对应英雄</div>
+            <div class="lol-empty-sub">请尝试其他关键词或筛选条件。</div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="lol-right">
+        <div class="lol-panel">
+          <template v-if="selectedChampion">
+            <div class="lol-panel-head">
+              <div class="lol-panel-title">
+                <div class="lol-panel-name">{{ selectedChampion.name }}</div>
+                <div class="lol-panel-sub">{{ selectedChampion.title }}</div>
               </div>
             </div>
 
-            <!-- Build Path -->
-            <div class="p-8 rounded-3xl bg-white border border-slate-100 shadow-sm mb-8 flex-1">
-              <h3 class="text-slate-800 font-bold text-lg mb-6 flex items-center gap-2">
-                <div class="p-1.5 rounded-lg bg-blue-100 text-blue-700">
-                  <el-icon>
-                    <Lightning />
-                  </el-icon>
-                </div>
-                Core Build Path
-              </h3>
+            <div class="lol-panel-body">
+              <div class="lol-hero-splash">
+                <img :src="panelSplash" :alt="selectedChampion.name" loading="lazy" />
+              </div>
 
-              <div class="flex flex-col gap-8">
-                <!-- Core Items -->
-                <div class="flex items-start gap-6">
-                  <span class="text-slate-400 text-xs font-bold uppercase tracking-wider w-12 pt-4">Core</span>
-                  <div class="flex gap-4 flex-wrap">
-                    <div v-for="item in coreItems" :key="item.item._id" class="relative group cursor-help">
-                      <div
-                        class="relative overflow-hidden rounded-xl border border-slate-200 shadow-sm group-hover:border-blue-500 transition-colors">
-                        <img :src="item.item.image" class="w-14 h-14" />
-                      </div>
-                      <div
-                        class="absolute -bottom-8 left-1/2 -translate-x-1/2 text-[10px] bg-slate-800 text-white px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-                        {{ item.item.gold.total }}g
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Runes -->
-                <div v-if="currentStrategy.runes" class="flex items-center gap-6 border-t border-slate-100 pt-8">
-                  <span class="text-slate-400 text-xs font-bold uppercase tracking-wider w-12">Runes</span>
-                  <div class="flex items-center gap-8">
-                    <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                      <img :src="currentStrategy.runes.primaryTreeIcon" class="w-8 h-8 opacity-80" />
-                      <div class="flex gap-1.5">
-                        <div v-for="rune in currentStrategy.runes.primaryRunes" :key="rune.id"
-                          class="w-9 h-9 rounded-full bg-slate-200 shadow-inner flex items-center justify-center p-0.5">
-                          <img :src="rune.icon" class="w-full h-full rounded-full" />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                      <img :src="currentStrategy.runes.secondaryTreeIcon" class="w-6 h-6 opacity-60" />
-                      <div class="flex gap-1.5">
-                        <div v-for="rune in currentStrategy.runes.secondaryRunes" :key="rune.id"
-                          class="w-7 h-7 rounded-full bg-slate-200 shadow-inner flex items-center justify-center p-0.5">
-                          <img :src="rune.icon" class="w-full h-full rounded-full" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+              <div v-if="strategiesLoading" class="lol-skel-block">
+                <div class="lol-skel-line" />
+                <div class="lol-skel-line lol-skel-line--sm" />
+                <div class="lol-skel-orbs">
+                  <div v-for="n in 4" :key="`sk-orb-${n}`" class="lol-orb lol-orb--skeleton" />
                 </div>
               </div>
+
+              <template v-else>
+                <div v-if="strategies.length > 1" class="lol-tabs" role="tablist" aria-label="Strategies">
+                  <button v-for="s in strategies" :key="s._id" type="button" class="lol-tab"
+                    :class="{ 'lol-tab--active': selectedStrategyId === s._id }" @click="selectedStrategyId = s._id">
+                    {{ s.title }}
+                  </button>
+                </div>
+
+                <div class="lol-section">
+                  <div class="lol-section-title">常规出装</div>
+                  <div class="lol-orbs">
+                    <div v-for="(it, idx) in coreBuildOrbs" :key="`core-${idx}`" class="lol-orb">
+                      <img v-if="it" :src="it" alt="" />
+                      <div v-else class="lol-orb-empty" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="lol-section">
+                  <div class="lol-section-title">其他可选</div>
+                  <div class="lol-orbs">
+                    <div v-for="(it, idx) in extraBuildOrbs" :key="`extra-${idx}`" class="lol-orb">
+                      <img v-if="it" :src="it" alt="" />
+                      <div v-else class="lol-orb-empty" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="lol-section">
+                  <div class="lol-section-title">海克斯推荐</div>
+                  <div class="lol-orbs lol-orbs--aug">
+                    <div v-for="(it, idx) in augmentOrbs" :key="`aug-${idx}`" class="lol-orb lol-orb--aug">
+                      <img v-if="it" :src="it" alt="" />
+                      <div v-else class="lol-orb-empty" />
+                    </div>
+                  </div>
+                </div>
+
+                <div class="lol-desc" v-if="selectedStrategy?.description">
+                  {{ selectedStrategy.description }}
+                </div>
+                <div class="lol-desc lol-desc--empty" v-else>
+                  暂无描述。
+                </div>
+
+                <div class="lol-cta">
+                  <button class="lol-primary" type="button" :disabled="!selectedStrategy" @click="exportStrategyCard">
+                    <el-icon>
+                      <Download />
+                    </el-icon>
+                    导出攻略为一图流
+                  </button>
+                  <button class="lol-secondary" type="button" :disabled="!selectedChampion" @click="goCreate">
+                    <el-icon>
+                      <Plus />
+                    </el-icon>
+                    新建攻略
+                  </button>
+                  <button v-if="selectedStrategy" class="lol-like" type="button" :disabled="isLiking"
+                    @click="toggleLike">
+                    <el-icon>
+                      <Star />
+                    </el-icon>
+                    <span>{{ selectedStrategy.stats?.likeCount ?? 0 }}</span>
+                  </button>
+                </div>
+
+                <div v-if="!selectedStrategy && !strategies.length" class="lol-empty-inline">
+                  <div class="lol-empty-title">没有攻略</div>
+                  <div class="lol-empty-sub">成为第一个为这位英雄制定攻略的人。</div>
+                </div>
+              </template>
             </div>
           </template>
 
-          <div v-else
-            class="flex-1 flex flex-col items-center justify-center text-slate-400 p-8 rounded-3xl bg-slate-50 border-2 border-dashed border-slate-200">
-            <p class="text-slate-500 font-medium mb-4">No guides found for this champion</p>
-            <el-button type="primary" round class="px-6" @click="handleCreateStrategy">Create First Guide</el-button>
+          <template v-else>
+            <div class="lol-empty-inline">
+              <div class="lol-empty-title">选择一个英雄</div>
+              <div class="lol-empty-sub">请选择一个英雄以查看相关攻略</div>
+            </div>
+          </template>
+        </div>
+
+        <div class="lol-trending">
+          <div class="lol-trending-head">
+            <div class="lol-trending-title">热门攻略</div>
+            <button class="lol-link" type="button" disabled>查看全部</button>
           </div>
 
-        </div>
+          <div class="lol-trending-list">
+            <template v-if="trendingLoading">
+              <div v-for="n in 2" :key="`trend-sk-${n}`" class="lol-trend lol-trend--skeleton" />
+            </template>
 
-        <!-- RIGHT COLUMN: Visual Card -->
-        <div class="w-[420px] flex-shrink-0 flex flex-col justify-center">
-          <div class="relative group">
-            <!-- The Card -->
-            <div ref="visualCardRef"
-              class="relative aspect-[4/5] w-full rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-200 bg-white select-none">
-              <!-- Card Content -->
-              <img :src="championSplash" class="absolute inset-0 w-full h-[100%] object-cover mask-gradient" />
-            </div>
+            <button v-for="s in trending" :key="s._id" class="lol-trend" type="button" @click="openTrending(s)">
+              <img class="lol-trend-icon" :src="s.champion?.images?.square" :alt="s.championName" />
+              <div class="lol-trend-meta">
+                <div class="lol-trend-title2">{{ s.title }}</div>
+                <div class="lol-trend-sub2">已经 {{ s.creatorName }} · {{ s.stats?.likeCount ?? 0 }} 喜欢</div>
+              </div>
+            </button>
 
-            <!-- Export Action -->
-            <div
-              class="absolute -right-6 top-1/2 -translate-y-1/2 translate-x-0 opacity-0 group-hover:translate-x-full group-hover:opacity-100 transition-all duration-300">
-              <el-button circle size="large"
-                class="!w-14 !h-14 !text-xl !bg-white !text-slate-700 !border-slate-100 shadow-xl hover:!text-blue-600 hover:!scale-110 transition-transform"
-                @click="exportImage">
-                <el-icon>
-                  <Camera />
-                </el-icon>
-              </el-button>
+            <div v-if="!trendingLoading && trending.length === 0" class="lol-empty lol-empty--tight">
+              <div class="lol-empty-sub">目前还没有热门攻略</div>
             </div>
           </div>
         </div>
-      </div>
-
-      <!-- Empty State -->
-      <div v-else class="flex-1 flex flex-col items-center justify-center text-slate-400">
-        <div class="w-32 h-32 rounded-full bg-slate-100 flex items-center justify-center mb-6">
-          <img
-            src="https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-static-assets/global/default/images/ranked-emblems/unranked.png"
-            class="w-20 opacity-50 grayscale" />
-        </div>
-        <h3 class="text-xl font-medium text-slate-600">Select a Champion</h3>
-        <p class="text-slate-400 text-sm">Choose from the list to view guides</p>
-      </div>
+      </aside>
     </main>
+
+    <!-- Hidden export node -->
+    <div class="lol-export-stage" aria-hidden="true">
+      <div v-if="selectedChampion && selectedStrategy" ref="exportCardRef" class="lol-export-card">
+        <div class="lol-export-hero">
+          <img class="lol-export-bg" :src="exportSplash" alt="" />
+          <div class="lol-export-overlay" />
+          <div class="lol-export-meta">
+            <div class="lol-export-name">{{ selectedChampion.name }}</div>
+            <div class="lol-export-sub">{{ selectedStrategy.title }}</div>
+          </div>
+        </div>
+        <div class="lol-export-body">
+          <div class="lol-export-row">
+            <div class="lol-export-label">推荐</div>
+            <div class="lol-export-orbs">
+              <div v-for="(it, idx) in coreBuildOrbs" :key="`exp-core-${idx}`" class="lol-export-orb">
+                <img v-if="it" :src="it" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="lol-export-row">
+            <div class="lol-export-label">其他</div>
+            <div class="lol-export-orbs">
+              <div v-for="(it, idx) in extraBuildOrbs" :key="`exp-extra-${idx}`" class="lol-export-orb">
+                <img v-if="it" :src="it" alt="" />
+              </div>
+            </div>
+          </div>
+          <div class="lol-export-row">
+            <div class="lol-export-label">强化</div>
+            <div class="lol-export-orbs">
+              <div v-for="(it, idx) in augmentOrbs" :key="`exp-aug-${idx}`" class="lol-export-orb">
+                <img v-if="it" :src="it" alt="" />
+              </div>
+            </div>
+          </div>
+          <div v-if="selectedStrategy.description" class="lol-export-desc">
+            {{ selectedStrategy.description }}
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { ref, onMounted, computed, watch, nextTick, onUnmounted } from 'vue'
+<script setup lang="ts">
+import { computed, onMounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Search, Plus, Lightning, Camera, ArrowLeft, HomeFilled } from '@element-plus/icons-vue'
-import { useRouter } from 'vue-router'
-import { useLolStore } from '@/stores/lol'
-import { commonService } from '@/service'
-import type { Champion, Strategy } from '@/types'
+import { ArrowLeft, Download, HomeFilled, Plus, Search, Star } from '@element-plus/icons-vue'
 import domToImage from 'dom-to-image'
+import { commonService } from '@/service'
+import { useLolStore } from '@/stores/lol'
+import type { Augment, Champion, Strategy } from '@/types'
+
+type RoleKey = 'all' | 'Fighter' | 'Mage' | 'Tank' | 'Support' | 'Marksman'
 const router = useRouter()
+const route = useRoute()
 const lolStore = useLolStore()
 
+const championsLoading = ref(false)
+const championQuery = ref('')
+const roleFilter = ref<RoleKey>('all')
+
 const selectedChampion = ref<Champion | null>(null)
+const strategiesLoading = ref(false)
 const strategies = ref<Strategy[]>([])
-const currentStrategy = ref<Strategy | null>(null)
-const visualCardRef = ref<HTMLElement | null>(null)
-const isSearchOpen = ref(false)
-const searchQuery = ref('')
-const searchInputRef = ref<HTMLInputElement | null>(null)
-const championItemMap = new Map<string, HTMLElement>()
+const selectedStrategyId = ref('')
 
-// Computed
-const championSplash = computed(() => {
-  if (!selectedChampion.value) return ''
-  // Try to find a high-res loading 'splash' if available in your data, 
-  // otherwise fallback to square or build a loading url
-  return selectedChampion.value.images.loading || selectedChampion.value.images.square
-})
+const trendingLoading = ref(false)
+const trending = ref<Strategy[]>([])
 
-const backgroundPalettes = [
-  {
-    light: '#e7ebf0',
-    mid: '#d8d2db',
-    deep: '#c8d6e6',
-    glow: '#ffffff',
-  },
-  {
-    light: '#e6f2f4',
-    mid: '#d3e6ee',
-    deep: '#c9dff2',
-    glow: '#ffffff',
-  },
-  {
-    light: '#eaf2ff',
-    mid: '#d8e9ff',
-    deep: '#c7deff',
-    glow: '#ffffff',
-  },
-  {
-    light: '#f2eee6',
-    mid: '#e9dfd2',
-    deep: '#e6d8c5',
-    glow: '#ffffff',
-  },
-  {
-    light: '#e8f3ea',
-    mid: '#d8ecd9',
-    deep: '#d0e8e4',
-    glow: '#ffffff',
-  },
-  {
-    light: '#e9eef9',
-    mid: '#d9e1f3',
-    deep: '#d2d8ee',
-    glow: '#ffffff',
-  },
+const augmentMap = ref<Record<string, Augment>>({})
+const isLiking = ref(false)
+const likedState = ref<Record<string, boolean>>({})
+
+const exportCardRef = ref<HTMLElement | null>(null)
+
+const roles = [
+  { key: 'all' as const, label: '所有角色' },
+  { key: 'Fighter' as const, label: '战士' },
+  { key: 'Mage' as const, label: '法师' },
+  { key: 'Tank' as const, label: '坦克' },
+  { key: 'Support' as const, label: '辅助' },
+  { key: 'Marksman' as const, label: '射手' },
 ]
+const roleMap: Record<RoleKey, string> = {
+  'Fighter': '战士',
+  'Mage': '法师',
+  'Tank': '坦克',
+  'Support': '辅助',
+  'Marksman': '射手',
+  'all': '全部'
+};
 
-const pickPaletteIndex = (seed: string) => {
-  let hash = 0
-  for (let i = 0; i < seed.length; i++) {
-    hash = (hash * 31 + seed.charCodeAt(i)) | 0
+const champions = computed(() => lolStore.champions || [])
+console.log(champions.value)
+
+const primaryRole = (c: Champion): string => {
+  const firstTag = c.tags?.[0];
+  if (firstTag && firstTag in roleMap) {
+    return roleMap[firstTag as RoleKey];
   }
-  return Math.abs(hash) % backgroundPalettes.length
-}
-
-const pageBackgroundStyle = computed(() => {
-  const seed = selectedChampion.value?.key?.toString() || selectedChampion.value?._id?.toString() || 'default'
-  const palette = backgroundPalettes[pickPaletteIndex(seed)]
-  const background = [
-    `radial-gradient(900px circle at 70% 10%, ${palette.glow} 0%, transparent 60%)`,
-    `radial-gradient(700px circle at 15% 85%, ${palette.glow} 0%, transparent 65%)`,
-    `linear-gradient(135deg, ${palette.light} 0%, ${palette.mid} 48%, ${palette.deep} 100%)`,
-  ].join(', ')
-  return { background }
-})
-
-const coreItems = computed(() => {
-  if (!currentStrategy.value) return []
-  return currentStrategy.value.items.filter(i => i.position < 6)
-})
+  return '未知';
+};
 
 const filteredChampions = computed(() => {
-  const q = searchQuery.value.trim().toLowerCase()
-  if (!q) return []
-  return lolStore.champions
-    .filter(c => {
-      const name = c.name?.toLowerCase() || ''
-      const title = c.title?.toLowerCase() || ''
-      const key = c.key?.toLowerCase() || ''
-      return name.includes(q) || title.includes(q) || key.includes(q)
-    })
-    .slice(0, 12)
+  const q = championQuery.value.trim().toLowerCase()
+  const list = champions.value
+  const byRole =
+    roleFilter.value === 'all'
+      ? list
+      : list.filter(c => (c.tags || []).map(t => String(t)).includes(roleFilter.value))
+
+  if (!q) return byRole
+  return byRole.filter(c => {
+    const name = c.name?.toLowerCase() || ''
+    const title = c.title?.toLowerCase() || ''
+    const key = c.key?.toLowerCase() || ''
+    return name.includes(q) || title.includes(q) || key.includes(q)
+  })
 })
 
-// Methods
-const init = async () => {
+const selectedStrategy = computed(() => {
+  if (!selectedStrategyId.value) return null
+  return strategies.value.find(s => s._id === selectedStrategyId.value) || null
+})
+
+const getStrategyItemImage = (s: Strategy, position: number) => {
+  const found = s.items.find(i => i.position === position)
+  return found?.itemImage || found?.item?.image || null
+}
+
+const coreBuildOrbs = computed(() => {
+  const s = selectedStrategy.value
+  if (!s) return Array(4).fill(null) as Array<string | null>
+  const imgs = [0, 1, 2, 3].map(p => getStrategyItemImage(s, p)).filter(Boolean) as string[]
+  return [...imgs, ...Array(Math.max(0, 4 - imgs.length)).fill(null)]
+})
+
+const extraBuildOrbs = computed(() => {
+  const s = selectedStrategy.value
+  if (!s) return Array(4).fill(null) as Array<string | null>
+  const imgs = [6, 7, 8, 9].map(p => getStrategyItemImage(s, p)).filter(Boolean) as string[]
+  return [...imgs, ...Array(Math.max(0, 4 - imgs.length)).fill(null)]
+})
+
+const augmentOrbs = computed(() => {
+  const s = selectedStrategy.value
+  if (!s?.augmentIds?.length) return Array(3).fill(null) as Array<string | null>
+  const icons = s.augmentIds
+    .slice(0, 3)
+    .map(id => augmentMap.value[id]?.icon)
+    .filter(Boolean) as string[]
+  return [...icons, ...Array(Math.max(0, 3 - icons.length)).fill(null)]
+})
+
+const computedTier = computed(() => {
+  const like = selectedStrategy.value?.stats?.likeCount ?? 0
+  if (!selectedStrategy.value) return '—'
+  if (like >= 50) return 'S-Tier'
+  if (like >= 15) return 'A-Tier'
+  return 'B-Tier'
+})
+
+const computedRank = computed(() => {
+  const like = selectedStrategy.value?.stats?.likeCount ?? 0
+  if (!selectedStrategy.value) return '—'
+  return Math.max(1, 100 - like)
+})
+
+const exportSplash = computed(() => {
+  const c = selectedChampion.value
+  return c?.images?.loading || c?.images?.splash || c?.images?.square || ''
+})
+
+const panelSplash = computed(() => {
+  const c = selectedChampion.value
+  return c?.images?.splash || c?.images?.loading || c?.images?.square || ''
+})
+
+const goBack = () => router.back()
+const goHome = () => router.push({ name: 'home' })
+
+const goCreate = () => {
+  if (!selectedChampion.value) return
+  router.push({
+    name: 'lol-create',
+    query: { championKey: selectedChampion.value.key },
+    state: { champion: selectedChampion.value },
+  } as any)
+}
+
+const normalizeAugmentList = (payload: any): Augment[] => {
+  if (Array.isArray(payload)) return payload
+  if (Array.isArray(payload?.augments)) return payload.augments
+  return []
+}
+
+const loadAugments = async () => {
+  if (Object.keys(augmentMap.value).length) return
   try {
-    if (lolStore.champions.length === 0) {
-      await lolStore.initializeData()
+    const cached = typeof window !== 'undefined' ? window.localStorage.getItem('lol-hex-augments-map-v1') : null
+    if (cached) {
+      augmentMap.value = JSON.parse(cached)
+      return
     }
-    // Select first champion by default to show UI immediately
-    if (lolStore.champions.length > 0) {
-      selectChampion(lolStore.champions[0])
+  } catch {
+    // ignore
+  }
+
+  try {
+    const res = await commonService.apiGetAugments({ mode: 'hex_brawl', isActive: true, limit: 200 })
+    const list = normalizeAugmentList(res?.data?.data)
+    const next: Record<string, Augment> = {}
+    for (const a of list) next[a.augmentId] = a
+    augmentMap.value = next
+    try {
+      window.localStorage.setItem('lol-hex-augments-map-v1', JSON.stringify(next))
+    } catch {
+      // ignore
     }
-  } catch (error: any) {
-    ElMessage.error(error.message || 'Failed to load data')
+  } catch {
+    // fallback to store cache if exists
+    const next: Record<string, Augment> = {}
+    for (const a of lolStore.augmentList || []) next[a.augmentId] = a
+    augmentMap.value = next
   }
 }
 
-const selectChampion = async (champ: Champion) => {
-  selectedChampion.value = champ
-  currentStrategy.value = null
-  strategies.value = []
-
+const fetchStrategies = async (championKey: string, preferStrategyId?: string) => {
+  strategiesLoading.value = true
   try {
-    const res = await commonService.apiGetStrategies({ championKey: champ.key })
-    strategies.value = res.data.data.strategies || []
-    // Auto-select first strategy if exists
-    if (strategies.value.length > 0) {
-      currentStrategy.value = strategies.value[0]
-    }
+    const res = await commonService.apiGetStrategies({ championKey, mode: 'hex_brawl' })
+    const list = res?.data?.data?.strategies || []
+    strategies.value = list
+    const target = preferStrategyId && list.some(s => s._id === preferStrategyId) ? preferStrategyId : list[0]?._id
+    selectedStrategyId.value = target || ''
   } catch (e) {
-    console.error('Failed to fetch strategies', e)
-    strategies.value = []
-  }
-}
-
-const handleCreateStrategy = () => {
-  const championKey = selectedChampion.value?.key
-  router.push(
-    ({
-      name: 'lol-create',
-      query: championKey ? { championKey } : undefined,
-      ...(selectedChampion.value ? { state: { champion: selectedChampion.value } } : {}),
-    }) as any,
-  )
-}
-
-const handleBack = () => {
-  router.back()
-}
-
-const handleGoHome = () => {
-  router.push({ name: 'home' })
-}
-
-const openSearch = () => {
-  isSearchOpen.value = true
-  nextTick(() => searchInputRef.value?.focus())
-}
-
-const closeSearch = () => {
-  isSearchOpen.value = false
-}
-
-const setChampionRef = (el: any, champ: Champion) => {
-  const id = champ._id
-  if (el && el instanceof HTMLElement) {
-    championItemMap.set(id, el)
-  } else {
-    championItemMap.delete(id)
-  }
-}
-
-const jumpToChampion = (champ: Champion) => {
-  closeSearch()
-  searchQuery.value = ''
-  selectChampion(champ)
-  nextTick(() => {
-    const el = championItemMap.get(champ._id)
-    el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
-  })
-}
-
-const exportImage = () => {
-  if (!visualCardRef.value) return
-
-  const node = visualCardRef.value
-
-  ElMessage.info('Generating image...')
-
-  // Wait for images to load just in case (though they should be visible)
-  domToImage.toPng(node, {
-    quality: 0.95,
-    style: {
-      transform: 'scale(1)', // Ensure no weird transforms during capture
+    console.error(e)
+    // fallback without mode (older server)
+    try {
+      const res2 = await commonService.apiGetStrategies({ championKey })
+      const list2 = res2?.data?.data?.strategies || []
+      strategies.value = list2
+      selectedStrategyId.value = list2[0]?._id || ''
+    } catch {
+      strategies.value = []
+      selectedStrategyId.value = ''
     }
-  })
-    .then((dataUrl: string) => {
-      const link = document.createElement('a')
-      link.download = `${selectedChampion.value?.name}-guide.png`
-      link.href = dataUrl
-      link.click()
-      ElMessage.success('Image exported!')
-    })
-    .catch((error: any) => {
-      console.error('oops, something went wrong!', error)
-      ElMessage.error('Failed to export image')
-    })
+  } finally {
+    strategiesLoading.value = false
+  }
+}
+
+const selectChampion = async (c: Champion) => {
+  selectedChampion.value = c
+  await Promise.all([fetchStrategies(c.key), loadAugments()])
+}
+
+const openTrending = async (s: Strategy) => {
+  const champ = lolStore.getChampionByKey(s.championKey)
+  if (!champ) return
+  selectedChampion.value = champ
+  await Promise.all([fetchStrategies(champ.key, s._id), loadAugments()])
+}
+
+const exportStrategyCard = async () => {
+  if (!exportCardRef.value) return
+  try {
+    ElMessage.info('Generating image…')
+    const dataUrl = await domToImage.toPng(exportCardRef.value, { quality: 0.96 })
+    const link = document.createElement('a')
+    link.download = `${selectedChampion.value?.name || 'strategy'}-${selectedStrategy.value?.title || 'card'}.png`
+    link.href = dataUrl
+    link.click()
+    ElMessage.success('Exported')
+  } catch (e) {
+    console.error(e)
+    ElMessage.error('Failed to export')
+  }
+}
+
+const toggleLike = async () => {
+  const s = selectedStrategy.value
+  if (!s) return
+  if (isLiking.value) return
+  isLiking.value = true
+  try {
+    const isLiked = !!likedState.value[s._id]
+    const res = await commonService.apiLikeStrategy(s._id, isLiked ? 'unlike' : 'like')
+    const data = res?.data?.data
+    likedState.value = { ...likedState.value, [s._id]: !!data?.isLiked }
+    const nextCount = typeof data?.likeCount === 'number' ? data.likeCount : s.stats.likeCount
+    strategies.value = strategies.value.map(it =>
+      it._id === s._id ? { ...it, stats: { ...it.stats, likeCount: nextCount } } : it,
+    )
+  } catch (e) {
+    console.error(e)
+    ElMessage.error('Like failed')
+  } finally {
+    isLiking.value = false
+  }
+}
+
+const championCardImage = (c: Champion) => c.images.square || c.images.loading || c.images.splash
+
+const boot = async () => {
+  championsLoading.value = true
+  try {
+    if (!lolStore.champions.length) {
+      const res = await commonService.apiGetChampions()
+      lolStore.champions = res?.data?.data?.champions || []
+    }
+    const keyFromQuery = String(route.query.championKey || '')
+    const initial = keyFromQuery ? lolStore.getChampionByKey(keyFromQuery) : undefined
+    const first = initial || filteredChampions.value[0] || lolStore.champions[0]
+    if (first) await selectChampion(first)
+  } catch (e: any) {
+    ElMessage.error(e?.message || 'Failed to load LOL data')
+  } finally {
+    championsLoading.value = false
+  }
+}
+
+const loadTrending = async () => {
+  trendingLoading.value = true
+  try {
+    const res = await commonService.apiGetPopularStrategies(10)
+    const list = res?.data?.data?.strategies || []
+    trending.value = list
+      .filter(s => (s.mode === 'hex_brawl' || s.mapType === 'aram') && s.champion?.images?.square)
+      .slice(0, 2)
+  } catch {
+    trending.value = []
+  } finally {
+    trendingLoading.value = false
+  }
 }
 
 onMounted(() => {
-  init()
+  boot()
+  loadTrending()
 })
 
-watch(isSearchOpen, open => {
-  if (open) {
-    nextTick(() => searchInputRef.value?.focus())
-  }
-})
-
-onUnmounted(() => {
-  championItemMap.clear()
-})
+watch(
+  () => route.query.championKey,
+  key => {
+    const k = String(key || '')
+    const champ = k ? lolStore.getChampionByKey(k) : undefined
+    if (champ) selectChampion(champ)
+  },
+)
 </script>
 
-<style lang="scss" scoped>
-@property --angle {
-  syntax: '<angle>';
-  initial-value: 0deg;
-  inherits: false;
+<style scoped lang="scss">
+.lol-shell {
+  --lol-bg0: #0b1220;
+  --lol-bg1: #0b1b22;
+  --lol-surface: rgba(255, 255, 255, 0.06);
+  --lol-surface-2: rgba(255, 255, 255, 0.08);
+  --lol-border: rgba(255, 255, 255, 0.12);
+  --lol-border-soft: rgba(255, 255, 255, 0.08);
+  --lol-text: rgba(248, 250, 252, 0.92);
+  --lol-dim: rgba(248, 250, 252, 0.66);
+  --lol-faint: rgba(248, 250, 252, 0.44);
+  --lol-accent: #3b82f6;
+  --lol-accent-2: #22d3ee;
+  --lol-shadow: 0 22px 60px rgba(0, 0, 0, 0.42);
+  --lol-shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.3);
+
+  height: 100%;
+  width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  overflow: hidden;
+  background:
+    radial-gradient(1200px circle at 16% 12%, rgba(59, 130, 246, 0.16), transparent 55%),
+    radial-gradient(900px circle at 78% 20%, rgba(34, 211, 238, 0.12), transparent 55%),
+    radial-gradient(900px circle at 64% 92%, rgba(255, 159, 10, 0.08), transparent 58%),
+    linear-gradient(180deg, var(--lol-bg0) 0%, var(--lol-bg1) 100%);
+  color: var(--lol-text);
 }
 
-/* Custom Scrollbar Hide */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+.lol-topbar {
+  height: 56px;
+  display: grid;
+  grid-template-columns: 220px 1fr 220px;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 18px;
 }
 
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-// .mask-gradient {
-//   mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-//   -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-// }
-
-.lol-page-bg {
-  transition: background 600ms ease;
-}
-
-.lol-aside {
-  background: linear-gradient(180deg,
-      rgba(255, 255, 255, 0.38) 0%,
-      rgba(255, 255, 255, 0.22) 55%,
-      rgba(255, 255, 255, 0.16) 100%);
-  box-shadow:
-    inset -1px 0 0 rgba(255, 255, 255, 0.7),
-    8px 0 24px rgba(15, 23, 42, 0.06);
-}
-
-.lol-fab {
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
+.lol-brand {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  color: rgb(71 85 105);
-  box-shadow:
-    0 8px 20px rgba(15, 23, 42, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  transition: transform 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.lol-logo {
+  width: 18px;
+  height: 18px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.95) 0%, rgba(34, 211, 238, 0.9) 100%);
+  box-shadow: 0 10px 24px rgba(59, 130, 246, 0.18);
+}
+
+.lol-brand-text {
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+}
+
+.lol-nav {
+  justify-self: center;
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.06);
   backdrop-filter: blur(14px);
 }
 
-.lol-fab:hover {
-  transform: translateY(-2px) scale(1.05);
-  background: rgba(255, 255, 255, 0.8);
-  color: var(--color-accent-primary);
-  box-shadow:
-    0 12px 28px rgba(0, 122, 255, 0.22),
-    0 0 0 1px rgba(0, 122, 255, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
+.lol-nav-item {
+  height: 30px;
+  padding: 0 14px;
+  border-radius: 9999px;
+  color: var(--lol-dim);
+  font-size: 12px;
+  font-weight: 800;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: background 180ms ease, color 180ms ease;
 }
 
-.lol-fab:active {
-  transform: translateY(0) scale(0.98);
+.lol-nav-item--active {
+  background: rgba(59, 130, 246, 0.16);
+  color: var(--lol-text);
 }
 
-.lol-fab--sm {
-  width: 36px;
-  height: 36px;
+.lol-nav-item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lol-actions {
+  justify-self: end;
+  display: inline-flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.lol-icon-btn {
+  width: 34px;
+  height: 34px;
   border-radius: 12px;
-}
-
-.lol-champ-item {
-  position: relative;
-  z-index: 0;
-  color: rgb(71 85 105);
-  background-color: rgba(255, 255, 255, 0.18);
-  background-image:
-    radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px),
-    radial-gradient(rgba(15, 23, 42, 0.04) 1px, transparent 1px);
-  background-size: 6px 6px, 9px 9px;
-  background-position: 0 0, 3px 3px;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  box-shadow:
-    0 6px 16px rgba(15, 23, 42, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  transform: translateZ(0);
-}
-
-.lol-champ-item::before {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: 1rem;
-  background: conic-gradient(from var(--angle, 0deg),
-      rgba(0, 122, 255, 0.95),
-      rgba(255, 159, 10, 0.9),
-      rgba(50, 173, 230, 0.95),
-      rgba(0, 122, 255, 0.95));
-  filter: blur(10px);
-  opacity: 0;
-  transition: opacity 320ms ease;
-  z-index: -1;
-}
-
-.lol-champ-item:hover {
-  color: rgb(15 23 42);
-  background-color: rgba(255, 255, 255, 0.28);
-  border-color: rgba(255, 255, 255, 0.6);
-  transform: translateY(-2px) scale(1.05) rotateZ(-1deg);
-  box-shadow:
-    0 10px 24px rgba(0, 122, 255, 0.18),
-    0 0 0 1px rgba(0, 122, 255, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-}
-
-.lol-champ-item:hover::before {
-  opacity: 0.9;
-  animation: champGlowSpin 2.2s linear infinite;
-}
-
-.lol-champ-item--active {
-  color: var(--color-accent-primary);
-  background-color: rgba(255, 255, 255, 0.5);
-  border-color: rgba(0, 122, 255, 0.55);
-  transform: translateY(-1px) scale(1.06);
-  box-shadow:
-    0 12px 30px rgba(0, 122, 255, 0.24),
-    0 0 0 2px rgba(0, 122, 255, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-.lol-champ-item--active::before {
-  opacity: 1;
-}
-
-@keyframes champGlowSpin {
-  to {
-    --angle: 360deg;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  .lol-champ-item,
-  .lol-champ-item:hover,
-  .lol-champ-item--active {
-    transition: none;
-    animation: none;
-    transform: none;
-  }
-
-  .lol-champ-item::before {
-    animation: none;
-  }
-}
-
-.lol-champ-skeleton {
-  position: relative;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.5),
-    0 6px 16px rgba(15, 23, 42, 0.05);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--lol-text);
+  cursor: pointer;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.lol-icon-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.lol-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--lol-text);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.lol-main {
+  height: calc(100% - 56px);
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 18px;
+  padding: 14px 18px 18px;
   overflow: hidden;
 }
 
-.lol-champ-skeleton__inner {
-  background: rgba(148, 163, 184, 0.25);
+.lol-left {
+  min-width: 0;
+  overflow: auto;
+  padding-right: 6px;
 }
 
-.lol-champ-skeleton::after {
-  content: "";
+.lol-hero {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.lol-hero-text h3 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--lol-accent);
+}
+
+.lol-hero-text p {
+  margin: 10px 0 0;
+  color: var(--lol-dim);
+  font-size: 13px;
+}
+
+.lol-search {
+  height: 42px;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  box-shadow: var(--lol-shadow-soft);
+  backdrop-filter: blur(14px);
+}
+
+.lol-search-icon {
+  color: var(--lol-faint);
+}
+
+.lol-search-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: var(--lol-text);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.lol-search-input::placeholder {
+  color: var(--lol-faint);
+}
+
+.lol-filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.lol-chip {
+  height: 32px;
+  padding: 0 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--lol-dim);
+  font-size: 12px;
+  font-weight: 850;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.lol-chip-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.lol-chip--active {
+  background: rgba(59, 130, 246, 0.16);
+  border-color: rgba(59, 130, 246, 0.28);
+  color: var(--lol-text);
+}
+
+.lol-chip--active .lol-chip-dot {
+  background: rgba(59, 130, 246, 0.92);
+}
+
+.lol-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  align-content: start;
+}
+
+.lol-card {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  min-height: 120px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.20);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--lol-shadow-soft);
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  text-align: left;
+  transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.lol-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow: var(--lol-shadow);
+}
+
+.lol-card--active {
+  border-color: rgba(59, 130, 246, 0.46);
+  box-shadow:
+    0 18px 48px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(59, 130, 246, 0.22);
+}
+
+.lol-card-bg {
   position: absolute;
   inset: 0;
-  background: linear-gradient(110deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.7) 45%,
-      transparent 90%);
-  transform: translateX(-140%);
-  animation: champSkeletonShimmer 1.2s ease-in-out infinite;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.92) contrast(1.05);
+  transform: scale(1.06);
 }
 
-@keyframes champSkeletonShimmer {
-  0% {
-    transform: translateX(-140%);
+.lol-card-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.66) 100%),
+    radial-gradient(420px circle at 24% 16%, rgba(59, 130, 246, 0.16), transparent 55%);
+}
+
+.lol-card-meta {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+}
+
+.lol-card-name {
+  font-weight: 950;
+  font-size: 12px;
+  letter-spacing: -0.01em;
+}
+
+.lol-card-role {
+  font-size: 10px;
+  font-weight: 950;
+  color: rgba(59, 130, 246, 0.9);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.lol-card--skeleton {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: none;
+  cursor: default;
+}
+
+.lol-right {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  overflow: auto;
+  padding-right: 6px;
+}
+
+.lol-panel {
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--lol-shadow);
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+}
+
+.lol-panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 16px 10px;
+}
+
+.lol-panel-name {
+  font-size: 22px;
+  font-weight: 950;
+  letter-spacing: -0.02em;
+}
+
+.lol-panel-sub {
+  font-size: 12px;
+  color: var(--lol-dim);
+  margin-top: 4px;
+}
+
+.lol-panel-body {
+  padding: 10px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.lol-hero-splash {
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 6px;
+  overflow: hidden;
+}
+
+.lol-hero-splash img {
+  width: 100%;
+  display: block;
+  border-radius: 14px;
+  object-fit: cover;
+  max-height: 240px;
+  filter: saturate(1.05) contrast(1.05);
+}
+
+.lol-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.lol-tab {
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.18);
+  color: var(--lol-dim);
+  font-size: 11px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.lol-tab--active {
+  background: rgba(59, 130, 246, 0.16);
+  border-color: rgba(59, 130, 246, 0.28);
+  color: var(--lol-text);
+}
+
+.lol-section-title {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lol-faint);
+  font-weight: 950;
+}
+
+.lol-orbs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.lol-orbs--aug {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.lol-orb {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.lol-orb--aug {
+  border-radius: 16px;
+}
+
+.lol-orb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lol-orb-empty {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.10), transparent 60%),
+    rgba(255, 255, 255, 0.04);
+}
+
+.lol-orb--skeleton {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lol-desc {
+  font-size: 12px;
+  color: var(--lol-dim);
+  line-height: 1.5;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.16);
+  padding: 10px 12px;
+  max-height: 92px;
+  overflow: hidden;
+}
+
+.lol-desc--empty {
+  color: var(--lol-faint);
+}
+
+.lol-cta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+.lol-primary,
+.lol-secondary,
+.lol-like {
+  height: 44px;
+  border-radius: 9999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-weight: 950;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform 160ms ease, filter 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.lol-primary {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.95) 0%, rgba(34, 211, 238, 0.92) 100%);
+  color: #071422;
+  box-shadow: 0 18px 40px rgba(59, 130, 246, 0.22);
+}
+
+.lol-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.lol-secondary {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: var(--lol-text);
+}
+
+.lol-like {
+  background: rgba(0, 0, 0, 0.18);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: var(--lol-dim);
+  height: 38px;
+}
+
+.lol-primary:hover:not(:disabled),
+.lol-secondary:hover:not(:disabled),
+.lol-like:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: saturate(1.04);
+}
+
+.lol-secondary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.lol-trending {
+  border-radius: 18px;
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--lol-shadow-soft);
+  padding: 14px;
+  backdrop-filter: blur(16px);
+}
+
+.lol-trending-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.lol-trending-title {
+  font-size: 14px;
+  font-weight: 950;
+}
+
+.lol-link {
+  border: 0;
+  background: transparent;
+  color: rgba(59, 130, 246, 0.9);
+  font-size: 12px;
+  font-weight: 900;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.lol-trending-list {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lol-trend {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  text-align: left;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.lol-trend:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.lol-trend-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.lol-trend-title2 {
+  font-weight: 950;
+  font-size: 12px;
+  color: var(--lol-text);
+}
+
+.lol-trend-sub2 {
+  font-size: 11px;
+  color: var(--lol-faint);
+  margin-top: 4px;
+}
+
+.lol-trend--skeleton {
+  height: 56px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lol-empty {
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.14);
+  text-align: center;
+  grid-column: 1 / -1;
+}
+
+.lol-empty--tight {
+  padding: 12px;
+}
+
+.lol-empty-title {
+  font-weight: 950;
+}
+
+.lol-empty-sub {
+  margin-top: 8px;
+  color: var(--lol-dim);
+  font-size: 12px;
+}
+
+.lol-empty-inline {
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px dashed rgba(255, 255, 255, 0.14);
+  background: rgba(0, 0, 0, 0.14);
+  text-align: center;
+}
+
+.lol-skel-block {
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 14px;
+}
+
+.lol-skel-line {
+  height: 12px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.lol-skel-line--sm {
+  width: 60%;
+  margin-top: 10px;
+}
+
+.lol-skel-orbs {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.lol-export-stage {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  width: 640px;
+}
+
+.lol-export-card {
+  width: 640px;
+  border-radius: 18px;
+  overflow: hidden;
+  background:
+    radial-gradient(900px circle at 16% 12%, rgba(59, 130, 246, 0.18), transparent 56%),
+    linear-gradient(180deg, #0b1220 0%, #0b1b22 100%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.55);
+  color: var(--lol-text);
+}
+
+.lol-export-hero {
+  position: relative;
+  height: 240px;
+}
+
+.lol-export-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lol-export-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.78) 100%);
+}
+
+.lol-export-meta {
+  position: absolute;
+  left: 18px;
+  bottom: 16px;
+}
+
+.lol-export-name {
+  font-size: 24px;
+  font-weight: 980;
+}
+
+.lol-export-sub {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--lol-dim);
+  font-weight: 900;
+}
+
+.lol-export-body {
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lol-export-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lol-export-label {
+  width: 84px;
+  font-size: 12px;
+  font-weight: 950;
+  color: rgba(59, 130, 246, 0.92);
+}
+
+.lol-export-orbs {
+  display: flex;
+  gap: 8px;
+}
+
+.lol-export-orb {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.lol-export-orb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lol-export-desc {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--lol-dim);
+  line-height: 1.5;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(0, 0, 0, 0.16);
+  padding: 10px 12px;
+}
+
+@media (max-width: 1200px) {
+  .lol-main {
+    grid-template-columns: 1fr;
   }
 
-  100% {
-    transform: translateX(140%);
+  .lol-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .lol-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .lol-topbar {
+    grid-template-columns: 1fr auto;
+  }
+
+  .lol-nav {
+    display: none;
+  }
+
+  .lol-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lol-hero-text h1 {
+    font-size: 34px;
   }
 }
 </style>

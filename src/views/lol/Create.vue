@@ -1,409 +1,375 @@
 <template>
-  <div class="h-[calc(100vh-1rem)] w-full overflow-hidden rounded-3xl border border-slate-200 my-2 lol-page-bg"
-    :style="pageBackgroundStyle">
-    <div class="h-full w-full overflow-y-auto scrollbar-hide">
-      <div class="mx-auto max-w-[1480px] px-4 sm:px-5 py-6">
-        <!-- Header -->
-        <div class="flex flex-col gap-4 mb-6">
-          <div class="flex items-start justify-between gap-4">
-            <div class="flex items-center gap-4 min-w-0">
-              <div class="relative">
-                <img v-if="selectedChampion" :src="selectedChampion.images.square"
-                  class="w-12 h-12 rounded-xl object-cover border border-white/60 shadow"
-                  :alt="selectedChampion.name" />
-                <div v-else class="w-12 h-12 rounded-xl bg-white/40 border border-white/60 animate-pulse" />
-              </div>
-              <div class="min-w-0">
-                <div class="flex items-center gap-2">
-                  <h1 class="text-xl font-bold text-slate-900 tracking-tight truncate">
-                    {{ selectedChampion?.name || 'Create Guide' }}
-                  </h1>
-                  <span
-                    class="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/60 border border-white/70 text-slate-600">
-                    海克斯大乱斗
-                  </span>
-                </div>
-                <div class="text-slate-500 text-sm truncate">{{ selectedChampion?.title || 'Loading champion…' }}</div>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-2 flex-shrink-0">
-              <button class="lol-fab" @click="handleCancel" title="返回">
-                <el-icon>
-                  <ArrowLeft />
-                </el-icon>
-              </button>
-              <button class="lol-fab" @click="handleGoHome" title="主页">
-                <el-icon>
-                  <HomeFilled />
-                </el-icon>
-              </button>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
-            <div class="md:col-span-4">
-              <div class="lol-glass p-3.5">
-                <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">攻略名称</div>
-                <input v-model="strategyTitle"
-                  class="w-full h-10 px-3.5 rounded-xl bg-white/70 border border-white/70 focus:border-blue-300 focus:ring-2 focus:ring-blue-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
-                  placeholder="例如：爆发流 / 生存流 / 控制流…" />
-                <div class="mt-2 text-[11px] text-slate-400">
-                  留空会自动使用英雄名生成标题
-                </div>
-              </div>
-            </div>
-            <div class="md:col-span-8">
-              <div class="lol-glass p-3.5">
-                <div class="flex items-center justify-between mb-2">
-                  <div class="text-xs font-bold uppercase tracking-wider text-slate-500">备注</div>
-                  <div class="text-[11px] text-slate-400">建议写打法、节奏、关键选择理由</div>
-                </div>
-                <textarea v-model="strategyRemark"
-                  class="w-full min-h-24 px-3.5 py-2.5 rounded-xl bg-white/70 border border-white/70 focus:border-blue-300 focus:ring-2 focus:ring-blue-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition resize-none"
-                  placeholder="补充说明：对局思路、强势期、克制关系、强化选择理由…" />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Main Layout -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
-          <!-- Left: Items -->
-          <section class="lg:col-span-8 min-w-0">
-            <div class="lol-glass p-4">
-              <div class="flex items-center justify-between mb-4">
-                <div>
-                  <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                    出装推荐
-                  </h2>
-                  <div class="text-sm text-slate-500 mt-1">先选中行，再从下方装备池添加</div>
-                </div>
-                <button class="lol-pill" @click="clearItems" :disabled="isSubmitting" title="清空出装">
-                  清空
-                </button>
-              </div>
-
-              <div class="grid grid-cols-1 gap-4">
-                <div class="lol-row" :class="activeItemRow === 'core' ? 'lol-row--active' : ''"
-                  @click="selectItemRow('core')">
-                  <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center gap-2">
-                      <div class="text-sm font-semibold text-slate-700">常规出装</div>
-                      <span class="lol-badge">6 slots</span>
-                    </div>
-                    <div class="text-xs text-slate-400">点击格子可定点替换</div>
-                  </div>
-                  <div class="grid grid-cols-6 gap-2">
-                    <button v-for="i in 6" :key="'core-' + i" class="lol-slot"
-                      :class="activeItemRow === 'core' && activeItemSlot === i - 1 ? 'lol-slot--active' : ''"
-                      @click.stop="selectItemSlot('core', i - 1)">
-                      <template v-if="coreItems[i - 1]">
-                        <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
-                          popper-class="lol-tooltip" :content="formatItemTooltip(coreItems[i - 1]!)">
-                          <img :src="coreItems[i - 1]!.image" class="w-full h-full rounded-lg object-cover" />
-                        </el-tooltip>
-                        <span class="lol-slot__shine" />
-                        <button class="lol-slot__remove" title="移除" @click.stop="removeItem('core', i - 1)">
-                          <el-icon>
-                            <Close />
-                          </el-icon>
-                        </button>
-                      </template>
-                      <template v-else>
-                        <div class="lol-slot__empty">
-                          <el-icon>
-                            <Plus />
-                          </el-icon>
-                        </div>
-                      </template>
-                    </button>
-                  </div>
-                </div>
-
-                <div class="lol-row" :class="activeItemRow === 'extra' ? 'lol-row--active' : ''"
-                  @click="selectItemRow('extra')">
-                  <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center gap-2">
-                      <div class="text-sm font-semibold text-slate-700">补充出装</div>
-                      <span class="lol-badge">6 slots</span>
-                    </div>
-                    <div class="text-xs text-slate-400">根据对局切换</div>
-                  </div>
-                  <div class="grid grid-cols-6 gap-2">
-                    <button v-for="i in 6" :key="'extra-' + i" class="lol-slot"
-                      :class="activeItemRow === 'extra' && activeItemSlot === i - 1 ? 'lol-slot--active' : ''"
-                      @click.stop="selectItemSlot('extra', i - 1)">
-                      <template v-if="extraItems[i - 1]">
-                        <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
-                          popper-class="lol-tooltip" :content="formatItemTooltip(extraItems[i - 1]!)">
-                          <img :src="extraItems[i - 1]!.image" class="w-full h-full rounded-lg object-cover" />
-                        </el-tooltip>
-                        <span class="lol-slot__shine" />
-                        <button class="lol-slot__remove" title="移除" @click.stop="removeItem('extra', i - 1)">
-                          <el-icon>
-                            <Close />
-                          </el-icon>
-                        </button>
-                      </template>
-                      <template v-else>
-                        <div class="lol-slot__empty">
-                          <el-icon>
-                            <Plus />
-                          </el-icon>
-                        </div>
-                      </template>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="mt-6">
-                <div class="flex items-center justify-between gap-3 mb-3">
-                  <div class="flex items-center gap-2">
-                    <div class="text-sm font-semibold text-slate-700">装备池</div>
-                    <span class="lol-badge">默认：海克斯模式</span>
-                  </div>
-                  <div class="relative w-[min(320px,60vw)]">
-                    <el-icon class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                      <Search />
-                    </el-icon>
-                    <input v-model="itemSearch"
-                      class="w-full h-10 pl-10 pr-3 rounded-2xl bg-white/60 border border-white/70 focus:border-blue-300 focus:ring-2 focus:ring-blue-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
-                      placeholder="搜索装备…" />
-                  </div>
-                </div>
-
-                <div v-if="itemsLoading" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2.5">
-                  <div v-for="n in 10" :key="'item-skel-' + n" class="lol-card-skeleton" />
-                </div>
-                <div v-else class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2.5">
-                  <el-tooltip v-for="item in filteredItems" :key="itemKey(item)" effect="light" placement="top"
-                    :show-after="160" :hide-after="80" popper-class="lol-tooltip" :content="formatItemTooltip(item)">
-                    <button class="lol-card" :class="isItemSelected(item) ? 'lol-card--selected' : ''"
-                      @click="addItem(item)">
-                      <img :src="item.image" class="w-11 h-11 rounded-lg object-cover shadow-sm" />
-                      <div class="min-w-0">
-                        <div class="text-xs font-semibold text-slate-800 truncate">{{ item.name }}</div>
-                        <div class="text-[11px] text-slate-500 mt-0.5 truncate">{{ item.gold.total }}g</div>
-                      </div>
-                      <div v-if="isItemSelected(item)" class="lol-check">已选</div>
-                    </button>
-                  </el-tooltip>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Right: Augments -->
-          <section class="lg:col-span-4 min-w-0">
-            <div class="lol-glass p-4">
-              <div class="flex items-center justify-between mb-4">
-                <div>
-                  <h2 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                    海克斯推荐
-                  </h2>
-                  <div class="text-sm text-slate-500 mt-1">先选中行，再从下方强化池添加</div>
-                </div>
-                <button class="lol-pill" @click="clearAugments" :disabled="isSubmitting" title="清空海克斯">
-                  清空
-                </button>
-              </div>
-
-              <div class="grid grid-cols-1 gap-4">
-                <div class="lol-row" :class="activeAugmentTier === 'silver' ? 'lol-row--active' : ''"
-                  @click="selectAugmentTier('silver')">
-                  <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center gap-2">
-                      <div class="text-sm font-semibold text-slate-700">银色</div>
-                      <span class="lol-badge lol-badge--silver">6 slots</span>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-6 gap-2">
-                    <button v-for="i in 6" :key="'silver-' + i" class="lol-slot lol-slot--augment"
-                      :class="activeAugmentTier === 'silver' && activeAugmentSlot === i - 1 ? 'lol-slot--active' : ''"
-                      @click.stop="selectAugmentSlot('silver', i - 1)">
-                      <template v-if="selectedAugments.silver[i - 1]">
-                        <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
-                          popper-class="lol-tooltip" :content="formatAugmentTooltip(selectedAugments.silver[i - 1]!)">
-                          <img :src="selectedAugments.silver[i - 1]!.icon"
-                            class="w-full h-full rounded-lg object-cover" />
-                        </el-tooltip>
-                        <span class="lol-slot__shine" />
-                        <button class="lol-slot__remove" title="移除" @click.stop="removeAugment('silver', i - 1)">
-                          <el-icon>
-                            <Close />
-                          </el-icon>
-                        </button>
-                      </template>
-                      <template v-else>
-                        <div class="lol-slot__empty">
-                          <el-icon>
-                            <Plus />
-                          </el-icon>
-                        </div>
-                      </template>
-                    </button>
-                  </div>
-                </div>
-
-                <div class="lol-row" :class="activeAugmentTier === 'gold' ? 'lol-row--active' : ''"
-                  @click="selectAugmentTier('gold')">
-                  <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center gap-2">
-                      <div class="text-sm font-semibold text-slate-700">金色</div>
-                      <span class="lol-badge lol-badge--gold">6 slots</span>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-6 gap-2">
-                    <button v-for="i in 6" :key="'gold-' + i" class="lol-slot lol-slot--augment"
-                      :class="activeAugmentTier === 'gold' && activeAugmentSlot === i - 1 ? 'lol-slot--active' : ''"
-                      @click.stop="selectAugmentSlot('gold', i - 1)">
-                      <template v-if="selectedAugments.gold[i - 1]">
-                        <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
-                          popper-class="lol-tooltip" :content="formatAugmentTooltip(selectedAugments.gold[i - 1]!)">
-                          <img :src="selectedAugments.gold[i - 1]!.icon"
-                            class="w-full h-full rounded-lg object-cover" />
-                        </el-tooltip>
-                        <span class="lol-slot__shine" />
-                        <button class="lol-slot__remove" title="移除" @click.stop="removeAugment('gold', i - 1)">
-                          <el-icon>
-                            <Close />
-                          </el-icon>
-                        </button>
-                      </template>
-                      <template v-else>
-                        <div class="lol-slot__empty">
-                          <el-icon>
-                            <Plus />
-                          </el-icon>
-                        </div>
-                      </template>
-                    </button>
-                  </div>
-                </div>
-
-                <div class="lol-row" :class="activeAugmentTier === 'prismatic' ? 'lol-row--active' : ''"
-                  @click="selectAugmentTier('prismatic')">
-                  <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center gap-2">
-                      <div class="text-sm font-semibold text-slate-700">彩色</div>
-                      <span class="lol-badge lol-badge--prismatic">6 slots</span>
-                    </div>
-                  </div>
-                  <div class="grid grid-cols-6 gap-2">
-                    <button v-for="i in 6" :key="'prismatic-' + i" class="lol-slot lol-slot--augment"
-                      :class="activeAugmentTier === 'prismatic' && activeAugmentSlot === i - 1 ? 'lol-slot--active' : ''"
-                      @click.stop="selectAugmentSlot('prismatic', i - 1)">
-                      <template v-if="selectedAugments.prismatic[i - 1]">
-                        <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
-                          popper-class="lol-tooltip"
-                          :content="formatAugmentTooltip(selectedAugments.prismatic[i - 1]!)">
-                          <img :src="selectedAugments.prismatic[i - 1]!.icon"
-                            class="w-full h-full rounded-lg object-cover" />
-                        </el-tooltip>
-                        <span class="lol-slot__shine" />
-                        <button class="lol-slot__remove" title="移除" @click.stop="removeAugment('prismatic', i - 1)">
-                          <el-icon>
-                            <Close />
-                          </el-icon>
-                        </button>
-                      </template>
-                      <template v-else>
-                        <div class="lol-slot__empty">
-                          <el-icon>
-                            <Plus />
-                          </el-icon>
-                        </div>
-                      </template>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="mt-6">
-                <div class="flex items-center justify-between gap-3 mb-3">
-                  <div class="flex items-center gap-2">
-                    <div class="text-sm font-semibold text-slate-700">强化池</div>
-                    <span class="lol-badge">筛选：{{ tierLabel(activeAugmentTier) }}</span>
-                  </div>
-                  <div class="relative w-[min(280px,60vw)]">
-                    <el-icon class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
-                      <Search />
-                    </el-icon>
-                    <input v-model="augmentSearch"
-                      class="w-full h-10 pl-10 pr-3 rounded-2xl bg-white/60 border border-white/70 focus:border-blue-300 focus:ring-2 focus:ring-blue-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
-                      placeholder="搜索强化…" />
-                  </div>
-                </div>
-
-                <div class="flex gap-2 mb-3">
-                  <button class="lol-tab" :class="augmentTierFilter === 'all' ? 'lol-tab--active' : ''"
-                    @click="augmentTierFilter = 'all'">
-                    全部
-                  </button>
-                  <button class="lol-tab" :class="augmentTierFilter === 'silver' ? 'lol-tab--active' : ''"
-                    @click="augmentTierFilter = 'silver'">
-                    银色
-                  </button>
-                  <button class="lol-tab" :class="augmentTierFilter === 'gold' ? 'lol-tab--active' : ''"
-                    @click="augmentTierFilter = 'gold'">
-                    金色
-                  </button>
-                  <button class="lol-tab" :class="augmentTierFilter === 'prismatic' ? 'lol-tab--active' : ''"
-                    @click="augmentTierFilter = 'prismatic'">
-                    彩色
-                  </button>
-                </div>
-
-                <div v-if="augmentsLoading" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
-                  <div v-for="n in 9" :key="'aug-skel-' + n" class="lol-card-skeleton" />
-                </div>
-                <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
-                  <el-tooltip v-for="aug in filteredAugments" :key="aug.augmentId" effect="light" placement="top"
-                    :show-after="160" :hide-after="80" popper-class="lol-tooltip" :content="formatAugmentTooltip(aug)">
-                    <button class="lol-card" :class="isAugmentSelected(aug) ? 'lol-card--selected' : ''"
-                      @click="addAugment(aug)">
-                      <img :src="aug.icon" class="w-11 h-11 rounded-lg object-cover shadow-sm" />
-                      <div class="min-w-0">
-                        <div class="text-xs font-semibold text-slate-800 truncate">{{ aug.name }}</div>
-                        <div class="text-[11px] text-slate-500 mt-0.5 truncate">{{ tierLabel(getAugmentTier(aug)) }}
-                        </div>
-                      </div>
-                      <div v-if="isAugmentSelected(aug)" class="lol-check">已选</div>
-                    </button>
-                  </el-tooltip>
-                </div>
-              </div>
-
-              <div class="mt-6 flex items-center justify-between gap-3">
-                <div class="text-xs text-slate-400">
-                  提示：至少选择 1 个装备 + 1 个强化才可完成
-                </div>
-                <button class="lol-primary" :disabled="isSubmitting" @click="submitStrategy">
-                  <span v-if="isSubmitting" class="lol-spinner" />
-                  {{ isSubmitting ? '提交中…' : '完成' }}
-                </button>
-              </div>
-            </div>
-          </section>
+  <div class="lol-create" :style="pageBackgroundStyle">
+    <header class="lol-topbar">
+      <div class="lol-topbar-left">
+        <div class="lol-breadcrumb">
+          <span class="lol-bc-muted">攻略</span>
+          <span class="lol-bc-sep">/</span>
+          <span>创建</span>
         </div>
       </div>
-    </div>
+
+      <div class="lol-topbar-right">
+        <button class="lol-icon-btn" type="button" title="返回上一页" @click="handleCancel">
+          <el-icon>
+            <ArrowLeft />
+          </el-icon>
+        </button>
+        <button class="lol-icon-btn" type="button" title="返回主页" @click="handleGoHome">
+          <el-icon>
+            <HomeFilled />
+          </el-icon>
+        </button>
+      </div>
+    </header>
+
+    <main class="lol-body">
+      <aside class="lol-left">
+        <section class="lol-panel">
+          <div class="lol-field">
+            <div class="lol-field-label">攻略名称</div>
+            <div class="lol-field-control">
+              <input v-model="strategyTitle" class="lol-input" placeholder="e.g. Jinx · Attack Speed Build"
+                autocomplete="off" />
+            </div>
+          </div>
+
+          <div class="lol-hero-card">
+            <div class="lol-hero-media">
+              <img v-if="selectedChampion" :src="selectedChampion.images.splash || selectedChampion.images.square"
+                class="lol-hero-img" :alt="selectedChampion.name" loading="lazy" />
+              <div v-else class="lol-hero-img lol-skeleton" />
+              <button class="lol-hero-swap" type="button" title="切换英雄" @click="heroPickerOpen = true">
+                <el-icon>
+                  <Switch />
+                </el-icon>
+              </button>
+            </div>
+            <div class="lol-hero-meta">
+              <div class="lol-hero-name">{{ selectedChampion?.name || 'Loading…' }}</div>
+              <div class="lol-hero-title">{{ selectedChampion?.title || 'Champion' }}</div>
+              <div class="lol-hero-pill">海克斯大乱斗</div>
+            </div>
+          </div>
+
+          <div class="lol-block">
+            <div class="lol-block-head">
+              <div class="lol-block-title">装备</div>
+              <div class="lol-block-sub">{{ filledItemCount }}/12</div>
+            </div>
+
+            <div class="lol-segment">
+              <button class="lol-seg" :class="{ 'lol-seg--active': activeItemRow === 'core' }" type="button"
+                @click="selectItemRow('core')">
+                常规装备
+              </button>
+              <button class="lol-seg" :class="{ 'lol-seg--active': activeItemRow === 'extra' }" type="button"
+                @click="selectItemRow('extra')">
+                额外可选
+              </button>
+            </div>
+
+            <div class="lol-slots">
+              <button v-for="i in 6" :key="`${activeItemRow}-${i}`" class="lol-slot"
+                :class="{ 'lol-slot--active': activeItemSlot === i - 1 }" type="button"
+                @click="selectItemSlot(activeItemRow, i - 1)">
+                <template v-if="activeItemRow === 'core' ? coreItems[i - 1] : extraItems[i - 1]">
+                  <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
+                    popper-class="lol-tooltip"
+                    :content="formatItemTooltip((activeItemRow === 'core' ? coreItems[i - 1] : extraItems[i - 1])!)">
+                    <img class="lol-slot-img"
+                      :src="(activeItemRow === 'core' ? coreItems[i - 1] : extraItems[i - 1])!.image" alt="" />
+                  </el-tooltip>
+                  <button class="lol-slot-remove" type="button" title="移除"
+                    @click.stop="removeItem(activeItemRow, i - 1)">
+                    <el-icon>
+                      <Close />
+                    </el-icon>
+                  </button>
+                </template>
+                <template v-else>
+                  <span class="lol-slot-plus" aria-hidden="true">+</span>
+                </template>
+              </button>
+            </div>
+
+            <div class="lol-block-actions">
+              <button class="lol-ghost" type="button" :disabled="isSubmitting" @click="clearItems">清空</button>
+            </div>
+          </div>
+
+          <div class="lol-block">
+            <div class="lol-block-head">
+              <div class="lol-block-title">海克斯强化</div>
+              <div class="lol-block-sub">{{ filledAugmentCount }}/18</div>
+            </div>
+
+            <div class="lol-tier-tabs">
+              <button class="lol-tier" type="button" :class="{ 'lol-tier--active': activeAugmentTier === 'silver' }"
+                @click="selectAugmentTier('silver')">
+                银色
+              </button>
+              <button class="lol-tier" type="button" :class="{ 'lol-tier--active': activeAugmentTier === 'gold' }"
+                @click="selectAugmentTier('gold')">
+                金色
+              </button>
+              <button class="lol-tier" type="button" :class="{ 'lol-tier--active': activeAugmentTier === 'prismatic' }"
+                @click="selectAugmentTier('prismatic')">
+                彩色
+              </button>
+            </div>
+
+            <div class="lol-slots lol-slots--aug">
+              <button v-for="i in 6" :key="`${activeAugmentTier}-${i}`" class="lol-slot lol-slot--aug"
+                :class="{ 'lol-slot--active': activeAugmentSlot === i - 1 }" type="button"
+                @click="selectAugmentSlot(activeAugmentTier, i - 1)">
+                <template v-if="selectedAugments[activeAugmentTier][i - 1]">
+                  <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
+                    popper-class="lol-tooltip"
+                    :content="formatAugmentTooltip(selectedAugments[activeAugmentTier][i - 1]!)">
+                    <img class="lol-slot-img" :src="selectedAugments[activeAugmentTier][i - 1]!.icon" alt="" />
+                  </el-tooltip>
+                  <button class="lol-slot-remove" type="button" title="移除"
+                    @click.stop="removeAugment(activeAugmentTier, i - 1)">
+                    <el-icon>
+                      <Close />
+                    </el-icon>
+                  </button>
+                </template>
+                <template v-else>
+                  <span class="lol-slot-plus" aria-hidden="true">+</span>
+                </template>
+              </button>
+            </div>
+
+            <div class="lol-block-actions">
+              <button class="lol-ghost" type="button" :disabled="isSubmitting" @click="clearAugments">清空</button>
+            </div>
+          </div>
+
+          <div class="lol-stats">
+            <div class="lol-stats-title">数据统计</div>
+            <div class="lol-stats-grid">
+              <div class="lol-stat">
+                <div class="lol-stat-k">装备</div>
+                <div class="lol-stat-v">{{ filledItemCount }}</div>
+              </div>
+              <div class="lol-stat">
+                <div class="lol-stat-k">强化</div>
+                <div class="lol-stat-v">{{ filledAugmentCount }}</div>
+              </div>
+              <div class="lol-stat">
+                <div class="lol-stat-k">模式</div>
+                <div class="lol-stat-v">海克斯</div>
+              </div>
+              <div class="lol-stat">
+                <div class="lol-stat-k">地图</div>
+                <div class="lol-stat-v">极地大乱斗</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lol-field">
+            <div class="lol-field-label">描述</div>
+            <div class="lol-field-control">
+              <textarea v-model="strategyRemark" class="lol-textarea" placeholder="解释下有什么特殊玩法吧…" rows="3" />
+            </div>
+          </div>
+
+          <div class="lol-save">
+            <button class="lol-primary" type="button" :disabled="isSubmitting" @click="submitStrategy">
+              <span v-if="isSubmitting" class="lol-inline-spin" aria-hidden="true" />
+              保存攻略
+            </button>
+            <div class="lol-save-hint">需要登录,请在登录后新建</div>
+          </div>
+        </section>
+      </aside>
+
+      <!-- Right column -->
+      <section class="lol-right">
+        <div class="lol-catalog">
+          <div class="lol-catalog-head">
+            <div class="lol-catalog-title">
+              <div class="lol-catalog-h">目录</div>
+              <div class="lol-catalog-sub">
+                {{ catalogTab === 'items' ? '请为你的攻略选择合适的装备' : '请为你的攻略选择海克斯' }}
+              </div>
+            </div>
+
+            <div class="lol-catalog-toggle">
+              <button class="lol-toggle" type="button" :class="{ 'lol-toggle--active': catalogTab === 'items' }"
+                @click="catalogTab = 'items'">
+                装备
+              </button>
+              <button class="lol-toggle" type="button" :class="{ 'lol-toggle--active': catalogTab === 'augments' }"
+                @click="catalogTab = 'augments'">
+                海克斯强化
+              </button>
+            </div>
+          </div>
+
+          <div class="lol-catalog-tools">
+            <div class="lol-search">
+              <el-icon class="lol-search-icon">
+                <Search />
+              </el-icon>
+              <input v-model="catalogSearch" class="lol-search-input"
+                :placeholder="catalogTab === 'items' ? '搜索装备…' : '搜索海克斯…'" autocomplete="off" />
+            </div>
+
+            <div class="lol-filters" v-if="catalogTab === 'items'">
+              <button v-for="c in itemCategories" :key="c.key" class="lol-chip"
+                :class="{ 'lol-chip--active': itemCategoryFilter === c.key }" type="button"
+                @click="itemCategoryFilter = c.key">
+                {{ c.label }}
+              </button>
+            </div>
+
+            <div class="lol-filters" v-else>
+              <button v-for="t in augmentFilters" :key="t.key" class="lol-chip"
+                :class="{ 'lol-chip--active': augmentTierFilter === t.key }" type="button"
+                @click="augmentTierFilter = t.key">
+                {{ t.label }}
+              </button>
+            </div>
+          </div>
+
+          <div class="lol-catalog-meta">
+            <div class="lol-meta-muted">
+              已找到
+              <span class="lol-meta-strong">{{ catalogTab === 'items' ? filteredItems.length : filteredAugments.length
+              }}</span>
+              {{ catalogTab === 'items' ? '个装备' : '个海克斯强化' }}
+            </div>
+            <div class="lol-meta-muted" v-if="catalogTab === 'augments'">
+              当前待添加:
+              <span class="lol-meta-strong">{{ tierLabel(activeAugmentTier) }}</span>
+            </div>
+          </div>
+
+          <div class="lol-grid" v-if="catalogTab === 'items'">
+            <template v-if="itemsLoading">
+              <div v-for="n in 12" :key="`item-sk-${n}`" class="lol-card lol-card--skeleton" />
+            </template>
+
+            <template v-else>
+              <el-tooltip v-for="item in filteredItems" :key="itemIdentifier(item) || item.name" effect="light"
+                placement="top" :show-after="160" :hide-after="80" popper-class="lol-tooltip"
+                :content="formatItemTooltip(item)">
+                <button class="lol-card" :class="{ 'lol-card--selected': isItemSelected(item) }" type="button"
+                  @click="addItem(item)">
+                  <img class="lol-card-icon" :src="item.image" :alt="item.name" loading="lazy" />
+                  <div class="lol-card-body">
+                    <div class="lol-card-title">{{ item.name }}</div>
+                    <div class="lol-card-sub">{{ item.gold?.total ?? '-' }}g · {{ itemShort(item) }}</div>
+                  </div>
+                  <div v-if="isItemSelected(item)" class="lol-card-badge">已选</div>
+                </button>
+              </el-tooltip>
+
+              <div v-if="!filteredItems.length" class="lol-empty">
+                <div class="lol-empty-title">未找到对应装备</div>
+                <div class="lol-empty-sub">请输入其他关键字。</div>
+              </div>
+            </template>
+          </div>
+
+          <div class="lol-grid" v-else>
+            <template v-if="augmentsLoading">
+              <div v-for="n in 12" :key="`aug-sk-${n}`" class="lol-card lol-card--skeleton" />
+            </template>
+
+            <template v-else>
+              <el-tooltip v-for="aug in filteredAugments" :key="aug.augmentId" effect="light" placement="top"
+                :show-after="160" :hide-after="80" popper-class="lol-tooltip" :content="formatAugmentTooltip(aug)">
+                <button class="lol-card" :class="{ 'lol-card--selected': isAugmentSelected(aug) }" type="button"
+                  @click="addAugment(aug)">
+                  <img class="lol-card-icon lol-card-icon--aug" :src="aug.icon" :alt="aug.name" loading="lazy" />
+                  <div class="lol-card-body">
+                    <div class="lol-card-title">{{ aug.name }}</div>
+                    <div class="lol-card-sub">{{ tierLabel(getAugmentTier(aug)) }} · {{ augmentShort(aug) }}</div>
+                  </div>
+                  <div v-if="isAugmentSelected(aug)" class="lol-card-badge">已选</div>
+                </button>
+              </el-tooltip>
+
+              <div v-if="!filteredAugments.length" class="lol-empty">
+                <div class="lol-empty-title">未找到对应的海克斯强化</div>
+                <div class="lol-empty-sub">请选择其他的关键字。</div>
+              </div>
+            </template>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <teleport to="body">
+      <transition name="lol-fade">
+        <div v-if="heroPickerOpen" class="lol-modal" role="dialog" aria-modal="true"
+          @click.self="heroPickerOpen = false">
+          <div class="lol-modal-panel">
+            <div class="lol-modal-head">
+              <div class="lol-modal-title">选择一个英雄</div>
+              <button class="lol-icon-btn" type="button" title="关闭" @click="heroPickerOpen = false">
+                <el-icon>
+                  <Close />
+                </el-icon>
+              </button>
+            </div>
+
+            <div class="lol-modal-tools">
+              <div class="lol-search lol-search--modal">
+                <el-icon class="lol-search-icon">
+                  <Search />
+                </el-icon>
+                <input v-model="heroQuery" class="lol-search-input" placeholder="Search champion…" autocomplete="off" />
+              </div>
+              <div class="lol-filters lol-filters--wrap">
+                <button v-for="r in roles" :key="r.key" class="lol-chip"
+                  :class="{ 'lol-chip--active': heroRoleFilter === r.key }" type="button"
+                  @click="heroRoleFilter = r.key">
+                  {{ r.label }}
+                </button>
+              </div>
+            </div>
+
+            <div class="lol-modal-grid" aria-label="Champion grid">
+              <template v-if="championsLoading && !champions.length">
+                <div v-for="n in 12" :key="`c-sk-${n}`" class="lol-champ-card lol-champ-card--skeleton" />
+              </template>
+
+              <button v-for="c in filteredChampions" :key="c._id" class="lol-champ-card" type="button"
+                :class="{ 'lol-champ-card--active': selectedChampion?._id === c._id }" @click="applyChampion(c)">
+                <img class="lol-champ-img" :src="c.images.square" :alt="c.name" loading="lazy" />
+                <div class="lol-champ-name">{{ c.name }}</div>
+                <div class="lol-champ-role">{{ primaryRole(c) }}</div>
+              </button>
+
+              <div v-if="!championsLoading && filteredChampions.length === 0" class="lol-empty lol-empty--modal">
+                <div class="lol-empty-title">未找到英雄</div>
+                <div class="lol-empty-sub">请选择其他的关键字</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>
+    </teleport>
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { ArrowLeft, Close, HomeFilled, Plus, Search } from '@element-plus/icons-vue'
+import { ArrowLeft, Close, HomeFilled, Search, Switch } from '@element-plus/icons-vue'
 import { commonService } from '@/service'
 import { useLolStore } from '@/stores/lol'
 import type { Augment, Champion, CreateStrategyPayload, Item } from '@/types'
 
 type ItemRow = 'core' | 'extra'
 type AugTier = 'silver' | 'gold' | 'prismatic'
+type CatalogTab = 'items' | 'augments'
 
 const router = useRouter()
 const route = useRoute()
@@ -415,9 +381,11 @@ const strategyTitle = ref('')
 const strategyRemark = ref('')
 const isSubmitting = ref(false)
 
+const catalogTab = ref<CatalogTab>('items')
+const catalogSearch = ref('')
+
 const itemsLoading = ref(false)
 const allItems = ref<Item[]>([])
-const itemSearch = ref('')
 const activeItemRow = ref<ItemRow>('core')
 const activeItemSlot = ref<number | null>(null)
 const coreItems = ref<(Item | null)[]>(Array(6).fill(null))
@@ -425,8 +393,6 @@ const extraItems = ref<(Item | null)[]>(Array(6).fill(null))
 
 const augmentsLoading = ref(false)
 const allAugments = ref<Augment[]>([])
-const augmentSearch = ref('')
-const augmentTierFilter = ref<'all' | AugTier>('all')
 const activeAugmentTier = ref<AugTier>('gold')
 const activeAugmentSlot = ref<number | null>(null)
 const selectedAugments = ref<Record<AugTier, (Augment | null)[]>>({
@@ -435,96 +401,144 @@ const selectedAugments = ref<Record<AugTier, (Augment | null)[]>>({
   prismatic: Array(6).fill(null),
 })
 
-const backgroundPalettes = [
-  // cool neutral (screenshot-like)
-  { light: '#e7ebf0', mid: '#d8d2db', deep: '#c8d6e6', glow: '#ffffff' },
-  { light: '#e9eef9', mid: '#d9e1f3', deep: '#d2d8ee', glow: '#ffffff' },
-  // blue/cyan (Mage/Support)
-  { light: '#e6f2f4', mid: '#d3e6ee', deep: '#c9dff2', glow: '#ffffff' },
-  { light: '#e6f0ff', mid: '#d7e4ff', deep: '#c9d7ff', glow: '#ffffff' },
-  // extra cool (Assassin/Marksman)
-  { light: '#eaf2ff', mid: '#d8e9ff', deep: '#c7deff', glow: '#ffffff' },
-  { light: '#ecf8ff', mid: '#d9f0ff', deep: '#c6e7ff', glow: '#ffffff' },
-  // green/teal (Tank)
-  { light: '#e8f3ea', mid: '#d8ecd9', deep: '#d0e8e4', glow: '#ffffff' },
-  { light: '#e6f5f1', mid: '#d5efe6', deep: '#cde6f2', glow: '#ffffff' },
-  // warm/amber (Fighter)
-  { light: '#f2eee6', mid: '#e9dfd2', deep: '#e6d8c5', glow: '#ffffff' },
-  { light: '#f7efe3', mid: '#f1e1c8', deep: '#ead2bf', glow: '#ffffff' },
-]
+const itemCategories = [
+  { key: 'all', label: '全部' },
+  { key: 'tank', label: '坦克' },
+  { key: 'mage', label: '法师' },
+  { key: 'marksman', label: '射手' },
+  { key: 'support', label: '辅助' },
+] as const
+const itemCategoryFilter = ref<(typeof itemCategories)[number]['key']>('all')
 
-const pickPaletteIndex = (seed: string) => {
-  let hash = 0
-  for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) | 0
-  return Math.abs(hash) % backgroundPalettes.length
-}
+const augmentFilters = [
+  { key: 'all', label: '全部' },
+  { key: 'silver', label: '银色' },
+  { key: 'gold', label: '金色' },
+  { key: 'prismatic', label: '彩色' },
+] as const
+const augmentTierFilter = ref<(typeof augmentFilters)[number]['key']>('all')
 
-const pageBackgroundStyle = computed(() => {
-  const seed = selectedChampion.value?.key?.toString() || selectedChampion.value?._id?.toString() || 'default'
-  const firstTag = selectedChampion.value?.tags?.[0]
-  const tagPaletteGroups: Record<string, number[]> = {
-    Assassin: [2, 3, 4, 5],
-    Mage: [2, 3, 4],
-    Support: [2, 3, 7],
-    Tank: [6, 7],
-    Fighter: [8, 9],
-    Marksman: [1, 3, 5],
+const heroPickerOpen = ref(false)
+const championsLoading = ref(false)
+const heroQuery = ref('')
+const heroRoleFilter = ref<string>('all')
+const roles = [
+  { key: 'all', label: 'All' },
+  { key: 'Fighter', label: 'Fighter' },
+  { key: 'Mage', label: 'Mage' },
+  { key: 'Tank', label: 'Tank' },
+  { key: 'Support', label: 'Support' },
+  { key: 'Marksman', label: 'Marksman' },
+] as const
+
+const champions = computed(() => lolStore.champions || [])
+
+const handleCancel = () => {
+  if (typeof window !== 'undefined' && window.history.length > 1) {
+    router.back()
+    return
   }
-  const group = firstTag ? tagPaletteGroups[firstTag] : undefined
-  const paletteIndex = group?.length ? group[pickPaletteIndex(seed) % group.length] : pickPaletteIndex(seed)
-  const palette = backgroundPalettes[paletteIndex]
-  const background = [
-    `radial-gradient(900px circle at 70% 10%, ${palette.glow} 0%, transparent 60%)`,
-    `radial-gradient(700px circle at 15% 85%, ${palette.glow} 0%, transparent 65%)`,
-    `linear-gradient(135deg, ${palette.light} 0%, ${palette.mid} 48%, ${palette.deep} 100%)`,
-  ].join(', ')
-  return { background }
-})
+  router.push({ name: 'lol' })
+}
+const handleGoHome = () => router.push({ name: 'home' })
 
 const stripHtml = (input: string) => input.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
 
-const itemKey = (item: Item) => String((item as any)?._id ?? (item as any)?.riotId ?? (item as any)?.name ?? '')
+const itemIdentifier = (item: Item) => {
+  const id = String((item as any)?._id || (item as any)?.riotId || (item as any)?.name || '')
+  return id.trim() ? id : null
+}
 
-const filteredItems = computed(() => {
-  const q = itemSearch.value.trim().toLowerCase()
-  const items = allItems.value.filter(i => i.gold?.purchasable !== false)
-  if (!q) return items
-  return items.filter(i => (i.name || '').toLowerCase().includes(q) || (i.plaintext || '').toLowerCase().includes(q))
-})
+const itemShort = (item: Item) => {
+  const text = stripHtml(item.plaintext || item.description || '')
+  if (!text) return '—'
+  return text.length > 48 ? `${text.slice(0, 48)}…` : text
+}
+
+const augmentShort = (aug: Augment) => {
+  const text = stripHtml(aug.description || '')
+  if (!text) return '—'
+  return text.length > 48 ? `${text.slice(0, 48)}…` : text
+}
 
 const getAugmentTier = (aug: Augment): AugTier => {
   const raw = String(aug.tier ?? '').toLowerCase()
-  if (raw === 'prismatic' || raw.includes('kprismatic') || raw === '2' || raw === '3') return 'prismatic'
+  if (raw === 'prismatic' || raw.includes('kprismatic') || raw === '2') return 'prismatic'
   if (raw === 'gold' || raw.includes('kgold') || raw === '1') return 'gold'
-  return 'silver' // 'silver' | '0' | 'ksilver'
+  return 'silver'
 }
 
 const tierLabel = (tier: 'all' | AugTier) => {
   if (tier === 'silver') return '银色'
   if (tier === 'gold') return '金色'
   if (tier === 'prismatic') return '彩色'
-  return '全部'
+  return 'All'
 }
 
+const primaryRole = (c: Champion) => c.tags?.[0] || '—'
+
+const filteredChampions = computed(() => {
+  const q = heroQuery.value.trim().toLowerCase()
+  const role = heroRoleFilter.value
+  return champions.value
+    .filter(c => (role === 'all' ? true : c.tags?.includes(role)))
+    .filter(c => {
+      if (!q) return true
+      const hay = `${c.name} ${c.title} ${c.key} ${c.riotId}`.toLowerCase()
+      return hay.includes(q)
+    })
+})
+
+const itemCategory = (item: Item) => {
+  const tags = (item.tags || []).map(t => String(t).toLowerCase())
+  const has = (...keys: string[]) => keys.some(k => tags.includes(k.toLowerCase()))
+  if (has('armor', 'health', 'spellblock')) return 'tank'
+  if (has('spelldamage', 'mana', 'magicpenetration')) return 'mage'
+  if (has('criticalstrike', 'attackspeed', 'lifesteal', 'damage')) return 'marksman'
+  if (has('aura', 'vision', 'cooldownreduction', 'manaregen', 'healthregen')) return 'support'
+  return 'all'
+}
+
+const filteredItems = computed(() => {
+  const q = catalogTab.value === 'items' ? catalogSearch.value.trim().toLowerCase() : ''
+  const category = itemCategoryFilter.value
+  const list = allItems.value.filter(i => i.gold?.purchasable !== false)
+  return list
+    .filter(i => (category === 'all' ? true : itemCategory(i) === category))
+    .filter(i => {
+      if (!q) return true
+      return (i.name || '').toLowerCase().includes(q) || (i.plaintext || '').toLowerCase().includes(q)
+    })
+})
+
 const filteredAugments = computed(() => {
-  const q = augmentSearch.value.trim().toLowerCase()
+  const q = catalogTab.value === 'augments' ? catalogSearch.value.trim().toLowerCase() : ''
   let list = allAugments.value
   if (augmentTierFilter.value !== 'all') {
     list = list.filter(a => getAugmentTier(a) === augmentTierFilter.value)
   }
-  if (!q) return list
-  return list.filter(a => (a.name || '').toLowerCase().includes(q) || (a.description || '').toLowerCase().includes(q))
+  return list.filter(a => {
+    if (!q) return true
+    return (a.name || '').toLowerCase().includes(q) || (a.description || '').toLowerCase().includes(q)
+  })
 })
-
-const handleCancel = () => router.push({ name: 'lol' })
-const handleGoHome = () => router.push({ name: 'home' })
 
 const formatItemTooltip = (item: Item) => {
   const parts = [
     item.name,
     item.plaintext ? `- ${stripHtml(item.plaintext)}` : '',
-    item.gold?.total !== undefined ? `价格：${item.gold.total}g` : '',
-    item.tags?.length ? `标签：${item.tags.join(' / ')}` : '',
+    item.gold?.total !== undefined ? `Price: ${item.gold.total}g` : '',
+    item.tags?.length ? `Tags: ${item.tags.join(' / ')}` : '',
+  ].filter(Boolean)
+  return parts.join('\n')
+}
+
+const formatAugmentTooltip = (aug: Augment) => {
+  const parts = [
+    aug.name,
+    aug.description ? `- ${stripHtml(aug.description)}` : '',
+    `Tier: ${tierLabel(getAugmentTier(aug))}`,
+    aug.tags?.length ? `Tags: ${aug.tags.join(' / ')}` : '',
   ].filter(Boolean)
   return parts.join('\n')
 }
@@ -539,33 +553,45 @@ const selectItemSlot = (row: ItemRow, idx: number) => {
   activeItemSlot.value = idx
 }
 
+const findSelectedItem = (item: Item) => {
+  const id = itemIdentifier(item)
+  if (!id) return null
+  const coreIdx = coreItems.value.findIndex(i => i && itemIdentifier(i) === id)
+  if (coreIdx !== -1) return { row: 'core' as const, idx: coreIdx }
+  const extraIdx = extraItems.value.findIndex(i => i && itemIdentifier(i) === id)
+  if (extraIdx !== -1) return { row: 'extra' as const, idx: extraIdx }
+  return null
+}
+
 const isItemSelected = (item: Item) => {
-  const key = itemKey(item)
-  return (
-    coreItems.value.some(i => (i ? itemKey(i) : '') === key) ||
-    extraItems.value.some(i => (i ? itemKey(i) : '') === key)
-  )
+  const id = itemIdentifier(item)
+  if (!id) return false
+  return !!findSelectedItem(item)
 }
 
 const removeItem = (row: ItemRow, idx: number) => {
   if (row === 'core') coreItems.value[idx] = null
   else extraItems.value[idx] = null
+  if (activeItemRow.value === row && activeItemSlot.value === idx) activeItemSlot.value = null
 }
 
 const addItem = (item: Item) => {
+  if (catalogTab.value !== 'items') catalogTab.value = 'items'
   const target = activeItemRow.value === 'core' ? coreItems.value : extraItems.value
 
-  if (activeItemSlot.value !== null) {
-    target[activeItemSlot.value] = item
+  const existing = findSelectedItem(item)
+  const placeAt = activeItemSlot.value ?? target.findIndex(i => !i)
+  if (placeAt === -1) {
+    ElMessage.warning('Selected row is full. Remove one slot first.')
     return
   }
 
-  const empty = target.findIndex(i => !i)
-  if (empty === -1) {
-    ElMessage.warning('当前行已满，先移除一个再添加')
-    return
+  if (existing) {
+    if (existing.row === activeItemRow.value && existing.idx === placeAt) return
+    removeItem(existing.row, existing.idx)
   }
-  target[empty] = item
+
+  target[placeAt] = item
 }
 
 const clearItems = () => {
@@ -578,11 +604,13 @@ const selectAugmentTier = (tier: AugTier) => {
   activeAugmentTier.value = tier
   activeAugmentSlot.value = null
   augmentTierFilter.value = tier
+  if (catalogTab.value !== 'augments') catalogTab.value = 'augments'
 }
 
 const selectAugmentSlot = (tier: AugTier, idx: number) => {
   activeAugmentTier.value = tier
   activeAugmentSlot.value = idx
+  augmentTierFilter.value = tier
 }
 
 const isAugmentSelected = (aug: Augment) => {
@@ -593,42 +621,41 @@ const isAugmentSelected = (aug: Augment) => {
   )
 }
 
+const findSelectedAugment = (aug: Augment) => {
+  const tier = getAugmentTier(aug)
+  const idx = selectedAugments.value[tier].findIndex(a => a?.augmentId === aug.augmentId)
+  return idx === -1 ? null : { tier, idx }
+}
+
 const removeAugment = (tier: AugTier, idx: number) => {
   selectedAugments.value[tier][idx] = null
+  if (activeAugmentTier.value === tier && activeAugmentSlot.value === idx) activeAugmentSlot.value = null
 }
 
 const addAugment = (aug: Augment) => {
+  if (catalogTab.value !== 'augments') catalogTab.value = 'augments'
   const tier = getAugmentTier(aug)
 
-  // Enforce tier-only rows (silver->silver, gold->gold, prismatic->prismatic)
-  if (activeAugmentTier.value !== tier) {
-    activeAugmentTier.value = tier
-    activeAugmentSlot.value = null
-    augmentTierFilter.value = tier
+  // Enforce tier-only rows: do NOT auto-switch silently.
+  if (tier !== activeAugmentTier.value) {
+    ElMessage.warning(`This augment is ${tierLabel(tier)}. Switch active tier to add it.`)
+    return
   }
 
   const target = selectedAugments.value[tier]
-  if (activeAugmentSlot.value !== null) {
-    target[activeAugmentSlot.value] = aug
+  const placeAt = activeAugmentSlot.value ?? target.findIndex(a => !a)
+  if (placeAt === -1) {
+    ElMessage.warning(`${tierLabel(tier)} row is full. Remove one slot first.`)
     return
   }
 
-  const empty = target.findIndex(a => !a)
-  if (empty === -1) {
-    ElMessage.warning(`${tierLabel(tier)}栏已满，先移除一个再添加`)
-    return
+  const existing = findSelectedAugment(aug)
+  if (existing) {
+    if (existing.tier === tier && existing.idx === placeAt) return
+    removeAugment(existing.tier, existing.idx)
   }
-  target[empty] = aug
-}
 
-const formatAugmentTooltip = (aug: Augment) => {
-  const parts = [
-    aug.name,
-    aug.description ? `- ${stripHtml(aug.description)}` : '',
-    `稀有度：${tierLabel(getAugmentTier(aug))}`,
-    aug.tags?.length ? `标签：${aug.tags.join(' / ')}` : '',
-  ].filter(Boolean)
-  return parts.join('\n')
+  target[placeAt] = aug
 }
 
 const clearAugments = () => {
@@ -640,15 +667,25 @@ const clearAugments = () => {
   activeAugmentSlot.value = null
 }
 
+const filledItemCount = computed(() => coreItems.value.filter(Boolean).length + extraItems.value.filter(Boolean).length)
+const filledAugmentCount = computed(
+  () =>
+    selectedAugments.value.silver.filter(Boolean).length +
+    selectedAugments.value.gold.filter(Boolean).length +
+    selectedAugments.value.prismatic.filter(Boolean).length,
+)
+
 const submitStrategy = async () => {
+  console.log('111');
+  debugger
   if (!selectedChampion.value) {
-    ElMessage.error('英雄信息缺失，请返回重试')
+    ElMessage.error('Champion missing. Please reselect.')
     return
   }
 
   const hasAnyItems = coreItems.value.some(Boolean) || extraItems.value.some(Boolean)
   if (!hasAnyItems) {
-    ElMessage.warning('请至少选择 1 个装备')
+    ElMessage.warning('Select at least 1 item.')
     return
   }
 
@@ -657,98 +694,130 @@ const submitStrategy = async () => {
     selectedAugments.value.gold.some(Boolean) ||
     selectedAugments.value.prismatic.some(Boolean)
   if (!hasAnyAugments) {
-    ElMessage.warning('请至少选择 1 个强化')
+    ElMessage.warning('Select at least 1 augment.')
     return
   }
 
+  const title = strategyTitle.value.trim() || `${selectedChampion.value.name} · 海克斯大乱斗`
+  const description = strategyRemark.value.trim() || `${selectedChampion.value.name}指南`
+
+  const itemPayload = [
+    ...coreItems.value
+      .map((it, idx) => (!it?._id ? null : { itemId: it._id, position: idx }))
+      .filter(Boolean),
+    ...extraItems.value
+      .map((it, idx) => (!it?._id ? null : { itemId: it._id, position: idx + 6 }))
+      .filter(Boolean),
+  ] as Array<{ itemId: string; position: number }>
+
+  if (!itemPayload.length) {
+    ElMessage.error('Selected items are missing IDs. Refresh and try again.')
+    return
+  }
+
+  const augmentIds = ([
+    ...selectedAugments.value.silver,
+    ...selectedAugments.value.gold,
+    ...selectedAugments.value.prismatic,
+  ] as Array<Augment | null>)
+    .filter(Boolean)
+    .map(a => a!.augmentId)
+
+  const payload: CreateStrategyPayload = {
+    title,
+    description,
+    championId: selectedChampion.value._id,
+    items: itemPayload,
+    mapType: 'aram',
+    mode: 'hex_brawl',
+    augmentIds,
+    tags: ['hex_brawl'],
+  }
+  console.log(payload);
+
   isSubmitting.value = true
   try {
-    const title = strategyTitle.value.trim() || `${selectedChampion.value.name} · 海克斯大乱斗`
-    const description = strategyRemark.value.trim() || `Hex Brawl guide for ${selectedChampion.value.name}`
-
-    const itemPayload = [
-      ...coreItems.value
-        .map((it, idx) => {
-          const itemId = it?._id
-          if (!it) return null
-          if (!itemId) return { itemId: '', position: idx }
-          return { itemId, position: idx }
-        })
-        .filter(Boolean),
-      ...extraItems.value
-        .map((it, idx) => {
-          const itemId = it?._id
-          if (!it) return null
-          if (!itemId) return { itemId: '', position: idx + 6 }
-          return { itemId, position: idx + 6 }
-        })
-        .filter(Boolean),
-    ] as Array<{ itemId: string; position: number }>
-
-    if (itemPayload.some(i => !i.itemId)) {
-      ElMessage.error('装备数据缺少 _id，无法提交，请刷新页面重试')
-      return
-    }
-
-    const augmentIds = ([
-      ...selectedAugments.value.silver,
-      ...selectedAugments.value.gold,
-      ...selectedAugments.value.prismatic,
-    ]
-      .filter(Boolean)
-      .map(a => (a as Augment).augmentId) as string[]).filter((v, i, arr) => arr.indexOf(v) === i)
-
-    const payload: CreateStrategyPayload = {
-      title,
-      championId: selectedChampion.value._id,
-      items: itemPayload,
-      mapType: 'aram',
-      mode: 'hex_brawl',
-      augmentIds,
-      description,
-      tags: ['hex_brawl'],
-    }
-
     await commonService.apiCreateStrategy(payload)
-    ElMessage.success('攻略创建成功')
+    ElMessage.success('Strategy created')
     router.push({ name: 'lol', query: { championKey: selectedChampion.value.key } })
   } catch (error: any) {
-    console.error('Failed to create strategy:', error)
-    ElMessage.error(error?.response?.data?.message || '创建攻略失败')
+    const msg = error?.response?.data?.message || error?.message || 'Failed to create strategy'
+    if (String(error?.response?.status) === '401') {
+      ElMessage.error('Please login first.')
+      return
+    }
+    ElMessage.error(msg)
   } finally {
     isSubmitting.value = false
   }
 }
 
-const init = async () => {
-  try {
-    const championFromState =
-      (typeof window !== 'undefined' ? ((window.history.state as any) || {}).champion : undefined) as
-      | Champion
-      | undefined
-    if (championFromState?._id) {
-      selectedChampion.value = championFromState
-      strategyTitle.value = `${championFromState.name} · 海克斯大乱斗`
-    }
+const applyChampion = (c: Champion) => {
+  const prev = selectedChampion.value
+  selectedChampion.value = c
+  router.replace({ query: { ...route.query, championKey: c.key } })
 
-    if (lolStore.champions.length === 0) {
-      await lolStore.initializeData()
-    }
+  const prevDefault = prev ? `${prev.name} · Hex Brawl` : ''
+  if (!strategyTitle.value.trim() || strategyTitle.value.trim() === prevDefault) {
+    strategyTitle.value = `${c.name} · Hex Brawl`
+  }
+  heroPickerOpen.value = false
+}
+
+const backgroundPalettes = [
+  { glow: 'rgba(255,255,255,0.07)', a: '#070b12', b: '#0b1222', c: '#0a1b25' }, // cool neutral
+  { glow: 'rgba(255,255,255,0.07)', a: '#070b12', b: '#071a2a', c: '#062438' }, // blue
+  { glow: 'rgba(255,255,255,0.07)', a: '#070b12', b: '#0a1f22', c: '#052a2b' }, // teal
+  { glow: 'rgba(255,255,255,0.07)', a: '#070b12', b: '#1b1422', c: '#251018' }, // warm
+  { glow: 'rgba(255,255,255,0.07)', a: '#070b12', b: '#121b22', c: '#1a2219' }, // muted green
+  { glow: 'rgba(255,255,255,0.07)', a: '#070b12', b: '#21180f', c: '#1f2514' }, // amber/olive
+]
+
+const pickPaletteIndex = (seed: string) => {
+  let hash = 0
+  for (let i = 0; i < seed.length; i++) hash = (hash * 31 + seed.charCodeAt(i)) | 0
+  return Math.abs(hash) % backgroundPalettes.length
+}
+
+const pageBackgroundStyle = computed(() => {
+  const seed = selectedChampion.value?.key?.toString() || selectedChampion.value?._id?.toString() || 'default'
+  const firstTag = selectedChampion.value?.tags?.[0]
+  const tagPaletteGroups: Record<string, number[]> = {
+    Assassin: [2, 1],
+    Mage: [1, 2],
+    Support: [1, 2],
+    Tank: [4, 2],
+    Fighter: [5, 3],
+    Marksman: [1, 0],
+  }
+  const group = firstTag ? tagPaletteGroups[firstTag] : undefined
+  const paletteIndex = group?.length ? group[pickPaletteIndex(seed) % group.length] : pickPaletteIndex(seed)
+  const p = backgroundPalettes[paletteIndex]
+  const background = [
+    `radial-gradient(900px circle at 70% 0%, ${p.glow} 0%, transparent 60%)`,
+    `radial-gradient(900px circle at 20% 100%, ${p.glow} 0%, transparent 60%)`,
+    `linear-gradient(135deg, ${p.a} 0%, ${p.b} 55%, ${p.c} 100%)`,
+  ].join(', ')
+  return { background }
+})
+
+const init = async () => {
+  championsLoading.value = true
+  try {
+    if (!lolStore.champions.length) await lolStore.initializeData()
+
+    const championFromState =
+      (typeof window !== 'undefined' ? ((window.history.state as any) || {}).champion : undefined) as Champion | undefined
+    if (championFromState?._id) selectedChampion.value = championFromState
 
     if (!selectedChampion.value) {
       const key = String(route.query.championKey || '')
-      if (key) {
-        selectedChampion.value = lolStore.getChampionByKey(key) || null
-        if (selectedChampion.value) strategyTitle.value = `${selectedChampion.value.name} · 海克斯大乱斗`
-      }
+      if (key) selectedChampion.value = lolStore.getChampionByKey(key) || null
     }
 
-    if (!selectedChampion.value && lolStore.champions.length) {
-      selectedChampion.value = lolStore.champions[0]
-      strategyTitle.value = `${selectedChampion.value.name} · 海克斯大乱斗`
-    }
+    if (!selectedChampion.value && lolStore.champions.length) selectedChampion.value = lolStore.champions[0]
+    if (selectedChampion.value && !strategyTitle.value.trim()) strategyTitle.value = `${selectedChampion.value.name} · Hex Brawl`
 
-    // Load hex-brawl item pool
     itemsLoading.value = true
     try {
       const itemsRes = await commonService.apiGetItems({ mode: 'hex_brawl' })
@@ -757,7 +826,6 @@ const init = async () => {
       itemsLoading.value = false
     }
 
-    // Load augments (prefer filtered API, fallback to store list)
     augmentsLoading.value = true
     try {
       const augRes = await commonService.apiGetAugments({ mode: 'hex_brawl', isActive: true, limit: 200 })
@@ -771,8 +839,10 @@ const init = async () => {
     }
   } catch (error: any) {
     console.error('Failed to init create page:', error)
-    ElMessage.error(error?.message || '初始化失败')
+    ElMessage.error(error?.message || 'Init failed')
     router.push({ name: 'lol' })
+  } finally {
+    championsLoading.value = false
   }
 }
 
@@ -781,246 +851,762 @@ onMounted(() => {
 })
 </script>
 
-<style lang="scss" scoped>
-/* Keep this page self-contained (Index has its own). */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+<style scoped>
+.lol-create {
+  height: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  overflow: hidden;
+  color: rgba(226, 232, 240, 0.92);
+  --accent: #38bdf8;
+  --accent2: #f59e0b;
+  --glass: rgba(15, 23, 42, 0.55);
+  --glass2: rgba(15, 23, 42, 0.42);
+  --border: rgba(148, 163, 184, 0.18);
+  --text: rgba(226, 232, 240, 0.92);
+  --muted: rgba(148, 163, 184, 0.82);
+  --muted2: rgba(148, 163, 184, 0.62);
+  --shadow: 0 18px 50px rgba(0, 0, 0, 0.35);
 }
 
-.scrollbar-hide {
-  -ms-overflow-style: none;
+.lol-topbar {
+  height: 56px;
+  padding: 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(2, 6, 23, 0.52);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  backdrop-filter: blur(14px);
+}
+
+.lol-breadcrumb {
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.2px;
+  color: rgba(226, 232, 240, 0.9);
+}
+
+.lol-bc-muted {
+  color: var(--muted2);
+}
+
+.lol-bc-sep {
+  padding: 0 8px;
+  color: rgba(148, 163, 184, 0.45);
+}
+
+.lol-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lol-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.38);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  color: rgba(226, 232, 240, 0.92);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+.lol-icon-btn:hover {
+  transform: translateY(-1px);
+  background: rgba(15, 23, 42, 0.5);
+  border-color: rgba(56, 189, 248, 0.24);
+}
+
+.lol-body {
+  height: calc(100% - 56px);
+  display: grid;
+  grid-template-columns: minmax(330px, 380px) 1fr;
+  gap: 12px;
+  padding: 12px;
+}
+
+.lol-left,
+.lol-right {
+  min-width: 0;
+}
+
+.lol-left {
+  overflow: auto;
   scrollbar-width: none;
 }
 
-.lol-page-bg {
-  transition: background 600ms ease;
+.lol-left::-webkit-scrollbar {
+  display: none;
 }
 
-.lol-glass {
-  border-radius: 1.25rem;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  box-shadow:
-    0 18px 40px rgba(15, 23, 42, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(20px);
+.lol-right {
+  overflow: auto;
+  scrollbar-width: none;
 }
 
-.lol-pill {
-  height: 34px;
-  padding: 0 12px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  color: rgb(71 85 105);
-  font-weight: 600;
+.lol-right::-webkit-scrollbar {
+  display: none;
+}
+
+.lol-panel {
+  background: var(--glass);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  border-radius: 14px;
+  padding: 12px;
+  backdrop-filter: blur(18px);
+}
+
+.lol-field {
+  margin-bottom: 12px;
+}
+
+.lol-field-label {
   font-size: 12px;
-  transition: transform 180ms ease, background 180ms ease;
+  font-weight: 750;
+  color: rgba(226, 232, 240, 0.92);
+  margin-bottom: 7px;
 }
 
-.lol-pill:hover:not(:disabled) {
+.lol-input,
+.lol-textarea {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  background: rgba(2, 6, 23, 0.32);
+  color: rgba(226, 232, 240, 0.92);
+  outline: none;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.lol-input {
+  height: 40px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.lol-textarea {
+  padding: 10px 12px;
+  font-size: 13px;
+  resize: none;
+}
+
+.lol-input::placeholder,
+.lol-textarea::placeholder {
+  color: rgba(148, 163, 184, 0.6);
+}
+
+.lol-input:focus,
+.lol-textarea:focus {
+  border-color: rgba(56, 189, 248, 0.35);
+  background: rgba(2, 6, 23, 0.44);
+}
+
+.lol-hero-card {
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  overflow: hidden;
+  background: rgba(2, 6, 23, 0.22);
+  margin-bottom: 14px;
+}
+
+.lol-hero-media {
+  position: relative;
+  height: 132px;
+  overflow: hidden;
+}
+
+.lol-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.95) contrast(1.05);
+  transform: scale(1.02);
+}
+
+.lol-hero-swap {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  background: rgba(2, 6, 23, 0.55);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: rgba(226, 232, 240, 0.92);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 160ms ease, border-color 160ms ease;
+}
+
+.lol-hero-swap:hover {
   transform: translateY(-1px);
-  background: rgba(255, 255, 255, 0.75);
+  border-color: rgba(56, 189, 248, 0.25);
 }
 
-.lol-pill:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.lol-hero-meta {
+  padding: 10px 12px 12px;
 }
 
-.lol-badge {
-  padding: 2px 8px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  color: rgb(100 116 139);
+.lol-hero-name {
+  font-size: 16px;
+  font-weight: 850;
+  letter-spacing: 0.2px;
+  color: rgba(226, 232, 240, 0.95);
+}
+
+.lol-hero-title {
+  margin-top: 2px;
+  font-size: 12px;
+  color: rgba(148, 163, 184, 0.85);
+}
+
+.lol-hero-pill {
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.42);
+  color: rgba(226, 232, 240, 0.85);
   font-size: 11px;
+  font-weight: 750;
+}
+
+.lol-block {
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(2, 6, 23, 0.22);
+  padding: 10px;
+  margin-bottom: 12px;
+}
+
+.lol-block-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.lol-block-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(226, 232, 240, 0.92);
+  letter-spacing: 0.16px;
+}
+
+.lol-block-sub {
+  font-size: 12px;
+  color: rgba(148, 163, 184, 0.7);
   font-weight: 700;
 }
 
-.lol-badge--silver {
-  background: rgba(226, 232, 240, 0.65);
+.lol-segment {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.3);
+  margin-bottom: 10px;
 }
 
-.lol-badge--gold {
-  background: rgba(254, 240, 138, 0.45);
-  border-color: rgba(250, 204, 21, 0.35);
+.lol-seg {
+  height: 32px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(148, 163, 184, 0.9);
+  transition: background 160ms ease, color 160ms ease;
 }
 
-.lol-badge--prismatic {
-  background: rgba(207, 250, 254, 0.6);
-  border-color: rgba(0, 122, 255, 0.28);
+.lol-seg--active {
+  background: rgba(56, 189, 248, 0.16);
+  color: rgba(226, 232, 240, 0.95);
 }
 
-.lol-row {
-  padding: 12px;
-  border-radius: 1.125rem;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.38);
-  transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+.lol-tier-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+  margin-bottom: 10px;
 }
 
-.lol-row:hover {
+.lol-tier {
+  height: 32px;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.26);
+  color: rgba(148, 163, 184, 0.9);
+  font-size: 12px;
+  font-weight: 800;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.lol-tier:hover {
   transform: translateY(-1px);
+  border-color: rgba(56, 189, 248, 0.22);
 }
 
-.lol-row--active {
-  border-color: rgba(0, 122, 255, 0.45);
-  box-shadow:
-    0 14px 30px rgba(0, 122, 255, 0.16),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+.lol-tier--active {
+  background: rgba(245, 158, 11, 0.16);
+  border-color: rgba(245, 158, 11, 0.35);
+  color: rgba(226, 232, 240, 0.95);
+}
+
+.lol-slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
 }
 
 .lol-slot {
   position: relative;
-  width: 100%;
   aspect-ratio: 1 / 1;
-  border-radius: 0.75rem;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.25);
-  box-shadow:
-    0 10px 20px rgba(15, 23, 42, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.75);
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
-}
-
-.lol-slot:hover {
-  transform: translateY(-2px) scale(1.03);
-}
-
-.lol-slot--active {
-  border-color: rgba(0, 122, 255, 0.6);
-  box-shadow:
-    0 14px 26px rgba(0, 122, 255, 0.22),
-    0 0 0 2px rgba(0, 122, 255, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-.lol-slot--augment.lol-slot--active {
-  border-color: rgba(255, 159, 10, 0.55);
-  box-shadow:
-    0 14px 26px rgba(255, 159, 10, 0.18),
-    0 0 0 2px rgba(255, 159, 10, 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-}
-
-.lol-slot__empty {
+  border-radius: 999px;
+  border: 1px dashed rgba(148, 163, 184, 0.26);
+  background: rgba(2, 6, 23, 0.22);
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
-  color: rgba(100, 116, 139, 0.9);
-  background:
-    radial-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px),
-    rgba(255, 255, 255, 0.18);
-  background-size: 7px 7px;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
 }
 
-.lol-slot__remove {
+.lol-slot:hover {
+  transform: translateY(-1px);
+  border-color: rgba(56, 189, 248, 0.28);
+}
+
+.lol-slot--active {
+  border-style: solid;
+  border-color: rgba(56, 189, 248, 0.45);
+  background: rgba(56, 189, 248, 0.08);
+}
+
+.lol-slot--aug.lol-slot--active {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.lol-slot-img {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+}
+
+.lol-slot-plus {
+  font-size: 22px;
+  font-weight: 900;
+  color: rgba(148, 163, 184, 0.6);
+  line-height: 1;
+}
+
+.lol-slot-remove {
   position: absolute;
-  top: 6px;
-  right: 6px;
-  width: 24px;
-  height: 24px;
-  border-radius: 8px;
-  background: rgba(15, 23, 42, 0.55);
-  color: white;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 10px;
+  background: rgba(2, 6, 23, 0.62);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  color: rgba(226, 232, 240, 0.92);
   opacity: 0;
   transform: translateY(-4px);
-  transition: opacity 160ms ease, transform 160ms ease;
+  transition: opacity 140ms ease, transform 140ms ease;
 }
 
-.lol-slot:hover .lol-slot__remove {
+.lol-slot:hover .lol-slot-remove {
   opacity: 1;
   transform: translateY(0);
 }
 
-.lol-slot__shine {
-  content: "";
+.lol-block-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.lol-ghost {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.28);
+  color: rgba(226, 232, 240, 0.88);
+  font-size: 12px;
+  font-weight: 800;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.lol-ghost:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(56, 189, 248, 0.2);
+  background: rgba(15, 23, 42, 0.38);
+}
+
+.lol-ghost:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.lol-stats {
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(2, 6, 23, 0.22);
+  padding: 10px;
+  margin-bottom: 12px;
+}
+
+.lol-stats-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(226, 232, 240, 0.92);
+  margin-bottom: 10px;
+}
+
+.lol-stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.lol-stat {
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.28);
+  padding: 8px 10px;
+}
+
+.lol-stat-k {
+  font-size: 11px;
+  color: rgba(148, 163, 184, 0.78);
+  font-weight: 750;
+}
+
+.lol-stat-v {
+  margin-top: 4px;
+  font-size: 14px;
+  font-weight: 900;
+  color: rgba(226, 232, 240, 0.95);
+}
+
+.lol-save {
+  position: sticky;
+  bottom: 0;
+  padding-top: 8px;
+  background: linear-gradient(180deg, transparent 0%, rgba(7, 11, 18, 0.6) 50%, rgba(7, 11, 18, 0.78) 100%);
+  border-top: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+.lol-primary {
+  width: 100%;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.92) 0%, rgba(245, 158, 11, 0.86) 100%);
+  color: rgba(2, 6, 23, 0.92);
+  font-weight: 950;
+  font-size: 13px;
+  letter-spacing: 0.2px;
+  box-shadow: 0 18px 50px rgba(56, 189, 248, 0.18);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: transform 160ms ease, filter 160ms ease;
+}
+
+.lol-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  filter: brightness(1.03);
+}
+
+.lol-primary:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.lol-save-hint {
+  margin-top: 8px;
+  font-size: 11px;
+  color: rgba(148, 163, 184, 0.75);
+  font-weight: 650;
+  text-align: center;
+}
+
+.lol-inline-spin {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(2, 6, 23, 0.25);
+  border-top-color: rgba(2, 6, 23, 0.85);
+  animation: lolSpin 850ms linear infinite;
+}
+
+@keyframes lolSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.lol-catalog {
+  background: var(--glass2);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  border-radius: 14px;
+  padding: 14px;
+  backdrop-filter: blur(18px);
+  min-height: 100%;
+}
+
+.lol-catalog-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.lol-catalog-h {
+  font-size: 20px;
+  font-weight: 950;
+  color: rgba(226, 232, 240, 0.95);
+  letter-spacing: 0.2px;
+}
+
+.lol-catalog-sub {
+  margin-top: 4px;
+  font-size: 12px;
+  color: rgba(148, 163, 184, 0.82);
+}
+
+.lol-catalog-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.28);
+  min-width: 240px;
+}
+
+.lol-toggle {
+  height: 34px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 850;
+  color: rgba(148, 163, 184, 0.9);
+}
+
+.lol-toggle--active {
+  background: rgba(56, 189, 248, 0.14);
+  color: rgba(226, 232, 240, 0.95);
+}
+
+.lol-catalog-tools {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.lol-search {
+  position: relative;
+}
+
+.lol-search-icon {
   position: absolute;
-  inset: 0;
-  background: radial-gradient(400px circle at 10% 0%, rgba(255, 255, 255, 0.55) 0%, transparent 60%);
-  pointer-events: none;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(148, 163, 184, 0.75);
+}
+
+.lol-search-input {
+  width: 100%;
+  height: 38px;
+  padding: 0 12px 0 38px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(2, 6, 23, 0.26);
+  color: rgba(226, 232, 240, 0.92);
+  outline: none;
+  font-size: 12px;
+  font-weight: 700;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.lol-search-input:focus {
+  border-color: rgba(56, 189, 248, 0.35);
+  background: rgba(2, 6, 23, 0.4);
+}
+
+.lol-search-input::placeholder {
+  color: rgba(148, 163, 184, 0.62);
+}
+
+.lol-filters {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.lol-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.lol-filters--wrap {
+  flex-wrap: wrap;
+  overflow: visible;
+}
+
+.lol-chip {
+  height: 30px;
+  padding: 0 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(15, 23, 42, 0.24);
+  color: rgba(148, 163, 184, 0.9);
+  font-size: 12px;
+  font-weight: 800;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease;
+  white-space: nowrap;
+}
+
+.lol-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(56, 189, 248, 0.18);
+}
+
+.lol-chip--active {
+  background: rgba(56, 189, 248, 0.14);
+  border-color: rgba(56, 189, 248, 0.28);
+  color: rgba(226, 232, 240, 0.95);
+}
+
+.lol-catalog-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0 12px;
+  gap: 10px;
+}
+
+.lol-meta-muted {
+  font-size: 12px;
+  color: rgba(148, 163, 184, 0.75);
+  font-weight: 700;
+}
+
+.lol-meta-strong {
+  color: rgba(226, 232, 240, 0.95);
+  font-weight: 900;
+}
+
+.lol-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .lol-card {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 10px;
   text-align: left;
-  padding: 10px 10px;
-  border-radius: 0.95rem;
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  background: rgba(255, 255, 255, 0.45);
-  box-shadow:
-    0 10px 22px rgba(15, 23, 42, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.85);
-  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
-  overflow: hidden;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+  border-radius: 14px;
+  background: rgba(2, 6, 23, 0.22);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+  min-height: 74px;
 }
 
 .lol-card:hover {
-  transform: translateY(-2px);
-  box-shadow:
-    0 14px 28px rgba(0, 122, 255, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  transform: translateY(-1px);
+  border-color: rgba(56, 189, 248, 0.18);
+  background: rgba(2, 6, 23, 0.3);
 }
 
 .lol-card--selected {
-  border-color: rgba(0, 122, 255, 0.5);
-  box-shadow:
-    0 14px 28px rgba(0, 122, 255, 0.18),
-    0 0 0 1px rgba(0, 122, 255, 0.25),
-    inset 0 1px 0 rgba(255, 255, 255, 0.92);
+  border-color: rgba(56, 189, 248, 0.28);
+  background: rgba(56, 189, 248, 0.06);
 }
 
-.lol-check {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  padding: 3px 8px;
-  border-radius: 9999px;
-  font-size: 11px;
-  font-weight: 800;
-  color: var(--color-accent-primary);
-  background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(0, 122, 255, 0.3);
-}
-
-:global(.lol-tooltip) {
-  max-width: 340px;
-  white-space: pre-line;
+.lol-card-icon {
+  width: 46px;
+  height: 46px;
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
-  backdrop-filter: blur(14px);
+  object-fit: cover;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.28);
+  flex-shrink: 0;
 }
 
-.lol-card-skeleton {
-  height: 64px;
-  border-radius: 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.25);
+.lol-card-icon--aug {
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.45);
+}
+
+.lol-card-body {
+  min-width: 0;
+}
+
+.lol-card-title {
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(226, 232, 240, 0.95);
+  white-space: nowrap;
   overflow: hidden;
-  position: relative;
+  text-overflow: ellipsis;
 }
 
-.lol-card-skeleton::after {
-  content: "";
+.lol-card-sub {
+  margin-top: 4px;
+  font-size: 11px;
+  color: rgba(148, 163, 184, 0.8);
+  font-weight: 650;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lol-card-badge {
+  margin-left: auto;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.14);
+  border: 1px solid rgba(56, 189, 248, 0.26);
+  color: rgba(226, 232, 240, 0.95);
+  font-size: 11px;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+
+.lol-card--skeleton {
+  background: rgba(2, 6, 23, 0.18);
+  position: relative;
+  overflow: hidden;
+}
+
+.lol-card--skeleton::after {
+  content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(110deg, transparent 0%, rgba(255, 255, 255, 0.75) 45%, transparent 90%);
+  background: linear-gradient(110deg, transparent 0%, rgba(226, 232, 240, 0.08) 45%, transparent 90%);
   transform: translateX(-140%);
-  animation: skShimmer 1.2s ease-in-out infinite;
+  animation: lolShimmer 1.2s ease-in-out infinite;
 }
 
-@keyframes skShimmer {
+@keyframes lolShimmer {
   0% {
     transform: translateX(-140%);
   }
@@ -1030,114 +1616,210 @@ onMounted(() => {
   }
 }
 
-.lol-tab {
-  height: 34px;
-  padding: 0 12px;
-  border-radius: 9999px;
-  background: rgba(255, 255, 255, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  color: rgb(100, 116, 139);
+.lol-empty {
+  grid-column: 1 / -1;
+  padding: 18px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(2, 6, 23, 0.2);
+  text-align: center;
+}
+
+.lol-empty-title {
+  font-size: 13px;
+  font-weight: 900;
+  color: rgba(226, 232, 240, 0.95);
+}
+
+.lol-empty-sub {
+  margin-top: 6px;
   font-size: 12px;
-  font-weight: 800;
-  transition: transform 160ms ease, background 160ms ease;
+  color: rgba(148, 163, 184, 0.78);
+  font-weight: 650;
 }
 
-.lol-tab:hover {
-  transform: translateY(-1px);
+.lol-empty--modal {
+  margin-top: 12px;
 }
 
-.lol-tab--active {
-  background: rgba(0, 122, 255, 0.12);
-  border-color: rgba(0, 122, 255, 0.4);
-  color: var(--color-accent-primary);
+.lol-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(2, 6, 23, 0.28);
 }
 
-.lol-primary {
-  height: 44px;
-  padding: 0 18px;
-  border-radius: 16px;
-  display: inline-flex;
+.lol-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 0%, rgba(226, 232, 240, 0.08) 45%, transparent 90%);
+  transform: translateX(-140%);
+  animation: lolShimmer 1.2s ease-in-out infinite;
+}
+
+:global(.lol-tooltip) {
+  max-width: 360px;
+  white-space: pre-line;
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.38);
+  background: rgba(2, 6, 23, 0.86);
+  color: rgba(226, 232, 240, 0.95);
+  backdrop-filter: blur(16px);
+}
+
+/* Modal */
+.lol-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 6, 23, 0.62);
+  backdrop-filter: blur(14px);
+  display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 2100;
+}
+
+.lol-modal-panel {
+  width: min(980px, 92vw);
+  max-height: min(720px, 86vh);
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(15, 23, 42, 0.7);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+}
+
+.lol-modal-head {
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.lol-modal-title {
+  font-size: 14px;
+  font-weight: 950;
+  color: rgba(226, 232, 240, 0.95);
+}
+
+.lol-modal-tools {
+  padding: 12px 14px;
+  display: grid;
   gap: 10px;
-  color: white;
-  font-weight: 800;
-  background: linear-gradient(135deg, rgba(0, 122, 255, 0.95) 0%, rgba(50, 173, 230, 0.92) 100%);
-  box-shadow:
-    0 14px 30px rgba(0, 122, 255, 0.28),
-    0 0 0 1px rgba(255, 255, 255, 0.35);
-  transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
 }
 
-.lol-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  filter: saturate(1.05);
-  box-shadow:
-    0 18px 38px rgba(0, 122, 255, 0.34),
-    0 0 0 1px rgba(255, 255, 255, 0.5);
+.lol-search--modal .lol-search-input {
+  border-radius: 12px;
 }
 
-.lol-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+.lol-modal-grid {
+  padding: 12px 14px 14px;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
 }
 
-.lol-spinner {
-  width: 14px;
-  height: 14px;
-  border-radius: 9999px;
-  border: 2px solid rgba(255, 255, 255, 0.45);
-  border-top-color: rgba(255, 255, 255, 1);
-  animation: spin 900ms linear infinite;
+.lol-champ-card {
+  padding: 10px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  background: rgba(2, 6, 23, 0.22);
+  text-align: left;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+.lol-champ-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(56, 189, 248, 0.18);
+  background: rgba(2, 6, 23, 0.3);
+}
+
+.lol-champ-card--active {
+  border-color: rgba(56, 189, 248, 0.3);
+  background: rgba(56, 189, 248, 0.06);
+}
+
+.lol-champ-img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.25);
+}
+
+.lol-champ-name {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 900;
+  color: rgba(226, 232, 240, 0.95);
+}
+
+.lol-champ-role {
+  margin-top: 2px;
+  font-size: 11px;
+  color: rgba(148, 163, 184, 0.78);
+  font-weight: 700;
+}
+
+.lol-champ-card--skeleton {
+  height: 140px;
+  position: relative;
+  overflow: hidden;
+  background: rgba(2, 6, 23, 0.18);
+}
+
+.lol-champ-card--skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, transparent 0%, rgba(226, 232, 240, 0.08) 45%, transparent 90%);
+  transform: translateX(-140%);
+  animation: lolShimmer 1.2s ease-in-out infinite;
+}
+
+.lol-fade-enter-active,
+.lol-fade-leave-active {
+  transition: opacity 160ms ease;
+}
+
+.lol-fade-enter-from,
+.lol-fade-leave-to {
+  opacity: 0;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .lol-body {
+    grid-template-columns: 1fr;
+  }
+
+  .lol-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lol-modal-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
-.lol-fab {
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  color: rgb(71 85 105);
-  box-shadow:
-    0 8px 20px rgba(15, 23, 42, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.9);
-  transition: transform 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
-  backdrop-filter: blur(14px);
-}
+@media (max-width: 640px) {
+  .lol-topbar {
+    padding: 0 10px;
+  }
 
-.lol-fab:hover {
-  transform: translateY(-2px) scale(1.05);
-  background: rgba(255, 255, 255, 0.8);
-  color: var(--color-accent-primary);
-  box-shadow:
-    0 12px 28px rgba(0, 122, 255, 0.22),
-    0 0 0 1px rgba(0, 122, 255, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 1);
-}
+  .lol-catalog-toggle {
+    min-width: 200px;
+  }
 
-.lol-fab:active {
-  transform: translateY(0) scale(0.98);
-}
-
-@media (prefers-reduced-motion: reduce) {
-
-  .lol-page-bg,
-  .lol-row,
-  .lol-slot,
-  .lol-card,
-  .lol-primary,
-  .lol-card-skeleton::after,
-  .lol-spinner {
-    transition: none !important;
-    animation: none !important;
+  .lol-modal-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 </style>

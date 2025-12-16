@@ -116,6 +116,7 @@ export default {
     const queryParams = new URLSearchParams()
     if (params?.championKey) queryParams.append('championKey', params.championKey)
     if (params?.mapType) queryParams.append('mapType', params.mapType)
+    if (params?.mode) queryParams.append('mode', params.mode)
     if (params?.creatorId) queryParams.append('creatorId', params.creatorId)
     if (params?.search) queryParams.append('search', params.search)
     if (params?.isRecommended !== undefined) queryParams.append('isRecommended', params.isRecommended.toString())
