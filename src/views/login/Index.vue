@@ -93,7 +93,7 @@ async function onSubmit() {
 
 .login-container {
   min-height: 100vh;
-  background: var(--color-bg-secondary);
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;

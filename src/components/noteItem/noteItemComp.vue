@@ -71,13 +71,15 @@ function getDisplayText(note: QuadrantNote): string {
 
 <style scoped>
 .note-item {
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  background-color: var(--glass-bg-strong, rgba(255, 255, 255, 0.74));
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.72));
+  border-radius: var(--radius-md, 10px);
   padding: 10px 12px;
   margin-bottom: 8px;
   cursor: grab;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(var(--glass-blur, 18px));
+  -webkit-backdrop-filter: blur(var(--glass-blur, 18px));
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   font-size: 14px;
   line-height: 1.4;
@@ -93,18 +95,18 @@ function getDisplayText(note: QuadrantNote): string {
 
 .note-creator {
   font-size: 11px;
-  color: #909399;
+  color: var(--color-text-tertiary);
   margin-bottom: 4px;
   font-weight: 500;
 }
 
 .note-content {
-  color: #303133;
+  color: var(--color-text-primary);
 }
 
 .note-item:not(.is-dragging):hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border-color: #409eff;
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(0, 122, 255, 0.35);
   transform: translateY(-2px);
 }
 

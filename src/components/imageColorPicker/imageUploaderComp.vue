@@ -1,14 +1,18 @@
 <template>
   <div class="image-uploader">
-    <el-button type="primary" for="file-upload" class="custom-file-upload"
-      onclick="this.nextElementSibling.click()">上传图片</el-button>
-    <input id="file-upload" type="file" accept="image/png, image/jpeg, image/jpg" @change="handleImageUpload" />
+    <el-button type="primary" class="custom-file-upload" @click="openFileDialog">上传图片</el-button>
+    <input
+      ref="fileInputRef"
+      id="file-upload"
+      type="file"
+      accept="image/png, image/jpeg, image/jpg"
+      @change="handleImageUpload" />
     <p class="file-upload-tips" v-if="!imageUrl">请选择一张本地图片</p>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeUnmount, ref } from 'vue'
 
 // 定义 emit 事件，用于向父组件传递图片 URL
 const emit = defineEmits<{
@@ -16,6 +20,11 @@ const emit = defineEmits<{
 }>()
 
 const imageUrl = ref<string | null>(null)
+const fileInputRef = ref<HTMLInputElement | null>(null)
+
+const openFileDialog = () => {
+  fileInputRef.value?.click()
+}
 
 const handleImageUpload = (event: Event) => {
   const target = event.target as HTMLInputElement
@@ -34,11 +43,15 @@ const handleImageUpload = (event: Event) => {
     emit('image-loaded', newImageUrl)
   }
 }
+
+onBeforeUnmount(() => {
+  if (imageUrl.value) URL.revokeObjectURL(imageUrl.value)
+})
 </script>
 
 <style lang="scss" scoped>
 .image-uploader {
-  padding: 20px;
+  padding: 14px;
 }
 
 .image-uploader input[type='file'] {
@@ -54,7 +67,7 @@ const handleImageUpload = (event: Event) => {
 
 .file-upload-tips {
   font-size: 12px;
-  color: #fff;
+  color: var(--color-text-tertiary);
   margin-top: 10px;
 }
 </style>

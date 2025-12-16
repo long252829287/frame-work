@@ -50,7 +50,7 @@
           <div class="flex items-center gap-2">
             <div class="flex-1 relative">
               <input ref="searchInputRef" v-model="searchQuery"
-                class="w-full h-12 pl-10 pr-4 rounded-2xl bg-white/70 border border-white/70 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
+                class="w-full h-12 pl-10 pr-4 rounded-2xl bg-white/70 border border-white/70 focus:border-blue-300 focus:ring-2 focus:ring-blue-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
                 placeholder="请输入英雄名称" @keydown.esc.prevent="closeSearch" />
             </div>
           </div>
@@ -78,8 +78,8 @@
           <div class="mb-8 flex gap-2 overflow-x-auto pb-2">
             <button v-for="strat in strategies" :key="strat._id"
               class="px-5 py-2 rounded-xl text-sm font-medium transition-all shadow-sm border" :class="currentStrategy?._id === strat._id
-                ? 'bg-indigo-600 text-white border-indigo-600 shadow-indigo-200'
-                : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-300 hover:text-indigo-600'"
+                ? 'bg-blue-600 text-white border-blue-600 shadow-blue-200'
+                : 'bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:text-blue-600'"
               @click="currentStrategy = strat">
               {{ strat.title }}
             </button>
@@ -110,7 +110,7 @@
             <!-- Build Path -->
             <div class="p-8 rounded-3xl bg-white border border-slate-100 shadow-sm mb-8 flex-1">
               <h3 class="text-slate-800 font-bold text-lg mb-6 flex items-center gap-2">
-                <div class="p-1.5 rounded-lg bg-indigo-100 text-indigo-600">
+                <div class="p-1.5 rounded-lg bg-blue-100 text-blue-700">
                   <el-icon>
                     <Lightning />
                   </el-icon>
@@ -125,7 +125,7 @@
                   <div class="flex gap-4 flex-wrap">
                     <div v-for="item in coreItems" :key="item.item._id" class="relative group cursor-help">
                       <div
-                        class="relative overflow-hidden rounded-xl border border-slate-200 shadow-sm group-hover:border-indigo-500 transition-colors">
+                        class="relative overflow-hidden rounded-xl border border-slate-200 shadow-sm group-hover:border-blue-500 transition-colors">
                         <img :src="item.item.image" class="w-14 h-14" />
                       </div>
                       <div
@@ -187,7 +187,7 @@
             <div
               class="absolute -right-6 top-1/2 -translate-y-1/2 translate-x-0 opacity-0 group-hover:translate-x-full group-hover:opacity-100 transition-all duration-300">
               <el-button circle size="large"
-                class="!w-14 !h-14 !text-xl !bg-white !text-slate-700 !border-slate-100 shadow-xl hover:!text-indigo-600 hover:!scale-110 transition-transform"
+                class="!w-14 !h-14 !text-xl !bg-white !text-slate-700 !border-slate-100 shadow-xl hover:!text-blue-600 hover:!scale-110 transition-transform"
                 @click="exportImage">
                 <el-icon>
                   <Camera />
@@ -255,9 +255,9 @@ const backgroundPalettes = [
     glow: '#ffffff',
   },
   {
-    light: '#efe7f5',
-    mid: '#e1d7ee',
-    deep: '#d6dcf4',
+    light: '#eaf2ff',
+    mid: '#d8e9ff',
+    deep: '#c7deff',
     glow: '#ffffff',
   },
   {
@@ -495,10 +495,10 @@ onUnmounted(() => {
 .lol-fab:hover {
   transform: translateY(-2px) scale(1.05);
   background: rgba(255, 255, 255, 0.8);
-  color: rgb(67 56 202);
+  color: var(--color-accent-primary);
   box-shadow:
-    0 12px 28px rgba(99, 102, 241, 0.22),
-    0 0 0 1px rgba(99, 102, 241, 0.35),
+    0 12px 28px rgba(0, 122, 255, 0.22),
+    0 0 0 1px rgba(0, 122, 255, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 1);
 }
 
@@ -535,10 +535,10 @@ onUnmounted(() => {
   inset: -2px;
   border-radius: 1rem;
   background: conic-gradient(from var(--angle, 0deg),
-      rgba(99, 102, 241, 0.95),
-      rgba(236, 72, 153, 0.9),
-      rgba(14, 165, 233, 0.95),
-      rgba(99, 102, 241, 0.95));
+      rgba(0, 122, 255, 0.95),
+      rgba(255, 159, 10, 0.9),
+      rgba(50, 173, 230, 0.95),
+      rgba(0, 122, 255, 0.95));
   filter: blur(10px);
   opacity: 0;
   transition: opacity 320ms ease;
@@ -551,8 +551,8 @@ onUnmounted(() => {
   border-color: rgba(255, 255, 255, 0.6);
   transform: translateY(-2px) scale(1.05) rotateZ(-1deg);
   box-shadow:
-    0 10px 24px rgba(99, 102, 241, 0.18),
-    0 0 0 1px rgba(99, 102, 241, 0.25),
+    0 10px 24px rgba(0, 122, 255, 0.18),
+    0 0 0 1px rgba(0, 122, 255, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
@@ -562,13 +562,13 @@ onUnmounted(() => {
 }
 
 .lol-champ-item--active {
-  color: rgb(67 56 202);
+  color: var(--color-accent-primary);
   background-color: rgba(255, 255, 255, 0.5);
-  border-color: rgba(99, 102, 241, 0.55);
+  border-color: rgba(0, 122, 255, 0.55);
   transform: translateY(-1px) scale(1.06);
   box-shadow:
-    0 12px 30px rgba(99, 102, 241, 0.24),
-    0 0 0 2px rgba(99, 102, 241, 0.35),
+    0 12px 30px rgba(0, 122, 255, 0.24),
+    0 0 0 2px rgba(0, 122, 255, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 

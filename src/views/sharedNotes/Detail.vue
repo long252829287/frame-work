@@ -1,10 +1,7 @@
 <template>
   <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div v-if="loading" class="loading-state">
-      <el-icon class="is-loading loading-icon">
-        <Loading />
-      </el-icon>
-      <p class="loading-text">加载中...</p>
+      <LoadingComp text="加载中…" />
     </div>
 
     <div v-else-if="!sharedNote" class="empty-state">
@@ -74,7 +71,7 @@
 import { ref, onMounted, reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { Loading, ArrowLeft } from '@element-plus/icons-vue'
+import { ArrowLeft } from '@element-plus/icons-vue'
 import { commonService } from '@/service'
 import QuadrantViewComp from '@/components/quadrantView/quadrantViewComp.vue'
 import type { SharedNote, SharedQuadrantNote } from '@/types'

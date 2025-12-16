@@ -33,7 +33,7 @@ const router = useRouter()
 const auth = useAuthStore()
 const isAuthed = computed(() => auth.checkAuth())
 
-type TileColor = 'blue' | 'purple' | 'teal' | 'orange' | 'pink' | 'slate' | 'green'
+type TileColor = 'blue' | 'cyan' | 'teal' | 'orange' | 'slate' | 'green'
 interface TileItem {
   key: string
   title: string
@@ -50,7 +50,7 @@ const tiles: TileItem[] = [
     title: '笔记',
     subtitle: 'Notes',
     icon: '📝',
-    color: 'purple',
+    color: 'blue',
     route: '/notes',
     requiresAuth: true,
   },
@@ -84,7 +84,7 @@ const tiles: TileItem[] = [
     title: 'lol攻略',
     subtitle: '大乱斗攻略',
     icon: '🎮',
-    color: 'pink',
+    color: 'cyan',
     route: '/lol'
   },
   {
@@ -92,7 +92,7 @@ const tiles: TileItem[] = [
     title: '工具',
     subtitle: 'Coming soon',
     icon: '🧰',
-    color: 'blue',
+    color: 'slate',
     route: '/tool',
   },
   {
@@ -144,19 +144,23 @@ function handleTile(t: TileItem) {
 }
 
 .module-card {
+  --tile-color: var(--color-accent-primary);
+
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: var(--spacing-xl);
-  background: var(--color-bg-primary);
-  border: 1px solid var(--color-border-primary);
+  padding: var(--spacing-lg);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-xl);
   cursor: pointer;
   transition: all var(--transition-base);
   min-height: 160px;
   text-align: left;
   overflow: hidden;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
 
   /* Remove default button styles */
   font-family: inherit;
@@ -172,12 +176,14 @@ function handleTile(t: TileItem) {
     border-radius: 50%;
     opacity: 0.1;
     transition: all var(--transition-base);
+    background: var(--tile-color);
   }
 
   &:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
-    border-color: transparent;
+    border-color: color-mix(in srgb, var(--tile-color) 22%, var(--glass-border-strong));
+    background: var(--glass-bg-strong);
 
     &::before {
       width: 150px;
@@ -201,7 +207,7 @@ function handleTile(t: TileItem) {
 }
 
 .module-icon {
-  font-size: 3rem;
+  font-size: 2.5rem;
   margin-bottom: var(--spacing-md);
   transition: transform var(--transition-base);
   position: relative;
@@ -229,79 +235,74 @@ function handleTile(t: TileItem) {
 
 /* Color variants */
 .module-card--blue {
-  &::before {
-    background: #3B82F6;
-  }
+  --tile-color: var(--color-accent-primary);
 
   &:hover {
-    border-color: #3B82F6;
-    background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, var(--color-bg-primary) 100%);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--tile-color) 10%, rgba(255, 255, 255, 0.9)) 0%,
+      var(--glass-bg-strong) 100%
+    );
   }
 }
 
-.module-card--purple {
-  &::before {
-    background: #8B5CF6;
-  }
+.module-card--cyan {
+  --tile-color: var(--color-accent-secondary);
 
   &:hover {
-    border-color: #8B5CF6;
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.03) 0%, var(--color-bg-primary) 100%);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--tile-color) 10%, rgba(255, 255, 255, 0.9)) 0%,
+      var(--glass-bg-strong) 100%
+    );
   }
 }
 
 .module-card--teal {
-  &::before {
-    background: #14B8A6;
-  }
+  --tile-color: var(--color-success);
 
   &:hover {
-    border-color: #14B8A6;
-    background: linear-gradient(135deg, rgba(20, 184, 166, 0.03) 0%, var(--color-bg-primary) 100%);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--tile-color) 10%, rgba(255, 255, 255, 0.9)) 0%,
+      var(--glass-bg-strong) 100%
+    );
   }
 }
 
 .module-card--orange {
-  &::before {
-    background: #F59E0B;
-  }
+  --tile-color: var(--color-accent-tertiary);
 
   &:hover {
-    border-color: #F59E0B;
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.03) 0%, var(--color-bg-primary) 100%);
-  }
-}
-
-.module-card--pink {
-  &::before {
-    background: #EC4899;
-  }
-
-  &:hover {
-    border-color: #EC4899;
-    background: linear-gradient(135deg, rgba(236, 72, 153, 0.03) 0%, var(--color-bg-primary) 100%);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--tile-color) 10%, rgba(255, 255, 255, 0.9)) 0%,
+      var(--glass-bg-strong) 100%
+    );
   }
 }
 
 .module-card--slate {
-  &::before {
-    background: #64748B;
-  }
+  --tile-color: var(--color-text-tertiary);
 
   &:hover {
-    border-color: #64748B;
-    background: linear-gradient(135deg, rgba(100, 116, 139, 0.03) 0%, var(--color-bg-primary) 100%);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--tile-color) 10%, rgba(255, 255, 255, 0.9)) 0%,
+      var(--glass-bg-strong) 100%
+    );
   }
 }
 
 .module-card--green {
-  &::before {
-    background: #10B981;
-  }
+  --tile-color: var(--color-success);
 
   &:hover {
-    border-color: #10B981;
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.03) 0%, var(--color-bg-primary) 100%);
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--tile-color) 10%, rgba(255, 255, 255, 0.9)) 0%,
+      var(--glass-bg-strong) 100%
+    );
   }
 }
 

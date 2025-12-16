@@ -27,7 +27,7 @@ src/assets/scss/
 
 ### 🎨 颜色系统
 
-基于 **Slate**（中性色）和 **Indigo/Violet**（强调色）色阶。
+基于 **Slate**（中性色）和 **Apple Blue / Cyan / Orange**（强调色）色阶。
 
 #### 背景色 (Backgrounds)
 
@@ -54,16 +54,17 @@ src/assets/scss/
 | :------------------------- | :--------- | :----------------------------- |
 | `--color-border-primary`   | Slate 200  | 强边框（输入框、卡片、分割线） |
 | `--color-border-secondary` | Slate 100  | 弱边框（表格行）               |
-| `--color-border-focus`     | Indigo 500 | 聚焦环                         |
+| `--color-border-focus`     | Blue 500   | 聚焦环                         |
 
 #### 品牌强调色 (Brand Accents)
 
 | 变量名                         | 值         | 用途                                   |
 | :----------------------------- | :--------- | :------------------------------------- |
-| `--color-accent-primary`       | Indigo 600 | **主要操作色**（按钮、链接、激活状态） |
-| `--color-accent-primary-hover` | Indigo 700 | 悬停状态                               |
-| `--color-accent-primary-light` | Indigo 100 | 激活背景、选中高亮                     |
-| `--color-accent-secondary`     | Violet 600 | 次要操作、装饰元素                     |
+| `--color-accent-primary`       | Apple Blue | **主要操作色**（按钮、链接、激活状态） |
+| `--color-accent-primary-hover` | Blue 600   | 悬停状态                               |
+| `--color-accent-primary-light` | Blue 100   | 激活背景、选中高亮                     |
+| `--color-accent-secondary`     | Cyan 500   | 次要操作、装饰元素                     |
+| `--color-accent-tertiary`      | Orange 500 | 点缀高亮、强调信息                     |
 
 #### 语义化颜色 (Semantic Colors)
 

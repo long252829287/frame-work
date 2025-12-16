@@ -34,9 +34,7 @@
     </el-form>
 
     <div class="canvas-wrapper">
-      <div v-if="isLoading" class="loading-overlay">
-        <span>正在解析中... {{ progress }} % </span>
-      </div>
+      <LoadingComp v-if="isLoading" overlay :text="`正在解析中… ${progress} %`" />
 
       <canvas ref="canvasRef"></canvas>
     </div>
@@ -44,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, reactive } from 'vue'
+import { onBeforeUnmount, reactive, ref, watch } from 'vue'
 import Color from 'color'
 import colorData from '../../json/color/rgbTransformColor.json'
 
@@ -96,25 +94,32 @@ let scaledImageWidth = 0
 let scaledImageHeight = 0
 let isAnalyzed = ref(false)
 
-function debounce<T extends (...args: any[]) => void>(
-  func: T,
-  delay: number,
-): (...args: Parameters<T>) => void {
-  let timeoutId: number | undefined
+const workerRef = ref<Worker | null>(null)
+let runId = 0
+let debounceTimer: number | undefined
 
-  return function (this: unknown, ...args: Parameters<T>) {
-    clearTimeout(timeoutId)
-    timeoutId = window.setTimeout(() => {
-      func.apply(this, args)
-    }, delay)
-  }
+const getCanvasTextColor = () => {
+  const cssValue = getComputedStyle(document.documentElement).getPropertyValue('--color-text-secondary').trim()
+  return cssValue || 'rgba(71, 85, 105, 0.7)'
 }
+
+const debouncedProcessImage = () => {
+  clearTimeout(debounceTimer)
+  debounceTimer = window.setTimeout(() => {
+    processImage()
+  }, 300)
+}
+
 // 主处理函数
 const processImage = () => {
+  const currentRun = ++runId
   const margin = 30
   if (!props.imageUrl || !canvasRef.value) return
   isLoading.value = true
   isAnalyzed.value = false
+  progress.value = 0
+  workerRef.value?.terminate()
+  workerRef.value = null
   const canvas = canvasRef.value
   const ctx = canvas.getContext('2d')
   if (!ctx) {
@@ -124,9 +129,9 @@ const processImage = () => {
 
   const img = new Image()
   img.crossOrigin = 'Anonymous'
-  img.src = props.imageUrl
-
   img.onload = () => {
+    if (currentRun !== runId) return
+
     // 保存原始尺寸
     originalImageWidth = img.width
     originalImageHeight = img.height
@@ -141,7 +146,10 @@ const processImage = () => {
     // 创建临时canvas来处理缩放
     const tempCanvas = document.createElement('canvas')
     const tempCtx = tempCanvas.getContext('2d')
-    if (!tempCtx) return
+    if (!tempCtx) {
+      isLoading.value = false
+      return
+    }
 
     tempCanvas.width = scaledImageWidth
     tempCanvas.height = scaledImageHeight
@@ -153,29 +161,34 @@ const processImage = () => {
     const worker = new Worker(new URL('../../workers/pixelate.worker.ts', import.meta.url), {
       type: 'module',
     })
+    workerRef.value = worker
 
     worker.postMessage({ imageData, cellSize: cellSize.value })
 
     worker.onmessage = (event) => {
+      if (currentRun !== runId) return
       const { type, percentage, data } = event.data
       if (type === 'progress') {
-        progress.value = percentage;
+        progress.value = percentage
       } else if (type === 'complete') {
         pixelatedColorData = data
         drawPixelatedImage(pixelatedColorData)
         isLoading.value = false
         worker.terminate()
+        if (workerRef.value === worker) workerRef.value = null
       }
     }
 
-    img.onerror = () => {
-      console.error('图片加载失败')
-      isLoading.value = false
-    }
   }
-}
 
-const debouncedProcessImage = debounce(processImage, 300) // 延迟300毫秒
+  img.onerror = () => {
+    if (currentRun !== runId) return
+    console.error('图片加载失败')
+    isLoading.value = false
+  }
+
+  img.src = props.imageUrl
+}
 // 绘制函数
 const drawPixelatedImage = (
   colors: { r: number; g: number; b: number; a: number }[],
@@ -190,7 +203,7 @@ const drawPixelatedImage = (
   ctx.clearRect(0, 0, canvas.width, canvas.height)
   let colorIndex = 0
 
-  ctx.fillStyle = '#666'
+  ctx.fillStyle = getCanvasTextColor()
   ctx.font = '10px Arial'
 
   ctx.textAlign = 'center'
@@ -228,8 +241,6 @@ const drawPixelatedImage = (
 
 watch(() => props.imageUrl, processImage, { immediate: true })
 watch(() => scaleFactor.value, debouncedProcessImage)
-
-onMounted(processImage)
 
 const analyzeColors = () => {
   if (pixelatedColorData.length > 0) {
@@ -324,16 +335,21 @@ const downloadImage = () => {
   link.download = 'pixelated_image.png'
   link.click()
 }
+
+onBeforeUnmount(() => {
+  clearTimeout(debounceTimer)
+  workerRef.value?.terminate()
+  workerRef.value = null
+})
 </script>
 
 <style lang="scss" scoped>
 @use '@/assets/scss/themes/modern-minimal.scss' as theme;
 
 .pixelated-canvas-container {
-  margin-top: 20px;
-  background: var(--color-bg-secondary);
-  min-height: 100vh;
-  padding: 20px;
+  margin-top: 16px;
+  background: transparent;
+  padding: 0;
   position: relative;
 
   >* {
@@ -344,9 +360,9 @@ const downloadImage = () => {
 
 .controls {
   @include theme.card;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
   gap: 8px;
-  padding: 20px;
+  padding: 14px;
   max-width: 100%;
   width: 100%;
   max-width: 800px;
@@ -472,30 +488,7 @@ const downloadImage = () => {
   position: relative;
   display: inline-block;
   @include theme.card;
-  padding: 16px;
-}
-
-.loading-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-  border-radius: var(--radius-lg);
-}
-
-.loading-overlay span {
-  background: var(--color-bg-primary);
-  color: var(--color-text-primary);
-  padding: 12px 24px;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  font-weight: var(--font-weight-medium);
+  padding: 12px;
 }
 
 canvas {
@@ -506,18 +499,9 @@ canvas {
   background: var(--color-bg-primary);
 }
 
-.loading-indicator {
-  padding: 20px;
-  @include theme.card;
-  text-align: center;
-  color: var(--color-text-primary);
-  font-weight: var(--font-weight-medium);
-}
-
 // 响应式调整
 @media (max-width: 768px) {
   .pixelated-canvas-container {
-    padding: 12px;
     margin-top: 12px;
   }
 

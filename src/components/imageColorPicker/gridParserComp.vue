@@ -46,9 +46,7 @@
       <canvas v-if="gridDrawn" ref="canvasRef" class="grid-canvas"></canvas>
     </div>
 
-    <div v-if="isLoading" class="loading-overlay">
-      <span>正在解析中...</span>
-    </div>
+    <LoadingComp v-if="isLoading" fullscreen text="正在解析中…" />
   </div>
 </template>
 
@@ -517,7 +515,7 @@ onUnmounted(() => {
 .grid-parser-container {
   padding: 20px;
   min-height: 100vh;
-  background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
+  background: transparent;
 }
 
 .controls {
@@ -536,15 +534,18 @@ onUnmounted(() => {
 .grid-info {
   margin-bottom: 15px;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.9);
-  border-radius: 6px;
-  border: 2px solid #8B4513;
+  background: var(--glass-bg-strong);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
 }
 
 .grid-info span {
   font-size: 14px;
   font-weight: bold;
-  color: #5D4037;
+  color: var(--color-text-secondary);
   display: block;
   margin-bottom: 8px;
 }
@@ -558,7 +559,7 @@ onUnmounted(() => {
 
 .offset-controls label {
   font-size: 13px;
-  color: #5D4037;
+  color: var(--color-text-secondary);
   font-weight: 600;
   margin-right: 4px;
 }
@@ -573,11 +574,13 @@ onUnmounted(() => {
 .image-container {
   position: relative;
   display: inline-block;
-  border: 3px solid #8B4513;
-  border-radius: 8px;
-  background: #FAFAFA;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.55);
   max-width: 100%;
   overflow: hidden;
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
 }
 
 .source-image {
@@ -593,8 +596,8 @@ onUnmounted(() => {
 
 .square-selector {
   position: absolute;
-  border: 2px solid #ff0000;
-  background: rgba(255, 0, 0, 0.1);
+  border: 2px solid var(--color-error);
+  background: color-mix(in srgb, var(--color-error) 14%, transparent);
   cursor: move;
   user-select: none;
   -webkit-user-select: none;
@@ -605,30 +608,30 @@ onUnmounted(() => {
 }
 
 .square-selector:hover {
-  border-color: #ff4444;
-  background: rgba(255, 0, 0, 0.15);
-  box-shadow: 0 4px 12px rgba(255, 0, 0, 0.4);
+  border-color: color-mix(in srgb, var(--color-error) 80%, white);
+  background: color-mix(in srgb, var(--color-error) 18%, transparent);
+  box-shadow: 0 10px 20px rgba(239, 68, 68, 0.22);
 }
 
 .square-selector.dragging {
-  border-color: #ff6666;
-  background: rgba(255, 0, 0, 0.2);
-  box-shadow: 0 6px 16px rgba(255, 0, 0, 0.5);
+  border-color: color-mix(in srgb, var(--color-error) 70%, white);
+  background: color-mix(in srgb, var(--color-error) 22%, transparent);
+  box-shadow: 0 14px 30px rgba(239, 68, 68, 0.26);
   transform: scale(1.02);
 }
 
 .square-selector.resizing {
-  border-color: #ffaa00;
-  background: rgba(255, 170, 0, 0.15);
-  box-shadow: 0 4px 12px rgba(255, 170, 0, 0.4);
+  border-color: var(--color-warning);
+  background: color-mix(in srgb, var(--color-warning) 16%, transparent);
+  box-shadow: 0 14px 30px rgba(245, 158, 11, 0.2);
 }
 
 .resize-handle {
   position: absolute;
   width: 10px;
   height: 10px;
-  background: #ff0000;
-  border: 2px solid #fff;
+  background: var(--color-error);
+  border: 2px solid var(--glass-border-strong);
   border-radius: 2px;
   transition: all 0.2s ease;
   user-select: none;
@@ -638,9 +641,9 @@ onUnmounted(() => {
 }
 
 .resize-handle:hover {
-  background: #ff4444;
+  background: color-mix(in srgb, var(--color-error) 80%, white);
   transform: scale(1.2);
-  box-shadow: 0 2px 8px rgba(255, 0, 0, 0.4);
+  box-shadow: 0 10px 20px rgba(239, 68, 68, 0.22);
 }
 
 .resize-handle.top-left {
@@ -670,27 +673,6 @@ onUnmounted(() => {
 .grid-canvas {
   display: block;
   max-width: 100%;
-}
-
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.loading-overlay span {
-  color: white;
-  font-size: 18px;
-  background: rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  border-radius: 8px;
 }
 
 @media (max-width: 768px) {

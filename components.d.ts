@@ -21,6 +21,7 @@ declare module 'vue' {
     ElInputNumber: typeof import('element-plus/es')['ElInputNumber']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPopconfirm: typeof import('element-plus/es')['ElPopconfirm']
+    ElRadio: typeof import('element-plus/es')['ElRadio']
     ElRadioButton: typeof import('element-plus/es')['ElRadioButton']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElSelect: typeof import('element-plus/es')['ElSelect']
@@ -34,14 +35,12 @@ declare module 'vue' {
     HeaderComp: typeof import('./src/components/header/headerComp.vue')['default']
     ImageColorPicker: typeof import('./src/components/imageColorPicker/index.vue')['default']
     ImageUploaderComp: typeof import('./src/components/imageColorPicker/imageUploaderComp.vue')['default']
+    LoadingComp: typeof import('./src/components/loading/loadingComp.vue')['default']
     NoteItemComp: typeof import('./src/components/noteItem/noteItemComp.vue')['default']
     PixelatedCanvasComp: typeof import('./src/components/imageColorPicker/pixelatedCanvasComp.vue')['default']
     QuadrantViewComp: typeof import('./src/components/quadrantView/quadrantViewComp.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ThemeSwitcher: typeof import('./src/components/ThemeSwitcher.vue')['default']
-  }
-  export interface ComponentCustomProperties {
-    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
   }
 }

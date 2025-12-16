@@ -25,7 +25,7 @@ const checkIsOwnId = () => {
   flex-wrap: wrap;
 
   >h3 {
-    color: #fff;
+    color: var(--color-text-primary);
   }
 }
 

@@ -18,10 +18,7 @@
     </div>
 
     <div v-if="loading" class="loading-state">
-      <el-icon class="is-loading loading-icon">
-        <Loading />
-      </el-icon>
-      <p class="loading-text">加载中...</p>
+      <LoadingComp text="加载中…" />
     </div>
 
     <div v-else-if="list.length === 0" class="empty-state">
@@ -91,7 +88,7 @@
 import { ref, onMounted, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Loading, MoreFilled, ArrowLeft } from '@element-plus/icons-vue'
+import { MoreFilled, ArrowLeft } from '@element-plus/icons-vue'
 import { commonService } from '@/service'
 import type { SharedNote, User } from '@/types'
 

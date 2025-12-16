@@ -43,38 +43,42 @@ const onModeChange = () => {
 <style lang="scss" scoped>
 .function-selector {
   margin-bottom: 20px;
-  padding: 20px;
-  background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
-  border-radius: 8px;
+  padding: 14px;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   display: flex;
   justify-content: center;
 }
 
 .pixel-analysis {
-  background: linear-gradient(135deg, #A0522D 0%, #CD853F 50%, #A0522D 100%);
+  background: transparent;
 }
 
 
 .function-selector :deep(.el-radio-group) {
   .el-radio-button__inner {
-    background: #FAFAFA;
-    border-color: #8B4513;
-    color: #5D4037;
+    background: rgba(255, 255, 255, 0.55);
+    border-color: rgba(255, 255, 255, 0.65);
+    color: var(--color-text-secondary);
     font-weight: 500;
     padding: 12px 20px;
   }
 
   .el-radio-button__original-radio:checked+.el-radio-button__inner {
-    background: #8B4513;
-    border-color: #8B4513;
-    color: #FAFAFA;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    background: var(--color-accent-primary);
+    border-color: rgba(0, 122, 255, 0.45);
+    color: var(--color-text-inverse);
+    box-shadow: var(--shadow-lg);
   }
 
   .el-radio-button:hover .el-radio-button__inner {
-    background: #D2691E;
-    border-color: #D2691E;
-    color: #FAFAFA;
+    background: rgba(255, 255, 255, 0.75);
+    border-color: rgba(0, 122, 255, 0.25);
+    color: var(--color-text-primary);
   }
 }
 

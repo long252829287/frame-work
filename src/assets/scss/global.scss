@@ -10,11 +10,16 @@ html, body {
   padding: 0;
   box-sizing: border-box;
   font-family: var(--font-family-base);
-  background: var(--color-bg-secondary);
+  background: var(--app-bg);
+  background-attachment: fixed;
   color: var(--color-text-primary);
   line-height: var(--line-height-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  min-height: 100vh;
 }
 
 *, *::before, *::after {
@@ -64,7 +69,7 @@ p {
 
   // Background Colors
   --el-bg-color: var(--color-bg-primary);
-  --el-bg-color-page: var(--color-bg-secondary);
+  --el-bg-color-page: transparent;
   --el-bg-color-overlay: var(--color-bg-elevated);
   --el-fill-color-blank: var(--color-bg-primary);
 
@@ -190,16 +195,16 @@ p {
   @include theme.card;
 
   .el-card__header {
-    background: var(--color-bg-primary);
-    border-bottom: 1px solid var(--color-border-primary);
+    background: rgba(255, 255, 255, 0.35);
+    border-bottom: 1px solid var(--color-border-secondary);
     color: var(--color-text-primary);
     font-weight: var(--font-weight-semibold);
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
   }
 
   .el-card__body {
     color: var(--color-text-primary);
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
   }
 }
 
@@ -209,21 +214,21 @@ p {
   border: none;
 
   .el-dialog__header {
-    background: var(--color-bg-primary);
+    background: rgba(255, 255, 255, 0.35);
     color: var(--color-text-primary);
     font-weight: var(--font-weight-semibold);
     border-bottom: 1px solid var(--color-border-primary);
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
   }
 
   .el-dialog__body {
-    background: var(--color-bg-primary);
+    background: transparent;
     color: var(--color-text-primary);
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
   }
 
   .el-dialog__footer {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
     border-top: 1px solid var(--color-border-primary);
   }
 }
@@ -258,13 +263,15 @@ p {
 
 // Tables
 .el-table {
-  background: var(--color-bg-primary);
-  border: 1px solid var(--color-border-primary);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.65);
   border-radius: var(--radius-lg);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
 
   .el-table__header {
     th {
-      background: var(--color-bg-secondary);
+      background: rgba(255, 255, 255, 0.45);
       color: var(--color-text-primary);
       font-weight: var(--font-weight-semibold);
       border-bottom: 1px solid var(--color-border-primary);
@@ -273,10 +280,10 @@ p {
 
   .el-table__body {
     tr {
-      background: var(--color-bg-primary);
+      background: rgba(255, 255, 255, 0.35);
 
       &:hover {
-        background: var(--color-bg-secondary);
+        background: rgba(255, 255, 255, 0.55);
       }
 
       td {
@@ -343,7 +350,9 @@ p {
 
 // Loading
 .el-loading-mask {
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(15, 23, 42, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 
   .el-loading-spinner {
     .circular {

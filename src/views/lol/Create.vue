@@ -1,6 +1,5 @@
 <template>
-  <div
-    class="h-[calc(100vh-1rem)] w-full overflow-hidden rounded-3xl border border-slate-200 my-2 lol-page-bg"
+  <div class="h-[calc(100vh-1rem)] w-full overflow-hidden rounded-3xl border border-slate-200 my-2 lol-page-bg"
     :style="pageBackgroundStyle">
     <div class="h-full w-full overflow-y-auto scrollbar-hide">
       <div class="mx-auto max-w-[1480px] px-4 sm:px-5 py-6">
@@ -9,9 +8,7 @@
           <div class="flex items-start justify-between gap-4">
             <div class="flex items-center gap-4 min-w-0">
               <div class="relative">
-                <img
-                  v-if="selectedChampion"
-                  :src="selectedChampion.images.square"
+                <img v-if="selectedChampion" :src="selectedChampion.images.square"
                   class="w-12 h-12 rounded-xl object-cover border border-white/60 shadow"
                   :alt="selectedChampion.name" />
                 <div v-else class="w-12 h-12 rounded-xl bg-white/40 border border-white/60 animate-pulse" />
@@ -21,7 +18,8 @@
                   <h1 class="text-xl font-bold text-slate-900 tracking-tight truncate">
                     {{ selectedChampion?.name || 'Create Guide' }}
                   </h1>
-                  <span class="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/60 border border-white/70 text-slate-600">
+                  <span
+                    class="px-2.5 py-1 rounded-full text-xs font-semibold bg-white/60 border border-white/70 text-slate-600">
                     海克斯大乱斗
                   </span>
                 </div>
@@ -31,10 +29,14 @@
 
             <div class="flex items-center gap-2 flex-shrink-0">
               <button class="lol-fab" @click="handleCancel" title="返回">
-                <el-icon><ArrowLeft /></el-icon>
+                <el-icon>
+                  <ArrowLeft />
+                </el-icon>
               </button>
               <button class="lol-fab" @click="handleGoHome" title="主页">
-                <el-icon><HomeFilled /></el-icon>
+                <el-icon>
+                  <HomeFilled />
+                </el-icon>
               </button>
             </div>
           </div>
@@ -43,9 +45,8 @@
             <div class="md:col-span-4">
               <div class="lol-glass p-3.5">
                 <div class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">攻略名称</div>
-                <input
-                  v-model="strategyTitle"
-                  class="w-full h-10 px-3.5 rounded-xl bg-white/70 border border-white/70 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
+                <input v-model="strategyTitle"
+                  class="w-full h-10 px-3.5 rounded-xl bg-white/70 border border-white/70 focus:border-blue-300 focus:ring-2 focus:ring-blue-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
                   placeholder="例如：爆发流 / 生存流 / 控制流…" />
                 <div class="mt-2 text-[11px] text-slate-400">
                   留空会自动使用英雄名生成标题
@@ -58,9 +59,8 @@
                   <div class="text-xs font-bold uppercase tracking-wider text-slate-500">备注</div>
                   <div class="text-[11px] text-slate-400">建议写打法、节奏、关键选择理由</div>
                 </div>
-                <textarea
-                  v-model="strategyRemark"
-                  class="w-full min-h-24 px-3.5 py-2.5 rounded-xl bg-white/70 border border-white/70 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition resize-none"
+                <textarea v-model="strategyRemark"
+                  class="w-full min-h-24 px-3.5 py-2.5 rounded-xl bg-white/70 border border-white/70 focus:border-blue-300 focus:ring-2 focus:ring-blue-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition resize-none"
                   placeholder="补充说明：对局思路、强势期、克制关系、强化选择理由…" />
               </div>
             </div>
@@ -85,9 +85,7 @@
               </div>
 
               <div class="grid grid-cols-1 gap-4">
-                <div
-                  class="lol-row"
-                  :class="activeItemRow === 'core' ? 'lol-row--active' : ''"
+                <div class="lol-row" :class="activeItemRow === 'core' ? 'lol-row--active' : ''"
                   @click="selectItemRow('core')">
                   <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
@@ -97,39 +95,33 @@
                     <div class="text-xs text-slate-400">点击格子可定点替换</div>
                   </div>
                   <div class="grid grid-cols-6 gap-2">
-                    <button
-                      v-for="i in 6"
-                      :key="'core-' + i"
-                      class="lol-slot"
+                    <button v-for="i in 6" :key="'core-' + i" class="lol-slot"
                       :class="activeItemRow === 'core' && activeItemSlot === i - 1 ? 'lol-slot--active' : ''"
                       @click.stop="selectItemSlot('core', i - 1)">
                       <template v-if="coreItems[i - 1]">
-                        <el-tooltip
-                          effect="light"
-                          placement="top"
-                          :show-after="160"
-                          :hide-after="80"
-                          popper-class="lol-tooltip"
-                          :content="formatItemTooltip(coreItems[i - 1]!)">
+                        <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
+                          popper-class="lol-tooltip" :content="formatItemTooltip(coreItems[i - 1]!)">
                           <img :src="coreItems[i - 1]!.image" class="w-full h-full rounded-lg object-cover" />
                         </el-tooltip>
                         <span class="lol-slot__shine" />
                         <button class="lol-slot__remove" title="移除" @click.stop="removeItem('core', i - 1)">
-                          <el-icon><Close /></el-icon>
+                          <el-icon>
+                            <Close />
+                          </el-icon>
                         </button>
                       </template>
                       <template v-else>
                         <div class="lol-slot__empty">
-                          <el-icon><Plus /></el-icon>
+                          <el-icon>
+                            <Plus />
+                          </el-icon>
                         </div>
                       </template>
                     </button>
                   </div>
                 </div>
 
-                <div
-                  class="lol-row"
-                  :class="activeItemRow === 'extra' ? 'lol-row--active' : ''"
+                <div class="lol-row" :class="activeItemRow === 'extra' ? 'lol-row--active' : ''"
                   @click="selectItemRow('extra')">
                   <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
@@ -139,30 +131,26 @@
                     <div class="text-xs text-slate-400">根据对局切换</div>
                   </div>
                   <div class="grid grid-cols-6 gap-2">
-                    <button
-                      v-for="i in 6"
-                      :key="'extra-' + i"
-                      class="lol-slot"
+                    <button v-for="i in 6" :key="'extra-' + i" class="lol-slot"
                       :class="activeItemRow === 'extra' && activeItemSlot === i - 1 ? 'lol-slot--active' : ''"
                       @click.stop="selectItemSlot('extra', i - 1)">
                       <template v-if="extraItems[i - 1]">
-                        <el-tooltip
-                          effect="light"
-                          placement="top"
-                          :show-after="160"
-                          :hide-after="80"
-                          popper-class="lol-tooltip"
-                          :content="formatItemTooltip(extraItems[i - 1]!)">
+                        <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
+                          popper-class="lol-tooltip" :content="formatItemTooltip(extraItems[i - 1]!)">
                           <img :src="extraItems[i - 1]!.image" class="w-full h-full rounded-lg object-cover" />
                         </el-tooltip>
                         <span class="lol-slot__shine" />
                         <button class="lol-slot__remove" title="移除" @click.stop="removeItem('extra', i - 1)">
-                          <el-icon><Close /></el-icon>
+                          <el-icon>
+                            <Close />
+                          </el-icon>
                         </button>
                       </template>
                       <template v-else>
                         <div class="lol-slot__empty">
-                          <el-icon><Plus /></el-icon>
+                          <el-icon>
+                            <Plus />
+                          </el-icon>
                         </div>
                       </template>
                     </button>
@@ -180,9 +168,8 @@
                     <el-icon class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
                       <Search />
                     </el-icon>
-                    <input
-                      v-model="itemSearch"
-                      class="w-full h-10 pl-10 pr-3 rounded-2xl bg-white/60 border border-white/70 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
+                    <input v-model="itemSearch"
+                      class="w-full h-10 pl-10 pr-3 rounded-2xl bg-white/60 border border-white/70 focus:border-blue-300 focus:ring-2 focus:ring-blue-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
                       placeholder="搜索装备…" />
                   </div>
                 </div>
@@ -191,18 +178,9 @@
                   <div v-for="n in 10" :key="'item-skel-' + n" class="lol-card-skeleton" />
                 </div>
                 <div v-else class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 xl:grid-cols-6 gap-2.5">
-                  <el-tooltip
-                    v-for="item in filteredItems"
-                    :key="itemKey(item)"
-                    effect="light"
-                    placement="top"
-                    :show-after="160"
-                    :hide-after="80"
-                    popper-class="lol-tooltip"
-                    :content="formatItemTooltip(item)">
-                    <button
-                      class="lol-card"
-                      :class="isItemSelected(item) ? 'lol-card--selected' : ''"
+                  <el-tooltip v-for="item in filteredItems" :key="itemKey(item)" effect="light" placement="top"
+                    :show-after="160" :hide-after="80" popper-class="lol-tooltip" :content="formatItemTooltip(item)">
+                    <button class="lol-card" :class="isItemSelected(item) ? 'lol-card--selected' : ''"
                       @click="addItem(item)">
                       <img :src="item.image" class="w-11 h-11 rounded-lg object-cover shadow-sm" />
                       <div class="min-w-0">
@@ -233,9 +211,7 @@
               </div>
 
               <div class="grid grid-cols-1 gap-4">
-                <div
-                  class="lol-row"
-                  :class="activeAugmentTier === 'silver' ? 'lol-row--active' : ''"
+                <div class="lol-row" :class="activeAugmentTier === 'silver' ? 'lol-row--active' : ''"
                   @click="selectAugmentTier('silver')">
                   <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
@@ -244,39 +220,34 @@
                     </div>
                   </div>
                   <div class="grid grid-cols-6 gap-2">
-                    <button
-                      v-for="i in 6"
-                      :key="'silver-' + i"
-                      class="lol-slot lol-slot--augment"
+                    <button v-for="i in 6" :key="'silver-' + i" class="lol-slot lol-slot--augment"
                       :class="activeAugmentTier === 'silver' && activeAugmentSlot === i - 1 ? 'lol-slot--active' : ''"
                       @click.stop="selectAugmentSlot('silver', i - 1)">
                       <template v-if="selectedAugments.silver[i - 1]">
-                        <el-tooltip
-                          effect="light"
-                          placement="top"
-                          :show-after="160"
-                          :hide-after="80"
-                          popper-class="lol-tooltip"
-                          :content="formatAugmentTooltip(selectedAugments.silver[i - 1]!)">
-                          <img :src="selectedAugments.silver[i - 1]!.icon" class="w-full h-full rounded-lg object-cover" />
+                        <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
+                          popper-class="lol-tooltip" :content="formatAugmentTooltip(selectedAugments.silver[i - 1]!)">
+                          <img :src="selectedAugments.silver[i - 1]!.icon"
+                            class="w-full h-full rounded-lg object-cover" />
                         </el-tooltip>
                         <span class="lol-slot__shine" />
                         <button class="lol-slot__remove" title="移除" @click.stop="removeAugment('silver', i - 1)">
-                          <el-icon><Close /></el-icon>
+                          <el-icon>
+                            <Close />
+                          </el-icon>
                         </button>
                       </template>
                       <template v-else>
                         <div class="lol-slot__empty">
-                          <el-icon><Plus /></el-icon>
+                          <el-icon>
+                            <Plus />
+                          </el-icon>
                         </div>
                       </template>
                     </button>
                   </div>
                 </div>
 
-                <div
-                  class="lol-row"
-                  :class="activeAugmentTier === 'gold' ? 'lol-row--active' : ''"
+                <div class="lol-row" :class="activeAugmentTier === 'gold' ? 'lol-row--active' : ''"
                   @click="selectAugmentTier('gold')">
                   <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
@@ -285,39 +256,34 @@
                     </div>
                   </div>
                   <div class="grid grid-cols-6 gap-2">
-                    <button
-                      v-for="i in 6"
-                      :key="'gold-' + i"
-                      class="lol-slot lol-slot--augment"
+                    <button v-for="i in 6" :key="'gold-' + i" class="lol-slot lol-slot--augment"
                       :class="activeAugmentTier === 'gold' && activeAugmentSlot === i - 1 ? 'lol-slot--active' : ''"
                       @click.stop="selectAugmentSlot('gold', i - 1)">
                       <template v-if="selectedAugments.gold[i - 1]">
-                        <el-tooltip
-                          effect="light"
-                          placement="top"
-                          :show-after="160"
-                          :hide-after="80"
-                          popper-class="lol-tooltip"
-                          :content="formatAugmentTooltip(selectedAugments.gold[i - 1]!)">
-                          <img :src="selectedAugments.gold[i - 1]!.icon" class="w-full h-full rounded-lg object-cover" />
+                        <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
+                          popper-class="lol-tooltip" :content="formatAugmentTooltip(selectedAugments.gold[i - 1]!)">
+                          <img :src="selectedAugments.gold[i - 1]!.icon"
+                            class="w-full h-full rounded-lg object-cover" />
                         </el-tooltip>
                         <span class="lol-slot__shine" />
                         <button class="lol-slot__remove" title="移除" @click.stop="removeAugment('gold', i - 1)">
-                          <el-icon><Close /></el-icon>
+                          <el-icon>
+                            <Close />
+                          </el-icon>
                         </button>
                       </template>
                       <template v-else>
                         <div class="lol-slot__empty">
-                          <el-icon><Plus /></el-icon>
+                          <el-icon>
+                            <Plus />
+                          </el-icon>
                         </div>
                       </template>
                     </button>
                   </div>
                 </div>
 
-                <div
-                  class="lol-row"
-                  :class="activeAugmentTier === 'prismatic' ? 'lol-row--active' : ''"
+                <div class="lol-row" :class="activeAugmentTier === 'prismatic' ? 'lol-row--active' : ''"
                   @click="selectAugmentTier('prismatic')">
                   <div class="flex items-center justify-between mb-3">
                     <div class="flex items-center gap-2">
@@ -326,30 +292,28 @@
                     </div>
                   </div>
                   <div class="grid grid-cols-6 gap-2">
-                    <button
-                      v-for="i in 6"
-                      :key="'prismatic-' + i"
-                      class="lol-slot lol-slot--augment"
+                    <button v-for="i in 6" :key="'prismatic-' + i" class="lol-slot lol-slot--augment"
                       :class="activeAugmentTier === 'prismatic' && activeAugmentSlot === i - 1 ? 'lol-slot--active' : ''"
                       @click.stop="selectAugmentSlot('prismatic', i - 1)">
                       <template v-if="selectedAugments.prismatic[i - 1]">
-                        <el-tooltip
-                          effect="light"
-                          placement="top"
-                          :show-after="160"
-                          :hide-after="80"
+                        <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
                           popper-class="lol-tooltip"
                           :content="formatAugmentTooltip(selectedAugments.prismatic[i - 1]!)">
-                          <img :src="selectedAugments.prismatic[i - 1]!.icon" class="w-full h-full rounded-lg object-cover" />
+                          <img :src="selectedAugments.prismatic[i - 1]!.icon"
+                            class="w-full h-full rounded-lg object-cover" />
                         </el-tooltip>
                         <span class="lol-slot__shine" />
                         <button class="lol-slot__remove" title="移除" @click.stop="removeAugment('prismatic', i - 1)">
-                          <el-icon><Close /></el-icon>
+                          <el-icon>
+                            <Close />
+                          </el-icon>
                         </button>
                       </template>
                       <template v-else>
                         <div class="lol-slot__empty">
-                          <el-icon><Plus /></el-icon>
+                          <el-icon>
+                            <Plus />
+                          </el-icon>
                         </div>
                       </template>
                     </button>
@@ -367,24 +331,27 @@
                     <el-icon class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
                       <Search />
                     </el-icon>
-                    <input
-                      v-model="augmentSearch"
-                      class="w-full h-10 pl-10 pr-3 rounded-2xl bg-white/60 border border-white/70 focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
+                    <input v-model="augmentSearch"
+                      class="w-full h-10 pl-10 pr-3 rounded-2xl bg-white/60 border border-white/70 focus:border-blue-300 focus:ring-2 focus:ring-blue-200/60 outline-none text-slate-800 placeholder:text-slate-400 transition"
                       placeholder="搜索强化…" />
                   </div>
                 </div>
 
                 <div class="flex gap-2 mb-3">
-                  <button class="lol-tab" :class="augmentTierFilter === 'all' ? 'lol-tab--active' : ''" @click="augmentTierFilter = 'all'">
+                  <button class="lol-tab" :class="augmentTierFilter === 'all' ? 'lol-tab--active' : ''"
+                    @click="augmentTierFilter = 'all'">
                     全部
                   </button>
-                  <button class="lol-tab" :class="augmentTierFilter === 'silver' ? 'lol-tab--active' : ''" @click="augmentTierFilter = 'silver'">
+                  <button class="lol-tab" :class="augmentTierFilter === 'silver' ? 'lol-tab--active' : ''"
+                    @click="augmentTierFilter = 'silver'">
                     银色
                   </button>
-                  <button class="lol-tab" :class="augmentTierFilter === 'gold' ? 'lol-tab--active' : ''" @click="augmentTierFilter = 'gold'">
+                  <button class="lol-tab" :class="augmentTierFilter === 'gold' ? 'lol-tab--active' : ''"
+                    @click="augmentTierFilter = 'gold'">
                     金色
                   </button>
-                  <button class="lol-tab" :class="augmentTierFilter === 'prismatic' ? 'lol-tab--active' : ''" @click="augmentTierFilter = 'prismatic'">
+                  <button class="lol-tab" :class="augmentTierFilter === 'prismatic' ? 'lol-tab--active' : ''"
+                    @click="augmentTierFilter = 'prismatic'">
                     彩色
                   </button>
                 </div>
@@ -393,23 +360,15 @@
                   <div v-for="n in 9" :key="'aug-skel-' + n" class="lol-card-skeleton" />
                 </div>
                 <div v-else class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
-                  <el-tooltip
-                    v-for="aug in filteredAugments"
-                    :key="aug.augmentId"
-                    effect="light"
-                    placement="top"
-                    :show-after="160"
-                    :hide-after="80"
-                    popper-class="lol-tooltip"
-                    :content="formatAugmentTooltip(aug)">
-                    <button
-                      class="lol-card"
-                      :class="isAugmentSelected(aug) ? 'lol-card--selected' : ''"
+                  <el-tooltip v-for="aug in filteredAugments" :key="aug.augmentId" effect="light" placement="top"
+                    :show-after="160" :hide-after="80" popper-class="lol-tooltip" :content="formatAugmentTooltip(aug)">
+                    <button class="lol-card" :class="isAugmentSelected(aug) ? 'lol-card--selected' : ''"
                       @click="addAugment(aug)">
                       <img :src="aug.icon" class="w-11 h-11 rounded-lg object-cover shadow-sm" />
                       <div class="min-w-0">
                         <div class="text-xs font-semibold text-slate-800 truncate">{{ aug.name }}</div>
-                        <div class="text-[11px] text-slate-500 mt-0.5 truncate">{{ tierLabel(getAugmentTier(aug)) }}</div>
+                        <div class="text-[11px] text-slate-500 mt-0.5 truncate">{{ tierLabel(getAugmentTier(aug)) }}
+                        </div>
                       </div>
                       <div v-if="isAugmentSelected(aug)" class="lol-check">已选</div>
                     </button>
@@ -483,9 +442,9 @@ const backgroundPalettes = [
   // blue/cyan (Mage/Support)
   { light: '#e6f2f4', mid: '#d3e6ee', deep: '#c9dff2', glow: '#ffffff' },
   { light: '#e6f0ff', mid: '#d7e4ff', deep: '#c9d7ff', glow: '#ffffff' },
-  // purple/pink (Assassin)
-  { light: '#efe7f5', mid: '#e1d7ee', deep: '#d6dcf4', glow: '#ffffff' },
-  { light: '#f4e7f0', mid: '#ead7e6', deep: '#dfd5f2', glow: '#ffffff' },
+  // extra cool (Assassin/Marksman)
+  { light: '#eaf2ff', mid: '#d8e9ff', deep: '#c7deff', glow: '#ffffff' },
+  { light: '#ecf8ff', mid: '#d9f0ff', deep: '#c6e7ff', glow: '#ffffff' },
   // green/teal (Tank)
   { light: '#e8f3ea', mid: '#d8ecd9', deep: '#d0e8e4', glow: '#ffffff' },
   { light: '#e6f5f1', mid: '#d5efe6', deep: '#cde6f2', glow: '#ffffff' },
@@ -504,12 +463,12 @@ const pageBackgroundStyle = computed(() => {
   const seed = selectedChampion.value?.key?.toString() || selectedChampion.value?._id?.toString() || 'default'
   const firstTag = selectedChampion.value?.tags?.[0]
   const tagPaletteGroups: Record<string, number[]> = {
-    Assassin: [4, 5],
-    Mage: [2, 3],
+    Assassin: [2, 3, 4, 5],
+    Mage: [2, 3, 4],
     Support: [2, 3, 7],
     Tank: [6, 7],
     Fighter: [8, 9],
-    Marksman: [1, 3],
+    Marksman: [1, 3, 5],
   }
   const group = firstTag ? tagPaletteGroups[firstTag] : undefined
   const paletteIndex = group?.length ? group[pickPaletteIndex(seed) % group.length] : pickPaletteIndex(seed)
@@ -765,8 +724,8 @@ const init = async () => {
   try {
     const championFromState =
       (typeof window !== 'undefined' ? ((window.history.state as any) || {}).champion : undefined) as
-        | Champion
-        | undefined
+      | Champion
+      | undefined
     if (championFromState?._id) {
       selectedChampion.value = championFromState
       strategyTitle.value = `${championFromState.name} · 海克斯大乱斗`
@@ -827,6 +786,7 @@ onMounted(() => {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -857,10 +817,12 @@ onMounted(() => {
   font-size: 12px;
   transition: transform 180ms ease, background 180ms ease;
 }
+
 .lol-pill:hover:not(:disabled) {
   transform: translateY(-1px);
   background: rgba(255, 255, 255, 0.75);
 }
+
 .lol-pill:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -875,16 +837,19 @@ onMounted(() => {
   font-size: 11px;
   font-weight: 700;
 }
+
 .lol-badge--silver {
   background: rgba(226, 232, 240, 0.65);
 }
+
 .lol-badge--gold {
   background: rgba(254, 240, 138, 0.45);
   border-color: rgba(250, 204, 21, 0.35);
 }
+
 .lol-badge--prismatic {
-  background: rgba(224, 231, 255, 0.55);
-  border-color: rgba(99, 102, 241, 0.35);
+  background: rgba(207, 250, 254, 0.6);
+  border-color: rgba(0, 122, 255, 0.28);
 }
 
 .lol-row {
@@ -894,13 +859,15 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.38);
   transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
 }
+
 .lol-row:hover {
   transform: translateY(-1px);
 }
+
 .lol-row--active {
-  border-color: rgba(99, 102, 241, 0.45);
+  border-color: rgba(0, 122, 255, 0.45);
   box-shadow:
-    0 14px 30px rgba(99, 102, 241, 0.16),
+    0 14px 30px rgba(0, 122, 255, 0.16),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
@@ -917,21 +884,24 @@ onMounted(() => {
     inset 0 1px 0 rgba(255, 255, 255, 0.75);
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
+
 .lol-slot:hover {
   transform: translateY(-2px) scale(1.03);
 }
+
 .lol-slot--active {
-  border-color: rgba(99, 102, 241, 0.6);
+  border-color: rgba(0, 122, 255, 0.6);
   box-shadow:
-    0 14px 26px rgba(99, 102, 241, 0.22),
-    0 0 0 2px rgba(99, 102, 241, 0.25),
+    0 14px 26px rgba(0, 122, 255, 0.22),
+    0 0 0 2px rgba(0, 122, 255, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
+
 .lol-slot--augment.lol-slot--active {
-  border-color: rgba(236, 72, 153, 0.55);
+  border-color: rgba(255, 159, 10, 0.55);
   box-shadow:
-    0 14px 26px rgba(236, 72, 153, 0.18),
-    0 0 0 2px rgba(236, 72, 153, 0.2),
+    0 14px 26px rgba(255, 159, 10, 0.18),
+    0 0 0 2px rgba(255, 159, 10, 0.2),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
 }
 
@@ -964,6 +934,7 @@ onMounted(() => {
   transform: translateY(-4px);
   transition: opacity 160ms ease, transform 160ms ease;
 }
+
 .lol-slot:hover .lol-slot__remove {
   opacity: 1;
   transform: translateY(0);
@@ -993,17 +964,19 @@ onMounted(() => {
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
   overflow: hidden;
 }
+
 .lol-card:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 14px 28px rgba(99, 102, 241, 0.14),
+    0 14px 28px rgba(0, 122, 255, 0.14),
     inset 0 1px 0 rgba(255, 255, 255, 0.92);
 }
+
 .lol-card--selected {
-  border-color: rgba(99, 102, 241, 0.5);
+  border-color: rgba(0, 122, 255, 0.5);
   box-shadow:
-    0 14px 28px rgba(99, 102, 241, 0.18),
-    0 0 0 1px rgba(99, 102, 241, 0.25),
+    0 14px 28px rgba(0, 122, 255, 0.18),
+    0 0 0 1px rgba(0, 122, 255, 0.25),
     inset 0 1px 0 rgba(255, 255, 255, 0.92);
 }
 
@@ -1015,9 +988,9 @@ onMounted(() => {
   border-radius: 9999px;
   font-size: 11px;
   font-weight: 800;
-  color: rgb(67 56 202);
+  color: var(--color-accent-primary);
   background: rgba(255, 255, 255, 0.75);
-  border: 1px solid rgba(99, 102, 241, 0.3);
+  border: 1px solid rgba(0, 122, 255, 0.3);
 }
 
 :global(.lol-tooltip) {
@@ -1037,6 +1010,7 @@ onMounted(() => {
   overflow: hidden;
   position: relative;
 }
+
 .lol-card-skeleton::after {
   content: "";
   position: absolute;
@@ -1045,10 +1019,12 @@ onMounted(() => {
   transform: translateX(-140%);
   animation: skShimmer 1.2s ease-in-out infinite;
 }
+
 @keyframes skShimmer {
   0% {
     transform: translateX(-140%);
   }
+
   100% {
     transform: translateX(140%);
   }
@@ -1065,13 +1041,15 @@ onMounted(() => {
   font-weight: 800;
   transition: transform 160ms ease, background 160ms ease;
 }
+
 .lol-tab:hover {
   transform: translateY(-1px);
 }
+
 .lol-tab--active {
-  background: rgba(99, 102, 241, 0.12);
-  border-color: rgba(99, 102, 241, 0.4);
-  color: rgb(67 56 202);
+  background: rgba(0, 122, 255, 0.12);
+  border-color: rgba(0, 122, 255, 0.4);
+  color: var(--color-accent-primary);
 }
 
 .lol-primary {
@@ -1083,19 +1061,21 @@ onMounted(() => {
   gap: 10px;
   color: white;
   font-weight: 800;
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.95) 0%, rgba(236, 72, 153, 0.9) 100%);
+  background: linear-gradient(135deg, rgba(0, 122, 255, 0.95) 0%, rgba(50, 173, 230, 0.92) 100%);
   box-shadow:
-    0 14px 30px rgba(99, 102, 241, 0.28),
+    0 14px 30px rgba(0, 122, 255, 0.28),
     0 0 0 1px rgba(255, 255, 255, 0.35);
   transition: transform 160ms ease, box-shadow 160ms ease, filter 160ms ease;
 }
+
 .lol-primary:hover:not(:disabled) {
   transform: translateY(-2px);
   filter: saturate(1.05);
   box-shadow:
-    0 18px 38px rgba(99, 102, 241, 0.34),
+    0 18px 38px rgba(0, 122, 255, 0.34),
     0 0 0 1px rgba(255, 255, 255, 0.5);
 }
+
 .lol-primary:disabled {
   opacity: 0.6;
   cursor: not-allowed;
@@ -1109,6 +1089,7 @@ onMounted(() => {
   border-top-color: rgba(255, 255, 255, 1);
   animation: spin 900ms linear infinite;
 }
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -1131,20 +1112,23 @@ onMounted(() => {
   transition: transform 180ms ease, background 180ms ease, color 180ms ease, box-shadow 180ms ease;
   backdrop-filter: blur(14px);
 }
+
 .lol-fab:hover {
   transform: translateY(-2px) scale(1.05);
   background: rgba(255, 255, 255, 0.8);
-  color: rgb(67 56 202);
+  color: var(--color-accent-primary);
   box-shadow:
-    0 12px 28px rgba(99, 102, 241, 0.22),
-    0 0 0 1px rgba(99, 102, 241, 0.35),
+    0 12px 28px rgba(0, 122, 255, 0.22),
+    0 0 0 1px rgba(0, 122, 255, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 1);
 }
+
 .lol-fab:active {
   transform: translateY(0) scale(0.98);
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .lol-page-bg,
   .lol-row,
   .lol-slot,

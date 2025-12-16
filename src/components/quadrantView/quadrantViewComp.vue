@@ -1,9 +1,6 @@
 <template>
   <div class="quadrant-board">
-    <div v-if="isLoading" class="loading-container">
-      <div class="loading-spinner"></div>
-      <p>加载笔记中...</p>
-    </div>
+    <LoadingComp v-if="isLoading" overlay text="加载笔记中…" />
 
     <div v-else-if="notes.length === 0" class="empty-state">
       <p>暂无笔记，请先创建一些笔记</p>
@@ -357,6 +354,7 @@ defineExpose({
 <style scoped>
 .quadrant-board,
 .shared-quadrant-board {
+  position: relative;
   width: 100%;
   max-width: 1200px;
   padding: 20px;
@@ -365,15 +363,15 @@ defineExpose({
 .user-legend {
   margin-bottom: 20px;
   padding: 16px;
-  background: #f8f9fa;
-  border-radius: 8px;
-  border: 1px solid #e4e7ed;
+  background: var(--color-bg-primary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border-primary);
 }
 
 .user-legend h4 {
   margin: 0 0 12px 0;
   font-size: 14px;
-  color: #606266;
+  color: var(--color-text-secondary);
   font-weight: 600;
 }
 
@@ -388,7 +386,7 @@ defineExpose({
   align-items: center;
   gap: 8px;
   font-size: 14px;
-  color: #303133;
+  color: var(--color-text-primary);
 }
 
 .color-indicator {
@@ -405,14 +403,14 @@ defineExpose({
   align-items: center;
   justify-content: center;
   height: 400px;
-  color: #ffffff;
+  color: var(--color-text-secondary);
 }
 
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #409eff;
+  border: 4px solid rgba(15, 23, 42, 0.08);
+  border-top: 4px solid var(--color-accent-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 16px;
@@ -434,7 +432,7 @@ defineExpose({
   align-items: center;
   justify-content: center;
   height: 400px;
-  color: #999;
+  color: var(--color-text-tertiary);
   font-size: 16px;
 }
 
@@ -449,35 +447,37 @@ defineExpose({
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  border: 2px solid #ddd;
-  border-radius: 12px;
+  border: 1px solid var(--color-border-primary);
+  border-radius: var(--radius-xl);
   position: relative;
   height: 600px;
-  background: #fafafa;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   overflow: hidden;
   gap: 0;
 }
 
 .quadrant {
   padding: 15px;
-  border: 1px solid #eee;
+  border: 1px solid var(--color-border-secondary);
   position: relative;
-  background: white;
+  background: rgba(255, 255, 255, 0.55);
   transition: background-color 0.2s ease;
 }
 
 .quadrant:hover {
-  background: #f8f9fa;
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .quadrant-title {
   text-align: center;
-  color: #A0522D;
+  color: var(--color-text-secondary);
   font-weight: 600;
   user-select: none;
   font-size: 14px;
   padding-bottom: 8px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--color-border-secondary);
 }
 
 .quadrant-content {
@@ -490,28 +490,28 @@ defineExpose({
 
 /* 象限特殊颜色 */
 .q1 {
-  background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+  background: linear-gradient(135deg, rgba(254, 226, 226, 0.55) 0%, rgba(255, 255, 255, 0.6) 70%);
   border-top-right-radius: 12px;
   position: relative;
   z-index: 1;
 }
 
 .q2 {
-  background: linear-gradient(135deg, #f0fff4 0%, #ffffff 100%);
+  background: linear-gradient(135deg, rgba(209, 250, 229, 0.55) 0%, rgba(255, 255, 255, 0.6) 70%);
   border-top-left-radius: 12px;
   position: relative;
   z-index: 1;
 }
 
 .q3 {
-  background: linear-gradient(135deg, #f0f9ff 0%, #ffffff 100%);
+  background: linear-gradient(135deg, rgba(224, 242, 254, 0.6) 0%, rgba(255, 255, 255, 0.6) 70%);
   border-bottom-left-radius: 12px;
   position: relative;
   z-index: 1;
 }
 
 .q4 {
-  background: linear-gradient(135deg, #fffbf0 0%, #ffffff 100%);
+  background: linear-gradient(135deg, rgba(254, 243, 199, 0.55) 0%, rgba(255, 255, 255, 0.6) 70%);
   border-bottom-right-radius: 12px;
   position: relative;
   z-index: 1;
@@ -519,7 +519,7 @@ defineExpose({
 
 /* 坐标轴 */
 .axis {
-  background-color: #ddd;
+  background-color: rgba(15, 23, 42, 0.10);
   position: absolute;
   z-index: 1;
 }
@@ -527,17 +527,19 @@ defineExpose({
 /* 待分类区域 */
 .uncategorized-area {
   margin-top: 20px;
-  border: 2px dashed #ccc;
-  border-radius: 12px;
+  border: 1px dashed var(--color-border-primary);
+  border-radius: var(--radius-xl);
   padding: 15px;
   min-height: 150px;
-  background: #fafafa;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
   transition: all 0.3s ease;
 }
 
 .uncategorized-title {
   text-align: center;
-  color: #ffffff;
+  color: var(--color-text-secondary);
   font-weight: 600;
   margin: 0 0 12px 0;
   font-size: 16px;
@@ -575,19 +577,19 @@ defineExpose({
 
 /* 放置区域高亮 */
 .drop-zone-active {
-  background-color: rgba(64, 158, 255, 0.1) !important;
-  border-color: #409eff !important;
-  box-shadow: inset 0 0 0 2px rgba(64, 158, 255, 0.3) !important;
+  background-color: rgba(0, 122, 255, 0.08) !important;
+  border-color: rgba(0, 122, 255, 0.55) !important;
+  box-shadow: inset 0 0 0 2px rgba(0, 122, 255, 0.22) !important;
   transition: all 0.2s ease !important;
 }
 
 .quadrant.drop-zone-active {
-  background: rgba(64, 158, 255, 0.1) !important;
+  background: rgba(0, 122, 255, 0.08) !important;
 }
 
 .uncategorized-area.drop-zone-active {
-  background-color: rgba(64, 158, 255, 0.05) !important;
-  border-color: #409eff !important;
+  background-color: rgba(0, 122, 255, 0.06) !important;
+  border-color: rgba(0, 122, 255, 0.55) !important;
 }
 
 /* 响应式设计 */

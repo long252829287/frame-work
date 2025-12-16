@@ -91,7 +91,8 @@ onMounted(fetchList)
       <el-button type="primary" @click="openCreate">新增凭据</el-button>
     </div>
 
-    <el-table :data="list" v-loading="loading" border>
+    <div class="relative">
+      <el-table :data="list" border>
       <el-table-column prop="account" label="账号" width="260" />
       <el-table-column prop="website" label="网站" />
       <el-table-column prop="notes" label="备注" />
@@ -108,7 +109,9 @@ onMounted(fetchList)
           </el-space>
         </template>
       </el-table-column>
-    </el-table>
+      </el-table>
+      <LoadingComp v-if="loading" overlay text="加载中…" />
+    </div>
 
     <el-drawer v-model="editorVisible" :title="form.id ? '编辑凭据' : '新增凭据'" size="40%">
       <el-form label-width="100px">
