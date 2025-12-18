@@ -72,9 +72,9 @@
         </div>
       </section>
 
-      <aside class="lol-right">
-        <div class="lol-panel">
-          <template v-if="selectedChampion">
+	      <aside class="lol-right">
+	        <div class="lol-panel">
+	          <template v-if="selectedChampion">
             <div class="lol-panel-head">
               <div class="lol-panel-title">
                 <div class="lol-panel-name">{{ selectedChampion.name }}</div>
@@ -82,10 +82,15 @@
               </div>
             </div>
 
-            <div class="lol-panel-body">
-              <div class="lol-hero-splash">
-                <img :src="panelSplash" :alt="selectedChampion.name" loading="lazy" />
-              </div>
+	            <div class="lol-panel-body">
+	              <div class="lol-hero-splash" :class="{ 'lol-hero-splash--loading': isSplashLoading }">
+	                <img
+	                  :src="splashSrc"
+	                  :alt="selectedChampion.name" loading="eager" decoding="async" @load="onSplashLoad" />
+	                <div v-if="isSplashLoading" class="lol-splash-loader">
+	                  <LoadingComp :visible="true" :fullscreen="false" :overlay="false" :blocking="false" :dim="false" text="正在加载中…" />
+	                </div>
+	              </div>
 
               <div v-if="strategiesLoading" class="lol-skel-block">
                 <div class="lol-skel-line" />
@@ -205,7 +210,6 @@
       </aside>
     </main>
 
-    <!-- Hidden export node -->
     <div class="lol-export-stage" aria-hidden="true">
       <div v-if="selectedChampion && selectedStrategy" ref="exportCardRef" class="lol-export-card">
         <div class="lol-export-hero">
@@ -259,6 +263,7 @@ import domToImage from 'dom-to-image'
 import { commonService } from '@/service'
 import { useLolStore } from '@/stores/lol'
 import type { Augment, Champion, Strategy } from '@/types'
+import { LoadingComp } from '@/components/loading';
 
 type RoleKey = 'all' | 'Fighter' | 'Mage' | 'Tank' | 'Support' | 'Marksman'
 const router = useRouter()
@@ -282,6 +287,10 @@ const isLiking = ref(false)
 const likedState = ref<Record<string, boolean>>({})
 
 const exportCardRef = ref<HTMLElement | null>(null)
+const isSplashLoading = ref(false)
+const splashSrc = ref('')
+const pendingSplashFinalSrc = ref('')
+let splashRequestId = 0
 
 const roles = [
   { key: 'all' as const, label: '所有角色' },
@@ -301,7 +310,6 @@ const roleMap: Record<RoleKey, string> = {
 };
 
 const champions = computed(() => lolStore.champions || [])
-console.log(champions.value)
 
 const primaryRole = (c: Champion): string => {
   const firstTag = c.tags?.[0];
@@ -340,21 +348,21 @@ const getStrategyItemImage = (s: Strategy, position: number) => {
 
 const coreBuildOrbs = computed(() => {
   const s = selectedStrategy.value
-  if (!s) return Array(4).fill(null) as Array<string | null>
+  if (!s) return Array(6).fill(null) as Array<string | null>
   const imgs = [0, 1, 2, 3].map(p => getStrategyItemImage(s, p)).filter(Boolean) as string[]
-  return [...imgs, ...Array(Math.max(0, 4 - imgs.length)).fill(null)]
+  return [...imgs, ...Array(Math.max(0, 6 - imgs.length)).fill(null)]
 })
 
 const extraBuildOrbs = computed(() => {
   const s = selectedStrategy.value
-  if (!s) return Array(4).fill(null) as Array<string | null>
+  if (!s) return Array(6).fill(null) as Array<string | null>
   const imgs = [6, 7, 8, 9].map(p => getStrategyItemImage(s, p)).filter(Boolean) as string[]
-  return [...imgs, ...Array(Math.max(0, 4 - imgs.length)).fill(null)]
+  return [...imgs, ...Array(Math.max(0, 6 - imgs.length)).fill(null)]
 })
 
 const augmentOrbs = computed(() => {
   const s = selectedStrategy.value
-  if (!s?.augmentIds?.length) return Array(3).fill(null) as Array<string | null>
+  if (!s?.augmentIds?.length) return Array(6).fill(null) as Array<string | null>
   const icons = s.augmentIds
     .slice(0, 3)
     .map(id => augmentMap.value[id]?.icon)
@@ -362,28 +370,9 @@ const augmentOrbs = computed(() => {
   return [...icons, ...Array(Math.max(0, 3 - icons.length)).fill(null)]
 })
 
-const computedTier = computed(() => {
-  const like = selectedStrategy.value?.stats?.likeCount ?? 0
-  if (!selectedStrategy.value) return '—'
-  if (like >= 50) return 'S-Tier'
-  if (like >= 15) return 'A-Tier'
-  return 'B-Tier'
-})
-
-const computedRank = computed(() => {
-  const like = selectedStrategy.value?.stats?.likeCount ?? 0
-  if (!selectedStrategy.value) return '—'
-  return Math.max(1, 100 - like)
-})
-
 const exportSplash = computed(() => {
   const c = selectedChampion.value
   return c?.images?.loading || c?.images?.splash || c?.images?.square || ''
-})
-
-const panelSplash = computed(() => {
-  const c = selectedChampion.value
-  return c?.images?.splash || c?.images?.loading || c?.images?.square || ''
 })
 
 const goBack = () => router.back()
@@ -428,7 +417,6 @@ const loadAugments = async () => {
       // ignore
     }
   } catch {
-    // fallback to store cache if exists
     const next: Record<string, Augment> = {}
     for (const a of lolStore.augmentList || []) next[a.augmentId] = a
     augmentMap.value = next
@@ -445,7 +433,6 @@ const fetchStrategies = async (championKey: string, preferStrategyId?: string) =
     selectedStrategyId.value = target || ''
   } catch (e) {
     console.error(e)
-    // fallback without mode (older server)
     try {
       const res2 = await commonService.apiGetStrategies({ championKey })
       const list2 = res2?.data?.data?.strategies || []
@@ -460,15 +447,54 @@ const fetchStrategies = async (championKey: string, preferStrategyId?: string) =
   }
 }
 
+const prefetchImage = (url: string) =>
+  new Promise<void>((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => resolve()
+    img.onerror = () => reject(new Error('image load error'))
+    img.src = url
+  })
+
+const syncSplash = (c: Champion) => {
+  const placeholder = c.images.loading || c.images.square || c.images.splash || ''
+  const final = c.images.splash || c.images.loading || c.images.square || ''
+
+  splashRequestId += 1
+  const reqId = splashRequestId
+
+  splashSrc.value = placeholder || final
+  pendingSplashFinalSrc.value = final || placeholder
+  isSplashLoading.value = !!pendingSplashFinalSrc.value
+
+  if (final && final !== splashSrc.value) {
+    void prefetchImage(final)
+      .then(() => {
+        if (reqId !== splashRequestId) return
+        splashSrc.value = final
+      })
+      .catch(() => {
+        // ignore
+      })
+  }
+}
+
 const selectChampion = async (c: Champion) => {
+  if (selectedChampion.value?._id === c._id) return
   selectedChampion.value = c
+  syncSplash(c)
   await Promise.all([fetchStrategies(c.key), loadAugments()])
+}
+const onSplashLoad = () => {
+  if (splashSrc.value && splashSrc.value === pendingSplashFinalSrc.value) {
+    isSplashLoading.value = false
+  }
 }
 
 const openTrending = async (s: Strategy) => {
   const champ = lolStore.getChampionByKey(s.championKey)
   if (!champ) return
   selectedChampion.value = champ
+  syncSplash(champ)
   await Promise.all([fetchStrategies(champ.key, s._id), loadAugments()])
 }
 
@@ -802,9 +828,10 @@ watch(
 
 .lol-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(92px, 120px));
   gap: 12px;
   align-content: start;
+  justify-content: start;
 }
 
 .lol-card {
@@ -926,20 +953,57 @@ watch(
 }
 
 .lol-hero-splash {
+  position: relative;
   border-radius: 18px;
   border: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(255, 255, 255, 0.04);
   padding: 6px;
   overflow: hidden;
+  min-height: 200px;
 }
 
 .lol-hero-splash img {
+  opacity: 1;
+  transition: opacity 0.3s ease;
   width: 100%;
   display: block;
   border-radius: 14px;
   object-fit: cover;
   max-height: 240px;
-  filter: saturate(1.05) contrast(1.05);
+}
+
+.lol-splash-loader {
+  position: absolute;
+  inset: 6px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+.lol-spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--lol-accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.lol-hero-splash--loading img {
+  opacity: 0.72;
+  filter: blur(6px) saturate(0.95);
+  transform: scale(1.02);
+  transition: opacity 0.22s ease, filter 0.22s ease, transform 0.22s ease;
 }
 
 .lol-tabs {
@@ -976,19 +1040,19 @@ watch(
 
 .lol-orbs {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 10px;
   margin-top: 10px;
 }
 
 .lol-orbs--aug {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(6, 1fr);
 }
 
 .lol-orb {
   width: 100%;
   aspect-ratio: 1 / 1;
-  border-radius: 9999px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
@@ -1362,10 +1426,6 @@ watch(
 
   .lol-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .lol-hero-text h1 {
-    font-size: 34px;
   }
 }
 </style>

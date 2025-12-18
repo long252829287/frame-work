@@ -1,261 +1,156 @@
 <template>
-  <Teleport v-if="fullscreen" to="body">
-    <Transition name="lc-fade">
-      <div
-        v-show="visible"
-        class="lc-root lc-fullscreen"
-        :style="{ zIndex: resolvedZIndex, pointerEvents: blocking ? 'auto' : 'none' }"
-        role="status"
-        aria-live="polite"
-        aria-busy="true">
-        <div v-if="dim" class="lc-backdrop" />
-        <div class="lc-panel" :class="panelClass">
-          <slot>
-            <div v-if="showSpinner" class="lc-spinner" :class="spinnerClass" aria-hidden="true" />
-            <div v-if="variant === 'reveal'" class="lc-text">
-              <div class="lc-text-base">{{ text }}</div>
-              <div class="lc-text-reveal" :style="revealStyle">{{ text }}</div>
-              <div v-if="subText" class="lc-subtext">{{ subText }}</div>
-            </div>
-            <div v-else class="lc-text lc-text--plain">
-              <div class="lc-text-single">{{ text }}</div>
-              <div v-if="subText" class="lc-subtext">{{ subText }}</div>
-            </div>
-          </slot>
-        </div>
+  <div class="loading-wrapper">
+    <div class="loading-container">
+      <div class="loading-text-base">
+        {{ text }}
       </div>
-    </Transition>
-  </Teleport>
-
-  <Transition v-else name="lc-fade">
-    <div
-      v-show="visible"
-      class="lc-root"
-      :class="{ 'lc-overlay': overlay }"
-      :style="{ zIndex: resolvedZIndex, pointerEvents: blocking ? 'auto' : 'none' }"
-      role="status"
-      aria-live="polite"
-      aria-busy="true">
-      <div v-if="dim" class="lc-backdrop" />
-      <div class="lc-panel" :class="panelClass">
-        <slot>
-          <div v-if="showSpinner" class="lc-spinner" :class="spinnerClass" aria-hidden="true" />
-          <div v-if="variant === 'reveal'" class="lc-text">
-            <div class="lc-text-base">{{ text }}</div>
-            <div class="lc-text-reveal" :style="revealStyle">{{ text }}</div>
-            <div v-if="subText" class="lc-subtext">{{ subText }}</div>
-          </div>
-          <div v-else class="lc-text lc-text--plain">
-            <div class="lc-text-single">{{ text }}</div>
-            <div v-if="subText" class="lc-subtext">{{ subText }}</div>
-          </div>
-        </slot>
+      <div class="loading-text-reveal" :style="revealStyle">
+        {{ text }}
       </div>
     </div>
-  </Transition>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue'
+import { computed } from 'vue';
 
-type SpinnerSize = 'sm' | 'md' | 'lg'
-type Variant = 'reveal' | 'plain'
-
-const props = withDefaults(
-  defineProps<{
-    text?: string
-    subText?: string
-    visible?: boolean
-    overlay?: boolean
-    fullscreen?: boolean
-    blocking?: boolean
-    dim?: boolean
-    zIndex?: number
-    size?: SpinnerSize
-    showSpinner?: boolean
-    variant?: Variant
-    duration?: number
-    revealRatio?: number
-  }>(),
-  {
-    text: '加载中…',
-    visible: true,
-    overlay: false,
-    fullscreen: false,
-    blocking: true,
-    dim: true,
-    size: 'md',
-    showSpinner: true,
-    variant: 'reveal',
-    duration: 1.6,
-    revealRatio: 1,
+// 定义组件的 props
+const props = defineProps({
+  // 允许外部传入自定义的文本
+  text: {
+    type: String,
+    default: 'One moment, the agent is currently loading...',
   },
-)
-
-const resolvedZIndex = computed(() => props.zIndex ?? (props.fullscreen ? 2100 : 50))
+  // 允许外部传入自定义的动画总时长（秒）
+  duration: {
+    type: Number,
+    default: 4,
+  },
+  // 允许外部传入自定义的文字显现时长占总时长的比例 (0-1)
+  revealRatio: {
+    type: Number,
+    default: 0.4,
+  },
+  // 允许外部传入自定义的淡出动画延迟占总时长的比例 (0-1)
+  fadeOutDelayRatio: {
+    type: Number,
+    default: 0.875, // 默认 3.5s / 4s = 0.875
+  },
+  // 新增: 自定义字体大小
+  fontSize: {
+    type: String,
+    default: '1.2rem',
+  },
+});
 
 // 计算动画样式，动态设置 CSS 变量
 const revealStyle = computed(() => {
-  const revealDuration = Math.max(0.4, props.duration * Math.min(1, Math.max(0.2, props.revealRatio)))
+  const revealDuration = props.duration * props.revealRatio;
+  const fadeOutDelay = props.duration * props.fadeOutDelayRatio;
+
   return {
     '--reveal-duration': `${revealDuration}s`,
-    '--total-duration': `${Math.max(revealDuration, props.duration)}s`,
-  } as Record<string, string>
-})
-
-const panelClass = computed(() => ({
-  'lc-panel--plain': props.variant === 'plain',
-}))
-
-const spinnerClass = computed(() => {
-  if (props.size === 'sm') return 'lc-spinner--sm'
-  if (props.size === 'lg') return 'lc-spinner--lg'
-  return 'lc-spinner--md'
-})
+    '--total-duration': `${props.duration}s`,
+    '--fade-out-delay': `${fadeOutDelay}s`,
+    '--font-size': props.fontSize,
+  };
+});
 </script>
 
 <style scoped>
-.lc-root {
+/* 新增：外部包裹容器，用于实现整体居中 */
+.loading-wrapper {
   display: flex;
-  align-items: center;
   justify-content: center;
-  position: relative;
-}
-
-.lc-fullscreen {
-  position: fixed;
-  inset: 0;
-}
-
-.lc-overlay {
-  position: absolute;
-  inset: 0;
-}
-
-.lc-backdrop {
-  position: absolute;
-  inset: 0;
-  background: var(--overlay-dim, rgba(15, 23, 42, 0.08));
-  backdrop-filter: blur(var(--glass-blur, 14px));
-}
-
-.lc-panel {
-  position: relative;
-  display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 11px 13px;
-  border-radius: var(--radius-lg, 16px);
-  background: var(--glass-bg-strong, rgba(255, 255, 255, 0.74));
-  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.72));
-  box-shadow: var(--glass-shadow, 0 20px 60px rgba(15, 23, 42, 0.14));
-  backdrop-filter: blur(var(--glass-blur, 18px));
-  max-width: min(520px, 92vw);
+  /* 确保容器有高度，否则无法垂直居中。这里假设父容器有高度，或者你可以设置 min-height */
+  width: 100%;
+  height: 100%;
+  /* 示例背景色，实际使用时应由父级决定或透明 */
+  /* background-color: #1a1a2e; */
 }
 
-.lc-panel--plain {
-  background: rgba(255, 255, 255, 0.55);
-}
-
-.lc-spinner {
-  border-radius: 9999px;
-  border: 2px solid color-mix(in srgb, var(--color-accent-primary) 18%, transparent);
-  border-top-color: var(--color-accent-primary);
-  animation: lc-spin 900ms linear infinite;
-}
-.lc-spinner--sm {
-  width: 14px;
-  height: 14px;
-}
-.lc-spinner--md {
-  width: 18px;
-  height: 18px;
-}
-.lc-spinner--lg {
-  width: 22px;
-  height: 22px;
-}
-
-@keyframes lc-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.lc-text {
+.loading-container {
   position: relative;
+  text-align: left;
   display: inline-block;
-  line-height: 1.1;
+  /* 使容器变为行内块，紧贴内容 */
 }
 
-.lc-text-base {
-  font-size: 13px;
-  font-weight: 700;
-  color: rgba(71, 85, 105, 0.7);
-  white-space: pre-line;
+/* 提取公共样式变量 */
+.loading-container {
+  /* Antigravity 风格色彩 */
+  /* --text-color-base: rgba(255, 255, 255, 0.1); */
+  /* 基础文字颜色，稍微可见一点点 */
+  --text-color-reveal: #e0e0ff;
+  /* 显现文字颜色，带一点冷色调的白 */
+  --text-glow: 0 0 8px rgba(100, 149, 237, 0.6);
+  /* 发光效果 */
+  /* 更现代、科技感的字体 */
+  --font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
 }
 
-.lc-text--plain {
-  line-height: 1.15;
+
+/* 基础文本，用于占位 */
+.loading-text-base {
+  font-size: var(--font-size);
+  /* color: var(--text-color-base); */
+  color: transparent;
+  /* 保持完全透明 */
+  font-family: var(--font-family);
+  font-weight: 300;
+  /* 更细的字重 */
 }
 
-.lc-text-single {
-  font-size: 13px;
-  font-weight: 750;
-  color: rgb(15, 23, 42);
-  white-space: pre-line;
-}
-
-.lc-text-reveal {
+/* 动画文本层，用于显示逐渐显现的文字 */
+.loading-text-reveal {
   position: absolute;
-  inset: 0;
-  font-size: 13px;
-  font-weight: 800;
-  color: rgb(15, 23, 42);
-  white-space: pre-line;
-  clip-path: inset(0 100% 0 0);
-  animation: lc-reveal var(--reveal-duration) ease-in-out infinite;
+  top: 0;
+  left: 0;
+  font-size: var(--font-size);
+  color: var(--text-color-reveal);
+  font-family: var(--font-family);
+  font-weight: 300;
+  /* 更细的字重 */
+  white-space: nowrap;
+  /* 保持文字在一行 */
+  overflow: hidden;
+  /* 隐藏未显示的文字 */
+  width: 0;
+  /* 初始宽度为0 */
+  /* 增加文字发光效果 */
+  text-shadow: var(--text-glow);
+
+  /* 使用 CSS 变量定义动画 */
+  animation:
+    reveal-text var(--total-duration) ease-in-out infinite,
+    fade-out var(--total-duration) ease-in-out infinite var(--fade-out-delay);
 }
 
-@keyframes lc-reveal {
+/* 关键帧动画：逐渐显现文字 */
+@keyframes reveal-text {
   0% {
-    clip-path: inset(0 100% 0 0);
-    opacity: 0.85;
+    width: 0;
   }
-  60% {
-    clip-path: inset(0 0 0 0);
-    opacity: 1;
+
+  /* 这里的 40% 仍然是硬编码，对应默认的 revealRatio=0.4 */
+  40% {
+    width: 100%;
   }
+
   100% {
-    clip-path: inset(0 0 0 0);
+    width: 100%;
+  }
+}
+
+/* 关键帧动画：逐渐淡出 */
+@keyframes fade-out {
+  0% {
     opacity: 1;
   }
-}
 
-.lc-subtext {
-  margin-top: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: rgba(71, 85, 105, 0.6);
-}
-
-.lc-fade-enter-active,
-.lc-fade-leave-active {
-  transition: opacity 180ms ease;
-}
-.lc-fade-enter-from,
-.lc-fade-leave-to {
-  opacity: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .lc-spinner,
-  .lc-text-reveal {
-    animation: none !important;
-  }
-  .lc-fade-enter-active,
-  .lc-fade-leave-active {
-    transition: none !important;
+  100% {
+    opacity: 0;
   }
 }
 </style>
