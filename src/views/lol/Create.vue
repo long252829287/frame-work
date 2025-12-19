@@ -69,19 +69,37 @@
               </button>
             </div>
 
-            <div class="lol-slots">
-              <button v-for="i in 6" :key="`${activeItemRow}-${i}`" class="lol-slot"
-                :class="{ 'lol-slot--active': activeItemSlot === i - 1 }" type="button"
-                @click="selectItemSlot(activeItemRow, i - 1)">
-                <template v-if="activeItemRow === 'core' ? coreItems[i - 1] : extraItems[i - 1]">
+            <div v-if="activeItemRow === 'core'" class="lol-slots">
+              <button v-for="(item, idx) in coreItems" :key="`core-${idx}`" class="lol-slot"
+                :class="{ 'lol-slot--active': activeItemSlot === idx }" type="button"
+                @click="selectItemSlot('core', idx)">
+                <template v-if="item">
                   <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
-                    popper-class="lol-tooltip"
-                    :content="formatItemTooltip((activeItemRow === 'core' ? coreItems[i - 1] : extraItems[i - 1])!)">
-                    <img class="lol-slot-img"
-                      :src="(activeItemRow === 'core' ? coreItems[i - 1] : extraItems[i - 1])!.image" alt="" />
+                    popper-class="lol-tooltip" :content="formatItemTooltip(item)">
+                    <img class="lol-slot-img" :src="item.image" alt="" />
                   </el-tooltip>
-                  <button class="lol-slot-remove" type="button" title="移除"
-                    @click.stop="removeItem(activeItemRow, i - 1)">
+                  <button class="lol-slot-remove" type="button" title="移除" @click.stop="removeItem('core', idx)">
+                    <el-icon>
+                      <Close />
+                    </el-icon>
+                  </button>
+                </template>
+                <template v-else>
+                  <span class="lol-slot-plus" aria-hidden="true">+</span>
+                </template>
+              </button>
+            </div>
+
+            <div v-if="activeItemRow === 'extra'" class="lol-slots">
+              <button v-for="(item, idx) in extraItems" :key="`extra-${idx}`" class="lol-slot"
+                :class="{ 'lol-slot--active': activeItemSlot === idx }" type="button"
+                @click="selectItemSlot('extra', idx)">
+                <template v-if="item">
+                  <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
+                    popper-class="lol-tooltip" :content="formatItemTooltip(item)">
+                    <img class="lol-slot-img" :src="item.image" alt="" />
+                  </el-tooltip>
+                  <button class="lol-slot-remove" type="button" title="移除" @click.stop="removeItem('extra', idx)">
                     <el-icon>
                       <Close />
                     </el-icon>
@@ -119,18 +137,59 @@
               </button>
             </div>
 
-            <div class="lol-slots lol-slots--aug">
-              <button v-for="i in 6" :key="`${activeAugmentTier}-${i}`" class="lol-slot lol-slot--aug"
-                :class="{ 'lol-slot--active': activeAugmentSlot === i - 1 }" type="button"
-                @click="selectAugmentSlot(activeAugmentTier, i - 1)">
-                <template v-if="selectedAugments[activeAugmentTier][i - 1]">
+            <div v-if="activeAugmentTier === 'silver'" class="lol-slots lol-slots--aug">
+              <button v-for="(aug, idx) in selectedAugments.silver" :key="`silver-${idx}`"
+                class="lol-slot lol-slot--aug" :class="{ 'lol-slot--active': activeAugmentSlot === idx }" type="button"
+                @click="selectAugmentSlot('silver', idx)">
+                <template v-if="aug">
                   <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
-                    popper-class="lol-tooltip"
-                    :content="formatAugmentTooltip(selectedAugments[activeAugmentTier][i - 1]!)">
-                    <img class="lol-slot-img" :src="selectedAugments[activeAugmentTier][i - 1]!.icon" alt="" />
+                    popper-class="lol-tooltip" :content="formatAugmentTooltip(aug)">
+                    <img class="lol-slot-img" :src="aug.icon" alt="" />
+                  </el-tooltip>
+                  <button class="lol-slot-remove" type="button" title="移除" @click.stop="removeAugment('silver', idx)">
+                    <el-icon>
+                      <Close />
+                    </el-icon>
+                  </button>
+                </template>
+                <template v-else>
+                  <span class="lol-slot-plus" aria-hidden="true">+</span>
+                </template>
+              </button>
+            </div>
+
+            <div v-if="activeAugmentTier === 'gold'" class="lol-slots lol-slots--aug">
+              <button v-for="(aug, idx) in selectedAugments.gold" :key="`gold-${idx}`" class="lol-slot lol-slot--aug"
+                :class="{ 'lol-slot--active': activeAugmentSlot === idx }" type="button"
+                @click="selectAugmentSlot('gold', idx)">
+                <template v-if="aug">
+                  <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
+                    popper-class="lol-tooltip" :content="formatAugmentTooltip(aug)">
+                    <img class="lol-slot-img" :src="aug.icon" alt="" />
+                  </el-tooltip>
+                  <button class="lol-slot-remove" type="button" title="移除" @click.stop="removeAugment('gold', idx)">
+                    <el-icon>
+                      <Close />
+                    </el-icon>
+                  </button>
+                </template>
+                <template v-else>
+                  <span class="lol-slot-plus" aria-hidden="true">+</span>
+                </template>
+              </button>
+            </div>
+
+            <div v-if="activeAugmentTier === 'prismatic'" class="lol-slots lol-slots--aug">
+              <button v-for="(aug, idx) in selectedAugments.prismatic" :key="`prismatic-${idx}`"
+                class="lol-slot lol-slot--aug" :class="{ 'lol-slot--active': activeAugmentSlot === idx }" type="button"
+                @click="selectAugmentSlot('prismatic', idx)">
+                <template v-if="aug">
+                  <el-tooltip effect="light" placement="top" :show-after="160" :hide-after="80"
+                    popper-class="lol-tooltip" :content="formatAugmentTooltip(aug)">
+                    <img class="lol-slot-img" :src="aug.icon" alt="" />
                   </el-tooltip>
                   <button class="lol-slot-remove" type="button" title="移除"
-                    @click.stop="removeAugment(activeAugmentTier, i - 1)">
+                    @click.stop="removeAugment('prismatic', idx)">
                     <el-icon>
                       <Close />
                     </el-icon>
@@ -198,12 +257,12 @@
             </div>
 
             <div class="lol-catalog-toggle">
-              <button class="lol-toggle" type="button" :class="{ 'lol-toggle--active': catalogTab === 'items' }"
-                @click="catalogTab = 'items'">
+              <button class="lol-toggle cursor-pointer" type="button"
+                :class="{ 'lol-toggle--active': catalogTab === 'items' }" @click="catalogTab = 'items'">
                 装备
               </button>
-              <button class="lol-toggle" type="button" :class="{ 'lol-toggle--active': catalogTab === 'augments' }"
-                @click="catalogTab = 'augments'">
+              <button class="lol-toggle cursor-pointer" type="button"
+                :class="{ 'lol-toggle--active': catalogTab === 'augments' }" @click="catalogTab = 'augments'">
                 海克斯强化
               </button>
             </div>
@@ -227,7 +286,7 @@
             </div>
 
             <div class="lol-filters" v-else>
-              <button v-for="t in augmentFilters" :key="t.key" class="lol-chip"
+              <button v-for="t in augmentFilters" :key="t.key" class="lol-chip cursor-pointer"
                 :class="{ 'lol-chip--active': augmentTierFilter === t.key }" type="button"
                 @click="augmentTierFilter = t.key">
                 {{ t.label }}
@@ -239,7 +298,7 @@
             <div class="lol-meta-muted">
               已找到
               <span class="lol-meta-strong">{{ catalogTab === 'items' ? filteredItems.length : filteredAugments.length
-                }}</span>
+              }}</span>
               {{ catalogTab === 'items' ? '个装备' : '个海克斯强化' }}
             </div>
             <div class="lol-meta-muted" v-if="catalogTab === 'augments'">
@@ -254,19 +313,15 @@
             </template>
 
             <template v-else>
-              <el-tooltip v-for="item in filteredItems" :key="itemIdentifier(item) || item.name" effect="light"
-                placement="top" :show-after="160" :hide-after="80" popper-class="lol-tooltip"
-                :content="formatItemTooltip(item)">
-                <button class="lol-card" :class="{ 'lol-card--selected': isItemSelected(item) }" type="button"
-                  @click="addItem(item)">
-                  <img class="lol-card-icon" :src="item.image" :alt="item.name" loading="lazy" />
-                  <div class="lol-card-body">
-                    <div class="lol-card-title">{{ item.name }}</div>
-                    <div class="lol-card-sub">{{ item.gold?.total ?? '-' }}g · {{ itemShort(item) }}</div>
-                  </div>
-                  <div v-if="isItemSelected(item)" class="lol-card-badge">已选</div>
-                </button>
-              </el-tooltip>
+              <button v-for="item in filteredItems" :key="itemIdentifier(item) || item.name" class="lol-card"
+                :class="{ 'lol-card--selected': isItemSelected(item) }" type="button" @click="addItem(item)">
+                <img class="lol-card-icon" :src="item.image" :alt="item.name" loading="lazy" />
+                <div class="lol-card-body">
+                  <div class="lol-card-title">{{ item.name }}</div>
+                  <div class="lol-card-sub">{{ item.gold?.total ?? '-' }}g · {{ itemShort(item) }}</div>
+                </div>
+                <div v-if="isItemSelected(item)" class="lol-card-badge">已选</div>
+              </button>
 
               <div v-if="!filteredItems.length" class="lol-empty">
                 <div class="lol-empty-title">未找到对应装备</div>
@@ -281,18 +336,15 @@
             </template>
 
             <template v-else>
-              <el-tooltip v-for="aug in filteredAugments" :key="aug.augmentId" effect="light" placement="top"
-                :show-after="160" :hide-after="80" popper-class="lol-tooltip" :content="formatAugmentTooltip(aug)">
-                <button class="lol-card" :class="{ 'lol-card--selected': isAugmentSelected(aug) }" type="button"
-                  @click="addAugment(aug)">
-                  <img class="lol-card-icon lol-card-icon--aug" :src="aug.icon" :alt="aug.name" loading="lazy" />
-                  <div class="lol-card-body">
-                    <div class="lol-card-title">{{ aug.name }}</div>
-                    <div class="lol-card-sub">{{ tierLabel(getAugmentTier(aug)) }} · {{ augmentShort(aug) }}</div>
-                  </div>
-                  <div v-if="isAugmentSelected(aug)" class="lol-card-badge">已选</div>
-                </button>
-              </el-tooltip>
+              <button v-for="aug in filteredAugments" :key="aug.augmentId" class="lol-card"
+                :class="{ 'lol-card--selected': isAugmentSelected(aug) }" type="button" @click="addAugment(aug)">
+                <img class="lol-card-icon lol-card-icon--aug" :src="aug.icon" :alt="aug.name" loading="lazy" />
+                <div class="lol-card-body">
+                  <div class="lol-card-title">{{ aug.name }}</div>
+                  <div class="lol-card-sub">{{ tierLabel(getAugmentTier(aug)) }} · {{ augmentShort(aug) }}</div>
+                </div>
+                <div v-if="isAugmentSelected(aug)" class="lol-card-badge">已选</div>
+              </button>
 
               <div v-if="!filteredAugments.length" class="lol-empty">
                 <div class="lol-empty-title">未找到对应的海克斯强化</div>
@@ -509,6 +561,9 @@ const filteredItems = computed(() => {
       if (!q) return true
       return (i.name || '').toLowerCase().includes(q) || (i.plaintext || '').toLowerCase().includes(q)
     })
+    .filter(i => {
+      return i.isLegendary === true
+    })
 })
 
 const filteredAugments = computed(() => {
@@ -676,16 +731,14 @@ const filledAugmentCount = computed(
 )
 
 const submitStrategy = async () => {
-  console.log('111');
-  debugger
   if (!selectedChampion.value) {
-    ElMessage.error('Champion missing. Please reselect.')
+    console.error('Champion missing. Please reselect.')
     return
   }
 
   const hasAnyItems = coreItems.value.some(Boolean) || extraItems.value.some(Boolean)
   if (!hasAnyItems) {
-    ElMessage.warning('Select at least 1 item.')
+    console.error('Select at least 1 item.')
     return
   }
 
@@ -694,24 +747,27 @@ const submitStrategy = async () => {
     selectedAugments.value.gold.some(Boolean) ||
     selectedAugments.value.prismatic.some(Boolean)
   if (!hasAnyAugments) {
-    ElMessage.warning('Select at least 1 augment.')
+    console.error('Select at least 1 augment.')
     return
   }
 
   const title = strategyTitle.value.trim() || `${selectedChampion.value.name} · 海克斯大乱斗`
   const description = strategyRemark.value.trim() || `${selectedChampion.value.name}指南`
+  console.log('title', title, description, coreItems.value, extraItems.value, selectedAugments.value);
+  const toItemPayloadEntry = (it: Item | null, position: number) => {
+    if (!it) return null
+    const itemId = String((it as any)?._id || (it as any)?.riotId || itemIdentifier(it) || '').trim()
+    if (!itemId) return null
+    return { itemId, position }
+  }
 
   const itemPayload = [
-    ...coreItems.value
-      .map((it, idx) => (!it?._id ? null : { itemId: it._id, position: idx }))
-      .filter(Boolean),
-    ...extraItems.value
-      .map((it, idx) => (!it?._id ? null : { itemId: it._id, position: idx + 6 }))
-      .filter(Boolean),
+    ...coreItems.value.map((it, idx) => toItemPayloadEntry(it, idx)).filter(Boolean),
+    ...extraItems.value.map((it, idx) => toItemPayloadEntry(it, idx + 6)).filter(Boolean),
   ] as Array<{ itemId: string; position: number }>
 
   if (!itemPayload.length) {
-    ElMessage.error('Selected items are missing IDs. Refresh and try again.')
+    console.error('Selected items are missing IDs. Refresh and try again.')
     return
   }
 
@@ -723,6 +779,7 @@ const submitStrategy = async () => {
     .filter(Boolean)
     .map(a => a!.augmentId)
 
+  console.log('augmentIds', augmentIds)
   const payload: CreateStrategyPayload = {
     title,
     description,
@@ -738,15 +795,15 @@ const submitStrategy = async () => {
   isSubmitting.value = true
   try {
     await commonService.apiCreateStrategy(payload)
-    ElMessage.success('Strategy created')
+    console.log('Strategy created')
     router.push({ name: 'lol', query: { championKey: selectedChampion.value.key } })
   } catch (error: any) {
     const msg = error?.response?.data?.message || error?.message || 'Failed to create strategy'
     if (String(error?.response?.status) === '401') {
-      ElMessage.error('Please login first.')
+      console.error('Please login first.')
       return
     }
-    ElMessage.error(msg)
+    console.error(msg)
   } finally {
     isSubmitting.value = false
   }
@@ -912,6 +969,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   transition: transform 160ms ease, background 160ms ease, border-color 160ms ease;
+  cursor: pointer;
 }
 
 .lol-icon-btn:hover {
@@ -1016,7 +1074,8 @@ onMounted(() => {
 
 .lol-hero-media {
   position: relative;
-  height: 132px;
+  aspect-ratio: 16 / 9;
+  height: auto;
   overflow: hidden;
 }
 
@@ -1026,6 +1085,19 @@ onMounted(() => {
   object-fit: cover;
   filter: saturate(0.95) contrast(1.05);
   transform: scale(1.02);
+}
+
+@supports not (aspect-ratio: 16 / 9) {
+  .lol-hero-media::before {
+    content: '';
+    display: block;
+    padding-top: 56.25%;
+  }
+
+  .lol-hero-media > .lol-hero-img {
+    position: absolute;
+    inset: 0;
+  }
 }
 
 .lol-hero-swap {
@@ -1123,6 +1195,7 @@ onMounted(() => {
   font-weight: 800;
   color: rgba(148, 163, 184, 0.9);
   transition: background 160ms ease, color 160ms ease;
+  cursor: pointer;
 }
 
 .lol-seg--active {
@@ -1146,6 +1219,7 @@ onMounted(() => {
   font-size: 12px;
   font-weight: 800;
   transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+  cursor: pointer;
 }
 
 .lol-tier:hover {
@@ -1161,7 +1235,7 @@ onMounted(() => {
 
 .lol-slots {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   gap: 8px;
 }
 
@@ -1210,10 +1284,10 @@ onMounted(() => {
 
 .lol-slot-remove {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 26px;
-  height: 26px;
+  top: 0px;
+  right: 0px;
+  width: 20px;
+  height: 20px;
   border-radius: 10px;
   background: rgba(2, 6, 23, 0.62);
   border: 1px solid rgba(148, 163, 184, 0.18);
@@ -1480,6 +1554,7 @@ onMounted(() => {
   font-weight: 800;
   transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 .lol-chip:hover {
@@ -1529,12 +1604,13 @@ onMounted(() => {
   border: 1px solid rgba(148, 163, 184, 0.12);
   transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
   min-height: 74px;
+  cursor: pointer;
 }
 
 .lol-card:hover {
   transform: translateY(-1px);
   border-color: rgba(56, 189, 248, 0.18);
-  background: rgba(2, 6, 23, 0.3);
+  background: rgba(3, 101, 108, 0.3);
 }
 
 .lol-card--selected {
@@ -1664,7 +1740,7 @@ onMounted(() => {
   border: 1px solid rgba(148, 163, 184, 0.22);
   box-shadow: 0 18px 55px rgba(0, 0, 0, 0.38);
   background: rgba(2, 6, 23, 0.86);
-  color: rgba(226, 232, 240, 0.95);
+  color: rgba(35, 37, 39, 0.95);
   backdrop-filter: blur(16px);
 }
 

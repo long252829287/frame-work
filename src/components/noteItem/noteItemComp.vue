@@ -24,8 +24,12 @@ const emit = defineEmits<{
 const noteEl = ref<HTMLElement | null>(null)
 
 const { x, y, isDragging } = useDraggable(noteEl, {
-  onStart: (_, event) => {
+  onStart: (position, event) => {
     document.body.style.cursor = 'grabbing'
+    // Prevent the note from jumping to (0,0) before the first pointermove.
+    // `position` is the pointer offset inside the element.
+    x.value = event.clientX - position.x
+    y.value = event.clientY - position.y
   },
   onMove: (position) => {
     emit('drag-move', position)

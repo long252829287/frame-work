@@ -1,14 +1,13 @@
 <template>
-  <header class="fixed top-0 left-0 right-0 z-50 bg-primary border-b border-primary transition-all duration-300" :class="{ 'h-14 shadow-sm': isScrolled, 'h-16': !isScrolled }">
+  <header class="fixed top-0 left-0 right-0 z-50 bg-primary border-b border-primary transition-all duration-300"
+    :class="{ 'h-14 shadow-sm': isScrolled, 'h-16': !isScrolled }">
     <!-- 内容容器 - 使用 Tailwind container -->
     <div class="container mx-auto h-full px-4 sm:px-6 lg:px-8">
       <div class="flex items-center justify-between h-full">
         <!-- 左侧Logo区域 -->
         <div class="flex items-center gap-6">
-          <button
-            @click="router.push({ name: 'home' })"
-            class="flex items-center gap-3 p-2 rounded-lg transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 group"
-          >
+          <button @click="router.push({ name: 'home' })"
+            class="flex items-center gap-3 p-2 rounded-lg transition-transform duration-200 hover:-translate-y-0.5 active:translate-y-0 group">
             <div class="text-3xl transition-transform duration-200 group-hover:scale-110">🏡</div>
             <div class="flex flex-col">
               <span class="text-2xl font-bold text-primary tracking-tight">Osheeep</span>
@@ -19,36 +18,25 @@
 
         <!-- 右侧操作区域 -->
         <div class="flex items-center gap-3">
-          <!-- 主题切换器 -->
-          <ThemeSwitcher />
 
           <!-- 未登录状态 - 显示登录/注册按钮 -->
           <div v-if="!auth.isAuthenticated" class="flex gap-2">
-            <button
-              @click="router.push({ name: 'login' })"
-              class="btn-secondary px-4 py-2 text-sm rounded-lg font-medium transition-all duration-200"
-            >
+            <button @click="router.push({ name: 'login' })"
+              class="btn-secondary px-4 py-2 text-sm rounded-lg font-medium transition-all duration-200">
               登录
             </button>
-            <button
-              @click="router.push({ name: 'register' })"
-              class="btn-primary px-4 py-2 text-sm rounded-lg font-medium transition-all duration-200"
-            >
+            <button @click="router.push({ name: 'register' })"
+              class="btn-primary px-4 py-2 text-sm rounded-lg font-medium transition-all duration-200">
               注册
             </button>
           </div>
 
           <!-- 已登录状态 - 显示用户菜单 -->
-          <div v-else class="relative">
-            <button
-              @click="toggleUserMenu"
-              class="flex items-center gap-3 px-3 py-2 rounded-full transition-colors duration-200 hover:bg-secondary"
-            >
-              <img
-                :src="userAvatar"
-                :alt="displayName"
-                class="w-9 h-9 rounded-full object-cover border-2 border-primary"
-              />
+          <div v-else class="relative user-dropdown">
+            <button @click="toggleUserMenu"
+              class="flex items-center gap-3 px-3 py-2 rounded-full transition-colors duration-200 hover:bg-secondary cursor-pointer">
+              <img :src="userAvatar" :alt="displayName"
+                class="w-9 h-9 rounded-full object-cover border-2 border-primary" />
               <div class="hidden sm:flex flex-col gap-0.5">
                 <div class="text-sm font-medium text-primary leading-none">{{ displayName }}</div>
                 <div class="text-xs text-success leading-none">在线</div>
@@ -57,32 +45,24 @@
 
             <!-- 下拉菜单 -->
             <Transition name="menu">
-              <div
-                v-if="showUserMenu"
-                class="absolute top-full right-0 mt-2 min-w-[200px] bg-primary border border-primary rounded-xl shadow-2xl p-2 z-50"
-              >
-                <button
-                  @click="viewProfile"
-                  class="menu-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-primary transition-all duration-200 hover:bg-secondary hover:text-accent"
-                >
+              <div v-if="showUserMenu"
+                class="absolute top-full right-0 mt-2 min-w-[200px] bg-primary border border-primary rounded-xl shadow-2xl p-2 z-50 user-menu">
+                <button @click="viewProfile"
+                  class="cursor-pointer menu-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-primary transition-all duration-200 hover:bg-secondary hover:text-accent">
                   <span class="text-base flex-shrink-0">👤</span>
                   <span>个人资料</span>
                 </button>
 
-                <button
-                  @click="viewSettings"
-                  class="menu-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-primary transition-all duration-200 hover:bg-secondary hover:text-accent"
-                >
+                <button @click="viewSettings"
+                  class="cursor-pointer menu-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-primary transition-all duration-200 hover:bg-secondary hover:text-accent">
                   <span class="text-base flex-shrink-0">⚙️</span>
                   <span>设置</span>
                 </button>
 
                 <div class="h-px bg-border my-2"></div>
 
-                <button
-                  @click="handleLogout"
-                  class="menu-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-error transition-all duration-200 hover:bg-error-light"
-                >
+                <button @click="handleLogout"
+                  class="cursor-pointer menu-item w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-error transition-all duration-200 hover:bg-error-light">
                   <span class="text-base flex-shrink-0">🚪</span>
                   <span>退出登录</span>
                 </button>
@@ -99,7 +79,6 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useAuthStore } from '../../stores/auth'
 import { useRouter, useRoute } from 'vue-router'
-import ThemeSwitcher from '../ThemeSwitcher.vue'
 
 const auth = useAuthStore()
 const router = useRouter()

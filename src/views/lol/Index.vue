@@ -22,7 +22,7 @@
           </el-icon>
         </button>
         <button class="lol-avatar" type="button" title="Account">
-          <span>U</span>
+          <img :src="userAvatar" :alt="displayName" class="rounded-full object-cover border-2 border-primary" />
         </button>
       </div>
     </header>
@@ -72,9 +72,9 @@
         </div>
       </section>
 
-	      <aside class="lol-right">
-	        <div class="lol-panel">
-	          <template v-if="selectedChampion">
+      <aside class="lol-right">
+        <div class="lol-panel">
+          <template v-if="selectedChampion">
             <div class="lol-panel-head">
               <div class="lol-panel-title">
                 <div class="lol-panel-name">{{ selectedChampion.name }}</div>
@@ -82,15 +82,15 @@
               </div>
             </div>
 
-	            <div class="lol-panel-body">
-	              <div class="lol-hero-splash" :class="{ 'lol-hero-splash--loading': isSplashLoading }">
-	                <img
-	                  :src="splashSrc"
-	                  :alt="selectedChampion.name" loading="eager" decoding="async" @load="onSplashLoad" />
-	                <div v-if="isSplashLoading" class="lol-splash-loader">
-	                  <LoadingComp :visible="true" :fullscreen="false" :overlay="false" :blocking="false" :dim="false" text="正在加载中…" />
-	                </div>
-	              </div>
+            <div class="lol-panel-body">
+              <div class="lol-hero-splash" :class="{ 'lol-hero-splash--loading': isSplashLoading }">
+                <img :src="splashSrc" :alt="selectedChampion.name" loading="eager" decoding="async"
+                  @load="onSplashLoad" />
+                <div v-if="isSplashLoading" class="lol-splash-loader">
+                  <LoadingComp :visible="true" :fullscreen="false" :overlay="false" :blocking="false" :dim="false"
+                    text="正在加载中…" />
+                </div>
+              </div>
 
               <div v-if="strategiesLoading" class="lol-skel-block">
                 <div class="lol-skel-line" />
@@ -262,6 +262,8 @@ import { ArrowLeft, Download, HomeFilled, Plus, Search, Star } from '@element-pl
 import domToImage from 'dom-to-image'
 import { commonService } from '@/service'
 import { useLolStore } from '@/stores/lol'
+import { useAuthStore } from '@/stores/auth'
+
 import type { Augment, Champion, Strategy } from '@/types'
 import { LoadingComp } from '@/components/loading';
 
@@ -290,6 +292,8 @@ const exportCardRef = ref<HTMLElement | null>(null)
 const isSplashLoading = ref(false)
 const splashSrc = ref('')
 const pendingSplashFinalSrc = ref('')
+const auth = useAuthStore()
+
 let splashRequestId = 0
 
 const roles = [
@@ -311,6 +315,11 @@ const roleMap: Record<RoleKey, string> = {
 
 const champions = computed(() => lolStore.champions || [])
 
+const displayName = computed(() => auth.user?.nickname || auth.user?.username || '用户')
+
+const userAvatar = computed(
+  () => 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png'
+)
 const primaryRole = (c: Champion): string => {
   const firstTag = c.tags?.[0];
   if (firstTag && firstTag in roleMap) {
