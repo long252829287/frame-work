@@ -23,20 +23,65 @@ const emit = defineEmits<{
 
 const noteEl = ref<HTMLElement | null>(null)
 
+type DragBaseRect = { left: number; top: number }
+
+const fixedContainingBlockEl = ref<HTMLElement | null>(null)
+const fixedContainingBlockRect = ref<DragBaseRect>({ left: 0, top: 0 })
+
+function findFixedContainingBlock(el: HTMLElement): HTMLElement | null {
+  // For `position: fixed`, browsers may use a non-viewport containing block when an ancestor has
+  // `transform` / `filter` / `backdrop-filter` / `perspective` / `contain: paint` / `will-change`.
+  // In that case, using viewport-based `clientX/clientY` directly causes a down-right jump.
+  let current: HTMLElement | null = el.parentElement
+  while (current) {
+    const style = window.getComputedStyle(current)
+    const hasTransform = style.transform !== 'none'
+    const hasFilter = style.filter !== 'none'
+    const hasPerspective = style.perspective !== 'none'
+    const hasContainPaint = (style.contain || '').includes('paint')
+    const hasWillChange = (style.willChange || '').includes('transform') || (style.willChange || '').includes('filter')
+    const backdropFilter = (style as any).backdropFilter as string | undefined
+    const hasBackdropFilter = !!backdropFilter && backdropFilter !== 'none'
+
+    if (hasTransform || hasFilter || hasBackdropFilter || hasPerspective || hasContainPaint || hasWillChange) {
+      return current
+    }
+
+    current = current.parentElement
+  }
+  return null
+}
+
+function updateFixedContainingBlockRect(): void {
+  if (!fixedContainingBlockEl.value) {
+    fixedContainingBlockRect.value = { left: 0, top: 0 }
+    return
+  }
+  const rect = fixedContainingBlockEl.value.getBoundingClientRect()
+  fixedContainingBlockRect.value = { left: rect.left, top: rect.top }
+}
+
 const { x, y, isDragging } = useDraggable(noteEl, {
   onStart: (position, event) => {
     document.body.style.cursor = 'grabbing'
+    if (noteEl.value) {
+      fixedContainingBlockEl.value = findFixedContainingBlock(noteEl.value)
+      updateFixedContainingBlockRect()
+    }
     // Prevent the note from jumping to (0,0) before the first pointermove.
     // `position` is the pointer offset inside the element.
     x.value = event.clientX - position.x
     y.value = event.clientY - position.y
   },
-  onMove: (position) => {
-    emit('drag-move', position)
+  onMove: (_, event) => {
+    updateFixedContainingBlockRect()
+    emit('drag-move', { x: event.clientX, y: event.clientY })
   },
-  onEnd: (position) => {
+  onEnd: (_, event) => {
     document.body.style.cursor = ''
-    emit('drag-end', position)
+    fixedContainingBlockEl.value = null
+    fixedContainingBlockRect.value = { left: 0, top: 0 }
+    emit('drag-end', { x: event.clientX, y: event.clientY })
   },
 })
 
@@ -51,11 +96,13 @@ const style = computed<StyleValue>(() => {
   }
 
   if (isDragging.value) {
+    const left = x.value - fixedContainingBlockRect.value.left
+    const top = y.value - fixedContainingBlockRect.value.top
     return {
       ...baseStyle,
       position: 'fixed',
-      top: `${y.value}px`,
-      left: `${x.value}px`,
+      top: `${top}px`,
+      left: `${left}px`,
       transition: 'none',
       transform: 'scale(1.05) rotate(3deg)',
       boxShadow: '0 12px 32px rgba(0, 0, 0, 0.25)',
