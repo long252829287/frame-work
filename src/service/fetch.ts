@@ -21,7 +21,7 @@ http.interceptors.response.use(
     const responseData = response.data
     if (responseData && typeof responseData === 'object') {
       const message = responseData.message || responseData.error || responseData.msg
-      if (typeof message === 'string' && message.includes('访问令牌已过期，请重新登录')) {
+      if (typeof message === 'string' && message.includes('登录已过期，请重新登录')) {
         handleTokenExpired()
         return Promise.reject(new Error(message))
       }
@@ -34,7 +34,7 @@ http.interceptors.response.use(
     if (error.response?.data) {
       const errorData = error.response.data
       const message = errorData.message || errorData.error || errorData.msg
-      if (typeof message === 'string' && message.includes('访问令牌已过期，请重新登录')) {
+      if (typeof message === 'string' && message.includes('登录已过期，请重新登录')) {
         handleTokenExpired()
         return Promise.reject(new Error(message))
       }

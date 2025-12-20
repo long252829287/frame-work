@@ -298,7 +298,7 @@
             <div class="lol-meta-muted">
               已找到
               <span class="lol-meta-strong">{{ catalogTab === 'items' ? filteredItems.length : filteredAugments.length
-              }}</span>
+                }}</span>
               {{ catalogTab === 'items' ? '个装备' : '个海克斯强化' }}
             </div>
             <div class="lol-meta-muted" v-if="catalogTab === 'augments'">
@@ -309,12 +309,12 @@
 
           <div class="lol-grid" v-if="catalogTab === 'items'">
             <template v-if="itemsLoading">
-              <div v-for="n in 12" :key="`item-sk-${n}`" class="lol-card lol-card--skeleton" />
+              <div v-for="n in 24" :key="`item-sk-${n}`" class="lol-card lol-card--skeleton" />
             </template>
 
             <template v-else>
               <button v-for="item in filteredItems" :key="itemIdentifier(item) || item.name" class="lol-card"
-                :class="{ 'lol-card--selected': isItemSelected(item) }" type="button" @click="addItem(item)">
+                :class="{ 'lol-card--selected': isItemSelected(item) }" type="button" @click="toggleAddItem(item)">
                 <img class="lol-card-icon" :src="item.image" :alt="item.name" loading="lazy" />
                 <div class="lol-card-body">
                   <div class="lol-card-title">{{ item.name }}</div>
@@ -332,7 +332,7 @@
 
           <div class="lol-grid" v-else>
             <template v-if="augmentsLoading">
-              <div v-for="n in 12" :key="`aug-sk-${n}`" class="lol-card lol-card--skeleton" />
+              <div v-for="n in 24" :key="`aug-sk-${n}`" class="lol-card lol-card--skeleton" />
             </template>
 
             <template v-else>
@@ -561,9 +561,9 @@ const filteredItems = computed(() => {
       if (!q) return true
       return (i.name || '').toLowerCase().includes(q) || (i.plaintext || '').toLowerCase().includes(q)
     })
-    .filter(i => {
-      return i.isLegendary === true
-    })
+  // .filter(i => {
+  //   return i.isLegendary === true
+  // })
 })
 
 const filteredAugments = computed(() => {
@@ -630,7 +630,7 @@ const removeItem = (row: ItemRow, idx: number) => {
   if (activeItemRow.value === row && activeItemSlot.value === idx) activeItemSlot.value = null
 }
 
-const addItem = (item: Item) => {
+const toggleAddItem = (item: Item) => {
   if (catalogTab.value !== 'items') catalogTab.value = 'items'
   const target = activeItemRow.value === 'core' ? coreItems.value : extraItems.value
 
@@ -642,7 +642,12 @@ const addItem = (item: Item) => {
   }
 
   if (existing) {
-    if (existing.row === activeItemRow.value && existing.idx === placeAt) return
+    // 如果已在当前激活行中，则重复点击视为取消选中：只删除原项并返回，不添加新的
+    if (existing.row === activeItemRow.value) {
+      removeItem(existing.row, existing.idx)
+      return
+    }
+    // 否则（在其它行），先删除再添加到当前行
     removeItem(existing.row, existing.idx)
   }
 
@@ -691,10 +696,8 @@ const addAugment = (aug: Augment) => {
   if (catalogTab.value !== 'augments') catalogTab.value = 'augments'
   const tier = getAugmentTier(aug)
 
-  // Enforce tier-only rows: do NOT auto-switch silently.
   if (tier !== activeAugmentTier.value) {
-    ElMessage.warning(`This augment is ${tierLabel(tier)}. Switch active tier to add it.`)
-    return
+    selectAugmentTier(tier)
   }
 
   const target = selectedAugments.value[tier]
@@ -706,7 +709,12 @@ const addAugment = (aug: Augment) => {
 
   const existing = findSelectedAugment(aug)
   if (existing) {
-    if (existing.tier === tier && existing.idx === placeAt) return
+    // 如果已在当前激活 tier 中，则重复点击视为取消选中：只删除原项并返回，不添加新的
+    if (existing.tier === activeAugmentTier.value) {
+      removeAugment(existing.tier, existing.idx)
+      return
+    }
+    // 否则（在其它 tier），先删除再添加到当前 tier
     removeAugment(existing.tier, existing.idx)
   }
 
@@ -795,7 +803,6 @@ const submitStrategy = async () => {
   isSubmitting.value = true
   try {
     await commonService.apiCreateStrategy(payload)
-    console.log('Strategy created')
     router.push({ name: 'lol', query: { championKey: selectedChampion.value.key } })
   } catch (error: any) {
     const msg = error?.response?.data?.message || error?.message || 'Failed to create strategy'
@@ -1094,7 +1101,7 @@ onMounted(() => {
     padding-top: 56.25%;
   }
 
-  .lol-hero-media > .lol-hero-img {
+  .lol-hero-media>.lol-hero-img {
     position: absolute;
     inset: 0;
   }

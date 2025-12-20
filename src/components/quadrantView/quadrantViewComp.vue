@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, defineProps, defineEmits, defineExpose } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { commonService } from '@/service'
 import type { PaginatedList, QuadrantNote, SharedQuadrantNote } from '@/types'
 import NoteItem from '@/components/noteItem/noteItemComp.vue'

@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, defineEmits, computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useDraggable } from '@vueuse/core'
 import type { QuadrantNote } from '@/types'
 import type { StyleValue } from 'vue'

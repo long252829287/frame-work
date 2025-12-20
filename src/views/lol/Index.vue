@@ -582,7 +582,7 @@ const loadTrending = async () => {
 
 onMounted(() => {
   boot()
-  loadTrending()
+  // loadTrending()
 })
 
 watch(

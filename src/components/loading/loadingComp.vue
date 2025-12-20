@@ -1,10 +1,11 @@
 <template>
   <div class="loading-wrapper">
-    <div class="loading-container">
+    <div class="loading-container" :style="styleVars">
+      <component :is="'style'">{{ keyframesCss }}</component>
       <div class="loading-text-base">
         {{ text }}
       </div>
-      <div class="loading-text-reveal" :style="revealStyle">
+      <div class="loading-text-reveal">
         {{ text }}
       </div>
     </div>
@@ -31,10 +32,11 @@ const props = defineProps({
     type: Number,
     default: 0.4,
   },
-  // 允许外部传入自定义的淡出动画延迟占总时长的比例 (0-1)
+  // 允许外部传入“从有到雾”开始的时间点（占总时长比例，0-1）
+  // 不传时默认跟随 revealRatio（即：从无到有结束后立即进入雾化）
   fadeOutDelayRatio: {
     type: Number,
-    default: 0.875, // 默认 3.5s / 4s = 0.875
+    default: undefined,
   },
   // 新增: 自定义字体大小
   fontSize: {
@@ -43,16 +45,67 @@ const props = defineProps({
   },
 });
 
-// 计算动画样式，动态设置 CSS 变量
-const revealStyle = computed(() => {
-  const revealDuration = props.duration * props.revealRatio;
-  const fadeOutDelay = props.duration * props.fadeOutDelayRatio;
+const clamp01 = (value: number) => Math.min(1, Math.max(0, value));
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+const uid = `loading-${Math.random().toString(36).slice(2, 10)}`;
 
+const revealRatioSafe = computed(() => clamp(props.revealRatio, 0.05, 0.95));
+const fogStartRatioSafe = computed(() => {
+  const fallback = revealRatioSafe.value;
+  const requested = typeof props.fadeOutDelayRatio === 'number' ? clamp01(props.fadeOutDelayRatio) : fallback;
+  return clamp(requested, fallback, 0.98);
+});
+
+const formatPercent = (ratio: number) => {
+  const percent = ratio * 100;
+  return `${Math.round(percent * 10) / 10}%`;
+};
+
+const keyframesName = computed(() => `${uid}-cycle`);
+const keyframesCss = computed(() => {
+  const revealEnd = formatPercent(revealRatioSafe.value);
+  const fogStart = formatPercent(fogStartRatioSafe.value);
+
+  return `
+@keyframes ${keyframesName.value} {
+  0% {
+    clip-path: inset(0 100% 0 0);
+    opacity: 0.95;
+    filter: blur(0px);
+    transform: translate3d(0, 0, 0);
+    letter-spacing: 0em;
+  }
+  ${revealEnd} {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate3d(0, 0, 0);
+    letter-spacing: 0em;
+  }
+  ${fogStart} {
+    clip-path: inset(0 0 0 0);
+    opacity: 1;
+    filter: blur(0px);
+    transform: translate3d(0, 0, 0);
+    letter-spacing: 0em;
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+    opacity: 0;
+    filter: blur(10px);
+    transform: translate3d(0, -6px, 0);
+    letter-spacing: 0.06em;
+  }
+}
+`.trim();
+});
+
+// 统一把 CSS 变量挂在 container 上，避免 base/reveal 字号不一致造成抖动
+const styleVars = computed(() => {
   return {
-    '--reveal-duration': `${revealDuration}s`,
     '--total-duration': `${props.duration}s`,
-    '--fade-out-delay': `${fadeOutDelay}s`,
     '--font-size': props.fontSize,
+    '--cycle-name': keyframesName.value,
   };
 });
 </script>
@@ -75,6 +128,7 @@ const revealStyle = computed(() => {
   text-align: left;
   display: inline-block;
   /* 使容器变为行内块，紧贴内容 */
+  contain: layout paint;
 }
 
 /* 提取公共样式变量 */
@@ -114,43 +168,25 @@ const revealStyle = computed(() => {
   /* 更细的字重 */
   white-space: nowrap;
   /* 保持文字在一行 */
-  overflow: hidden;
-  /* 隐藏未显示的文字 */
-  width: 0;
-  /* 初始宽度为0 */
   /* 增加文字发光效果 */
   text-shadow: var(--text-glow);
+  will-change: clip-path, opacity, filter, transform;
+  transform: translate3d(0, 0, 0);
 
-  /* 使用 CSS 变量定义动画 */
-  animation:
-    reveal-text var(--total-duration) ease-in-out infinite,
-    fade-out var(--total-duration) ease-in-out infinite var(--fade-out-delay);
+  animation-name: var(--cycle-name);
+  animation-duration: var(--total-duration);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
 }
 
-/* 关键帧动画：逐渐显现文字 */
-@keyframes reveal-text {
-  0% {
-    width: 0;
-  }
-
-  /* 这里的 40% 仍然是硬编码，对应默认的 revealRatio=0.4 */
-  40% {
-    width: 100%;
-  }
-
-  100% {
-    width: 100%;
-  }
-}
-
-/* 关键帧动画：逐渐淡出 */
-@keyframes fade-out {
-  0% {
+@media (prefers-reduced-motion: reduce) {
+  .loading-text-reveal {
+    animation: none;
+    clip-path: inset(0 0 0 0);
     opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
+    filter: none;
+    transform: none;
+    letter-spacing: 0em;
   }
 }
 </style>
