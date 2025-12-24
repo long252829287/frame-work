@@ -31,3 +31,11 @@ pnpm dev
 ```sh
 pnpm build
 ```
+
+### 运行单元测试
+
+```sh
+pnpm test
+```
+
+单元测试入门与本项目约定见：`docs/UNIT_TEST_GUIDE.md`

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { createAuthGuard } from './guards'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -77,25 +78,7 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
-
-  // 检查是否有有效的登录状态
-  const isAuthenticated = authStore.checkAuth()
-
-  if (to.meta?.requiresAuth && !isAuthenticated) {
-    // 需要登录但未登录，保存目标路由并重定向到登录页
-    authStore.setLastRoute(to.fullPath)
-    next({ name: 'login', query: { redirect: to.fullPath } })
-    return
-  }
-
-  if ((to.name === 'login' || to.name === 'register') && isAuthenticated) {
-    // 已登录用户访问登录/注册页，重定向到首页
-    next('/home')
-    return
-  }
-
-  next()
+  createAuthGuard(useAuthStore)(to, from, next)
 })
 
 export default router

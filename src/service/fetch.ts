@@ -2,47 +2,63 @@ import axios, { type AxiosRequestConfig } from 'axios'
 import router from '@/router'
 import { useAuthStore } from '@/stores/auth'
 
-const http = axios.create({
-  timeout: 200000,
-})
+const LOGIN_EXPIRED_TEXT = '登录已过期，请重新登录'
 
-http.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token')
-  if (token) {
-    config.headers = config.headers ?? {}
-    ;(config.headers as any).Authorization = `Bearer ${token}`
-  }
-  return config
-})
+export type TokenProvider = () => string | null
+export type TokenExpiredHandler = () => void
 
-http.interceptors.response.use(
-  (response) => {
-    // 检查响应中是否包含过期令牌消息
-    const responseData = response.data
-    if (responseData && typeof responseData === 'object') {
-      const message = responseData.message || responseData.error || responseData.msg
-      if (typeof message === 'string' && message.includes('登录已过期，请重新登录')) {
-        handleTokenExpired()
-        return Promise.reject(new Error(message))
-      }
+export interface HttpClientOptions {
+  timeout?: number
+  getToken?: TokenProvider
+  onTokenExpired?: TokenExpiredHandler
+}
+
+// 创建 axios 客户端：通过依赖注入解耦 localStorage/router/store，提升可测试性与可维护性。
+export function createHttpClient(options: HttpClientOptions = {}) {
+  const http = axios.create({
+    timeout: options.timeout ?? 200000,
+  })
+
+  http.interceptors.request.use((config) => {
+    const token = options.getToken?.() ?? localStorage.getItem('token')
+    if (token) {
+      config.headers = config.headers ?? {}
+      ;(config.headers as any).Authorization = `Bearer ${token}`
     }
+    return config
+  })
 
-    return response
-  },
-  (error) => {
-    // 检查错误响应中是否包含过期令牌消息
-    if (error.response?.data) {
-      const errorData = error.response.data
-      const message = errorData.message || errorData.error || errorData.msg
-      if (typeof message === 'string' && message.includes('登录已过期，请重新登录')) {
-        handleTokenExpired()
-        return Promise.reject(new Error(message))
+  http.interceptors.response.use(
+    (response) => {
+      // 检查响应中是否包含过期令牌消息
+      const responseData = response.data
+      if (responseData && typeof responseData === 'object') {
+        const message = responseData.message || responseData.error || responseData.msg
+        if (typeof message === 'string' && message.includes(LOGIN_EXPIRED_TEXT)) {
+          options.onTokenExpired?.()
+          return Promise.reject(new Error(message))
+        }
       }
-    }
 
-    return Promise.reject(error)
-  },
-)
+      return response
+    },
+    (error) => {
+      // 检查错误响应中是否包含过期令牌消息
+      if (error.response?.data) {
+        const errorData = error.response.data
+        const message = errorData.message || errorData.error || errorData.msg
+        if (typeof message === 'string' && message.includes(LOGIN_EXPIRED_TEXT)) {
+          options.onTokenExpired?.()
+          return Promise.reject(new Error(message))
+        }
+      }
+
+      return Promise.reject(error)
+    },
+  )
+
+  return http
+}
 
 // 处理令牌过期的函数
 function handleTokenExpired() {
@@ -70,19 +86,27 @@ function handleTokenExpired() {
 
 type AxiosConfig = AxiosRequestConfig
 
-const fetch = {
-  get<T = unknown>(url: string, config?: AxiosConfig) {
-    return http.get<T>(url, config)
-  },
-  post<T = unknown>(url: string, data?: unknown, config?: AxiosConfig) {
-    return http.post<T>(url, data, config)
-  },
-  put<T = unknown>(url: string, data?: unknown, config?: AxiosConfig) {
-    return http.put<T>(url, data, config)
-  },
-  delete<T = unknown>(url: string, config?: AxiosConfig) {
-    return http.delete<T>(url, config)
-  },
+// 创建 fetch 包装：对外提供与历史一致的 get/post/put/delete API。
+export function createFetch(options: HttpClientOptions = {}) {
+  const http = createHttpClient({
+    ...options,
+    onTokenExpired: options.onTokenExpired ?? handleTokenExpired,
+  })
+
+  return {
+    get<T = unknown>(url: string, config?: AxiosConfig) {
+      return http.get<T>(url, config)
+    },
+    post<T = unknown>(url: string, data?: unknown, config?: AxiosConfig) {
+      return http.post<T>(url, data, config)
+    },
+    put<T = unknown>(url: string, data?: unknown, config?: AxiosConfig) {
+      return http.put<T>(url, data, config)
+    },
+    delete<T = unknown>(url: string, config?: AxiosConfig) {
+      return http.delete<T>(url, config)
+    },
+  }
 }
 
-export default fetch
+export default createFetch()

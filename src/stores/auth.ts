@@ -13,7 +13,15 @@ export const useAuthStore = defineStore('auth', () => {
   // 从 localStorage 初始化状态
   const token = ref<string | null>(localStorage.getItem('token'))
   const savedUserRaw = localStorage.getItem('user')
-  const user = ref<UserInfo | null>(savedUserRaw ? JSON.parse(savedUserRaw) : null)
+  let initialUser: UserInfo | null = null
+  if (savedUserRaw) {
+    try {
+      initialUser = JSON.parse(savedUserRaw)
+    } catch {
+      initialUser = null
+    }
+  }
+  const user = ref<UserInfo | null>(initialUser)
 
   // 最后访问的路由（用于登录后跳转）
   const lastRoute = ref<string | null>(localStorage.getItem('lastRoute') || '/home')

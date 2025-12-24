@@ -12,6 +12,9 @@
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "format": "prettier --write src/"
   },
   "dependencies": {
@@ -33,8 +36,11 @@
     "@types/dom-to-image": "^2.6.7",
     "@types/node": "^22.16.5",
     "@vitejs/plugin-vue": "^6.0.1",
+    "@vitest/coverage-v8": "^4.0.16",
+    "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.7.0",
     "autoprefixer": "^10.4.21",
+    "jsdom": "^27.3.0",
     "npm-run-all2": "^8.0.4",
     "postcss": "^8.5.6",
     "prettier": "3.6.2",
@@ -45,6 +51,7 @@
     "unplugin-vue-components": "^0.27.0",
     "vite": "^7.2.7",
     "vite-plugin-vue-devtools": "^8.0.0",
+    "vitest": "^4.0.16",
     "vue-tsc": "^3.0.4"
   }
 }
