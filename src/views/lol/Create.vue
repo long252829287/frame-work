@@ -298,7 +298,7 @@
             <div class="lol-meta-muted">
               已找到
               <span class="lol-meta-strong">{{ catalogTab === 'items' ? filteredItems.length : filteredAugments.length
-                }}</span>
+              }}</span>
               {{ catalogTab === 'items' ? '个装备' : '个海克斯强化' }}
             </div>
             <div class="lol-meta-muted" v-if="catalogTab === 'augments'">
@@ -318,7 +318,7 @@
                 <img class="lol-card-icon" :src="item.image" :alt="item.name" loading="lazy" />
                 <div class="lol-card-body">
                   <div class="lol-card-title">{{ item.name }}</div>
-                  <div class="lol-card-sub">{{ item.gold?.total ?? '-' }}g · {{ itemShort(item) }}</div>
+                  <div class="lol-card-sub">{{ item.gold?.total }}g · {{ itemShort(item) }}</div>
                 </div>
                 <div v-if="isItemSelected(item)" class="lol-card-badge">已选</div>
               </button>
@@ -341,7 +341,7 @@
                 <img class="lol-card-icon lol-card-icon--aug" :src="aug.icon" :alt="aug.name" loading="lazy" />
                 <div class="lol-card-body">
                   <div class="lol-card-title">{{ aug.name }}</div>
-                  <div class="lol-card-sub">{{ tierLabel(getAugmentTier(aug)) }} · {{ augmentShort(aug) }}</div>
+                  <div class="lol-card-sub">{{ tierLabel(getAugmentTier(aug)) }}</div>
                 </div>
                 <div v-if="isAugmentSelected(aug)" class="lol-card-badge">已选</div>
               </button>
@@ -507,14 +507,8 @@ const itemShort = (item: Item) => {
   return text.length > 48 ? `${text.slice(0, 48)}…` : text
 }
 
-const augmentShort = (aug: Augment) => {
-  const text = stripHtml(aug.description || '')
-  if (!text) return '—'
-  return text.length > 48 ? `${text.slice(0, 48)}…` : text
-}
-
 const getAugmentTier = (aug: Augment): AugTier => {
-  const raw = String(aug.tier ?? '').toLowerCase()
+  const raw = String(aug.rarity ?? aug.tier ?? '').toLowerCase()
   if (raw === 'prismatic' || raw.includes('kprismatic') || raw === '2') return 'prismatic'
   if (raw === 'gold' || raw.includes('kgold') || raw === '1') return 'gold'
   return 'silver'
@@ -868,7 +862,12 @@ const pageBackgroundStyle = computed(() => {
 const init = async () => {
   championsLoading.value = true
   try {
-    if (!lolStore.champions.length) await lolStore.initializeData()
+    itemsLoading.value = !lolStore.items?.length
+    augmentsLoading.value = !lolStore.augmentList?.length
+    allItems.value = lolStore.items || []
+    allAugments.value = lolStore.augmentList || []
+
+    await lolStore.initializeData({ includeItems: true })
 
     const championFromState =
       (typeof window !== 'undefined' ? ((window.history.state as any) || {}).champion : undefined) as Champion | undefined
@@ -882,25 +881,10 @@ const init = async () => {
     if (!selectedChampion.value && lolStore.champions.length) selectedChampion.value = lolStore.champions[0]
     if (selectedChampion.value && !strategyTitle.value.trim()) strategyTitle.value = `${selectedChampion.value.name} · Hex Brawl`
 
-    itemsLoading.value = true
-    try {
-      const itemsRes = await commonService.apiGetItems({ mode: 'hex_brawl' })
-      allItems.value = itemsRes?.data?.data?.items || []
-    } finally {
-      itemsLoading.value = false
-    }
-
-    augmentsLoading.value = true
-    try {
-      const augRes = await commonService.apiGetAugments({ mode: 'hex_brawl', isActive: true, limit: 200 })
-      const raw = augRes?.data?.data as any
-      const list = Array.isArray(raw) ? raw : raw?.augments
-      allAugments.value = (list || []).filter(Boolean)
-    } catch {
-      allAugments.value = lolStore.augmentList || []
-    } finally {
-      augmentsLoading.value = false
-    }
+    allItems.value = lolStore.items || []
+    allAugments.value = lolStore.augmentList || []
+    itemsLoading.value = false
+    augmentsLoading.value = false
   } catch (error: any) {
     console.error('Failed to init create page:', error)
     ElMessage.error(error?.message || 'Init failed')

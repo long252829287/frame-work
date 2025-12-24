@@ -384,20 +384,30 @@ export interface Augment {
   _id?: string
   augmentId: string
   name: string
-  description: string
+  description?: string
   icon: string
-  tier: string | number
-  tags: string[]
-  modes: string[]
+  /**
+   * 后端旧字段：silver | gold | prismatic（或 0/1/2）。
+   * 新接口可能返回 `rarity` 字段。
+   */
+  tier?: string | number
+  /**
+   * 后端新字段：silver | gold | prismatic
+   */
+  rarity?: string
+  tags?: string[]
+  modes?: string[]
   patchVersion?: string
   isActive?: boolean
   createdAt?: string
   updatedAt?: string
+  iconSmall?: string
 }
 
 export interface AugmentListResponse {
   augments: Augment[]
   total: number
+  version?: string
 }
 
 export interface AugmentQueryParams {

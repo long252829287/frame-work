@@ -112,7 +112,13 @@
                   <div class="lol-section-title">常规出装</div>
                   <div class="lol-orbs">
                     <div v-for="(it, idx) in coreBuildOrbs" :key="`core-${idx}`" class="lol-orb">
-                      <img v-if="it" :src="it" alt="" />
+                      <template v-if="it">
+                        <el-tooltip v-if="coreBuildTooltips[idx]" effect="light" placement="top" :show-after="160"
+                          :hide-after="80" popper-class="lol-tooltip" :content="coreBuildTooltips[idx]">
+                          <img :src="it" alt="" />
+                        </el-tooltip>
+                        <img v-else :src="it" alt="" />
+                      </template>
                       <div v-else class="lol-orb-empty" />
                     </div>
                   </div>
@@ -122,7 +128,13 @@
                   <div class="lol-section-title">其他可选</div>
                   <div class="lol-orbs">
                     <div v-for="(it, idx) in extraBuildOrbs" :key="`extra-${idx}`" class="lol-orb">
-                      <img v-if="it" :src="it" alt="" />
+                      <template v-if="it">
+                        <el-tooltip v-if="extraBuildTooltips[idx]" effect="light" placement="top" :show-after="160"
+                          :hide-after="80" popper-class="lol-tooltip" :content="extraBuildTooltips[idx]">
+                          <img :src="it" alt="" />
+                        </el-tooltip>
+                        <img v-else :src="it" alt="" />
+                      </template>
                       <div v-else class="lol-orb-empty" />
                     </div>
                   </div>
@@ -132,7 +144,13 @@
                   <div class="lol-section-title">海克斯推荐</div>
                   <div class="lol-orbs lol-orbs--aug">
                     <div v-for="(it, idx) in augmentOrbs" :key="`aug-${idx}`" class="lol-orb lol-orb--aug">
-                      <img v-if="it" :src="it" alt="" />
+                      <template v-if="it">
+                        <el-tooltip v-if="augmentTooltips[idx]" effect="light" placement="top" :show-after="160"
+                          :hide-after="80" popper-class="lol-tooltip" :content="augmentTooltips[idx]">
+                          <img :src="it" alt="" />
+                        </el-tooltip>
+                        <img v-else :src="it" alt="" />
+                      </template>
                       <div v-else class="lol-orb-empty" />
                     </div>
                   </div>
@@ -264,7 +282,7 @@ import { commonService } from '@/service'
 import { useLolStore } from '@/stores/lol'
 import { useAuthStore } from '@/stores/auth'
 
-import type { Augment, Champion, Strategy } from '@/types'
+import type { Augment, Champion, Item, Strategy } from '@/types'
 import { LoadingComp } from '@/components/loading';
 
 type RoleKey = 'all' | 'Fighter' | 'Mage' | 'Tank' | 'Support' | 'Marksman'
@@ -350,6 +368,44 @@ const selectedStrategy = computed(() => {
   return strategies.value.find(s => s._id === selectedStrategyId.value) || null
 })
 
+const stripHtml = (input: string) => input.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim()
+
+const formatItemTooltip = (item?: Item | null, fallbackName?: string) => {
+  if (!item && !fallbackName) return ''
+  const parts = [
+    item?.name || fallbackName || '—',
+    item?.plaintext ? `- ${stripHtml(item.plaintext)}` : item?.description ? `- ${stripHtml(item.description)}` : '',
+    typeof item?.gold?.total === 'number' ? `Price: ${item.gold.total}g` : '',
+    item?.tags?.length ? `Tags: ${item.tags.join(' / ')}` : '',
+  ].filter(Boolean)
+  return parts.join('\n')
+}
+
+type AugTier = 'silver' | 'gold' | 'prismatic'
+const getAugmentTier = (aug: Augment): AugTier => {
+  const raw = String(aug.rarity ?? aug.tier ?? '').toLowerCase()
+  if (raw === 'prismatic' || raw.includes('kprismatic') || raw === '2') return 'prismatic'
+  if (raw === 'gold' || raw.includes('kgold') || raw === '1') return 'gold'
+  return 'silver'
+}
+
+const tierLabel = (tier: AugTier) => {
+  if (tier === 'silver') return '银色'
+  if (tier === 'gold') return '金色'
+  return '彩色'
+}
+
+const formatAugmentTooltip = (aug?: Augment | null) => {
+  if (!aug) return ''
+  const parts = [
+    aug.name || '—',
+    aug.description ? `- ${stripHtml(aug.description)}` : '',
+    `Tier: ${tierLabel(getAugmentTier(aug))}`,
+    aug.tags?.length ? `Tags: ${aug.tags.join(' / ')}` : '',
+  ].filter(Boolean)
+  return parts.join('\n')
+}
+
 const getStrategyItemImage = (s: Strategy, position: number) => {
   const found = s.items.find(i => i.position === position)
   return found?.itemImage || found?.item?.image || null
@@ -362,11 +418,39 @@ const coreBuildOrbs = computed(() => {
   return [...imgs, ...Array(Math.max(0, 6 - imgs.length)).fill(null)]
 })
 
+const coreBuildTooltips = computed(() => {
+  const s = selectedStrategy.value
+  if (!s) return Array(6).fill('')
+  const tips = [0, 1, 2, 3]
+    .map(p => {
+      const src = getStrategyItemImage(s, p)
+      if (!src) return null
+      const found = s.items.find(i => i.position === p)
+      return formatItemTooltip(found?.item, found?.itemName)
+    })
+    .filter(Boolean) as string[]
+  return [...tips, ...Array(Math.max(0, 6 - tips.length)).fill('')]
+})
+
 const extraBuildOrbs = computed(() => {
   const s = selectedStrategy.value
   if (!s) return Array(6).fill(null) as Array<string | null>
   const imgs = [6, 7, 8, 9].map(p => getStrategyItemImage(s, p)).filter(Boolean) as string[]
   return [...imgs, ...Array(Math.max(0, 6 - imgs.length)).fill(null)]
+})
+
+const extraBuildTooltips = computed(() => {
+  const s = selectedStrategy.value
+  if (!s) return Array(6).fill('')
+  const tips = [6, 7, 8, 9]
+    .map(p => {
+      const src = getStrategyItemImage(s, p)
+      if (!src) return null
+      const found = s.items.find(i => i.position === p)
+      return formatItemTooltip(found?.item, found?.itemName)
+    })
+    .filter(Boolean) as string[]
+  return [...tips, ...Array(Math.max(0, 6 - tips.length)).fill('')]
 })
 
 const augmentOrbs = computed(() => {
@@ -377,6 +461,20 @@ const augmentOrbs = computed(() => {
     .map(id => augmentMap.value[id]?.icon)
     .filter(Boolean) as string[]
   return [...icons, ...Array(Math.max(0, 3 - icons.length)).fill(null)]
+})
+
+const augmentTooltips = computed(() => {
+  const s = selectedStrategy.value
+  if (!s?.augmentIds?.length) return Array(6).fill('')
+  const tips = s.augmentIds
+    .slice(0, 3)
+    .map(id => {
+      const aug = augmentMap.value[id]
+      if (!aug?.icon) return null
+      return formatAugmentTooltip(aug)
+    })
+    .filter(Boolean) as string[]
+  return [...tips, ...Array(Math.max(0, 3 - tips.length)).fill('')]
 })
 
 const exportSplash = computed(() => {
@@ -407,19 +505,34 @@ const loadAugments = async () => {
   try {
     const cached = typeof window !== 'undefined' ? window.localStorage.getItem('lol-hex-augments-map-v1') : null
     if (cached) {
-      augmentMap.value = JSON.parse(cached)
+      const parsed = JSON.parse(cached)
+      augmentMap.value = parsed
+      if (!lolStore.augmentList?.length) lolStore.augmentList = Object.values(parsed || {})
       return
     }
   } catch {
     // ignore
   }
 
+  if (lolStore.augmentList?.length) {
+    const next: Record<string, Augment> = {}
+    for (const a of lolStore.augmentList || []) next[a.augmentId] = a
+    augmentMap.value = next
+    try {
+      window.localStorage.setItem('lol-hex-augments-map-v1', JSON.stringify(next))
+    } catch {
+      // ignore
+    }
+    return
+  }
+
   try {
-    const res = await commonService.apiGetAugments({ mode: 'hex_brawl', isActive: true, limit: 200 })
+    const res = await commonService.apiGetAugments({ mode: 'hex_brawl', isActive: true, limit: 500 })
     const list = normalizeAugmentList(res?.data?.data)
     const next: Record<string, Augment> = {}
     for (const a of list) next[a.augmentId] = a
     augmentMap.value = next
+    if (!lolStore.augmentList?.length) lolStore.augmentList = list
     try {
       window.localStorage.setItem('lol-hex-augments-map-v1', JSON.stringify(next))
     } catch {
@@ -596,6 +709,11 @@ watch(
 </script>
 
 <style scoped lang="scss">
+:global(.el-popper.lol-tooltip) {
+  max-width: 360px;
+  white-space: pre-line;
+}
+
 .lol-shell {
   --lol-bg0: #0b1220;
   --lol-bg1: #0b1b22;
@@ -733,6 +851,7 @@ watch(
   gap: 18px;
   padding: 14px 18px 18px;
   overflow: hidden;
+  min-height: 100vh;
 }
 
 .lol-left {

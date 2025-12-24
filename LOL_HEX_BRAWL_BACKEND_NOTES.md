@@ -35,7 +35,8 @@ Augment 需要字段：
 - `name`
 - `description`
 - `icon`（图片URL）
-- `tier`（后端已统一为 `silver | gold | prismatic`，前端按该枚举分栏展示）
+- `tier`（旧字段；`silver | gold | prismatic`，前端按该枚举分栏展示）
+- `rarity`（新字段；`silver | gold | prismatic`，等价于 `tier`）
 - `tags: string[]`
 - `modes: string[]`（至少包含 `hex_brawl`）
 - `isActive`（可选）
